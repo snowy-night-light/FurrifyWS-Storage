@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: "ZUUL_SERVICE"
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: "http://localhost:8761/eureka"
+
+
+zuul:
+  ignoredServices: "*"
+  prefix: "/api/v1"
+  routes:
