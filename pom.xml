@@ -19,6 +19,7 @@
     <modules>
         <module>FurrifyWS-EurekaServer</module>
         <module>FurrifyWS-ZuulServer</module>
+        <module>FurrifyWS-Posts</module>
     </modules>
 
 </project>
