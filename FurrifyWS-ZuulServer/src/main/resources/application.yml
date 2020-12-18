@@ -14,4 +14,3 @@ eureka:
 zuul:
   ignoredServices: "*"
   prefix: "/api/v1"
-  routes:
