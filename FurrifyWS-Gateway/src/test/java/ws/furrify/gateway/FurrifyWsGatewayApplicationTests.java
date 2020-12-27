@@ -1,10 +1,10 @@
-package ws.furrify.zuulserver;
+package ws.furrify.gateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ZuulServerApplicationTests {
+class FurrifyWsGatewayApplicationTests {
 
     @Test
     void contextLoads() {

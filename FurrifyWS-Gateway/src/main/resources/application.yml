@@ -1,6 +1,6 @@
 spring:
   application:
-    name: "ZUUL_SERVICE"
+    name: "GATEWAY_SERVICE"
 
 server:
   port: 8080
@@ -9,8 +9,3 @@ eureka:
   client:
     service-url:
       defaultZone: "http://localhost:8761/eureka"
-
-
-zuul:
-  ignoredServices: "*"
-  prefix: "/api/v1"

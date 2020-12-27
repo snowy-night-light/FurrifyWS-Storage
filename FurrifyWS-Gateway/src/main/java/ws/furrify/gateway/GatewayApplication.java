@@ -1,20 +1,18 @@
-package ws.furrify.zuulserver;
+package ws.furrify.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 /**
  * @author Skyte
  */
 @SpringBootApplication
 @EnableEurekaClient
-@EnableZuulProxy
-public class ZuulServerApplication {
+public class GatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ZuulServerApplication.class, args);
+        SpringApplication.run(GatewayApplication.class, args);
     }
 
 }
