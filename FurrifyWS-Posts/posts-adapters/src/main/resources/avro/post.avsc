@@ -1,0 +1,26 @@
+[
+    {
+      "type": "record",
+      "namespace": "ws.furrify.posts",
+      "doc": "Post data containing required information to perform state change across multiple microservices.",
+      "name": "PostData",
+      "fields" : [
+          {"name": "title", "type": ["null", "string"], "default": null, "doc": "Post title."},
+          {"name": "description", "type": ["null", "string"], "default": null, "doc": "Post description."},
+          {"name": "ownerId", "type": ["null", "string"], "default": null, "doc": "Owner UUID."},
+          {"name": "createDate", "type": ["null", "long"], "default": null, "logicalType": "timestamp-millis", "doc": "Create timestamp."}
+        ]
+    },
+    {
+      "type": "record",
+      "namespace": "ws.furrify.posts",
+      "doc": "Post state change request.",
+      "name": "Post",
+      "fields" : [
+        {"name": "state", "type": "string", "doc": "A event type performed on that record. (Can be acquired using State enum.)"},
+        {"name": "target", "type": "string", "doc": "Target record UUID"},
+        {"name": "data", "type": "ws.furrify.posts.PostData", "doc": "Post data eg. changed fields."},
+        {"name": "occurredOn", "type": "long", "logicalType": "timestamp-millis", "doc": "Instant event occurred on."}
+      ]
+    }
+]
