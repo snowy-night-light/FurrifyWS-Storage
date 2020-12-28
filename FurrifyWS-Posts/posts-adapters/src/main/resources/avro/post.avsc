@@ -15,10 +15,9 @@
       "type": "record",
       "namespace": "ws.furrify.posts",
       "doc": "Post state change request.",
-      "name": "Post",
+      "name": "PostEvent",
       "fields" : [
         {"name": "state", "type": "string", "doc": "A event type performed on that record. (Can be acquired using State enum.)"},
-        {"name": "target", "type": "string", "doc": "Target record UUID"},
         {"name": "data", "type": "ws.furrify.posts.PostData", "doc": "Post data eg. changed fields."},
         {"name": "occurredOn", "type": "long", "logicalType": "timestamp-millis", "doc": "Instant event occurred on."}
       ]
