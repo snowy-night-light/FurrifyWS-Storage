@@ -1,5 +1,6 @@
 package ws.furrify.posts.kafka;
 
+import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +33,7 @@ class KafkaConsumerConfig {
         Map<String, Object> properties = new HashMap<>(7);
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupIdPrefix + UUID.randomUUID().toString());
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         properties.put("schema.registry.url", schemaRegistryServers);

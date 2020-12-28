@@ -1,5 +1,6 @@
 package ws.furrify.posts.kafka;
 
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -27,7 +28,7 @@ class KafkaProducerConfig {
         Map<String, Object> properties = new HashMap<>(9);
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
         properties.put(ProducerConfig.ACKS_CONFIG, "all");
         properties.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
         properties.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy");
