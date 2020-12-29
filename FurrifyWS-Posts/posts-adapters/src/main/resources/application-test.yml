@@ -1,0 +1,10 @@
+logging:
+  level:
+    web: DEBUG
+
+spring:
+  kafka:
+    enable: false
+
+server:
+  port: 0
