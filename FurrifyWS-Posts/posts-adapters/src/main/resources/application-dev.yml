@@ -4,8 +4,8 @@ logging:
 
 spring:
   kafka:
-    bootstrap-servers: localhost:9092
-    schema-registry-servers: localhost:8081
+    bootstrap-servers: http://kafka:9092
+    schema-registry-servers: http://kafka:8081
     consumer:
       group-id:
         prefix: "kafka-test-"

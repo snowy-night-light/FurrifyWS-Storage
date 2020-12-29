@@ -23,13 +23,12 @@ public class KafkaTopicEventPublisher implements DomainEventPublisher<PostEvent>
     private final KafkaTemplate<String, PostEvent> kafkaTemplate;
 
     @Override
-    public void publish(final Topic topic, final UUID targetId, final PostEvent event) {
-        ListenableFuture<SendResult<String, PostEvent>> future = kafkaTemplate.send(topic.getTopicName(), targetId.toString(), event);
+    public void publish(final Topic topic, final UUID key, final PostEvent event) {
+        ListenableFuture<SendResult<String, PostEvent>> future =
+                kafkaTemplate.send(topic.getTopicName(), key.toString(), event);
 
         future.addCallback(result -> {
         }, error -> {
-            log.severe("Unable to send event to kafka.");
-
             throw new RuntimeException("Unable to send event to kafka.");
         });
     }

@@ -12,18 +12,13 @@
     <artifactId>posts-adapters</artifactId>
 
     <properties>
-        <avro.version>1.10.1</avro.version>
+        <keycloak.version>12.0.1</keycloak.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>ws.furrify</groupId>
             <artifactId>posts-app</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ws.furrify</groupId>
-            <artifactId>posts-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -45,6 +40,7 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-boot-starter</artifactId>
+            <version>${keycloak.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -95,12 +91,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.apache.avro</groupId>
-            <artifactId>avro</artifactId>
-            <version>${avro.version}</version>
-        </dependency>
-
         <!-- Validators -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -113,7 +103,7 @@
             <dependency>
                 <groupId>org.keycloak.bom</groupId>
                 <artifactId>keycloak-adapter-bom</artifactId>
-                <version>11.0.3</version>
+                <version>${keycloak.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -126,50 +116,5 @@
             <url>https://packages.confluent.io/maven/</url>
         </repository>
     </repositories>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.avro</groupId>
-                <artifactId>avro-maven-plugin</artifactId>
-                <version>${avro.version}</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>schema</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirectory>${project.basedir}/src/main/resources/avro/</sourceDirectory>
-                            <outputDirectory>${project.build.directory}/generated-sources/avro</outputDirectory>
-                            <stringType>String</stringType>
-                            <createSetters>false</createSetters>
-                            <enableDecimalLogicalType>true</enableDecimalLogicalType>
-                            <fieldVisibility>private</fieldVisibility>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>target/generated-sources/avro</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

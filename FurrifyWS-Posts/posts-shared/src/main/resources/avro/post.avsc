@@ -7,7 +7,7 @@
       "fields" : [
           {"name": "title", "type": ["null", "string"], "default": null, "doc": "Post title."},
           {"name": "description", "type": ["null", "string"], "default": null, "doc": "Post description."},
-          {"name": "ownerId", "type": ["null", "string"], "default": null, "doc": "Owner UUID."},
+          {"name": "ownerId", "type": ["null", "string"], "default": null, "doc": "Post owner UUID."},
           {"name": "createDate", "type": ["null", "long"], "default": null, "logicalType": "timestamp-millis", "doc": "Create timestamp."}
         ]
     },
@@ -18,6 +18,7 @@
       "name": "PostEvent",
       "fields" : [
         {"name": "state", "type": "string", "doc": "A event type performed on that record. (Can be acquired using State enum.)"},
+        {"name": "targetId", "type": "string", "doc": "A post UUID event is targeted at."},
         {"name": "data", "type": "ws.furrify.posts.PostData", "doc": "Post data eg. changed fields."},
         {"name": "occurredOn", "type": "long", "logicalType": "timestamp-millis", "doc": "Instant event occurred on."}
       ]
