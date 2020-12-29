@@ -8,6 +8,7 @@ import ws.furrify.posts.post.dto.PostDTO;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+// TODO REMOVE BEFORE PRODUCTION
 @Component
 @RequiredArgsConstructor
 class Test implements CommandLineRunner {
@@ -33,8 +34,8 @@ class Test implements CommandLineRunner {
                 ).getSnapshot()
         );
 
-        System.out.println(postId);
-        System.out.println(userId);
+        System.out.println("UserId: " + userId);
+        System.out.println("PostId" + postId);
     }
 
 }
