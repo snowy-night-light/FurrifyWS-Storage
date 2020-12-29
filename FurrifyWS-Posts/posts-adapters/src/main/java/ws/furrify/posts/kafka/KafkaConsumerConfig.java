@@ -22,13 +22,13 @@ import java.util.UUID;
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 class KafkaConsumerConfig {
 
-    @Value("${spring.kafka.bootstrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers:null}")
     private String bootstrapServers;
 
-    @Value("${spring.kafka.schema-registry-servers}")
+    @Value("${spring.kafka.schema-registry-servers:null}")
     private String schemaRegistryServers;
 
-    @Value("${spring.kafka.consumer.group-id.prefix}")
+    @Value("${spring.kafka.consumer.group-id.prefix:null}")
     private String groupIdPrefix;
 
     @Bean

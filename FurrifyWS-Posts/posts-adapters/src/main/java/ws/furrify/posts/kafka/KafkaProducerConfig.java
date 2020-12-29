@@ -20,10 +20,10 @@ import java.util.Map;
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 class KafkaProducerConfig {
 
-    @Value("${spring.kafka.bootstrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers:null}")
     private String bootstrapServers;
 
-    @Value("${spring.kafka.schema-registry-servers}")
+    @Value("${spring.kafka.schema-registry-servers:null}")
     private String schemaRegistryServers;
 
     @Bean

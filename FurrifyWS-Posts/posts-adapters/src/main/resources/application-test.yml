@@ -5,7 +5,6 @@ logging:
 spring:
   kafka:
     enable: false
-    bootstrap-servers: http://kafka:9092 # Needs to be here cause od @Value in Configuration class
-    schema-registry-servers: http://kafka:8081 # Needs to be here cause od @Value in Configuration class
+
 server:
   port: 0
