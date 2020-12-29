@@ -35,7 +35,7 @@ class Test implements CommandLineRunner {
         );
 
         System.out.println("UserId: " + userId);
-        System.out.println("PostId" + postId);
+        System.out.println("PostId: " + postId);
     }
 
 }

@@ -14,12 +14,6 @@
       "name": "eureka.client.service-url.defaultZone",
       "type": "java.lang.String",
       "description": "Default eureka zone."
-    },
-    {
-      "name": "spring.kafka.enable",
-      "type": "java.lang.String",
-      "defaultValue": "true",
-      "description": "Specifies if kafka configuration classes should be enabled."
     }
   ]
 }
