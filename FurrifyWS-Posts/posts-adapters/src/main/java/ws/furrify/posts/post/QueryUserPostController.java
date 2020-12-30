@@ -23,6 +23,10 @@ import ws.furrify.posts.post.dto.query.PostDetailsQueryDTO;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.afford;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/users/{userId}/posts")
 @RequiredArgsConstructor
@@ -56,11 +60,26 @@ class QueryUserPostController {
         Page<PostDetailsQueryDTO> posts = postQueryRepository.findAll(userId, pageable);
 
         // Add relations
-        Page<PostDetailsQueryDTO> postResponses = posts.stream()
-                .collect(Collectors.collectingAndThen(Collectors.toList(), (list) -> new PageImpl<>(list, pageable, posts.getTotalElements())));
+        PagedModel<EntityModel<PostDetailsQueryDTO>> postResponses = posts.stream()
+                .peek(this::addPostRelations)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), (list) ->
+                        pagedResourcesAssembler.toModel(
+                                new PageImpl<>(list, pageable, posts.getTotalElements())
+                        )));
 
+        // Add hateoas relation
+        var postsRel = linkTo(methodOn(QueryUserPostController.class).getUserPosts(
+                userId,
+                null,
+                null,
+                null,
+                null,
+                null
+        )).withSelfRel();
 
-        return pagedResourcesAssembler.toModel(postResponses);
+        postResponses.add(postsRel);
+
+        return postResponses;
     }
 
     @GetMapping("/{postId}")
@@ -73,7 +92,35 @@ class QueryUserPostController {
                                            @PathVariable UUID postId,
                                            @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
-        return postQueryRepository.findByPostId(userId, postId)
+        PostDetailsQueryDTO postQueryDTO = postQueryRepository.findByPostId(userId, postId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId)));
+
+        return addPostRelations(postQueryDTO);
+    }
+
+    private PostDetailsQueryDTO addPostRelations(PostDetailsQueryDTO postQueryDTO) {
+        var selfRel = linkTo(methodOn(QueryUserPostController.class).getUserPost(
+                postQueryDTO.getOwnerId(),
+                postQueryDTO.getPostId(),
+                null
+        )).withSelfRel().andAffordance(
+                afford(methodOn(CommandUserPostController.class).deletePost(
+                        postQueryDTO.getOwnerId(), postQueryDTO.getPostId(), null
+                ))
+        );
+
+        var postsRel = linkTo(methodOn(QueryUserPostController.class).getUserPosts(
+                postQueryDTO.getOwnerId(),
+                null,
+                null,
+                null,
+                null,
+                null
+        )).withRel("userPosts");
+
+        postQueryDTO.add(selfRel);
+        postQueryDTO.add(postsRel);
+
+        return postQueryDTO;
     }
 }
