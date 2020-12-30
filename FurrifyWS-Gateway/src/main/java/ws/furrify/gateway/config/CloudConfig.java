@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class CloudConfig {
 
+    /*
+       TODO CURRENTLY BROKEN
+     */
+
     @Bean
     RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
