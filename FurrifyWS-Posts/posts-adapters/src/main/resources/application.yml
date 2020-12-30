@@ -1,6 +1,6 @@
 spring:
   application:
-    name: "POSTS_SERVICE"
+    name: "POSTS-SERVICE"
   main:
     web-application-type: servlet
   profiles:
