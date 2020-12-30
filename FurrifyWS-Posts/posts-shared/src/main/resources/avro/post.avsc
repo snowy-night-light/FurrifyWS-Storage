@@ -18,7 +18,8 @@
       "name": "PostEvent",
       "fields" : [
         {"name": "state", "type": "string", "doc": "A event type performed on that record. (Can be acquired using State enum.)"},
-        {"name": "targetId", "type": "string", "doc": "A post UUID event is targeted at."},
+        {"name": "postId", "type": ["null", "long"], "default": null, "doc": "A post database id."},
+        {"name": "postUUID", "type": "string", "doc": "A post UUID event is targeted at."},
         {"name": "data", "type": "ws.furrify.posts.PostData", "doc": "Post data eg. changed fields."},
         {"name": "occurredOn", "type": "long", "logicalType": "timestamp-millis", "doc": "Instant event occurred on."}
       ]

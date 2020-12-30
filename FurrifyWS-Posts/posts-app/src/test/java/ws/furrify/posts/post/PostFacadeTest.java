@@ -8,6 +8,7 @@ import ws.furrify.posts.DomainEventPublisher;
 import ws.furrify.posts.PostEvent;
 import ws.furrify.posts.exception.RecordNotFoundException;
 import ws.furrify.posts.post.dto.PostDTO;
+import ws.furrify.posts.post.dto.PostDtoFactory;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -42,6 +43,7 @@ class PostFacadeTest {
         postRepository = mock(PostRepository.class);
 
         var postFactory = new PostFactory();
+        var postDTOFactory = new PostDtoFactory();
         @SuppressWarnings("unchecked")
         var eventPublisher = (DomainEventPublisher<PostEvent>) mock(DomainEventPublisher.class);
 
@@ -51,7 +53,8 @@ class PostFacadeTest {
                 new UpdatePostDetailsDetailsAdapter(eventPublisher, postRepository),
                 new ReplacePostDetailsDetailsAdapter(eventPublisher, postRepository),
                 postRepository,
-                postFactory
+                postFactory,
+                postDTOFactory
         );
     }
 

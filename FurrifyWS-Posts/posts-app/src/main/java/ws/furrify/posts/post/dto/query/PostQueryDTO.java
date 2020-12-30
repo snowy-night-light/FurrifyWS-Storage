@@ -8,6 +8,6 @@ import java.util.UUID;
  *
  * @author Skyte
  */
-public interface PostQueryDTO extends Serializable {
+interface PostQueryDTO extends Serializable {
     UUID getPostId();
 }

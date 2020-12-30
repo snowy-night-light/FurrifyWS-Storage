@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import ws.furrify.posts.PostEvent;
 import ws.furrify.posts.post.dto.PostDTO;
+import ws.furrify.posts.post.dto.PostDtoFactory;
 
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -22,6 +21,7 @@ public class PostFacade {
     private final ReplacePostDetailsPort replacePostAdapter;
     private final PostRepository postRepository;
     private final PostFactory postFactory;
+    private final PostDtoFactory postDTOFactory;
 
     /**
      * Handle incoming events.
@@ -29,21 +29,13 @@ public class PostFacade {
      * @param postEvent Post event instance received form kafka.
      */
     public void handleEvent(final UUID key, final PostEvent postEvent) {
-        UUID targetId = UUID.fromString(postEvent.getTargetId());
+        PostDTO postDTO = postDTOFactory.from(key, postEvent);
 
         switch (PostEventType.valueOf(postEvent.getState())) {
-            case CREATED, REPLACED, UPDATED -> {
-                PostDTO postDTO = PostDTO.builder()
-                        .postId(targetId)
-                        .ownerId(key)
-                        .title(postEvent.getData().getTitle())
-                        .description(postEvent.getData().getDescription())
-                        .createDate(new Date(postEvent.getData().getCreateDate()).toInstant().atZone(ZoneId.systemDefault()))
-                        .build();
+            case CREATED, REPLACED, UPDATED -> savePost(postDTO);
 
-                savePost(postDTO);
-            }
-            case REMOVED -> deletePostByPostId(targetId);
+            case REMOVED -> deletePostByPostId(postDTO.getPostId());
+
             default -> log.warning("State received from kafka is not defined. State=" + postEvent.getState());
         }
     }
@@ -87,7 +79,6 @@ public class PostFacade {
     public void updatePostDetails(final UUID userId, final UUID postId, final PostDTO postDTO) {
         updatePostAdapter.updatePostDetails(userId, postId, postDTO);
     }
-
 
     private void savePost(final PostDTO postDTO) {
         postRepository.save(postFactory.from(postDTO));

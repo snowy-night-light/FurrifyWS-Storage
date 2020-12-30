@@ -45,7 +45,7 @@ class CreatePostAdapter implements CreatePostPort {
 
         return PostEvent.newBuilder()
                 .setState(PostEventType.CREATED.name())
-                .setTargetId(postSnapshot.getPostId().toString())
+                .setPostUUID(postSnapshot.getPostId().toString())
                 .setOccurredOn(Instant.now().toEpochMilli())
                 .setDataBuilder(
                         PostData.newBuilder()

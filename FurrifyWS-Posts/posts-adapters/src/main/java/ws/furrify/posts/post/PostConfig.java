@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ws.furrify.posts.kafka.KafkaTopicEventPublisher;
+import ws.furrify.posts.post.dto.PostDtoFactory;
 
 @Configuration
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ class PostConfig {
     @Bean
     PostFacade postFacade() {
         var postFactory = new PostFactory();
+        var postDtoFactory = new PostDtoFactory();
 
         return new PostFacade(
                 new CreatePostAdapter(postFactory, eventPublisher),
@@ -22,7 +24,8 @@ class PostConfig {
                 new UpdatePostDetailsDetailsAdapter(eventPublisher, postRepository),
                 new ReplacePostDetailsDetailsAdapter(eventPublisher, postRepository),
                 postRepository,
-                postFactory
+                postFactory,
+                postDtoFactory
         );
     }
 }
