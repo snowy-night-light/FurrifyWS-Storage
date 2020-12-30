@@ -18,6 +18,8 @@ public class PostFacade {
 
     private final CreatePostPort createPostAdapter;
     private final DeletePostPort deletePostAdapter;
+    private final UpdatePostDetailsPort updatePostAdapter;
+    private final ReplacePostDetailsPort replacePostAdapter;
     private final PostRepository postRepository;
     private final PostFactory postFactory;
 
@@ -30,7 +32,7 @@ public class PostFacade {
         UUID targetId = UUID.fromString(postEvent.getTargetId());
 
         switch (PostEventType.valueOf(postEvent.getState())) {
-            case CREATED -> {
+            case CREATED, REPLACED, UPDATED -> {
                 PostDTO postDTO = PostDTO.builder()
                         .postId(targetId)
                         .ownerId(key)
@@ -65,6 +67,27 @@ public class PostFacade {
     public void deletePost(final UUID userId, final UUID postId) {
         deletePostAdapter.deletePost(userId, postId);
     }
+
+    /**
+     * Replaces all fields in post.
+     *
+     * @param postId  Post UUID
+     * @param postDTO Replacement post.
+     */
+    public void replacePostDetails(final UUID userId, final UUID postId, final PostDTO postDTO) {
+        replacePostAdapter.replacePostDetails(userId, postId, postDTO);
+    }
+
+    /**
+     * Updates specified fields in post.
+     *
+     * @param postId  Post UUID.
+     * @param postDTO Post with updated specific fields.
+     */
+    public void updatePostDetails(final UUID userId, final UUID postId, final PostDTO postDTO) {
+        updatePostAdapter.updatePostDetails(userId, postId, postDTO);
+    }
+
 
     private void savePost(final PostDTO postDTO) {
         postRepository.save(postFactory.from(postDTO));

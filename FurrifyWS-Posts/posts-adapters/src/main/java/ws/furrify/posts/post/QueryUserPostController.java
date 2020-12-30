@@ -107,6 +107,14 @@ class QueryUserPostController {
                 afford(methodOn(CommandUserPostController.class).deletePost(
                         postQueryDTO.getOwnerId(), postQueryDTO.getPostId(), null
                 ))
+        ).andAffordance(
+                afford(methodOn(CommandUserPostController.class).replacePostDetails(
+                        postQueryDTO.getOwnerId(), postQueryDTO.getPostId(), null, null
+                ))
+        ).andAffordance(
+                afford(methodOn(CommandUserPostController.class).updatePostDetails(
+                        postQueryDTO.getOwnerId(), postQueryDTO.getPostId(), null, null
+                ))
         );
 
         var postsRel = linkTo(methodOn(QueryUserPostController.class).getUserPosts(

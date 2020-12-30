@@ -19,6 +19,8 @@ interface SqlPostRepository extends Repository<PostSnapshot, Long> {
     void deleteByPostId(UUID postId);
 
     boolean existsByOwnerIdAndPostId(UUID ownerId, UUID postId);
+
+    Optional<PostSnapshot> findByOwnerIdAndPostId(UUID ownerId, UUID postId);
 }
 
 
@@ -67,6 +69,11 @@ class PostRepositoryImpl implements PostRepository {
     @Override
     public boolean existsByOwnerIdAndPostId(final UUID ownerId, final UUID postId) {
         return sqlPostRepository.existsByOwnerIdAndPostId(ownerId, postId);
+    }
+
+    @Override
+    public Optional<Post> findByOwnerIdAndPostId(final UUID ownerId, final UUID postId) {
+        return sqlPostRepository.findByOwnerIdAndPostId(ownerId, postId).map(Post::restore);
     }
 
     @Override

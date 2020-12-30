@@ -19,6 +19,8 @@ class PostConfig {
         return new PostFacade(
                 new CreatePostAdapter(postFactory, eventPublisher),
                 new DeletePostAdapter(eventPublisher, postRepository),
+                new UpdatePostDetailsDetailsAdapter(eventPublisher, postRepository),
+                new ReplacePostDetailsDetailsAdapter(eventPublisher, postRepository),
                 postRepository,
                 postFactory
         );

@@ -7,13 +7,17 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.command.PostCreateCommandDTO;
+import ws.furrify.posts.post.dto.command.PostReplaceCommandDTO;
+import ws.furrify.posts.post.dto.command.PostUpdateCommandDTO;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
@@ -58,4 +62,35 @@ class CommandUserPostController {
 
         return ResponseEntity.accepted().build();
     }
+
+    @PatchMapping("/{postId}")
+    @PreAuthorize(
+            "hasRole('admin') or " +
+                    "hasAuthority('admin') or " +
+                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+    )
+    public ResponseEntity<?> updatePostDetails(@PathVariable UUID userId,
+                                               @PathVariable UUID postId,
+                                               @RequestBody PostUpdateCommandDTO postUpdateCommandDTO,
+                                               @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+        postFacade.updatePostDetails(userId, postId, postUpdateCommandDTO.toDTO());
+
+        return ResponseEntity.accepted().build();
+    }
+
+    @PutMapping("/{postId}")
+    @PreAuthorize(
+            "hasRole('admin') or " +
+                    "hasAuthority('admin') or " +
+                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+    )
+    public ResponseEntity<?> replacePostDetails(@PathVariable UUID userId,
+                                                @PathVariable UUID postId,
+                                                @RequestBody PostReplaceCommandDTO postReplaceCommandDTO,
+                                                @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+        postFacade.replacePostDetails(userId, postId, postReplaceCommandDTO.toDTO());
+
+        return ResponseEntity.accepted().build();
+    }
+
 }

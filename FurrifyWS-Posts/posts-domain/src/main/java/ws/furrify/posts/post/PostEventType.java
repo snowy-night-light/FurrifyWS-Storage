@@ -5,5 +5,7 @@ enum PostEventType {
      * Events that can occur on Post entity.
      */
     CREATED,
-    REMOVED
+    REMOVED,
+    REPLACED,
+    UPDATED
 }
