@@ -11,6 +11,7 @@ import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -32,6 +33,7 @@ class PostFacadeTest {
         postDTO = PostDTO.builder()
                 .title("Test")
                 .description("dsa")
+                .ownerId(UUID.randomUUID())
                 .createDate(ZonedDateTime.now())
                 .build();
 
@@ -66,6 +68,62 @@ class PostFacadeTest {
         // When createPost() method called
         // Then return generated uuid
         assertNotNull(postFacade.createPost(userId, postDTO), "PostId was not returned.");
+    }
+
+    @Test
+    @DisplayName("Replace post")
+    void replacePost() {
+        // Given postDTO, userId and postId
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        // When replacePost() method called
+        when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
+        // Then run successfully
+        assertDoesNotThrow(() -> postFacade.replacePostDetails(userId, postId, postDTO), "Exception was thrown");
+    }
+
+    @Test
+    @DisplayName("Replace post with non existing postId")
+    void replacePost2() {
+        // Given postDTO, userId and non existing postId
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        // When replacePost() method called
+        when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.empty());
+        // Then throw no record found exception
+        assertThrows(
+                RecordNotFoundException.class,
+                () -> postFacade.replacePostDetails(userId, postId, postDTO),
+                "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Update post")
+    void updatePost() {
+        // Given postDTO, userId and postId
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        // When updatePost() method called
+        when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
+        // Then run successfully
+        assertDoesNotThrow(() -> postFacade.updatePostDetails(userId, postId, postDTO), "Exception was thrown");
+    }
+
+    @Test
+    @DisplayName("Update post with non existing postId")
+    void updatePost2() {
+        // Given postDTO, userId and non existing postId
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        // When updatePost() method called
+        when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.empty());
+        // Then throw no record found exception
+        assertThrows(
+                RecordNotFoundException.class,
+                () -> postFacade.updatePostDetails(userId, postId, postDTO),
+                "Exception was not thrown."
+        );
     }
 
     @Test
