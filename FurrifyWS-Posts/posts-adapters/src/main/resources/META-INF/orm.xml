@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings version="2.1"
+                 xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm">
+
+    <description>XML Mapping file</description>
+
+    <entity class="ws.furrify.posts.post.PostSnapshot" access="FIELD">
+        <table name="posts"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="SEQUENCE"/>
+            </id>
+            <basic name="postId">
+                <column unique="true" updatable="false" nullable="false"/>
+            </basic>
+            <basic name="ownerId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="title">
+                <column nullable="false"/>
+            </basic>
+            <basic name="description">
+                <column nullable="true"/>
+            </basic>
+            <basic name="createDate">
+                <column updatable="false" nullable="false"/>
+            </basic>
+        </attributes>
+    </entity>
+</entity-mappings>

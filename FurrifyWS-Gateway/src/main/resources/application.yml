@@ -1,0 +1,18 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: "http://localhost:8761/eureka"
+
+spring:
+  application:
+    name: "GATEWAY-SERVICE"
+  cloud:
+    gateway:
+      routes:
+        - id: postService
+          uri: lb://POSTS-SERVICE
+          predicates:
+            - Path=/users/*/posts/**
+
+server:
+  port: 8080

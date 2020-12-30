@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: "POSTS-SERVICE"
+  main:
+    web-application-type: servlet
+  profiles:
+    active: prod
+  jpa:
+    open-in-view: false
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
