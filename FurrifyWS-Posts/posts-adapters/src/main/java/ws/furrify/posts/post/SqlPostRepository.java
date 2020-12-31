@@ -23,7 +23,6 @@ interface SqlPostRepository extends Repository<PostSnapshot, Long> {
     Optional<PostSnapshot> findByOwnerIdAndPostId(UUID ownerId, UUID postId);
 }
 
-
 /* PROJECTIONS ARE DONE MANUALLY CAUSE FOR WHATEVER REASON
 CLASS BASED PROJECTIONS DON'T WORK IN THIS PROJECT */
 

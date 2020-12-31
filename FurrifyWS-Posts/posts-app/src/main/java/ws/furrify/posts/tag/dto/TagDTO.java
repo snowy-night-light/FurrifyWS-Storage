@@ -1,11 +1,11 @@
-package ws.furrify.posts.post.dto;
+package ws.furrify.posts.tag.dto;
 
 import lombok.Builder;
 import lombok.ToString;
 import lombok.Value;
+import ws.furrify.posts.tag.TagType;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -14,17 +14,15 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 @Value
 @ToString
-public class PostDTO {
+public class TagDTO {
 
     Long id;
 
-    UUID postId;
+    String value;
     UUID ownerId;
 
-    String title;
-    String description;
-
-    Set<String> tags;
+    TagType type;
 
     ZonedDateTime createDate;
 }
+

@@ -1,4 +1,4 @@
-package ws.furrify.posts.post;
+package ws.furrify.posts.tag;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -7,23 +7,23 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
-import ws.furrify.posts.PostEvent;
+import ws.furrify.posts.TagEvent;
 
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Log
-class PostEventListener {
-    private final PostFacade postFacade;
+class TagEventListener {
+    private final TagFacade tagFacade;
 
-    @KafkaListener(groupId = "furrify", topics = "post_events")
+    @KafkaListener(groupId = "furrify", topics = "tag_events")
     public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
                    @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                    @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                   @Payload PostEvent postEvent) {
+                   @Payload TagEvent tagEvent) {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
-        postFacade.handleEvent(UUID.fromString(key), postEvent);
+        tagFacade.handleEvent(UUID.fromString(key), tagEvent);
     }
 }

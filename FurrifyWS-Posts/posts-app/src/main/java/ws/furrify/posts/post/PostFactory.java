@@ -3,6 +3,7 @@ package ws.furrify.posts.post;
 import ws.furrify.posts.post.dto.PostDTO;
 
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.UUID;
 
 class PostFactory {
@@ -11,9 +12,10 @@ class PostFactory {
         PostSnapshot postSnapshot = new PostSnapshot(
                 postDTO.getId(),
                 (postDTO.getPostId() != null) ? postDTO.getPostId() : UUID.randomUUID(),
-                (postDTO.getOwnerId() != null) ? postDTO.getOwnerId() : null,
+                postDTO.getOwnerId(),
                 postDTO.getTitle(),
                 postDTO.getDescription(),
+                (postDTO.getTags() != null) ? postDTO.getTags() : new HashSet<>(),
                 (postDTO.getCreateDate() != null) ? postDTO.getCreateDate() : ZonedDateTime.now()
         );
 

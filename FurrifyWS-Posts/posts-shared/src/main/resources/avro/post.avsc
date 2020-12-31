@@ -8,6 +8,7 @@
           {"name": "title", "type": ["null", "string"], "default": null, "doc": "Post title."},
           {"name": "description", "type": ["null", "string"], "default": null, "doc": "Post description."},
           {"name": "ownerId", "type": ["null", "string"], "default": null, "doc": "Post owner UUID."},
+          {"name": "tags", "type": {"type": "array", "items": "string"}, "default": [], "doc": "Post tags values."},
           {"name": "createDate", "type": ["null", "long"], "default": null, "logicalType": "timestamp-millis", "doc": "Create timestamp."}
         ]
     },
@@ -17,7 +18,7 @@
       "doc": "Post state change request.",
       "name": "PostEvent",
       "fields" : [
-        {"name": "state", "type": "string", "doc": "A event type performed on that record. (Can be acquired using State enum.)"},
+        {"name": "state", "type": "string", "doc": "A event type performed on that record. (Can be acquired using PostEventType enum.)"},
         {"name": "postId", "type": ["null", "long"], "default": null, "doc": "A post database id."},
         {"name": "postUUID", "type": "string", "doc": "A post UUID event is targeted at."},
         {"name": "data", "type": "ws.furrify.posts.PostData", "doc": "Post data eg. changed fields."},

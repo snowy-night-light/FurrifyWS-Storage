@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -17,6 +18,7 @@ class Post {
     private final UUID ownerId;
     private String title;
     private String description;
+    private final Set<String> tags;
     private final ZonedDateTime createDate;
 
     static Post restore(PostSnapshot postSnapshot) {
@@ -26,6 +28,7 @@ class Post {
                 postSnapshot.getOwnerId(),
                 postSnapshot.getTitle(),
                 postSnapshot.getDescription(),
+                postSnapshot.getTags(),
                 postSnapshot.getCreateDate()
         );
     }
@@ -37,6 +40,7 @@ class Post {
                 ownerId,
                 title,
                 description,
+                tags,
                 createDate
         );
     }

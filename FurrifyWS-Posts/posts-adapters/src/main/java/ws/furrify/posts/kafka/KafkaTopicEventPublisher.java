@@ -2,12 +2,12 @@ package ws.furrify.posts.kafka;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.apache.avro.specific.SpecificRecord;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import ws.furrify.posts.DomainEventPublisher;
-import ws.furrify.posts.PostEvent;
 
 import java.util.UUID;
 
@@ -19,12 +19,12 @@ import java.util.UUID;
 @Log
 @Service
 @RequiredArgsConstructor
-public class KafkaTopicEventPublisher implements DomainEventPublisher<PostEvent> {
-    private final KafkaTemplate<String, PostEvent> kafkaTemplate;
+public class KafkaTopicEventPublisher<T extends SpecificRecord> implements DomainEventPublisher<T> {
+    private final KafkaTemplate<String, T> kafkaTemplate;
 
     @Override
-    public void publish(final Topic topic, final UUID key, final PostEvent event) {
-        ListenableFuture<SendResult<String, PostEvent>> future =
+    public void publish(final Topic topic, final UUID key, final T event) {
+        ListenableFuture<SendResult<String, T>> future =
                 kafkaTemplate.send(topic.getTopicName(), key.toString(), event);
 
         future.addCallback(result -> {

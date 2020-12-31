@@ -26,7 +26,7 @@ public class PostFacade {
     /**
      * Handle incoming events.
      *
-     * @param postEvent Post event instance received form kafka.
+     * @param postEvent Post event instance received from kafka.
      */
     public void handleEvent(final UUID key, final PostEvent postEvent) {
         PostDTO postDTO = postDTOFactory.from(key, postEvent);

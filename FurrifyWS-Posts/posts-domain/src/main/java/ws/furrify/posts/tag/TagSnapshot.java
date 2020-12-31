@@ -1,4 +1,4 @@
-package ws.furrify.posts.post;
+package ws.furrify.posts.tag;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 import static lombok.AccessLevel.PACKAGE;
@@ -18,16 +17,13 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter(value = PACKAGE)
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PACKAGE)
-class PostSnapshot {
+class TagSnapshot {
     private Long id;
 
-    private UUID postId;
+    private String value;
     private UUID ownerId;
 
-    private String title;
-    private String description;
-
-    private Set<String> tags;
+    private TagType type;
 
     private ZonedDateTime createDate;
 }

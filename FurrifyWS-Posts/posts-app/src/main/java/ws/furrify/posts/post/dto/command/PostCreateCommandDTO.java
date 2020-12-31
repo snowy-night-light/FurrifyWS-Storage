@@ -2,6 +2,7 @@ package ws.furrify.posts.post.dto.command;
 
 import lombok.ToString;
 import lombok.Value;
+import ws.furrify.posts.CommandDTO;
 import ws.furrify.posts.post.dto.PostDTO;
 
 import javax.validation.constraints.NotBlank;
@@ -12,7 +13,7 @@ import javax.validation.constraints.Size;
  */
 @Value
 @ToString
-public class PostCreateCommandDTO implements PostCommandDTO {
+public class PostCreateCommandDTO implements CommandDTO<PostDTO> {
 
     @NotBlank
     @Size(max = 64)

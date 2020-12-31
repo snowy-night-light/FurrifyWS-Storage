@@ -5,6 +5,7 @@ import ws.furrify.posts.PostEvent;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -29,6 +30,7 @@ public class PostDtoFactory {
                 .ownerId(key)
                 .title(postEvent.getData().getTitle())
                 .description(postEvent.getData().getDescription())
+                .tags(Set.copyOf(postEvent.getData().getTags()))
                 .createDate(createDate)
                 .build();
     }

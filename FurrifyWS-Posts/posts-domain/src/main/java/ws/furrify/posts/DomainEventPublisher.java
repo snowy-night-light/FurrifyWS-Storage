@@ -19,7 +19,8 @@ public interface DomainEventPublisher<T> {
         /**
          * Represents post_events topic in kafka.
          */
-        POST("post_events");
+        POST("post_events"),
+        TAG("tag_events");
 
         /**
          * Topic name for kafka.

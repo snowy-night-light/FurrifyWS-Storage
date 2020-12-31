@@ -1,0 +1,15 @@
+{
+    "type": "record",
+    "namespace": "ws.furrify.posts",
+    "doc": "Tag state change request.",
+    "name": "TagEvent",
+    "fields" : [
+        {"name": "state", "type": "string", "doc": "A event type performed on that record. (Can be acquired using TagEventType enum.)"},
+        {"name": "tagId", "type": ["null", "long"], "default": null, "doc": "A tag database id."},
+        {"name": "value", "type": "string", "doc": "A tag unique value."},
+        {"name": "ownerId", "type": "string", "doc": "A tag owner UUID."},
+        {"name": "type", "type": "string", "doc": "A tag type. (Can be acquired using TagType enum.)"},
+        {"name": "createDate", "type": ["null", "long"], "default": null, "logicalType": "timestamp-millis", "doc": "Create timestamp."},
+        {"name": "occurredOn", "type": "long", "logicalType": "timestamp-millis", "doc": "Instant event occurred on."}
+    ]
+}

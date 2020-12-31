@@ -1,10 +1,11 @@
-package ws.furrify.posts.post.dto.query;
+package ws.furrify.posts.tag.dto.query;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 import lombok.experimental.NonFinal;
 import org.springframework.hateoas.RepresentationModel;
+import ws.furrify.posts.tag.TagType;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -17,13 +18,11 @@ import java.util.UUID;
 @Value
 @NonFinal
 @ToString
-public class PostDetailsQueryDTO extends RepresentationModel<PostDetailsQueryDTO> implements Serializable {
-
-    UUID postId;
+public class TagDetailsQueryDTO extends RepresentationModel<TagDetailsQueryDTO> implements Serializable {
+    String value;
     UUID ownerId;
 
-    String title;
-    String description;
+    TagType type;
 
     ZonedDateTime createDate;
 }
