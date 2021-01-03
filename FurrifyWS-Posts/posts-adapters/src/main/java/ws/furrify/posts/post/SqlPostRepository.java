@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ws.furrify.posts.post.dto.query.PostDetailsQueryDTO;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Transactional(rollbackFor = RuntimeException.class)
 interface SqlPostRepository extends Repository<PostSnapshot, Long> {
@@ -21,6 +23,9 @@ interface SqlPostRepository extends Repository<PostSnapshot, Long> {
     boolean existsByOwnerIdAndPostId(UUID ownerId, UUID postId);
 
     Optional<PostSnapshot> findByOwnerIdAndPostId(UUID ownerId, UUID postId);
+
+    @Query("from PostSnapshot post where ?2 in (post.tags) and post.ownerId = ?1")
+    Set<PostSnapshot> findAllByOwnerIdAndValueInTags(UUID ownerId, String value);
 }
 
 /* PROJECTIONS ARE DONE MANUALLY CAUSE FOR WHATEVER REASON
@@ -36,6 +41,7 @@ interface SqlPostQueryRepository extends PostQueryRepository, Repository<PostSna
             "post.ownerId, " +
             "post.title, " +
             "post.description, " +
+            "post.tags, " +
             "post.createDate" +
             ")" +
             " from PostSnapshot post where post.postId = ?2 and post.ownerId = ?1")
@@ -48,6 +54,7 @@ interface SqlPostQueryRepository extends PostQueryRepository, Repository<PostSna
             "post.ownerId, " +
             "post.title, " +
             "post.description, " +
+            "post.tags, " +
             "post.createDate" +
             ")" +
             " from PostSnapshot post where post.ownerId = ?1")
@@ -63,6 +70,14 @@ class PostRepositoryImpl implements PostRepository {
     @Override
     public Post save(final Post post) {
         return Post.restore(sqlPostRepository.save(post.getSnapshot()));
+    }
+
+    @Override
+    public Set<Post> findAllByOwnerIdAndValueInTags(final UUID ownerId, final String value) {
+        return sqlPostRepository.findAllByOwnerIdAndValueInTags(ownerId, value)
+                .stream()
+                .map(Post::restore)
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     @Override

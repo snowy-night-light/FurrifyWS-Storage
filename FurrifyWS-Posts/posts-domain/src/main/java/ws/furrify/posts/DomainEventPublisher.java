@@ -35,4 +35,24 @@ public interface DomainEventPublisher<T> {
             return topicName;
         }
     }
+
+    enum PostEventType {
+        /**
+         * Events that can occur on Post entity.
+         */
+        CREATED,
+        REMOVED,
+        REPLACED,
+        UPDATED
+    }
+
+    enum TagEventType {
+        /**
+         * Events that can occur on Tag entity.
+         */
+        CREATED,
+        REMOVED,
+        REPLACED,
+        UPDATED
+    }
 }

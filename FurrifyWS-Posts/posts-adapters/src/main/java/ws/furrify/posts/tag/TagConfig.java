@@ -21,6 +21,9 @@ class TagConfig {
 
         return new TagFacade(
                 new CreateTagAdapter(tagFactory, eventPublisher, tagRepository),
+                new DeleteTagAdapter(eventPublisher, tagRepository),
+                new UpdateTagAdapter(eventPublisher, tagRepository),
+                new ReplaceTagAdapter(eventPublisher, tagRepository),
                 tagRepository,
                 tagFactory,
                 tagDtoFactory

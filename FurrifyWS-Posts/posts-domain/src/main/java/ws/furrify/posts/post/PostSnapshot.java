@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import ws.furrify.posts.post.vo.PostTag;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -27,7 +28,7 @@ class PostSnapshot {
     private String title;
     private String description;
 
-    private Set<String> tags;
+    private Set<PostTag> tags;
 
     private ZonedDateTime createDate;
 }

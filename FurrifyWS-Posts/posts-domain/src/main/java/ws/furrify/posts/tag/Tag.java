@@ -3,7 +3,10 @@ package ws.furrify.posts.tag;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
+import ws.furrify.posts.exception.Errors;
+import ws.furrify.posts.exception.RecordAlreadyExistsException;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -13,9 +16,9 @@ import java.util.UUID;
 @ToString
 class Tag {
     private final Long id;
-    private final String value;
+    private String value;
     private final UUID ownerId;
-    private final TagType type;
+    private TagType type;
     private final ZonedDateTime createDate;
 
     static Tag restore(TagSnapshot tagSnapshot) {
@@ -36,5 +39,18 @@ class Tag {
                 type,
                 createDate
         );
+    }
+
+    void updateValue(@NonNull final String value,
+                     @NonNull final TagRepository tagRepository) {
+        if (tagRepository.existsByOwnerIdAndValue(ownerId, value)) {
+            throw new RecordAlreadyExistsException(Errors.TAG_ALREADY_EXISTS.getErrorMessage(value));
+        }
+
+        this.value = value;
+    }
+
+    void updateType(@NonNull final TagType type) {
+        this.type = type;
     }
 }

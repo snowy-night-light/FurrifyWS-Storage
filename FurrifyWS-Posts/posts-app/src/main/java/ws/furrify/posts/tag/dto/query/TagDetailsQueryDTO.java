@@ -20,6 +20,7 @@ import java.util.UUID;
 @ToString
 public class TagDetailsQueryDTO extends RepresentationModel<TagDetailsQueryDTO> implements Serializable {
     String value;
+
     UUID ownerId;
 
     TagType type;

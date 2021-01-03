@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
  * @author Skyte
  */
 @Data
-public class TagCreateCommandDTO implements CommandDTO<TagDTO> {
+public class TagReplaceCommandDTO implements CommandDTO<TagDTO> {
 
     @NotBlank
     @Size(max = 32)

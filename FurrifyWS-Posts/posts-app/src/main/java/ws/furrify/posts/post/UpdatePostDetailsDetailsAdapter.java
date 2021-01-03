@@ -43,7 +43,7 @@ class UpdatePostDetailsDetailsAdapter implements UpdatePostDetailsPort {
         PostSnapshot postSnapshot = post.getSnapshot();
 
         return PostEvent.newBuilder()
-                .setState(PostEventType.UPDATED.name())
+                .setState(DomainEventPublisher.PostEventType.UPDATED.name())
                 .setPostId(postSnapshot.getId())
                 .setPostUUID(postSnapshot.getPostId().toString())
                 .setOccurredOn(Instant.now().toEpochMilli())

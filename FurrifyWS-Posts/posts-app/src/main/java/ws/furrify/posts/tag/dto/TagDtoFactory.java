@@ -17,7 +17,7 @@ import java.util.UUID;
 public class TagDtoFactory {
 
     public TagDTO from(UUID key, TagEvent tagEvent) {
-        Long createDateMillis = tagEvent.getCreateDate();
+        Long createDateMillis = tagEvent.getData().getCreateDate();
         ZonedDateTime createDate = null;
 
         if (createDateMillis != null) {
@@ -26,9 +26,9 @@ public class TagDtoFactory {
 
         return TagDTO.builder()
                 .id(tagEvent.getTagId())
-                .value(tagEvent.getValue())
+                .value(tagEvent.getData().getValue())
                 .ownerId(key)
-                .type(TagType.valueOf(tagEvent.getType()))
+                .type(TagType.valueOf(tagEvent.getData().getType()))
                 .createDate(createDate)
                 .build();
     }

@@ -5,9 +5,11 @@ import lombok.ToString;
 import lombok.Value;
 import lombok.experimental.NonFinal;
 import org.springframework.hateoas.RepresentationModel;
+import ws.furrify.posts.post.vo.PostTag;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -24,6 +26,8 @@ public class PostDetailsQueryDTO extends RepresentationModel<PostDetailsQueryDTO
 
     String title;
     String description;
+
+    Set<PostTag> tags;
 
     ZonedDateTime createDate;
 }

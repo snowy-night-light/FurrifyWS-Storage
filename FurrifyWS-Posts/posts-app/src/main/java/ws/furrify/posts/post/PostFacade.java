@@ -2,7 +2,9 @@ package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import ws.furrify.posts.DomainEventPublisher;
 import ws.furrify.posts.PostEvent;
+import ws.furrify.posts.TagEvent;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
 
@@ -24,19 +26,36 @@ public class PostFacade {
     private final PostDtoFactory postDTOFactory;
 
     /**
-     * Handle incoming events.
+     * Handle incoming post events.
      *
      * @param postEvent Post event instance received from kafka.
      */
     public void handleEvent(final UUID key, final PostEvent postEvent) {
         PostDTO postDTO = postDTOFactory.from(key, postEvent);
 
-        switch (PostEventType.valueOf(postEvent.getState())) {
+        switch (DomainEventPublisher.PostEventType.valueOf(postEvent.getState())) {
             case CREATED, REPLACED, UPDATED -> savePost(postDTO);
 
             case REMOVED -> deletePostByPostId(postDTO.getPostId());
 
             default -> log.warning("State received from kafka is not defined. State=" + postEvent.getState());
+        }
+    }
+
+    /**
+     * Handle incoming tag events.
+     *
+     * @param tagEvent Tag event instance received from kafka.
+     */
+    public void handleEvent(final UUID key, final TagEvent tagEvent) {
+        switch (DomainEventPublisher.TagEventType.valueOf(tagEvent.getState())) {
+            case REMOVED -> deleteTagFromPosts(key, tagEvent.getTagValue());
+            case UPDATED, REPLACED -> updateTagDetailsInPosts(key,
+                    tagEvent.getTagValue(),
+                    tagEvent.getData().getValue(),
+                    tagEvent.getData().getType());
+
+            default -> log.warning("State received from kafka is not defined. State=" + tagEvent.getState());
         }
     }
 
@@ -86,5 +105,23 @@ public class PostFacade {
 
     private void deletePostByPostId(final UUID postId) {
         postRepository.deleteByPostId(postId);
+    }
+
+    private void updateTagDetailsInPosts(final UUID ownerId,
+                                         final String originalValue,
+                                         final String newValue,
+                                         final String newType) {
+        // Get all posts with tag value, change value and save.
+        postRepository.findAllByOwnerIdAndValueInTags(ownerId, originalValue).stream()
+                .peek(post -> post.updateTagDetailsInTags(originalValue, newValue, newType))
+                .forEach(postRepository::save);
+    }
+
+    private void deleteTagFromPosts(final UUID ownerId,
+                                    final String value) {
+        // Get all posts with tag value, remove it and save.
+        postRepository.findAllByOwnerIdAndValueInTags(ownerId, value).stream()
+                .peek(post -> post.removeTag(value))
+                .forEach(postRepository::save);
     }
 }

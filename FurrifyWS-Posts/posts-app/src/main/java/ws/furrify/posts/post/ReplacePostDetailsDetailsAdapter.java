@@ -38,7 +38,7 @@ class ReplacePostDetailsDetailsAdapter implements ReplacePostDetailsPort {
         PostSnapshot postSnapshot = post.getSnapshot();
 
         return PostEvent.newBuilder()
-                .setState(PostEventType.REPLACED.name())
+                .setState(DomainEventPublisher.PostEventType.REPLACED.name())
                 .setPostId(postSnapshot.getId())
                 .setPostUUID(postSnapshot.getPostId().toString())
                 .setOccurredOn(Instant.now().toEpochMilli())

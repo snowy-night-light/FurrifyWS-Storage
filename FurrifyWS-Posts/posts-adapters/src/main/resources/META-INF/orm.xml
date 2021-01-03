@@ -25,7 +25,9 @@
             <basic name="createDate">
                 <column updatable="false" nullable="false"/>
             </basic>
-            <element-collection name="tags" fetch="EAGER"/>
+            <element-collection name="tags">
+                <collection-table name="post_tags"/>
+            </element-collection>
         </attributes>
     </entity>
 
@@ -36,7 +38,7 @@
                 <generated-value strategy="SEQUENCE"/>
             </id>
             <basic name="value">
-                <column unique="true" nullable="false"/>
+                <column nullable="false"/>
             </basic>
             <basic name="ownerId">
                 <column updatable="false" nullable="false"/>
@@ -45,12 +47,20 @@
                 <column nullable="false"/>
                 <enumerated>STRING</enumerated>
             </basic>
-            <basic name="description">
-                <column nullable="true"/>
-            </basic>
             <basic name="createDate">
                 <column updatable="false" nullable="false"/>
             </basic>
         </attributes>
     </entity>
+
+    <embeddable class="ws.furrify.posts.post.vo.PostTag" access="FIELD">
+        <attributes>
+            <basic name="value">
+                <column nullable="false" unique="true"/>
+            </basic>
+            <basic name="type">
+                <column nullable="false"/>
+            </basic>
+        </attributes>
+    </embeddable>
 </entity-mappings>

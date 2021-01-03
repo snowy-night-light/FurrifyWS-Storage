@@ -1,6 +1,16 @@
 [
     {
       "type": "record",
+      "namespace": "ws.furrify.posts.vo",
+      "doc": "Post tag containing most important values to user to access with post.",
+      "name": "PostTagData",
+      "fields" : [
+          {"name": "value", "type": "string", "doc": "Tag value."},
+          {"name": "type", "type": ["null", "string"], "default": null, "doc": "A tag type."}
+      ]
+    },
+    {
+      "type": "record",
       "namespace": "ws.furrify.posts",
       "doc": "Post data containing required information to perform state change across multiple microservices.",
       "name": "PostData",
@@ -8,7 +18,7 @@
           {"name": "title", "type": ["null", "string"], "default": null, "doc": "Post title."},
           {"name": "description", "type": ["null", "string"], "default": null, "doc": "Post description."},
           {"name": "ownerId", "type": ["null", "string"], "default": null, "doc": "Post owner UUID."},
-          {"name": "tags", "type": {"type": "array", "items": "string"}, "default": [], "doc": "Post tags values."},
+          {"name": "tags", "type": {"type": "array", "items": "ws.furrify.posts.vo.PostTagData"}, "default": [], "doc": "Post tags value objects."},
           {"name": "createDate", "type": ["null", "long"], "default": null, "logicalType": "timestamp-millis", "doc": "Create timestamp."}
         ]
     },
