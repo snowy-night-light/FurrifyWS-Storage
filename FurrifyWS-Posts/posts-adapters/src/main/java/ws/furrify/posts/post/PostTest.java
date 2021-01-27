@@ -5,9 +5,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import ws.furrify.posts.post.dto.PostDTO;
+import ws.furrify.posts.post.vo.PostTag;
 
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.UUID;
 
 @Component
@@ -38,6 +40,12 @@ class PostTest implements CommandLineRunner {
                                 .ownerId(userId)
                                 .title("title")
                                 .description("desc")
+                                .tags(Set.of(
+                                        PostTag.builder()
+                                                .value("walking")
+                                                .type("ACTION")
+                                                .build()
+                                ))
                                 .createDate(ZonedDateTime.now())
                                 .build()
                 ).getSnapshot()

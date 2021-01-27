@@ -1,13 +1,27 @@
 package ws.furrify.posts.post.vo;
 
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+
+import static lombok.AccessLevel.PRIVATE;
+import static lombok.AccessLevel.PROTECTED;
 
 /**
  * @author Skyte
  */
-@Value
+@Data
+@Setter(value = PRIVATE)
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor(access = PROTECTED)
 public class PostTag {
-    String value;
-    String type;
+    @NonNull
+    private String value;
+    @NonNull
+    private String type;
 }

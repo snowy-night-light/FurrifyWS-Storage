@@ -35,30 +35,10 @@ CLASS BASED PROJECTIONS DON'T WORK IN THIS PROJECT */
 interface SqlPostQueryRepository extends PostQueryRepository, Repository<PostSnapshot, Long> {
 
     @Override
-    @Query(value = "select " +
-            "new ws.furrify.posts.post.dto.query.PostDetailsQueryDTO(" +
-            "post.postId, " +
-            "post.ownerId, " +
-            "post.title, " +
-            "post.description, " +
-            "post.tags, " +
-            "post.createDate" +
-            ")" +
-            " from PostSnapshot post where post.postId = ?2 and post.ownerId = ?1")
-    Optional<PostDetailsQueryDTO> findByPostId(UUID userId, UUID postId);
+    Optional<PostDetailsQueryDTO> findByPostIdAndOwnerId(UUID userId, UUID postId);
 
     @Override
-    @Query(value = "select " +
-            "new ws.furrify.posts.post.dto.query.PostDetailsQueryDTO(" +
-            "post.postId, " +
-            "post.ownerId, " +
-            "post.title, " +
-            "post.description, " +
-            "post.tags, " +
-            "post.createDate" +
-            ")" +
-            " from PostSnapshot post where post.ownerId = ?1")
-    Page<PostDetailsQueryDTO> findAll(UUID userId, Pageable pageable);
+    Page<PostDetailsQueryDTO> findAllByOwnerId(UUID userId, Pageable pageable);
 }
 
 @org.springframework.stereotype.Repository

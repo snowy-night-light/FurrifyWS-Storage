@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -28,6 +29,7 @@ class PostTest {
                 UUID.randomUUID(),
                 "Test",
                 "dsa",
+                new HashSet<>(),
                 ZonedDateTime.now()
         );
 

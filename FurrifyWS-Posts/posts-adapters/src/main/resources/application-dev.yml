@@ -11,6 +11,9 @@ spring:
         prefix: "kafka-test-"
     producer:
       retries: 3
+  h2:
+    console:
+      enabled: true
   datasource:
     driverClassName: org.h2.Driver
     username: 'sa'

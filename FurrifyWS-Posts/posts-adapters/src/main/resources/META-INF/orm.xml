@@ -25,8 +25,10 @@
             <basic name="createDate">
                 <column updatable="false" nullable="false"/>
             </basic>
-            <element-collection name="tags">
-                <collection-table name="post_tags"/>
+            <element-collection fetch="EAGER" name="tags">
+                <collection-table name="post_tags">
+                    <join-column name="postId"/>
+                </collection-table>
             </element-collection>
         </attributes>
     </entity>

@@ -1,10 +1,5 @@
 package ws.furrify.posts.post.dto.query;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.Value;
-import lombok.experimental.NonFinal;
-import org.springframework.hateoas.RepresentationModel;
 import ws.furrify.posts.post.vo.PostTag;
 
 import java.io.Serializable;
@@ -15,19 +10,17 @@ import java.util.UUID;
 /**
  * @author Skyte
  */
-@EqualsAndHashCode(callSuper = true)
-@Value
-@NonFinal
-@ToString
-public class PostDetailsQueryDTO extends RepresentationModel<PostDetailsQueryDTO> implements Serializable {
+public interface PostDetailsQueryDTO extends Serializable {
 
-    UUID postId;
-    UUID ownerId;
+    UUID getPostId();
 
-    String title;
-    String description;
+    UUID getOwnerId();
 
-    Set<PostTag> tags;
+    String getTitle();
 
-    ZonedDateTime createDate;
+    String getDescription();
+
+    Set<PostTag> getTags();
+
+    ZonedDateTime getCreateDate();
 }
