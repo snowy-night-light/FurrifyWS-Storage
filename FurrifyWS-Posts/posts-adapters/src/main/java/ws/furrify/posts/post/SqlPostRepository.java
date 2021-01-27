@@ -24,7 +24,7 @@ interface SqlPostRepository extends Repository<PostSnapshot, Long> {
 
     Optional<PostSnapshot> findByOwnerIdAndPostId(UUID ownerId, UUID postId);
 
-    @Query("from PostSnapshot post where ?2 in (post.tags) and post.ownerId = ?1")
+    @Query("from PostSnapshot post join post.tags tag where tag.value = ?2 and post.ownerId = ?1")
     Set<PostSnapshot> findAllByOwnerIdAndValueInTags(UUID ownerId, String value);
 }
 

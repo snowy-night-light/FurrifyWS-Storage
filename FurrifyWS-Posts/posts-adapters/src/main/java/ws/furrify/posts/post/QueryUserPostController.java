@@ -36,7 +36,7 @@ class QueryUserPostController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public PagedModel<EntityModel<PostDetailsQueryDTO>> getUserPosts(
             @PathVariable UUID userId,
@@ -79,7 +79,7 @@ class QueryUserPostController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public EntityModel<PostDetailsQueryDTO> getUserPost(@PathVariable UUID userId,
                                                         @PathVariable UUID postId,

@@ -5,11 +5,36 @@
       "doc": "Tag data containing required information to perform state change across multiple microservices.",
       "name": "TagData",
       "fields" : [
-            {"name": "value", "type": "string", "doc": "A tag unique value."},
-            {"name": "ownerId", "type": "string", "doc": "A tag owner UUID."},
-            {"name": "type", "type": "string", "doc": "A tag type. (Can be acquired using TagType enum.)"},
-            {"name": "createDate", "type": ["null", "long"], "default": null, "logicalType": "timestamp-millis", "doc": "Create timestamp."}
-        ]
+        {
+          "name": "value",
+          "type": "string",
+          "doc": "A tag new unique value."
+        },
+        {
+          "name": "ownerId",
+          "type": "string",
+          "doc": "A tag owner UUID."
+        },
+        {
+          "name": "type",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null,
+          "doc": "A tag type. (Can be acquired using TagType enum.)"
+        },
+        {
+          "name": "createDate",
+          "type": [
+            "null",
+            "long"
+          ],
+          "default": null,
+          "logicalType": "timestamp-millis",
+          "doc": "Create timestamp."
+        }
+      ]
     },
     {
         "type": "record",
@@ -17,11 +42,36 @@
         "doc": "Tag state change request.",
         "name": "TagEvent",
         "fields" : [
-            {"name": "state", "type": "string", "doc": "A event type performed on that record. (Can be acquired using TagEventType enum.)"},
-            {"name": "tagId", "type": ["null", "long"], "default": null, "doc": "A tag database id."},
-            {"name": "tagValue", "type": "string", "doc": "A tag unique value (if update request this represents old value)."},
-            {"name": "data", "type": "ws.furrify.tags.TagData", "doc": "Tag data ex. changed fields."},
-            {"name": "occurredOn", "type": "long", "logicalType": "timestamp-millis", "doc": "Instant event occurred on."}
+          {
+            "name": "state",
+            "type": "string",
+            "doc": "A event type performed on that record. (Can be acquired using TagEventType enum.)"
+          },
+          {
+            "name": "tagId",
+            "type": [
+              "null",
+              "long"
+            ],
+            "default": null,
+            "doc": "A tag database id."
+          },
+          {
+            "name": "tagValue",
+            "type": "string",
+            "doc": "A tag old unique value."
+          },
+          {
+            "name": "data",
+            "type": "ws.furrify.tags.TagData",
+            "doc": "Tag data ex. changed fields."
+          },
+          {
+            "name": "occurredOn",
+            "type": "long",
+            "logicalType": "timestamp-millis",
+            "doc": "Instant event occurred on."
+          }
         ]
     }
 ]

@@ -69,10 +69,10 @@ class CommandUserTagController {
                     "hasAuthority('admin') or " +
                     "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
     )
-    public ResponseEntity<?> updateTag(@PathVariable UUID userId,
-                                       @PathVariable String value,
-                                       @RequestBody TagUpdateCommandDTO tagUpdateCommandDTO,
-                                       @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+    public ResponseEntity<?> updateTagDetails(@PathVariable UUID userId,
+                                              @PathVariable String value,
+                                              @RequestBody TagUpdateCommandDTO tagUpdateCommandDTO,
+                                              @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
         tagFacade.updateTag(userId, value, tagUpdateCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();
@@ -84,10 +84,10 @@ class CommandUserTagController {
                     "hasAuthority('admin') or " +
                     "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
     )
-    public ResponseEntity<?> replacePostDetails(@PathVariable UUID userId,
-                                                @PathVariable String value,
-                                                @RequestBody TagReplaceCommandDTO tagReplaceCommandDTO,
-                                                @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+    public ResponseEntity<?> replaceTagDetails(@PathVariable UUID userId,
+                                               @PathVariable String value,
+                                               @RequestBody TagReplaceCommandDTO tagReplaceCommandDTO,
+                                               @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
         tagFacade.replaceTag(userId, value, tagReplaceCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();

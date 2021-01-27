@@ -27,15 +27,19 @@ class DeleteTagAdapter implements DeleteTagPort {
                 DomainEventPublisher.Topic.TAG,
                 // Use userId as key
                 userId,
-                createTagEvent(value)
+                createTagEvent(userId, value)
         );
     }
 
-    private TagEvent createTagEvent(final String value) {
+    private TagEvent createTagEvent(final UUID ownerId, final String value) {
         return TagEvent.newBuilder()
                 .setState(DomainEventPublisher.TagEventType.REMOVED.name())
                 .setTagValue(value)
-                .setDataBuilder(TagData.newBuilder())
+                .setDataBuilder(
+                        TagData.newBuilder()
+                                .setValue(value)
+                                .setOwnerId(ownerId.toString())
+                )
                 .setOccurredOn(Instant.now().toEpochMilli())
                 .build();
     }

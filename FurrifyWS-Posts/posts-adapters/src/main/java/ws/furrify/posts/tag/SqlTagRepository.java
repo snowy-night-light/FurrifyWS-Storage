@@ -2,13 +2,12 @@ package ws.furrify.posts.tag;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ws.furrify.posts.tag.dto.query.TagDetailsQueryDTO;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Transactional(rollbackFor = RuntimeException.class)
@@ -29,26 +28,10 @@ CLASS BASED PROJECTIONS DON'T WORK IN THIS PROJECT */
 interface SqlTagQueryRepository extends TagQueryRepository, Repository<TagSnapshot, Long> {
 
     @Override
-    @Query(value = "select " +
-            "new ws.furrify.posts.tag.dto.query.TagDetailsQueryDTO(" +
-            "tag.value, " +
-            "tag.ownerId, " +
-            "tag.type, " +
-            "tag.createDate" +
-            ")" +
-            " from TagSnapshot tag where tag.value = ?2 and tag.ownerId = ?1")
-    Optional<TagDetailsQueryDTO> findByValue(UUID userId, String value);
+    Optional<TagDetailsQueryDTO> findByOwnerIdAndValue(UUID userId, String value);
 
     @Override
-    @Query(value = "select " +
-            "new ws.furrify.posts.tag.dto.query.TagDetailsQueryDTO(" +
-            "tag.value, " +
-            "tag.ownerId, " +
-            "tag.type, " +
-            "tag.createDate" +
-            ")" +
-            " from TagSnapshot tag where tag.ownerId = ?1")
-    Set<TagDetailsQueryDTO> findAll(UUID userId);
+    List<TagDetailsQueryDTO> findAllByOwnerId(UUID userId);
 }
 
 @org.springframework.stereotype.Repository

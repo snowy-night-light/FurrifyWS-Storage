@@ -28,7 +28,7 @@ public class TagDtoFactory {
                 .id(tagEvent.getTagId())
                 .value(tagEvent.getData().getValue())
                 .ownerId(key)
-                .type(TagType.valueOf(tagEvent.getData().getType()))
+                .type((tagEvent.getData().getType() == null) ? null : TagType.valueOf(tagEvent.getData().getType()))
                 .createDate(createDate)
                 .build();
     }

@@ -108,20 +108,20 @@ public class PostFacade {
     }
 
     private void updateTagDetailsInPosts(final UUID ownerId,
-                                         final String originalValue,
+                                         final String originalTagValue,
                                          final String newValue,
                                          final String newType) {
         // Get all posts with tag value, change value and save.
-        postRepository.findAllByOwnerIdAndValueInTags(ownerId, originalValue).stream()
-                .peek(post -> post.updateTagDetailsInTags(originalValue, newValue, newType))
+        postRepository.findAllByOwnerIdAndValueInTags(ownerId, originalTagValue).stream()
+                .peek(post -> post.updateTagDetailsInTags(originalTagValue, newValue, newType))
                 .forEach(postRepository::save);
     }
 
     private void deleteTagFromPosts(final UUID ownerId,
-                                    final String value) {
+                                    final String tagValue) {
         // Get all posts with tag value, remove it and save.
-        postRepository.findAllByOwnerIdAndValueInTags(ownerId, value).stream()
-                .peek(post -> post.removeTag(value))
+        postRepository.findAllByOwnerIdAndValueInTags(ownerId, tagValue).stream()
+                .peek(post -> post.removeTag(tagValue))
                 .forEach(postRepository::save);
     }
 }
