@@ -11,6 +11,9 @@ spring:
         prefix: "kafka-test-"
     producer:
       retries: 3
+  h2:
+    console:
+      enabled: true
   datasource:
     driverClassName: org.h2.Driver
     username: 'sa'
@@ -33,7 +36,7 @@ server:
   port: 7071
 
 keycloak:
-  auth-server-url: http://localhost:6565/auth
+  auth-server-url: http://192.168.0.27:6565/auth
   realm: dev
   resource: keycloak-test
   public-client: true

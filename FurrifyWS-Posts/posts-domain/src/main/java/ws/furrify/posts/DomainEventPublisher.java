@@ -19,7 +19,8 @@ public interface DomainEventPublisher<T> {
         /**
          * Represents post_events topic in kafka.
          */
-        POST("post_events");
+        POST("post_events"),
+        TAG("tag_events");
 
         /**
          * Topic name for kafka.
@@ -33,5 +34,25 @@ public interface DomainEventPublisher<T> {
         public String getTopicName() {
             return topicName;
         }
+    }
+
+    enum PostEventType {
+        /**
+         * Events that can occur on Post entity.
+         */
+        CREATED,
+        REMOVED,
+        REPLACED,
+        UPDATED
+    }
+
+    enum TagEventType {
+        /**
+         * Events that can occur on Tag entity.
+         */
+        CREATED,
+        REMOVED,
+        REPLACED,
+        UPDATED
     }
 }

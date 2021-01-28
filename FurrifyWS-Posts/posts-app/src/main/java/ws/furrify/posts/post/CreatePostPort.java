@@ -7,5 +7,4 @@ import java.util.UUID;
 interface CreatePostPort {
 
     UUID createPost(UUID userId, PostDTO postDTO);
-
 }

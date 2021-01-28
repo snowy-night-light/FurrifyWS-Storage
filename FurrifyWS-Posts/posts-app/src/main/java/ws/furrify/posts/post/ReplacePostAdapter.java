@@ -7,20 +7,32 @@ import ws.furrify.posts.PostEvent;
 import ws.furrify.posts.exception.Errors;
 import ws.furrify.posts.exception.RecordNotFoundException;
 import ws.furrify.posts.post.dto.PostDTO;
+import ws.furrify.posts.post.vo.PostTag;
+import ws.furrify.posts.tag.TagQueryRepository;
+import ws.furrify.posts.vo.PostTagData;
 
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-class ReplacePostDetailsDetailsAdapter implements ReplacePostDetailsPort {
+class ReplacePostAdapter implements ReplacePostPort {
 
     private final DomainEventPublisher<PostEvent> domainEventPublisher;
     private final PostRepository postRepository;
+    private final TagQueryRepository tagQueryRepository;
 
     @Override
-    public void replacePostDetails(final UUID userId, final UUID postId, final PostDTO postDTO) {
+    public void replacePost(final UUID userId, final UUID postId, final PostDTO postDTO) {
         Post post = postRepository.findByOwnerIdAndPostId(userId, postId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId.toString())));
+
+        // Convert tags with values to tags with values and types
+        Set<PostTag> tags = PostTagUtils.tagValueToTag(userId, postDTO.getTags(), tagQueryRepository);
+
+        // Update tags in post
+        post.replaceTags(tags);
 
         // Update all details in post
         post.updateDetails(postDTO.getTitle(), postDTO.getDescription());
@@ -38,7 +50,7 @@ class ReplacePostDetailsDetailsAdapter implements ReplacePostDetailsPort {
         PostSnapshot postSnapshot = post.getSnapshot();
 
         return PostEvent.newBuilder()
-                .setState(PostEventType.REPLACED.name())
+                .setState(DomainEventPublisher.PostEventType.REPLACED.name())
                 .setPostId(postSnapshot.getId())
                 .setPostUUID(postSnapshot.getPostId().toString())
                 .setOccurredOn(Instant.now().toEpochMilli())
@@ -47,6 +59,16 @@ class ReplacePostDetailsDetailsAdapter implements ReplacePostDetailsPort {
                                 .setOwnerId(postSnapshot.getOwnerId().toString())
                                 .setTitle(postSnapshot.getTitle())
                                 .setDescription(postSnapshot.getDescription())
+                                .setTags(
+                                        // Map PostTag to PostTagData
+                                        postSnapshot.getTags().stream()
+                                                .map(tag ->
+                                                        PostTagData.newBuilder()
+                                                                .setValue(tag.getValue())
+                                                                .setType(tag.getType())
+                                                                .build()
+                                                ).collect(Collectors.toList())
+                                )
                                 .setCreateDate(postSnapshot.getCreateDate().toInstant().toEpochMilli())
                 ).build();
     }

@@ -33,7 +33,7 @@ class DeletePostAdapter implements DeletePostPort {
 
     private PostEvent createPostEvent(final UUID postId) {
         return PostEvent.newBuilder()
-                .setState(PostEventType.REMOVED.name())
+                .setState(DomainEventPublisher.PostEventType.REMOVED.name())
                 .setPostUUID(postId.toString())
                 .setDataBuilder(PostData.newBuilder())
                 .setOccurredOn(Instant.now().toEpochMilli())

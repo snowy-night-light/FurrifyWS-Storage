@@ -2,8 +2,6 @@ package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
@@ -21,7 +19,6 @@ import ws.furrify.posts.pageable.PageableRequest;
 import ws.furrify.posts.post.dto.query.PostDetailsQueryDTO;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.afford;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -39,7 +36,7 @@ class QueryUserPostController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public PagedModel<EntityModel<PostDetailsQueryDTO>> getUserPosts(
             @PathVariable UUID userId,
@@ -57,15 +54,11 @@ class QueryUserPostController {
                 .page(page)
                 .build().toPageable();
 
-        Page<PostDetailsQueryDTO> posts = postQueryRepository.findAll(userId, pageable);
+        PagedModel<EntityModel<PostDetailsQueryDTO>> posts = pagedResourcesAssembler.toModel(
+                postQueryRepository.findAllByOwnerId(userId, pageable)
+        );
 
-        // Add relations
-        PagedModel<EntityModel<PostDetailsQueryDTO>> postResponses = posts.stream()
-                .peek(this::addPostRelations)
-                .collect(Collectors.collectingAndThen(Collectors.toList(), (list) ->
-                        pagedResourcesAssembler.toModel(
-                                new PageImpl<>(list, pageable, posts.getTotalElements())
-                        )));
+        posts.forEach(this::addPostRelations);
 
         // Add hateoas relation
         var postsRel = linkTo(methodOn(QueryUserPostController.class).getUserPosts(
@@ -77,48 +70,56 @@ class QueryUserPostController {
                 null
         )).withSelfRel();
 
-        postResponses.add(postsRel);
+        posts.add(postsRel);
 
-        return postResponses;
+        return posts;
     }
 
     @GetMapping("/{postId}")
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
-    public PostDetailsQueryDTO getUserPost(@PathVariable UUID userId,
-                                           @PathVariable UUID postId,
-                                           @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+    public EntityModel<PostDetailsQueryDTO> getUserPost(@PathVariable UUID userId,
+                                                        @PathVariable UUID postId,
+                                                        @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
-        PostDetailsQueryDTO postQueryDTO = postQueryRepository.findByPostId(userId, postId)
+        PostDetailsQueryDTO postQueryDTO = postQueryRepository.findByPostIdAndOwnerId(postId, userId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId)));
 
-        return addPostRelations(postQueryDTO);
+        return addPostRelations(
+                EntityModel.of(postQueryDTO)
+        );
     }
 
-    private PostDetailsQueryDTO addPostRelations(PostDetailsQueryDTO postQueryDTO) {
+    private EntityModel<PostDetailsQueryDTO> addPostRelations(EntityModel<PostDetailsQueryDTO> postQueryDtoModel) {
+        var postQueryDto = postQueryDtoModel.getContent();
+        // Check if model content is empty
+        if (postQueryDto == null) {
+            throw new IllegalStateException("Entity model contains empty content.");
+        }
+
         var selfRel = linkTo(methodOn(QueryUserPostController.class).getUserPost(
-                postQueryDTO.getOwnerId(),
-                postQueryDTO.getPostId(),
+                postQueryDto.getOwnerId(),
+                postQueryDto.getPostId(),
                 null
         )).withSelfRel().andAffordance(
                 afford(methodOn(CommandUserPostController.class).deletePost(
-                        postQueryDTO.getOwnerId(), postQueryDTO.getPostId(), null
+                        postQueryDto.getOwnerId(), postQueryDto.getPostId(), null
                 ))
         ).andAffordance(
-                afford(methodOn(CommandUserPostController.class).replacePostDetails(
-                        postQueryDTO.getOwnerId(), postQueryDTO.getPostId(), null, null
+                afford(methodOn(CommandUserPostController.class).replacePost(
+                        postQueryDto.getOwnerId(), postQueryDto.getPostId(), null, null
                 ))
         ).andAffordance(
-                afford(methodOn(CommandUserPostController.class).updatePostDetails(
-                        postQueryDTO.getOwnerId(), postQueryDTO.getPostId(), null, null
+                afford(methodOn(CommandUserPostController.class).updatePost(
+                        postQueryDto.getOwnerId(), postQueryDto.getPostId(), null, null
                 ))
         );
 
         var postsRel = linkTo(methodOn(QueryUserPostController.class).getUserPosts(
-                postQueryDTO.getOwnerId(),
+                postQueryDto.getOwnerId(),
                 null,
                 null,
                 null,
@@ -126,9 +127,9 @@ class QueryUserPostController {
                 null
         )).withRel("userPosts");
 
-        postQueryDTO.add(selfRel);
-        postQueryDTO.add(postsRel);
+        postQueryDtoModel.add(selfRel);
+        postQueryDtoModel.add(postsRel);
 
-        return postQueryDTO;
+        return postQueryDtoModel;
     }
 }

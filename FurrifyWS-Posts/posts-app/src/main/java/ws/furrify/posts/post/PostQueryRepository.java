@@ -11,7 +11,7 @@ import java.util.UUID;
  * @author Skyte
  */
 public interface PostQueryRepository {
-    Optional<PostDetailsQueryDTO> findByPostId(UUID userId, UUID postId);
+    Optional<PostDetailsQueryDTO> findByPostIdAndOwnerId(UUID userId, UUID postId);
 
-    Page<PostDetailsQueryDTO> findAll(UUID userId, Pageable pageable);
+    Page<PostDetailsQueryDTO> findAllByOwnerId(UUID userId, Pageable pageable);
 }

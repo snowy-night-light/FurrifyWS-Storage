@@ -1,10 +1,13 @@
 package ws.furrify.posts.post;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 interface PostRepository {
     Post save(Post post);
+
+    Set<Post> findAllByOwnerIdAndValueInTags(UUID ownerId, String value);
 
     boolean existsByOwnerIdAndPostId(UUID ownerId, UUID postId);
 
