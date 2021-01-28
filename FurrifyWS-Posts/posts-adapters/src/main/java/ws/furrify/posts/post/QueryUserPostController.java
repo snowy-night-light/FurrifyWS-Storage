@@ -109,11 +109,11 @@ class QueryUserPostController {
                         postQueryDto.getOwnerId(), postQueryDto.getPostId(), null
                 ))
         ).andAffordance(
-                afford(methodOn(CommandUserPostController.class).replacePostDetails(
+                afford(methodOn(CommandUserPostController.class).replacePost(
                         postQueryDto.getOwnerId(), postQueryDto.getPostId(), null, null
                 ))
         ).andAffordance(
-                afford(methodOn(CommandUserPostController.class).updatePostDetails(
+                afford(methodOn(CommandUserPostController.class).updatePost(
                         postQueryDto.getOwnerId(), postQueryDto.getPostId(), null, null
                 ))
         );

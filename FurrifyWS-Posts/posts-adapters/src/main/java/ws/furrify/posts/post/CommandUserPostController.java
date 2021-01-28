@@ -69,11 +69,11 @@ class CommandUserPostController {
                     "hasAuthority('admin') or " +
                     "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
     )
-    public ResponseEntity<?> updatePostDetails(@PathVariable UUID userId,
-                                               @PathVariable UUID postId,
-                                               @RequestBody PostUpdateCommandDTO postUpdateCommandDTO,
-                                               @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
-        postFacade.updatePostDetails(userId, postId, postUpdateCommandDTO.toDTO());
+    public ResponseEntity<?> updatePost(@PathVariable UUID userId,
+                                        @PathVariable UUID postId,
+                                        @RequestBody PostUpdateCommandDTO postUpdateCommandDTO,
+                                        @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+        postFacade.updatePost(userId, postId, postUpdateCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();
     }
@@ -84,11 +84,11 @@ class CommandUserPostController {
                     "hasAuthority('admin') or " +
                     "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
     )
-    public ResponseEntity<?> replacePostDetails(@PathVariable UUID userId,
-                                                @PathVariable UUID postId,
-                                                @RequestBody PostReplaceCommandDTO postReplaceCommandDTO,
-                                                @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
-        postFacade.replacePostDetails(userId, postId, postReplaceCommandDTO.toDTO());
+    public ResponseEntity<?> replacePost(@PathVariable UUID userId,
+                                         @PathVariable UUID postId,
+                                         @RequestBody PostReplaceCommandDTO postReplaceCommandDTO,
+                                         @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+        postFacade.replacePost(userId, postId, postReplaceCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();
     }

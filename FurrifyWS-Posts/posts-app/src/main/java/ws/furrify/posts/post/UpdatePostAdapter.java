@@ -17,14 +17,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-class UpdatePostDetailsDetailsAdapter implements UpdatePostDetailsPort {
+class UpdatePostAdapter implements UpdatePostPort {
 
     private final DomainEventPublisher<PostEvent> domainEventPublisher;
     private final PostRepository postRepository;
     private final TagQueryRepository tagQueryRepository;
 
     @Override
-    public void updatePostDetails(final UUID userId, final UUID postId, final PostDTO postDTO) {
+    public void updatePost(final UUID userId, final UUID postId, final PostDTO postDTO) {
         Post post = postRepository.findByOwnerIdAndPostId(userId, postId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId.toString())));
 

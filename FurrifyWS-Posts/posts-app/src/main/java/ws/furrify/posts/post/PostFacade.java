@@ -19,8 +19,8 @@ public class PostFacade {
 
     private final CreatePostPort createPostAdapter;
     private final DeletePostPort deletePostAdapter;
-    private final UpdatePostDetailsPort updatePostAdapter;
-    private final ReplacePostDetailsPort replacePostAdapter;
+    private final UpdatePostPort updatePostAdapter;
+    private final ReplacePostPort replacePostAdapter;
     private final PostRepository postRepository;
     private final PostFactory postFactory;
     private final PostDtoFactory postDTOFactory;
@@ -35,7 +35,6 @@ public class PostFacade {
 
         switch (DomainEventPublisher.PostEventType.valueOf(postEvent.getState())) {
             case CREATED, REPLACED, UPDATED -> savePost(postDTO);
-
             case REMOVED -> deletePostByPostId(postDTO.getPostId());
 
             default -> log.warning("State received from kafka is not defined. State=" + postEvent.getState());
@@ -85,8 +84,8 @@ public class PostFacade {
      * @param postId  Post UUID
      * @param postDTO Replacement post.
      */
-    public void replacePostDetails(final UUID userId, final UUID postId, final PostDTO postDTO) {
-        replacePostAdapter.replacePostDetails(userId, postId, postDTO);
+    public void replacePost(final UUID userId, final UUID postId, final PostDTO postDTO) {
+        replacePostAdapter.replacePost(userId, postId, postDTO);
     }
 
     /**
@@ -95,8 +94,8 @@ public class PostFacade {
      * @param postId  Post UUID.
      * @param postDTO Post with updated specific fields.
      */
-    public void updatePostDetails(final UUID userId, final UUID postId, final PostDTO postDTO) {
-        updatePostAdapter.updatePostDetails(userId, postId, postDTO);
+    public void updatePost(final UUID userId, final UUID postId, final PostDTO postDTO) {
+        updatePostAdapter.updatePost(userId, postId, postDTO);
     }
 
     private void savePost(final PostDTO postDTO) {

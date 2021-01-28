@@ -55,8 +55,8 @@ class PostFacadeTest {
         postFacade = new PostFacade(
                 new CreatePostAdapter(postFactory, eventPublisher, tagQueryRepository),
                 new DeletePostAdapter(eventPublisher, postRepository),
-                new UpdatePostDetailsDetailsAdapter(eventPublisher, postRepository, tagQueryRepository),
-                new ReplacePostDetailsDetailsAdapter(eventPublisher, postRepository, tagQueryRepository),
+                new UpdatePostAdapter(eventPublisher, postRepository, tagQueryRepository),
+                new ReplacePostAdapter(eventPublisher, postRepository, tagQueryRepository),
                 postRepository,
                 postFactory,
                 postDTOFactory
@@ -82,7 +82,7 @@ class PostFacadeTest {
         // When replacePost() method called
         when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
         // Then run successfully
-        assertDoesNotThrow(() -> postFacade.replacePostDetails(userId, postId, postDTO), "Exception was thrown");
+        assertDoesNotThrow(() -> postFacade.replacePost(userId, postId, postDTO), "Exception was thrown");
     }
 
     @Test
@@ -96,7 +96,7 @@ class PostFacadeTest {
         // Then throw no record found exception
         assertThrows(
                 RecordNotFoundException.class,
-                () -> postFacade.replacePostDetails(userId, postId, postDTO),
+                () -> postFacade.replacePost(userId, postId, postDTO),
                 "Exception was not thrown."
         );
     }
@@ -110,7 +110,7 @@ class PostFacadeTest {
         // When updatePost() method called
         when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
         // Then run successfully
-        assertDoesNotThrow(() -> postFacade.updatePostDetails(userId, postId, postDTO), "Exception was thrown");
+        assertDoesNotThrow(() -> postFacade.updatePost(userId, postId, postDTO), "Exception was thrown");
     }
 
     @Test
@@ -124,7 +124,7 @@ class PostFacadeTest {
         // Then throw no record found exception
         assertThrows(
                 RecordNotFoundException.class,
-                () -> postFacade.updatePostDetails(userId, postId, postDTO),
+                () -> postFacade.updatePost(userId, postId, postDTO),
                 "Exception was not thrown."
         );
     }
