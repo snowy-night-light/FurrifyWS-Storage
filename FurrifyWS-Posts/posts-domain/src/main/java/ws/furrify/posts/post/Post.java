@@ -45,15 +45,15 @@ class Post {
     }
 
     PostSnapshot getSnapshot() {
-        return new PostSnapshot(
-                id,
-                postId,
-                ownerId,
-                title,
-                description,
-                tags.stream().collect(Collectors.toUnmodifiableSet()),
-                createDate
-        );
+        return PostSnapshot.builder()
+                .id(id)
+                .postId(postId)
+                .ownerId(ownerId)
+                .title(title)
+                .description(description)
+                .tags(tags.stream().collect(Collectors.toUnmodifiableSet()))
+                .createDate(createDate)
+                .build();
     }
 
     void updateDetails(@NonNull final String newTitle,

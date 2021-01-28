@@ -40,15 +40,15 @@ class Tag {
     }
 
     TagSnapshot getSnapshot() {
-        return new TagSnapshot(
-                id,
-                title,
-                description,
-                value,
-                ownerId,
-                type,
-                createDate
-        );
+        return TagSnapshot.builder()
+                .id(id)
+                .title(title)
+                .description(description)
+                .value(value)
+                .ownerId(ownerId)
+                .type(type)
+                .createDate(createDate)
+                .build();
     }
 
     void updateValue(@NonNull final String value,
