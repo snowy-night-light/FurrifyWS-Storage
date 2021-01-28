@@ -20,10 +20,15 @@ import java.util.stream.Collectors;
 @Log
 class Post {
     private final Long id;
+    @NonNull
     private final UUID postId;
+    @NonNull
     private final UUID ownerId;
+    @NonNull
     private String title;
+    @NonNull
     private String description;
+    @NonNull
     private Set<PostTag> tags;
     private final ZonedDateTime createDate;
 

@@ -16,8 +16,11 @@ import java.util.UUID;
 @ToString
 class Tag {
     private final Long id;
+    @NonNull
     private String value;
+    @NonNull
     private final UUID ownerId;
+    @NonNull
     private TagType type;
     private final ZonedDateTime createDate;
 
