@@ -17,6 +17,13 @@ import javax.validation.constraints.Size;
 public class TagReplaceCommandDTO implements CommandDTO<TagDTO> {
 
     @NotBlank
+    @Size(max = 64)
+    private String title;
+
+    @Size(max = 1024)
+    private String description;
+
+    @NotBlank
     @Size(max = 32)
     @Pattern(regexp = "^[a-zA-Z0-9_-]*$")
     private String value;
@@ -27,6 +34,8 @@ public class TagReplaceCommandDTO implements CommandDTO<TagDTO> {
     @Override
     public TagDTO toDTO() {
         return TagDTO.builder()
+                .title(title)
+                .description(description)
                 .value(value)
                 .type(type)
                 .build();

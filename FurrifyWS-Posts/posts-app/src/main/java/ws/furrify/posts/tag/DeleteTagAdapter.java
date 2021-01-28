@@ -38,6 +38,8 @@ class DeleteTagAdapter implements DeleteTagPort {
                 .setDataBuilder(
                         TagData.newBuilder()
                                 .setValue(value)
+                                .setTitle("")
+                                .setDescription("")
                                 .setOwnerId(ownerId.toString())
                 )
                 .setOccurredOn(Instant.now().toEpochMilli())

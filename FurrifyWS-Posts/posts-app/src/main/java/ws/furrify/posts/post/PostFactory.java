@@ -9,15 +9,21 @@ import java.util.UUID;
 class PostFactory {
 
     Post from(PostDTO postDTO) {
-        PostSnapshot postSnapshot = new PostSnapshot(
-                postDTO.getId(),
-                (postDTO.getPostId() != null) ? postDTO.getPostId() : UUID.randomUUID(),
-                postDTO.getOwnerId(),
-                postDTO.getTitle(),
-                postDTO.getDescription(),
-                (postDTO.getTags() != null) ? postDTO.getTags() : new HashSet<>(),
-                (postDTO.getCreateDate() != null) ? postDTO.getCreateDate() : ZonedDateTime.now()
-        );
+        PostSnapshot postSnapshot = PostSnapshot.builder()
+                .id(postDTO.getId())
+                .postId(
+                        (postDTO.getPostId() != null) ? postDTO.getPostId() : UUID.randomUUID()
+                )
+                .ownerId(postDTO.getOwnerId())
+                .title(postDTO.getTitle())
+                .description(postDTO.getDescription())
+                .tags(
+                        (postDTO.getTags() != null) ? postDTO.getTags() : new HashSet<>()
+                )
+                .createDate(
+                        (postDTO.getCreateDate() != null) ? postDTO.getCreateDate() : ZonedDateTime.now()
+                )
+                .build();
 
         return Post.restore(postSnapshot);
     }

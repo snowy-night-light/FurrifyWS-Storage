@@ -3,6 +3,7 @@ package ws.furrify.posts;
 /**
  * Interface for dto commands.
  *
+ * @param <T> A main entity DTO.
  * @author Skyte
  */
 public interface CommandDTO<T> {

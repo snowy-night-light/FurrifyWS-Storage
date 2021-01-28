@@ -18,6 +18,9 @@ public class TagDTO {
 
     Long id;
 
+    String title;
+    String description;
+
     String value;
     UUID ownerId;
 

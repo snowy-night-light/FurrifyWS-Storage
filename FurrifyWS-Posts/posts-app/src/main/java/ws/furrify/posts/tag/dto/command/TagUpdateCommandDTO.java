@@ -14,6 +14,12 @@ import javax.validation.constraints.Size;
 @Data
 public class TagUpdateCommandDTO implements CommandDTO<TagDTO> {
 
+    @Size(min = 1, max = 64)
+    private String title;
+
+    @Size(max = 1024)
+    private String description;
+
     @Size(max = 32)
     @Pattern(regexp = "^[a-zA-Z0-9_-]*$")
     private String value;

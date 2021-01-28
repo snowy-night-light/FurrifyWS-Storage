@@ -17,6 +17,9 @@ import java.util.UUID;
 class Tag {
     private final Long id;
     @NonNull
+    private String title;
+    private String description;
+    @NonNull
     private String value;
     @NonNull
     private final UUID ownerId;
@@ -27,6 +30,8 @@ class Tag {
     static Tag restore(TagSnapshot tagSnapshot) {
         return new Tag(
                 tagSnapshot.getId(),
+                tagSnapshot.getTitle(),
+                tagSnapshot.getDescription(),
                 tagSnapshot.getValue(),
                 tagSnapshot.getOwnerId(),
                 tagSnapshot.getType(),
@@ -35,13 +40,15 @@ class Tag {
     }
 
     TagSnapshot getSnapshot() {
-        return new TagSnapshot(
-                id,
-                value,
-                ownerId,
-                type,
-                createDate
-        );
+        return TagSnapshot.builder()
+                .id(id)
+                .title(title)
+                .description(description)
+                .value(value)
+                .ownerId(ownerId)
+                .type(type)
+                .createDate(createDate)
+                .build();
     }
 
     void updateValue(@NonNull final String value,
@@ -51,6 +58,12 @@ class Tag {
         }
 
         this.value = value;
+    }
+
+    void updateDetails(final String title,
+                       final String description) {
+        this.title = title;
+        this.description = description;
     }
 
     void updateType(@NonNull final TagType type) {

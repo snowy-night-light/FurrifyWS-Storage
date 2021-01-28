@@ -7,13 +7,17 @@ import java.time.ZonedDateTime;
 class TagFactory {
 
     Tag from(TagDTO tagDTO) {
-        TagSnapshot tagSnapshot = new TagSnapshot(
-                tagDTO.getId(),
-                tagDTO.getValue(),
-                tagDTO.getOwnerId(),
-                tagDTO.getType(),
-                (tagDTO.getCreateDate() != null) ? tagDTO.getCreateDate() : ZonedDateTime.now()
-        );
+        TagSnapshot tagSnapshot = TagSnapshot.builder()
+                .id(tagDTO.getId())
+                .title(tagDTO.getTitle())
+                .description(tagDTO.getDescription())
+                .value(tagDTO.getValue())
+                .ownerId(tagDTO.getOwnerId())
+                .type(tagDTO.getType())
+                .createDate(
+                        (tagDTO.getCreateDate() != null) ? tagDTO.getCreateDate() : ZonedDateTime.now()
+                )
+                .build();
 
         return Tag.restore(tagSnapshot);
     }

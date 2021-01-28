@@ -29,6 +29,12 @@ class UpdateTagAdapter implements UpdateTagPort {
         if (tagDTO.getType() != null) {
             tag.updateType(tagDTO.getType());
         }
+        if (tagDTO.getTitle() != null) {
+            tag.updateDetails(tagDTO.getTitle(), tag.getSnapshot().getDescription());
+        }
+        if (tagDTO.getDescription() != null) {
+            tag.updateDetails(tag.getSnapshot().getTitle(), tagDTO.getDescription());
+        }
 
         // Publish update tag event
         domainEventPublisher.publish(
@@ -49,6 +55,8 @@ class UpdateTagAdapter implements UpdateTagPort {
                 .setDataBuilder(
                         TagData.newBuilder()
                                 .setValue(tagSnapshot.getValue())
+                                .setTitle(tagSnapshot.getTitle())
+                                .setDescription(tagSnapshot.getDescription())
                                 .setOwnerId(tagSnapshot.getOwnerId().toString())
                                 .setType(tagSnapshot.getType().name())
                                 .setCreateDate(tagSnapshot.getCreateDate().toInstant().toEpochMilli())
