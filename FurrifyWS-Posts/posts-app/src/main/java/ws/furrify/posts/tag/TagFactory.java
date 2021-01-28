@@ -9,6 +9,8 @@ class TagFactory {
     Tag from(TagDTO tagDTO) {
         TagSnapshot tagSnapshot = new TagSnapshot(
                 tagDTO.getId(),
+                tagDTO.getTitle(),
+                tagDTO.getDescription(),
                 tagDTO.getValue(),
                 tagDTO.getOwnerId(),
                 tagDTO.getType(),

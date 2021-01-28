@@ -10,6 +10,10 @@ import java.util.UUID;
  * @author Skyte
  */
 public interface TagDetailsQueryDTO extends Serializable {
+    String getTitle();
+
+    String getDescription();
+
     String getValue();
 
     UUID getOwnerId();

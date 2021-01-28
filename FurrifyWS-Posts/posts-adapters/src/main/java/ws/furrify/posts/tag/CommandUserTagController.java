@@ -37,7 +37,7 @@ class CommandUserTagController {
                     "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
     )
     public ResponseEntity<?> createTag(@PathVariable UUID userId,
-                                       @RequestBody TagCreateCommandDTO tagCreateCommandDTO,
+                                       @RequestBody @Validated TagCreateCommandDTO tagCreateCommandDTO,
                                        @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken,
                                        HttpServletResponse response) {
         TagDTO tagDTO = tagCreateCommandDTO.toDTO();
@@ -71,7 +71,7 @@ class CommandUserTagController {
     )
     public ResponseEntity<?> updateTagDetails(@PathVariable UUID userId,
                                               @PathVariable String value,
-                                              @RequestBody TagUpdateCommandDTO tagUpdateCommandDTO,
+                                              @RequestBody @Validated TagUpdateCommandDTO tagUpdateCommandDTO,
                                               @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
         tagFacade.updateTag(userId, value, tagUpdateCommandDTO.toDTO());
 
@@ -86,7 +86,7 @@ class CommandUserTagController {
     )
     public ResponseEntity<?> replaceTagDetails(@PathVariable UUID userId,
                                                @PathVariable String value,
-                                               @RequestBody TagReplaceCommandDTO tagReplaceCommandDTO,
+                                               @RequestBody @Validated TagReplaceCommandDTO tagReplaceCommandDTO,
                                                @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
         tagFacade.replaceTag(userId, value, tagReplaceCommandDTO.toDTO());
 

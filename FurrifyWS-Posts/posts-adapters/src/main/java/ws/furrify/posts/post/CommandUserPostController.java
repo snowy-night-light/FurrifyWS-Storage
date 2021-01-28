@@ -37,7 +37,7 @@ class CommandUserPostController {
                     "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
     )
     public ResponseEntity<?> createPost(@PathVariable UUID userId,
-                                        @RequestBody PostCreateCommandDTO postCreateCommandDTO,
+                                        @RequestBody @Validated PostCreateCommandDTO postCreateCommandDTO,
                                         @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken,
                                         HttpServletResponse response) {
         PostDTO postDTO = postCreateCommandDTO.toDTO();
@@ -71,7 +71,7 @@ class CommandUserPostController {
     )
     public ResponseEntity<?> updatePost(@PathVariable UUID userId,
                                         @PathVariable UUID postId,
-                                        @RequestBody PostUpdateCommandDTO postUpdateCommandDTO,
+                                        @RequestBody @Validated PostUpdateCommandDTO postUpdateCommandDTO,
                                         @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
         postFacade.updatePost(userId, postId, postUpdateCommandDTO.toDTO());
 
@@ -86,7 +86,7 @@ class CommandUserPostController {
     )
     public ResponseEntity<?> replacePost(@PathVariable UUID userId,
                                          @PathVariable UUID postId,
-                                         @RequestBody PostReplaceCommandDTO postReplaceCommandDTO,
+                                         @RequestBody @Validated PostReplaceCommandDTO postReplaceCommandDTO,
                                          @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
         postFacade.replacePost(userId, postId, postReplaceCommandDTO.toDTO());
 

@@ -31,9 +31,10 @@ public class PostUpdateCommandDTO implements CommandDTO<PostDTO> {
                 .title(title)
                 .description(description)
                 .tags(
-                        tags.stream()
+                        // Checks if tags are null
+                        (tags != null) ? tags.stream()
                                 .map(tag -> new PostTag(tag.getValue(), null))
-                                .collect(Collectors.toSet())
+                                .collect(Collectors.toSet()) : null
                 )
                 .build();
     }

@@ -42,6 +42,16 @@ class PostFacadeTest {
 
         tagDetailsQueryDTO = new TagDetailsQueryDTO() {
             @Override
+            public String getTitle() {
+                return "title";
+            }
+
+            @Override
+            public String getDescription() {
+                return "desc";
+            }
+
+            @Override
             public String getValue() {
                 return postTag.getValue();
             }

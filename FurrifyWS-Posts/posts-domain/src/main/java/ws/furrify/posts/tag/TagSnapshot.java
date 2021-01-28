@@ -20,6 +20,9 @@ import static lombok.AccessLevel.PROTECTED;
 class TagSnapshot {
     private Long id;
 
+    private String title;
+    private String description;
+
     private String value;
     private UUID ownerId;
 
