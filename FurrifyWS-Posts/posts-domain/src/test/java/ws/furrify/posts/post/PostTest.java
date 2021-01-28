@@ -23,15 +23,15 @@ class PostTest {
 
     @BeforeEach
     void setUp() {
-        postSnapshot = new PostSnapshot(
-                0L,
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                "Test",
-                "dsa",
-                new HashSet<>(),
-                ZonedDateTime.now()
-        );
+        postSnapshot = PostSnapshot.builder()
+                .id(0L)
+                .postId(UUID.randomUUID())
+                .ownerId(UUID.randomUUID())
+                .title("Test")
+                .description("dsa")
+                .tags(new HashSet<>())
+                .createDate(ZonedDateTime.now())
+                .build();
 
         post = Post.restore(postSnapshot);
     }

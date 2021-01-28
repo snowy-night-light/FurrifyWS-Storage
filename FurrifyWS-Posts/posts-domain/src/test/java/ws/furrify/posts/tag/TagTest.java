@@ -24,13 +24,15 @@ class TagTest {
 
     @BeforeEach
     void setUp() {
-        tagSnapshot = new TagSnapshot(
-                0L,
-                "walking",
-                UUID.randomUUID(),
-                TagType.ACTION,
-                ZonedDateTime.now()
-        );
+        tagSnapshot = TagSnapshot.builder()
+                .id(0L)
+                .title("Title")
+                .description("desc")
+                .value("walking")
+                .ownerId(UUID.randomUUID())
+                .type(TagType.ACTION)
+                .createDate(ZonedDateTime.now())
+                .build();
 
         tag = Tag.restore(tagSnapshot);
     }
