@@ -1,13 +1,11 @@
 package ws.furrify.posts;
 
-import java.io.Serializable;
-
 /**
  * Interface for dto commands.
  *
  * @author Skyte
  */
-public interface CommandDTO<T> extends Serializable {
+public interface CommandDTO<T> {
 
     /**
      * Method enforcing implementation of mapper to DTO.

@@ -92,4 +92,8 @@ class Post {
 
         this.tags = filteredTags;
     }
+
+    void replaceTags(final Set<PostTag> tags) {
+        this.tags = new HashSet<>(tags);
+    }
 }

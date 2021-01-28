@@ -9,6 +9,7 @@ import ws.furrify.posts.PostEvent;
 import ws.furrify.posts.exception.RecordNotFoundException;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
+import ws.furrify.posts.tag.TagQueryRepository;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -24,6 +25,7 @@ class PostFacadeTest {
 
     private static PostRepository postRepository;
     private static PostFacade postFacade;
+    private static TagQueryRepository tagQueryRepository;
 
     private PostDTO postDTO;
     private Post post;
@@ -43,6 +45,7 @@ class PostFacadeTest {
     @BeforeAll
     static void beforeAll() {
         postRepository = mock(PostRepository.class);
+        tagQueryRepository = mock(TagQueryRepository.class);
 
         var postFactory = new PostFactory();
         var postDTOFactory = new PostDtoFactory();
@@ -50,10 +53,10 @@ class PostFacadeTest {
         var eventPublisher = (DomainEventPublisher<PostEvent>) mock(DomainEventPublisher.class);
 
         postFacade = new PostFacade(
-                new CreatePostAdapter(postFactory, eventPublisher),
+                new CreatePostAdapter(postFactory, eventPublisher, tagQueryRepository),
                 new DeletePostAdapter(eventPublisher, postRepository),
-                new UpdatePostDetailsDetailsAdapter(eventPublisher, postRepository),
-                new ReplacePostDetailsDetailsAdapter(eventPublisher, postRepository),
+                new UpdatePostDetailsDetailsAdapter(eventPublisher, postRepository, tagQueryRepository),
+                new ReplacePostDetailsDetailsAdapter(eventPublisher, postRepository, tagQueryRepository),
                 postRepository,
                 postFactory,
                 postDTOFactory

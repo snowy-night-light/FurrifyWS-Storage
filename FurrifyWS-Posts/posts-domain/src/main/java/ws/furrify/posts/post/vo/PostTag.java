@@ -22,6 +22,5 @@ import static lombok.AccessLevel.PROTECTED;
 public class PostTag {
     @NonNull
     private String value;
-    @NonNull
     private String type;
 }

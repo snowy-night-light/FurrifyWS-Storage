@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import ws.furrify.posts.PostEvent;
 import ws.furrify.posts.kafka.KafkaTopicEventPublisher;
 import ws.furrify.posts.post.dto.PostDtoFactory;
+import ws.furrify.posts.tag.TagQueryRepository;
 
 @Configuration
 @RequiredArgsConstructor
@@ -13,6 +14,7 @@ class PostConfig {
 
     private final PostRepositoryImpl postRepository;
     private final KafkaTopicEventPublisher<PostEvent> eventPublisher;
+    private final TagQueryRepository queryTagRepository;
 
     @Bean
     PostFacade postFacade() {
@@ -20,10 +22,10 @@ class PostConfig {
         var postDtoFactory = new PostDtoFactory();
 
         return new PostFacade(
-                new CreatePostAdapter(postFactory, eventPublisher),
+                new CreatePostAdapter(postFactory, eventPublisher, queryTagRepository),
                 new DeletePostAdapter(eventPublisher, postRepository),
-                new UpdatePostDetailsDetailsAdapter(eventPublisher, postRepository),
-                new ReplacePostDetailsDetailsAdapter(eventPublisher, postRepository),
+                new UpdatePostDetailsDetailsAdapter(eventPublisher, postRepository, queryTagRepository),
+                new ReplacePostDetailsDetailsAdapter(eventPublisher, postRepository, queryTagRepository),
                 postRepository,
                 postFactory,
                 postDtoFactory

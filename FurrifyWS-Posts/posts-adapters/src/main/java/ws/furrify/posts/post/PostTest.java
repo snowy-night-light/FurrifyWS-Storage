@@ -30,7 +30,7 @@ class PostTest implements CommandLineRunner {
     private void createTestingPosts() {
         var postFactory = new PostFactory();
 
-        var userId = UUID.fromString("b10920ba-7c1b-42d7-bb75-a07708a760bd");
+        var userId = UUID.fromString("152af668-4e26-4f78-9d4a-30e05e546536");
         var postId = UUID.fromString("7c2c35f3-20e9-4b7e-a455-253b7b78e2fa");
 
         sqlPostRepository.save(
