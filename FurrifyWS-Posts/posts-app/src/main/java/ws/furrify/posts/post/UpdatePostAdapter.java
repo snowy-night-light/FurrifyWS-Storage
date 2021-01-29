@@ -1,15 +1,15 @@
 package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
-import ws.furrify.posts.DomainEventPublisher;
-import ws.furrify.posts.PostData;
 import ws.furrify.posts.PostEvent;
-import ws.furrify.posts.exception.Errors;
-import ws.furrify.posts.exception.RecordNotFoundException;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.vo.PostTag;
-import ws.furrify.posts.tag.TagQueryRepository;
+import ws.furrify.posts.tag.TagServiceClient;
+import ws.furrify.posts.vo.PostData;
 import ws.furrify.posts.vo.PostTagData;
+import ws.furrify.shared.DomainEventPublisher;
+import ws.furrify.shared.exception.Errors;
+import ws.furrify.shared.exception.RecordNotFoundException;
 
 import java.time.Instant;
 import java.util.Set;
@@ -21,7 +21,7 @@ class UpdatePostAdapter implements UpdatePostPort {
 
     private final DomainEventPublisher<PostEvent> domainEventPublisher;
     private final PostRepository postRepository;
-    private final TagQueryRepository tagQueryRepository;
+    private final TagServiceClient tagServiceClient;
 
     @Override
     public void updatePost(final UUID userId, final UUID postId, final PostDTO postDTO) {
@@ -37,7 +37,7 @@ class UpdatePostAdapter implements UpdatePostPort {
         }
         if (postDTO.getTags() != null) {
             // Convert tags with values to tags with values and types
-            Set<PostTag> tags = PostTagUtils.tagValueToTag(userId, postDTO.getTags(), tagQueryRepository);
+            Set<PostTag> tags = PostTagUtils.tagValueToTag(userId, postDTO.getTags(), tagServiceClient);
 
             post.replaceTags(tags);
         }

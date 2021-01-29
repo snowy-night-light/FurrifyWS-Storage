@@ -20,6 +20,8 @@
         <module>FurrifyWS-EurekaServer</module>
         <module>FurrifyWS-Gateway</module>
         <module>FurrifyWS-Posts</module>
+        <module>FurrifyWS-Shared</module>
+        <module>FurrifyWS-Tags</module>
     </modules>
 
     <dependencies>

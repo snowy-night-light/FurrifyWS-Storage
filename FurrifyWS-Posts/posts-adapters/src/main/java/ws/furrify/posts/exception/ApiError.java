@@ -11,6 +11,7 @@ import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import ws.furrify.shared.exception.Errors;
 
 import javax.validation.ConstraintViolation;
 import java.time.LocalDateTime;

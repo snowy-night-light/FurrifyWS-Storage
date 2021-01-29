@@ -1,11 +1,11 @@
 package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
-import ws.furrify.posts.DomainEventPublisher;
-import ws.furrify.posts.PostData;
 import ws.furrify.posts.PostEvent;
-import ws.furrify.posts.exception.Errors;
-import ws.furrify.posts.exception.RecordNotFoundException;
+import ws.furrify.posts.vo.PostData;
+import ws.furrify.shared.DomainEventPublisher;
+import ws.furrify.shared.exception.Errors;
+import ws.furrify.shared.exception.RecordNotFoundException;
 
 import java.time.Instant;
 import java.util.UUID;

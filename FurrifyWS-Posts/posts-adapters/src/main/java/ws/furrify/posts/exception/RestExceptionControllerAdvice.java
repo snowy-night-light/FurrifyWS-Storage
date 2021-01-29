@@ -23,6 +23,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ws.furrify.shared.exception.Errors;
+import ws.furrify.shared.exception.RecordAlreadyExistsException;
+import ws.furrify.shared.exception.RecordNotFoundException;
+import ws.furrify.shared.exception.RestException;
 
 import java.util.Objects;
 

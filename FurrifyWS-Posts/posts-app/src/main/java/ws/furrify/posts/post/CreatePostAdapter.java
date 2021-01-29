@@ -1,13 +1,13 @@
 package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
-import ws.furrify.posts.DomainEventPublisher;
-import ws.furrify.posts.PostData;
 import ws.furrify.posts.PostEvent;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.vo.PostTag;
-import ws.furrify.posts.tag.TagQueryRepository;
+import ws.furrify.posts.tag.TagServiceClient;
+import ws.furrify.posts.vo.PostData;
 import ws.furrify.posts.vo.PostTagData;
+import ws.furrify.shared.DomainEventPublisher;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -20,7 +20,7 @@ class CreatePostAdapter implements CreatePostPort {
 
     private final PostFactory postFactory;
     private final DomainEventPublisher<PostEvent> domainEventPublisher;
-    private final TagQueryRepository tagQueryRepository;
+    private final TagServiceClient tagServiceClient;
 
     @Override
     public UUID createPost(final UUID userId, final PostDTO postDTO) {
@@ -28,7 +28,7 @@ class CreatePostAdapter implements CreatePostPort {
         UUID postId = UUID.randomUUID();
 
         // Convert tags with values to tags with values and types
-        Set<PostTag> tags = PostTagUtils.tagValueToTag(userId, postDTO.getTags(), tagQueryRepository);
+        Set<PostTag> tags = PostTagUtils.tagValueToTag(userId, postDTO.getTags(), tagServiceClient);
 
         // Edit postDTO with generated user uuid, encrypted password and current time
         PostDTO updatedPostToCreateDTO = postDTO.toBuilder()
