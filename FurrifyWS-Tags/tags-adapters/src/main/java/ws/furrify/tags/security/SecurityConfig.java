@@ -1,4 +1,4 @@
-package ws.furrify.posts.security;
+package ws.furrify.tags.security;
 
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
@@ -50,7 +50,7 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.authorizeRequests()
-                .antMatchers("/users/*/tags*").hasRole("user")
+                .antMatchers("/users/*/tags/**").hasRole("user")
                 .anyRequest().authenticated();
 
         http.csrf().disable();
