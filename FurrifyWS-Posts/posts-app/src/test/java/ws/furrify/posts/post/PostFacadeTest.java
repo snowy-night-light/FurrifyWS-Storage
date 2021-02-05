@@ -89,7 +89,7 @@ class PostFacadeTest {
         // Given ownerId and postDTO
         UUID userId = UUID.randomUUID();
         // When createPost() method called
-        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(Optional.of(tagDetailsQueryDTO));
+        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(tagDetailsQueryDTO);
         // Then return generated uuid
         assertNotNull(postFacade.createPost(userId, postDTO), "PostId was not returned.");
     }
@@ -100,7 +100,7 @@ class PostFacadeTest {
         // Given ownerId and postDTO with non existing tag
         UUID userId = UUID.randomUUID();
         // When createPost() method called
-        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(Optional.empty());
+        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(null);
         // Then return generated uuid
         assertThrows(
                 RecordNotFoundException.class,
@@ -117,7 +117,7 @@ class PostFacadeTest {
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
         // When replacePost() method called
-        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(Optional.of(tagDetailsQueryDTO));
+        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(tagDetailsQueryDTO);
         when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
         // Then run successfully
         assertDoesNotThrow(() -> postFacade.replacePost(userId, postId, postDTO), "Exception was thrown");
@@ -147,7 +147,7 @@ class PostFacadeTest {
         UUID postId = UUID.randomUUID();
         // When replacePost() method called
         when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
-        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(Optional.empty());
+        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(null);
         // Then run successfully
         assertThrows(
                 RecordNotFoundException.class,
@@ -163,7 +163,7 @@ class PostFacadeTest {
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
         // When updatePost() method called
-        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(Optional.of(tagDetailsQueryDTO));
+        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(tagDetailsQueryDTO);
         when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
         // Then run successfully
         assertDoesNotThrow(() -> postFacade.updatePost(userId, postId, postDTO), "Exception was thrown");
@@ -193,7 +193,7 @@ class PostFacadeTest {
         UUID postId = UUID.randomUUID();
         // When replacePost() method called
         when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
-        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(Optional.empty());
+        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(null);
         // Then run successfully
         assertThrows(
                 RecordNotFoundException.class,

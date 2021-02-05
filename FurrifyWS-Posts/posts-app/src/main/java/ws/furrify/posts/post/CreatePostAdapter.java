@@ -28,7 +28,7 @@ class CreatePostAdapter implements CreatePostPort {
         UUID postId = UUID.randomUUID();
 
         // Convert tags with values to tags with values and types
-        Set<PostTag> tags = PostTagUtils.tagValueToTag(userId, postDTO.getTags(), tagServiceClient);
+        Set<PostTag> tags = PostTagUtils.tagValueToTagVO(userId, postDTO.getTags(), tagServiceClient);
 
         // Edit postDTO with generated user uuid, encrypted password and current time
         PostDTO updatedPostToCreateDTO = postDTO.toBuilder()

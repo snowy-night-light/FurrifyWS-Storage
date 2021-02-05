@@ -23,6 +23,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ws.furrify.shared.exception.ChainOfRequestsUnauthorizedException;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
 import ws.furrify.shared.exception.RecordNotFoundException;
@@ -131,7 +132,8 @@ class RestExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({
             RecordNotFoundException.class,
-            RecordAlreadyExistsException.class
+            RecordAlreadyExistsException.class,
+            ChainOfRequestsUnauthorizedException.class
     })
     protected ResponseEntity<Object> handleEntityNotFound(
             RestException exception) {

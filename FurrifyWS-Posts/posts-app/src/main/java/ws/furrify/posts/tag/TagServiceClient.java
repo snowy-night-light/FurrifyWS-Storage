@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ws.furrify.posts.tag.dto.query.TagDetailsQueryDTO;
 
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -22,5 +21,5 @@ public interface TagServiceClient {
      * @return Tag details from other microservice.
      */
     @RequestMapping(method = RequestMethod.GET, value = "/users/{userId}/tags/{value}")
-    Optional<TagDetailsQueryDTO> getUserTag(@PathVariable UUID userId, @PathVariable String value);
+    TagDetailsQueryDTO getUserTag(@PathVariable UUID userId, @PathVariable String value);
 }

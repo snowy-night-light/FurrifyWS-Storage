@@ -1,16 +1,19 @@
 package ws.furrify.posts.tag.dto.query;
 
+import lombok.Data;
+
 /**
  * @author Skyte
  */
-public interface TagDetailsQueryDTO {
+@Data
+public class TagDetailsQueryDTO {
     /**
      * @return Tag unique value for user.
      */
-    String getValue();
+    private String value;
 
     /**
      * @return Tag type from enum.
      */
-    String getType();
+    private String type;
 }

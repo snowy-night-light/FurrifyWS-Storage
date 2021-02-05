@@ -6,6 +6,7 @@ import ws.furrify.posts.tag.dto.query.TagDetailsQueryDTO;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
  *
  * @author Skyte
  */
-public class PostTagUtils {
+class PostTagUtils {
 
     /**
      * Coverts PostTag with value to PostTag with value and type.
@@ -25,13 +26,14 @@ public class PostTagUtils {
      * @param tagServiceClient Tag Service Client instance.
      * @return Tags with value and type.
      */
-    public static Set<PostTag> tagValueToTag(UUID ownerId,
-                                             Set<PostTag> tags,
-                                             TagServiceClient tagServiceClient) {
+    public static Set<PostTag> tagValueToTagVO(UUID ownerId,
+                                               Set<PostTag> tags,
+                                               TagServiceClient tagServiceClient) {
         return tags.stream()
                 .map(tagWithValue -> {
-                            TagDetailsQueryDTO tag = tagServiceClient.getUserTag(ownerId, tagWithValue.getValue())
-                                    .orElseThrow(() -> new RecordNotFoundException(Errors.NO_TAG_FOUND.getErrorMessage(tagWithValue.getValue())));
+                            TagDetailsQueryDTO tag = Optional.ofNullable(
+                                    tagServiceClient.getUserTag(ownerId, tagWithValue.getValue())
+                            ).orElseThrow(() -> new RecordNotFoundException(Errors.NO_TAG_FOUND.getErrorMessage(tagWithValue.getValue())));
 
                             return new PostTag(tag.getValue(), tag.getType());
                         }

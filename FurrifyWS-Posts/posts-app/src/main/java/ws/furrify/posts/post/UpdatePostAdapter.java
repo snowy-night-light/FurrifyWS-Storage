@@ -37,7 +37,7 @@ class UpdatePostAdapter implements UpdatePostPort {
         }
         if (postDTO.getTags() != null) {
             // Convert tags with values to tags with values and types
-            Set<PostTag> tags = PostTagUtils.tagValueToTag(userId, postDTO.getTags(), tagServiceClient);
+            Set<PostTag> tags = PostTagUtils.tagValueToTagVO(userId, postDTO.getTags(), tagServiceClient);
 
             post.replaceTags(tags);
         }

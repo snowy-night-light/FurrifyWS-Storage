@@ -29,7 +29,7 @@ class ReplacePostAdapter implements ReplacePostPort {
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId.toString())));
 
         // Convert tags with values to tags with values and types
-        Set<PostTag> tags = PostTagUtils.tagValueToTag(userId, postDTO.getTags(), tagServiceClient);
+        Set<PostTag> tags = PostTagUtils.tagValueToTagVO(userId, postDTO.getTags(), tagServiceClient);
 
         // Update tags in post
         post.replaceTags(tags);

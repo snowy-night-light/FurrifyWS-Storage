@@ -25,6 +25,9 @@ public enum Errors {
     RECORD_ALREADY_EXISTS("Record [uuid={0}] already exists."),
     TAG_ALREADY_EXISTS("Tag [value={0}] already exists."),
     BAD_REQUEST("Given request data is invalid."),
+    CHAIN_OF_REQUESTS_BROKEN("Chain of requests was broken with exception."),
+    CHAIN_OF_REQUESTS_UNAUTHORIZED("Chain of requests was broken with unauthorized call. " +
+            "Make sure you have all scopes required for this request."),
     UNIDENTIFIED("Unknown error occurred.");
 
     private final String errorMessage;

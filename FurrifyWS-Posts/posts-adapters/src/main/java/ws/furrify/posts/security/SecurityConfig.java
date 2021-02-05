@@ -40,6 +40,11 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     }
 
     @Bean
+    OpenFeignKeycloakInterceptor openFeignKeycloakInterceptor() {
+        return new OpenFeignKeycloakInterceptor();
+    }
+
+    @Bean
     @Override
     protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
         return new RegisterSessionAuthenticationStrategy(

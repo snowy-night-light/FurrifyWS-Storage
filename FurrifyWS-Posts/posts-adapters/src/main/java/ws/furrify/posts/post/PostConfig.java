@@ -13,7 +13,7 @@ class PostConfig {
 
     private final PostRepositoryImpl postRepository;
     private final KafkaTopicEventPublisher<PostEvent> eventPublisher;
-    private final TagServiceClientImpl tagServiceClient;
+    private final TagServiceImpl tagService;
 
     @Bean
     PostFacade postFacade() {
@@ -21,10 +21,10 @@ class PostConfig {
         var postDtoFactory = new PostDtoFactory();
 
         return new PostFacade(
-                new CreatePostAdapter(postFactory, eventPublisher, tagServiceClient),
+                new CreatePostAdapter(postFactory, eventPublisher, tagService),
                 new DeletePostAdapter(eventPublisher, postRepository),
-                new UpdatePostAdapter(eventPublisher, postRepository, tagServiceClient),
-                new ReplacePostAdapter(eventPublisher, postRepository, tagServiceClient),
+                new UpdatePostAdapter(eventPublisher, postRepository, tagService),
+                new ReplacePostAdapter(eventPublisher, postRepository, tagService),
                 postRepository,
                 postFactory,
                 postDtoFactory
