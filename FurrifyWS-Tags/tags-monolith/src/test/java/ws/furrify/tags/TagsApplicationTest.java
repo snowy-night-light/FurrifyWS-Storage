@@ -1,9 +1,9 @@
-package ws.furrify.posts;
+package ws.furrify.tags;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(value = "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class TagsApplicationTest {
 
     @Test
