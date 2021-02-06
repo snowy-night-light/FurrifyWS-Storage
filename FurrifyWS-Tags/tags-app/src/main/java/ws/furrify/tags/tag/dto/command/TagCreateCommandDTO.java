@@ -1,7 +1,7 @@
 package ws.furrify.tags.tag.dto.command;
 
 import lombok.Data;
-import ws.furrify.tags.CommandDTO;
+import ws.furrify.shared.dto.CommandDTO;
 import ws.furrify.tags.tag.TagType;
 import ws.furrify.tags.tag.dto.TagDTO;
 

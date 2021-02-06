@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 /**
  * Creates PostDTO from PostEvent.
  * `
- *
  * @author Skyte
  */
 public class PostDtoFactory {

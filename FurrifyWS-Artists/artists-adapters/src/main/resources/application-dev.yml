@@ -1,0 +1,45 @@
+logging:
+  level:
+    web: DEBUG
+
+spring:
+  kafka:
+    bootstrap-servers: http://kafka:9092
+    schema-registry-servers: http://kafka:8081
+    consumer:
+      group-id:
+        prefix: "kafka-test-"
+    producer:
+      retries: 3
+  h2:
+    console:
+      enabled: true
+  datasource:
+    driverClassName: org.h2.Driver
+    username: 'sa'
+    password: 'password'
+    url: jdbc:h2:mem:testdb
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+server:
+  port: 7071
+
+keycloak:
+  auth-server-url: http://192.168.0.27:6565/auth
+  realm: dev
+  resource: furrifyws-storage
+  public-client: true
+  principal-attribute: preferred_username
+  bearer-only: true
+  use-resource-role-mappings: true

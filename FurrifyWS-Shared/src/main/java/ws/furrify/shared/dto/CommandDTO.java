@@ -1,4 +1,4 @@
-package ws.furrify.tags;
+package ws.furrify.shared.dto;
 
 /**
  * Interface for dto commands.

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings version="2.1"
+                 xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm">
+
+    <description>XML Mapping file</description>
+
+</entity-mappings>

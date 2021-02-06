@@ -8,7 +8,7 @@ package ws.furrify.tags.pageable;
 class PageableConstants {
 
     /**
-     * Default page size of accounts.pageable.
+     * Default page size of accounts.ws.furrify.shared.pageable.
      */
     public final static int DEFAULT_PAGE_SIZE = 30;
 

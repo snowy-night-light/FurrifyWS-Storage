@@ -20,6 +20,7 @@ public interface DomainEventPublisher<T> {
          * Represents post_events topic in kafka.
          */
         POST("post_events"),
+        ARTIST("artist_events"),
         TAG("tag_events");
 
         /**
@@ -34,6 +35,16 @@ public interface DomainEventPublisher<T> {
         public String getTopicName() {
             return topicName;
         }
+    }
+
+    enum ArtistEventType {
+        /**
+         * Events that can occur on Artist entity.
+         */
+        CREATED,
+        REMOVED,
+        REPLACED,
+        UPDATED
     }
 
     enum PostEventType {

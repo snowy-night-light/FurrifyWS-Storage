@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ws.furrify.posts.pageable.PageableRequest;
 import ws.furrify.posts.post.dto.query.PostDetailsQueryDTO;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
+import ws.furrify.shared.pageable.PageableRequest;
 
 import java.util.UUID;
 

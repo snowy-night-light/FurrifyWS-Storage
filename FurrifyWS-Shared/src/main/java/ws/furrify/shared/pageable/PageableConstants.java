@@ -1,4 +1,4 @@
-package ws.furrify.posts.pageable;
+package ws.furrify.shared.pageable;
 
 /**
  * Pageable constants.
@@ -8,7 +8,7 @@ package ws.furrify.posts.pageable;
 class PageableConstants {
 
     /**
-     * Default page size of accounts.pageable.
+     * Default page size of accounts.ws.furrify.shared.pageable.
      */
     public final static int DEFAULT_PAGE_SIZE = 30;
 

@@ -1,4 +1,4 @@
-package ws.furrify.posts.pageable;
+package ws.furrify.shared.pageable;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,9 +10,9 @@ import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
 
-import static ws.furrify.posts.pageable.PageableConstants.DEFAULT_PAGE;
-import static ws.furrify.posts.pageable.PageableConstants.DEFAULT_PAGE_SIZE;
-import static ws.furrify.posts.pageable.PageableConstants.DEFAULT_SORT;
+import static ws.furrify.shared.pageable.PageableConstants.DEFAULT_PAGE;
+import static ws.furrify.shared.pageable.PageableConstants.DEFAULT_PAGE_SIZE;
+import static ws.furrify.shared.pageable.PageableConstants.DEFAULT_SORT;
 
 /**
  * Pageable request that can be converted to Pageable.
