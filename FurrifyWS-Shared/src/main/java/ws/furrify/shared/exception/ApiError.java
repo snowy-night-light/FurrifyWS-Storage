@@ -3,7 +3,7 @@
  * <p>
  * Copyright (c) 2019 Bruno Leite
  */
-package ws.furrify.posts.exception;
+package ws.furrify.shared.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -11,7 +11,6 @@ import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import ws.furrify.shared.exception.Errors;
 
 import javax.validation.ConstraintViolation;
 import java.time.LocalDateTime;
@@ -33,19 +32,19 @@ class ApiError {
         timestamp = LocalDateTime.now();
     }
 
-    ApiError(HttpStatus status) {
+    public ApiError(HttpStatus status) {
         this();
         this.status = status;
     }
 
-    ApiError(HttpStatus status, Throwable ex) {
+    public ApiError(HttpStatus status, Throwable ex) {
         this();
         this.status = status;
         this.message = Errors.UNIDENTIFIED.getErrorMessage();
         this.debugMessage = ex.getLocalizedMessage();
     }
 
-    ApiError(HttpStatus status, String message, Throwable ex) {
+    public ApiError(HttpStatus status, String message, Throwable ex) {
         this();
         this.status = status;
         this.message = message;

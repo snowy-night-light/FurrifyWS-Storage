@@ -3,7 +3,7 @@
   <p>
   Copyright (c) 2019 Bruno Leite
  */
-package ws.furrify.tags.exception;
+package ws.furrify.shared.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

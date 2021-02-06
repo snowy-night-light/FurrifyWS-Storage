@@ -1,4 +1,4 @@
-package ws.furrify.posts.security;
+package ws.furrify.shared.security;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -7,9 +7,11 @@ import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * Interceptor adding oauth 2.0 credentials to outgoing request with open feign.
+ * Interceptor adding OAuth 2.0 credentials to outgoing request with open feign.
+ *
+ * @author Skyte
  */
-class OpenFeignKeycloakInterceptor implements RequestInterceptor {
+public class OpenFeignKeycloakInterceptor implements RequestInterceptor {
 
     private final static String AUTHORIZATION_HEADER_NAME = "Authorization";
     private final static String AUTHORIZATION_PRE_FIX = "Bearer ";

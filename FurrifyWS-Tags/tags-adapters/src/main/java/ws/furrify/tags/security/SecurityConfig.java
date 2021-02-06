@@ -14,6 +14,7 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import ws.furrify.shared.security.OpenFeignKeycloakInterceptor;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -37,6 +38,11 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Bean
     KeycloakSpringBootConfigResolver keycloakSpringBootConfigResolver() {
         return new KeycloakSpringBootConfigResolver();
+    }
+
+    @Bean
+    OpenFeignKeycloakInterceptor openFeignKeycloakInterceptor() {
+        return new OpenFeignKeycloakInterceptor();
     }
 
     @Bean
