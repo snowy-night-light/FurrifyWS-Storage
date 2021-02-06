@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "spring.kafka.consumer.group-id.prefix",
+      "type": "java.lang.String",
+      "description": "Group id prefix before random UUID."
+    },
+    {
+      "name": "spring.kafka.schema-registry-servers",
+      "type": "java.lang.String",
+      "description": "Confluent schema registry servers."
+    },
+    {
+      "name": "eureka.client.service-url.defaultZone",
+      "type": "java.lang.String",
+      "description": "Default eureka zone."
+    }
+  ]
+}

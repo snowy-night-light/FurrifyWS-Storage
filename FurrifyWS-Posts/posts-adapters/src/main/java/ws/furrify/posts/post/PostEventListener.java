@@ -8,7 +8,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import ws.furrify.posts.PostEvent;
-import ws.furrify.posts.TagEvent;
+import ws.furrify.tags.TagEvent;
 
 import java.util.UUID;
 

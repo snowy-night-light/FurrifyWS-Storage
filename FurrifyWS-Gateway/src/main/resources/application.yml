@@ -9,10 +9,14 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: postService
+        - id: postsService
           uri: lb://POSTS-SERVICE
           predicates:
             - Path=/users/*/posts/**
+        - id: tagsService
+          uri: lb://TAGS-SERVICE
+          predicates:
+            - Path=/users/*/tags/**
 
 server:
   port: 8080

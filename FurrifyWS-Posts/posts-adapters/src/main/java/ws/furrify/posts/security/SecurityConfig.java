@@ -14,6 +14,7 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import ws.furrify.shared.security.OpenFeignKeycloakInterceptor;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -40,6 +41,11 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     }
 
     @Bean
+    OpenFeignKeycloakInterceptor openFeignKeycloakInterceptor() {
+        return new OpenFeignKeycloakInterceptor();
+    }
+
+    @Bean
     @Override
     protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
         return new RegisterSessionAuthenticationStrategy(
@@ -50,7 +56,7 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.authorizeRequests()
-                .antMatchers("/posts*").hasRole("user")
+                .antMatchers("/users/*/posts**").hasRole("user")
                 .anyRequest().authenticated();
 
         http.csrf().disable();

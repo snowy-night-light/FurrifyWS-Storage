@@ -2,11 +2,11 @@ package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import ws.furrify.posts.DomainEventPublisher;
 import ws.furrify.posts.PostEvent;
-import ws.furrify.posts.TagEvent;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
+import ws.furrify.shared.DomainEventPublisher;
+import ws.furrify.tags.TagEvent;
 
 import java.util.UUID;
 

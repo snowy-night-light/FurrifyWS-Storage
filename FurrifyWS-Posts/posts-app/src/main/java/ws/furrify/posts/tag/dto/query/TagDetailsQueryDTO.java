@@ -1,24 +1,19 @@
 package ws.furrify.posts.tag.dto.query;
 
-import ws.furrify.posts.tag.TagType;
-
-import java.io.Serializable;
-import java.time.ZonedDateTime;
-import java.util.UUID;
+import lombok.Data;
 
 /**
  * @author Skyte
  */
-public interface TagDetailsQueryDTO extends Serializable {
-    String getTitle();
+@Data
+public class TagDetailsQueryDTO {
+    /**
+     * @return Tag unique value for user.
+     */
+    private String value;
 
-    String getDescription();
-
-    String getValue();
-
-    UUID getOwnerId();
-
-    TagType getType();
-
-    ZonedDateTime getCreateDate();
+    /**
+     * @return Tag type from enum.
+     */
+    private String type;
 }
