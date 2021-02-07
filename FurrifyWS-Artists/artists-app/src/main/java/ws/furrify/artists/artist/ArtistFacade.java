@@ -5,7 +5,7 @@ import lombok.extern.java.Log;
 import ws.furrify.artists.ArtistEvent;
 import ws.furrify.artists.artist.dto.ArtistDTO;
 import ws.furrify.artists.artist.dto.ArtistDtoFactory;
-import ws.furrify.shared.DomainEventPublisher;
+import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.util.UUID;
 
@@ -35,7 +35,7 @@ public class ArtistFacade {
 
         switch (DomainEventPublisher.ArtistEventType.valueOf(artistEvent.getState())) {
             case CREATED, REPLACED, UPDATED -> saveArtist(artistDTO);
-            case REMOVED -> deleteArtistByArtistId(artistDTO.getOwnerId(), artistDTO.getArtistId());
+            case REMOVED -> deleteArtistByArtistId(artistDTO.getArtistId());
 
             default -> log.warning("State received from kafka is not defined. State=" + artistEvent.getState());
         }
@@ -84,8 +84,8 @@ public class ArtistFacade {
         deleteArtistAdapter.deleteArtist(ownerId, artistId);
     }
 
-    private void deleteArtistByArtistId(final UUID ownerId, final UUID artistId) {
-        artistRepository.deleteByOwnerIdAndArtistId(ownerId, artistId);
+    private void deleteArtistByArtistId(final UUID artistId) {
+        artistRepository.deleteByArtistId(artistId);
     }
 
     private void saveArtist(final ArtistDTO artistDTO) {

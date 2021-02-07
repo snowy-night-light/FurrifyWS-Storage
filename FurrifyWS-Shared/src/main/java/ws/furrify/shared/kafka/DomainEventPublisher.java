@@ -1,4 +1,4 @@
-package ws.furrify.shared;
+package ws.furrify.shared.kafka;
 
 import java.util.UUID;
 

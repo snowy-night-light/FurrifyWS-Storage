@@ -4,4 +4,27 @@
 
     <description>XML Mapping file</description>
 
+    <entity class="ws.furrify.artists.artist.ArtistSnapshot" access="FIELD">
+        <table name="artists"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="SEQUENCE"/>
+            </id>
+            <basic name="artistId">
+                <column unique="true" updatable="false" nullable="false"/>
+            </basic>
+            <basic name="ownerId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="preferredNickname">
+                <column nullable="false"/>
+            </basic>
+            <basic name="createDate">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <element-collection fetch="EAGER" name="nicknames">
+                <column nullable="false"/>
+            </element-collection>
+        </attributes>
+    </entity>
 </entity-mappings>

@@ -2,7 +2,7 @@ package ws.furrify.tags.tag;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import ws.furrify.shared.DomainEventPublisher;
+import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.TagEvent;
 import ws.furrify.tags.tag.dto.TagDTO;
 import ws.furrify.tags.tag.dto.TagDtoFactory;

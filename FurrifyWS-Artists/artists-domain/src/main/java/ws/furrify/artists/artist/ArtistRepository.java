@@ -6,7 +6,7 @@ import java.util.UUID;
 interface ArtistRepository {
     Artist save(Artist artist);
 
-    void deleteByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
+    void deleteByArtistId(UUID artistId);
 
     boolean existsByOwnerIdAndPreferredNickname(UUID ownerId, String preferredNickname);
 

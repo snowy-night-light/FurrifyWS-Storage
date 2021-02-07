@@ -28,17 +28,14 @@ interface SqlPostRepository extends Repository<PostSnapshot, Long> {
     Set<PostSnapshot> findAllByOwnerIdAndValueInTags(UUID ownerId, String value);
 }
 
-/* PROJECTIONS ARE DONE MANUALLY CAUSE FOR WHATEVER REASON
-CLASS BASED PROJECTIONS DON'T WORK IN THIS PROJECT */
-
 @Transactional(rollbackFor = {})
 interface SqlPostQueryRepository extends PostQueryRepository, Repository<PostSnapshot, Long> {
 
     @Override
-    Optional<PostDetailsQueryDTO> findByPostIdAndOwnerId(UUID userId, UUID postId);
+    Optional<PostDetailsQueryDTO> findByOwnerIdAndPostId(UUID ownerId, UUID postId);
 
     @Override
-    Page<PostDetailsQueryDTO> findAllByOwnerId(UUID userId, Pageable pageable);
+    Page<PostDetailsQueryDTO> findAllByOwnerId(UUID ownerId, Pageable pageable);
 }
 
 @org.springframework.stereotype.Repository

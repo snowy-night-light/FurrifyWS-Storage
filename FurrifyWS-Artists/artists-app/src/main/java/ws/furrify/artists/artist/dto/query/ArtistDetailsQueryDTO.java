@@ -10,8 +10,6 @@ import java.util.UUID;
  */
 public interface ArtistDetailsQueryDTO extends Serializable {
 
-    Long getId();
-
     UUID getArtistId();
 
     UUID getOwnerId();

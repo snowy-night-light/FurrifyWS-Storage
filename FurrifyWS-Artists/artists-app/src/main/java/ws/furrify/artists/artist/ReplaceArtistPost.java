@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import ws.furrify.artists.ArtistEvent;
 import ws.furrify.artists.artist.dto.ArtistDTO;
 import ws.furrify.artists.vo.ArtistData;
-import ws.furrify.shared.DomainEventPublisher;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
+import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -43,6 +43,7 @@ class ReplaceArtistPost implements ReplaceArtistPort {
 
         return ArtistEvent.newBuilder()
                 .setState(DomainEventPublisher.ArtistEventType.REPLACED.name())
+                .setArtistId(artistSnapshot.getId())
                 .setArtistUUID(artistSnapshot.getArtistId().toString())
                 .setData(
                         ArtistData.newBuilder()

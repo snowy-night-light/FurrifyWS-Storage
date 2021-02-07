@@ -3,9 +3,9 @@ package ws.furrify.posts.post;
 import lombok.RequiredArgsConstructor;
 import ws.furrify.posts.PostEvent;
 import ws.furrify.posts.vo.PostData;
-import ws.furrify.shared.DomainEventPublisher;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
+import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.time.Instant;
 import java.util.UUID;

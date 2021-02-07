@@ -1,4 +1,4 @@
-package ws.furrify.posts.post;
+package ws.furrify.artists.artist;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ws.furrify.posts.post.dto.query.PostDetailsQueryDTO;
+import ws.furrify.artists.artist.dto.query.ArtistDetailsQueryDTO;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.pageable.PageableRequest;
@@ -25,12 +25,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/users/{userId}/posts")
+@RequestMapping("/users/{userId}/artists")
 @RequiredArgsConstructor
-class QueryUserPostController {
+class QueryUserArtistController {
 
-    private final SqlPostQueryRepository postQueryRepository;
-    private final PagedResourcesAssembler<PostDetailsQueryDTO> pagedResourcesAssembler;
+    private final SqlArtistQueryRepository artistQueryRepository;
+    private final PagedResourcesAssembler<ArtistDetailsQueryDTO> pagedResourcesAssembler;
 
     @GetMapping
     @PreAuthorize(
@@ -38,7 +38,7 @@ class QueryUserPostController {
                     "hasAuthority('admin') or " +
                     "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
-    public PagedModel<EntityModel<PostDetailsQueryDTO>> getUserPosts(
+    public PagedModel<EntityModel<ArtistDetailsQueryDTO>> getUserArtists(
             @PathVariable UUID userId,
             @RequestParam(required = false) String order,
             @RequestParam(required = false) String sort,
@@ -54,14 +54,14 @@ class QueryUserPostController {
                 .page(page)
                 .build().toPageable();
 
-        PagedModel<EntityModel<PostDetailsQueryDTO>> posts = pagedResourcesAssembler.toModel(
-                postQueryRepository.findAllByOwnerId(userId, pageable)
+        PagedModel<EntityModel<ArtistDetailsQueryDTO>> posts = pagedResourcesAssembler.toModel(
+                artistQueryRepository.findAllByOwnerId(userId, pageable)
         );
 
-        posts.forEach(this::addPostRelations);
+        posts.forEach(this::addArtistRelations);
 
         // Add hateoas relation
-        var postsRel = linkTo(methodOn(QueryUserPostController.class).getUserPosts(
+        var artistsRel = linkTo(methodOn(QueryUserArtistController.class).getUserArtists(
                 userId,
                 null,
                 null,
@@ -70,66 +70,66 @@ class QueryUserPostController {
                 null
         )).withSelfRel();
 
-        posts.add(postsRel);
+        posts.add(artistsRel);
 
         return posts;
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/{artistId}")
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
                     "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
-    public EntityModel<PostDetailsQueryDTO> getUserPost(@PathVariable UUID userId,
-                                                        @PathVariable UUID postId,
-                                                        @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+    public EntityModel<ArtistDetailsQueryDTO> getUserArtist(@PathVariable UUID userId,
+                                                            @PathVariable UUID artistId,
+                                                            @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
-        PostDetailsQueryDTO postQueryDTO = postQueryRepository.findByOwnerIdAndPostId(postId, userId)
-                .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId)));
+        ArtistDetailsQueryDTO artistQueryDTO = artistQueryRepository.findByOwnerIdAndArtistId(userId, artistId)
+                .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(artistId)));
 
-        return addPostRelations(
-                EntityModel.of(postQueryDTO)
+        return addArtistRelations(
+                EntityModel.of(artistQueryDTO)
         );
     }
 
-    private EntityModel<PostDetailsQueryDTO> addPostRelations(EntityModel<PostDetailsQueryDTO> postQueryDtoModel) {
-        var postQueryDto = postQueryDtoModel.getContent();
+    private EntityModel<ArtistDetailsQueryDTO> addArtistRelations(EntityModel<ArtistDetailsQueryDTO> artistQueryDtoModel) {
+        var artistQueryDto = artistQueryDtoModel.getContent();
         // Check if model content is empty
-        if (postQueryDto == null) {
+        if (artistQueryDto == null) {
             throw new IllegalStateException("Entity model contains empty content.");
         }
 
-        var selfRel = linkTo(methodOn(QueryUserPostController.class).getUserPost(
-                postQueryDto.getOwnerId(),
-                postQueryDto.getPostId(),
+        var selfRel = linkTo(methodOn(QueryUserArtistController.class).getUserArtist(
+                artistQueryDto.getOwnerId(),
+                artistQueryDto.getArtistId(),
                 null
         )).withSelfRel().andAffordance(
-                afford(methodOn(CommandUserPostController.class).deletePost(
-                        postQueryDto.getOwnerId(), postQueryDto.getPostId(), null
+                afford(methodOn(CommandUserArtistController.class).deleteArtist(
+                        artistQueryDto.getOwnerId(), artistQueryDto.getArtistId(), null
                 ))
         ).andAffordance(
-                afford(methodOn(CommandUserPostController.class).replacePost(
-                        postQueryDto.getOwnerId(), postQueryDto.getPostId(), null, null
+                afford(methodOn(CommandUserArtistController.class).replaceArtist(
+                        artistQueryDto.getOwnerId(), artistQueryDto.getArtistId(), null, null
                 ))
         ).andAffordance(
-                afford(methodOn(CommandUserPostController.class).updatePost(
-                        postQueryDto.getOwnerId(), postQueryDto.getPostId(), null, null
+                afford(methodOn(CommandUserArtistController.class).updateArtist(
+                        artistQueryDto.getOwnerId(), artistQueryDto.getArtistId(), null, null
                 ))
         );
 
-        var postsRel = linkTo(methodOn(QueryUserPostController.class).getUserPosts(
-                postQueryDto.getOwnerId(),
+        var artistsRel = linkTo(methodOn(QueryUserArtistController.class).getUserArtists(
+                artistQueryDto.getOwnerId(),
                 null,
                 null,
                 null,
                 null,
                 null
-        )).withRel("userPosts");
+        )).withRel("userArtists");
 
-        postQueryDtoModel.add(selfRel);
-        postQueryDtoModel.add(postsRel);
+        artistQueryDtoModel.add(selfRel);
+        artistQueryDtoModel.add(artistsRel);
 
-        return postQueryDtoModel;
+        return artistQueryDtoModel;
     }
 }

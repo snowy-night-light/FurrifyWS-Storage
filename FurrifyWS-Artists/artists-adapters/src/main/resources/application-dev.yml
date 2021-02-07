@@ -33,7 +33,7 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 
 server:
-  port: 7071
+  port: 7073
 
 keycloak:
   auth-server-url: http://192.168.0.27:6565/auth

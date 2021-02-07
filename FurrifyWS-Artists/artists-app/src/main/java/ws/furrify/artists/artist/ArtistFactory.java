@@ -10,6 +10,7 @@ class ArtistFactory {
 
     Artist from(ArtistDTO artistDTO) {
         ArtistSnapshot artistSnapshot = ArtistSnapshot.builder()
+                .id(artistDTO.getId())
                 .artistId(
                         artistDTO.getArtistId() != null ? artistDTO.getArtistId() : UUID.randomUUID()
                 )

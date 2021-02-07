@@ -10,8 +10,8 @@ import ws.furrify.posts.post.dto.PostDtoFactory;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.posts.tag.TagServiceClient;
 import ws.furrify.posts.tag.dto.query.TagDetailsQueryDTO;
-import ws.furrify.shared.DomainEventPublisher;
 import ws.furrify.shared.exception.RecordNotFoundException;
+import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.time.ZonedDateTime;
 import java.util.Collections;

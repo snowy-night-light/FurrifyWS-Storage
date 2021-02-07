@@ -5,7 +5,7 @@ import lombok.extern.java.Log;
 import ws.furrify.posts.PostEvent;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
-import ws.furrify.shared.DomainEventPublisher;
+import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.TagEvent;
 
 import java.util.UUID;
