@@ -79,10 +79,10 @@ class Artist {
         }
 
         // Verify if preferred nickname is in nicknames array
-        boolean isPreferredNickValid = nicknames.stream()
+        boolean isPreferredNicknameValid = nicknames.stream()
                 .anyMatch(nick -> nick.equals(preferredNickname));
 
-        if (!isPreferredNickValid) {
+        if (!isPreferredNicknameValid) {
             throw new PreferredNicknameIsNotValidException(Errors.PREFERRED_NICKNAME_IS_NOT_VALID.getErrorMessage(preferredNickname));
         }
 
