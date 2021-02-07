@@ -6,7 +6,7 @@
     "name": "ArtistData",
     "fields": [
       {
-        "name": "ownerId",
+        "name": "ownerUUID",
         "type": [
           "null",
           "string"

@@ -10,7 +10,7 @@ public interface DomainEventPublisher<T> {
      * Publish event to kafka topic.
      *
      * @param topic    Topic to send event to.
-     * @param targetId UUID of entity event concerns.
+     * @param targetId UUID of owner entity event concerns.
      * @param event    Event that will be sent.
      */
     void publish(final Topic topic, final UUID targetId, final T event);

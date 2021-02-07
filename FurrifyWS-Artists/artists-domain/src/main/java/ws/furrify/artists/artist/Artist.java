@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
+import ws.furrify.shared.exception.ArrayCannotBeEmptyException;
+import ws.furrify.shared.exception.Errors;
+import ws.furrify.shared.exception.PreferredNicknameIsNotValidException;
+import ws.furrify.shared.exception.PreferredNicknameIsTakenException;
 
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -22,9 +26,9 @@ class Artist {
     @NonNull
     private final UUID ownerId;
     @NonNull
-    private final Set<String> nicknames;
+    private Set<String> nicknames;
     @NonNull
-    private final String preferredNickname;
+    private String preferredNickname;
 
     private final ZonedDateTime createDate;
 
@@ -48,6 +52,50 @@ class Artist {
                 .preferredNickname(preferredNickname)
                 .createDate(createDate)
                 .build();
+    }
+
+    void updateNicknames(Set<String> newNicknames,
+                         String newPreferredNickname,
+                         @NonNull final ArtistRepository artistRepository) {
+        // Check if both parameters are null
+        if (newPreferredNickname == null && newNicknames == null) {
+            throw new NullPointerException("Both parameters cannot be null.");
+        }
+
+        // Check if any parameters are null
+        if (newNicknames == null) {
+            newNicknames = new HashSet<>(this.nicknames);
+        } else if (newPreferredNickname == null) {
+            newPreferredNickname = this.preferredNickname;
+        }
+
+        // Copy fields to final fields
+        final String preferredNickname = newPreferredNickname;
+        final Set<String> nicknames = newNicknames;
+
+        // Check if nicknames array is empty
+        if (nicknames.size() == 0) {
+            throw new ArrayCannotBeEmptyException(Errors.NICKNAMES_CANNOT_BE_EMPTY.getErrorMessage());
+        }
+
+        // Verify if preferred nickname is in nicknames array
+        boolean isPreferredNickValid = nicknames.stream()
+                .anyMatch(nick -> nick.equals(preferredNickname));
+
+        if (!isPreferredNickValid) {
+            throw new PreferredNicknameIsNotValidException(Errors.PREFERRED_NICKNAME_IS_NOT_VALID.getErrorMessage(preferredNickname));
+        }
+
+        // Verify is preferred nickname is already taken
+        boolean isPreferredNicknameTaken =
+                artistRepository.existsByOwnerIdAndPreferredNickname(ownerId, preferredNickname);
+
+        if (isPreferredNicknameTaken) {
+            throw new PreferredNicknameIsTakenException(Errors.PREFERRED_NICKNAME_IS_TAKEN.getErrorMessage(preferredNickname));
+        }
+
+        this.nicknames = nicknames;
+        this.preferredNickname = preferredNickname;
     }
 
 }

@@ -28,6 +28,9 @@ public enum Errors {
     CHAIN_OF_REQUESTS_BROKEN("Chain of requests was broken with exception."),
     CHAIN_OF_REQUESTS_UNAUTHORIZED("Chain of requests was broken with unauthorized call. " +
             "Make sure you have all scopes required for this request."),
+    PREFERRED_NICKNAME_IS_NOT_VALID("Preferred nickname [nickname={0}] isn't in nicknames array."),
+    PREFERRED_NICKNAME_IS_TAKEN("Preferred nickname [nickname={0}] is already taken."),
+    NICKNAMES_CANNOT_BE_EMPTY("Nicknames array mustn't be empty."),
     UNIDENTIFIED("Unknown error occurred.");
 
     private final String errorMessage;
