@@ -50,7 +50,7 @@ class UpdateTagAdapter implements UpdateTagPort {
 
         return TagEvent.newBuilder()
                 .setState(DomainEventPublisher.TagEventType.UPDATED.name())
-                .setTagId(tagSnapshot.getId())
+                .setId(tagSnapshot.getId())
                 .setTagValue(oldTagValue)
                 .setDataBuilder(
                         TagData.newBuilder()

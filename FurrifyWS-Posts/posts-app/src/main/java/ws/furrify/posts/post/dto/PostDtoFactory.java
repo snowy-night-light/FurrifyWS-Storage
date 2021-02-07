@@ -25,8 +25,8 @@ public class PostDtoFactory {
         }
 
         return PostDTO.builder()
-                .id(postEvent.getPostId())
-                .postId(UUID.fromString(postEvent.getPostUUID()))
+                .id(postEvent.getId())
+                .postId(UUID.fromString(postEvent.getPostId()))
                 .ownerId(key)
                 .title(postEvent.getData().getTitle())
                 .description(postEvent.getData().getDescription())

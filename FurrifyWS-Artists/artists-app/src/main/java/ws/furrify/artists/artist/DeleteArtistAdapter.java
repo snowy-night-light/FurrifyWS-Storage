@@ -34,7 +34,7 @@ class DeleteArtistAdapter implements DeleteArtistPort {
     private ArtistEvent createArtistEvent(final UUID artistId) {
         return ArtistEvent.newBuilder()
                 .setState(DomainEventPublisher.ArtistEventType.REMOVED.name())
-                .setArtistUUID(artistId.toString())
+                .setArtistId(artistId.toString())
                 .setDataBuilder(ArtistData.newBuilder())
                 .setOccurredOn(Instant.now().toEpochMilli())
                 .build();

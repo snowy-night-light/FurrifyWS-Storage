@@ -55,10 +55,10 @@ class CreateArtistAdapter implements CreateArtistPort {
 
         return ArtistEvent.newBuilder()
                 .setState(DomainEventPublisher.ArtistEventType.CREATED.name())
-                .setArtistUUID(artistSnapshot.getArtistId().toString())
+                .setArtistId(artistSnapshot.getArtistId().toString())
                 .setData(
                         ArtistData.newBuilder()
-                                .setOwnerUUID(artistSnapshot.getOwnerId().toString())
+                                .setOwnerId(artistSnapshot.getOwnerId().toString())
                                 .setNicknames(new ArrayList<>(artistSnapshot.getNicknames()))
                                 .setPreferredNickname(artistSnapshot.getPreferredNickname())
                                 .setCreateDate(artistSnapshot.getCreateDate().toInstant().toEpochMilli())

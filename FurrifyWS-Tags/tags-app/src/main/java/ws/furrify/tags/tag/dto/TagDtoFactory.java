@@ -25,7 +25,7 @@ public class TagDtoFactory {
         }
 
         return TagDTO.builder()
-                .id(tagEvent.getTagId())
+                .id(tagEvent.getId())
                 .title(tagEvent.getData().getTitle())
                 .description(tagEvent.getData().getDescription())
                 .value(tagEvent.getData().getValue())

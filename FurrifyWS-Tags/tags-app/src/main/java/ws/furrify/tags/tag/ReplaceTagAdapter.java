@@ -40,7 +40,7 @@ class ReplaceTagAdapter implements ReplaceTagPort {
 
         return TagEvent.newBuilder()
                 .setState(DomainEventPublisher.TagEventType.REPLACED.name())
-                .setTagId(tagSnapshot.getId())
+                .setId(tagSnapshot.getId())
                 .setTagValue(oldTagValue)
                 .setDataBuilder(
                         TagData.newBuilder()

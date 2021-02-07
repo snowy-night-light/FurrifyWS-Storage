@@ -43,11 +43,11 @@ class ReplaceArtistPost implements ReplaceArtistPort {
 
         return ArtistEvent.newBuilder()
                 .setState(DomainEventPublisher.ArtistEventType.REPLACED.name())
-                .setArtistId(artistSnapshot.getId())
-                .setArtistUUID(artistSnapshot.getArtistId().toString())
+                .setId(artistSnapshot.getId())
+                .setArtistId(artistSnapshot.getArtistId().toString())
                 .setData(
                         ArtistData.newBuilder()
-                                .setOwnerUUID(artistSnapshot.getOwnerId().toString())
+                                .setOwnerId(artistSnapshot.getOwnerId().toString())
                                 .setNicknames(new ArrayList<>(artistSnapshot.getNicknames()))
                                 .setPreferredNickname(artistSnapshot.getPreferredNickname())
                                 .setCreateDate(artistSnapshot.getCreateDate().toInstant().toEpochMilli())

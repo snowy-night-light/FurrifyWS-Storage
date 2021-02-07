@@ -62,7 +62,7 @@
         "doc": "A event type performed on that record. (Can be acquired using TagEventType enum.)"
       },
       {
-        "name": "tagId",
+        "name": "id",
         "type": [
           "null",
           "long"

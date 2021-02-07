@@ -6,7 +6,7 @@
     "name": "ArtistData",
     "fields": [
       {
-        "name": "ownerUUID",
+        "name": "ownerId",
         "type": [
           "null",
           "string"
@@ -56,7 +56,7 @@
         "doc": "A event type performed on that record. (Can be acquired using ArtistEventType enum.)"
       },
       {
-        "name": "artistId",
+        "name": "id",
         "type": [
           "null",
           "long"
@@ -65,7 +65,7 @@
         "doc": "A artist database id."
       },
       {
-        "name": "artistUUID",
+        "name": "artistId",
         "type": "string",
         "doc": "A artist UUID event is targeted at."
       },

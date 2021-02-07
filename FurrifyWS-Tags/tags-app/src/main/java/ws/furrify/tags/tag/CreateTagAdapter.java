@@ -47,7 +47,7 @@ class CreateTagAdapter implements CreateTagPort {
 
         return TagEvent.newBuilder()
                 .setState(DomainEventPublisher.TagEventType.UPDATED.name())
-                .setTagId(tagSnapshot.getId())
+                .setId(tagSnapshot.getId())
                 .setTagValue(tagSnapshot.getValue())
                 .setDataBuilder(
                         TagData.newBuilder()

@@ -51,8 +51,8 @@ class ReplacePostAdapter implements ReplacePostPort {
 
         return PostEvent.newBuilder()
                 .setState(DomainEventPublisher.PostEventType.REPLACED.name())
-                .setPostId(postSnapshot.getId())
-                .setPostUUID(postSnapshot.getPostId().toString())
+                .setId(postSnapshot.getId())
+                .setPostId(postSnapshot.getPostId().toString())
                 .setOccurredOn(Instant.now().toEpochMilli())
                 .setDataBuilder(
                         PostData.newBuilder()

@@ -56,8 +56,8 @@ class UpdatePostAdapter implements UpdatePostPort {
 
         return PostEvent.newBuilder()
                 .setState(DomainEventPublisher.PostEventType.UPDATED.name())
-                .setPostId(postSnapshot.getId())
-                .setPostUUID(postSnapshot.getPostId().toString())
+                .setId(postSnapshot.getId())
+                .setPostId(postSnapshot.getPostId().toString())
                 .setOccurredOn(Instant.now().toEpochMilli())
                 .setDataBuilder(
                         PostData.newBuilder()

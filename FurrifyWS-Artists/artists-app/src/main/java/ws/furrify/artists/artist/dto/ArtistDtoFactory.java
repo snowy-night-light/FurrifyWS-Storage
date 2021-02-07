@@ -26,8 +26,8 @@ public class ArtistDtoFactory {
         }
 
         return ArtistDTO.builder()
-                .id(artistEvent.getArtistId())
-                .artistId(UUID.fromString(artistEvent.getArtistUUID()))
+                .id(artistEvent.getId())
+                .artistId(UUID.fromString(artistEvent.getArtistId()))
                 .ownerId(key)
                 .nicknames(new HashSet<>(artistEvent.getData().getNicknames()))
                 .preferredNickname(artistEvent.getData().getPreferredNickname())
