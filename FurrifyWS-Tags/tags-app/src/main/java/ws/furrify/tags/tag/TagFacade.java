@@ -29,7 +29,7 @@ public class TagFacade {
      *
      * @param tagEvent Tag event instance received from kafka.
      */
-    public void handleEvent(final UUID key, final TagEvent tagEvent) {
+    void handleEvent(final UUID key, final TagEvent tagEvent) {
         TagDTO tagDTO = tagDtoFactory.from(key, tagEvent);
 
         switch (DomainEventPublisher.TagEventType.valueOf(tagEvent.getState())) {

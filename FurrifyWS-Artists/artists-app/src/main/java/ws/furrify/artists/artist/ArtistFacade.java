@@ -30,7 +30,7 @@ public class ArtistFacade {
      *
      * @param artistEvent Artist event instance received from kafka.
      */
-    public void handleEvent(final UUID key, final ArtistEvent artistEvent) {
+    void handleEvent(final UUID key, final ArtistEvent artistEvent) {
         ArtistDTO artistDTO = artistDTOFactory.from(key, artistEvent);
 
         switch (DomainEventPublisher.ArtistEventType.valueOf(artistEvent.getState())) {

@@ -31,7 +31,7 @@ public class PostFacade {
      *
      * @param postEvent Post event instance received from kafka.
      */
-    public void handleEvent(final UUID key, final PostEvent postEvent) {
+    void handleEvent(final UUID key, final PostEvent postEvent) {
         PostDTO postDTO = postDTOFactory.from(key, postEvent);
 
         switch (DomainEventPublisher.PostEventType.valueOf(postEvent.getState())) {
@@ -47,7 +47,7 @@ public class PostFacade {
      *
      * @param tagEvent Tag event instance received from kafka.
      */
-    public void handleEvent(final UUID key, final TagEvent tagEvent) {
+    void handleEvent(final UUID key, final TagEvent tagEvent) {
         switch (DomainEventPublisher.TagEventType.valueOf(tagEvent.getState())) {
             case REMOVED -> deleteTagFromPosts(key, tagEvent.getTagValue());
             case UPDATED, REPLACED -> updateTagDetailsInPosts(key,
@@ -64,7 +64,7 @@ public class PostFacade {
      *
      * @param artistEvent Artist event instance received from kafka.
      */
-    public void handleEvent(final UUID key, final ArtistEvent artistEvent) {
+    void handleEvent(final UUID key, final ArtistEvent artistEvent) {
         switch (DomainEventPublisher.ArtistEventType.valueOf(artistEvent.getState())) {
             case REMOVED -> deleteArtistFromPosts(key, UUID.fromString(artistEvent.getArtistId()));
             case UPDATED, REPLACED -> updateArtistDetailsInPosts(key,

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-class UpdateArtistPost implements UpdateArtistPort {
+class UpdateArtistAdapter implements UpdateArtistPort {
 
     private final ArtistRepository artistRepository;
     private final DomainEventPublisher<ArtistEvent> eventPublisher;

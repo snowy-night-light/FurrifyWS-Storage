@@ -21,9 +21,9 @@ class ArtistConfig {
 
         return new ArtistFacade(
                 new CreateArtistAdapter(artistRepository, artistFactory, eventPublisher),
-                new DeleteArtistAdapter(eventPublisher, artistRepository),
-                new UpdateArtistPost(artistRepository, eventPublisher),
-                new ReplaceArtistPost(artistRepository, eventPublisher),
+                new DeleteArtistAdapter(artistRepository, eventPublisher),
+                new UpdateArtistAdapter(artistRepository, eventPublisher),
+                new ReplaceArtistAdapter(artistRepository, eventPublisher),
                 artistRepository,
                 artistFactory,
                 artistDtoFactory

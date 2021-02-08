@@ -13,8 +13,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 class DeleteArtistAdapter implements DeleteArtistPort {
 
-    private final DomainEventPublisher<ArtistEvent> domainEventPublisher;
     private final ArtistRepository artistRepository;
+    private final DomainEventPublisher<ArtistEvent> domainEventPublisher;
 
     @Override
     public void deleteArtist(final UUID ownerId, final UUID artistId) {
