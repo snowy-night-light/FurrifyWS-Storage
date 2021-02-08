@@ -130,9 +130,7 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
             RecordAlreadyExistsException.class,
             ChainOfRequestsUnauthorizedException.class,
             ChainOfRequestsBrokenException.class,
-            PreferredNicknameIsNotValidException.class,
-            PreferredNicknameIsTakenException.class,
-            ArrayCannotBeEmptyException.class
+            InvalidDataGivenException.class
     })
     protected ResponseEntity<Object> handleException(
             RestException exception) {

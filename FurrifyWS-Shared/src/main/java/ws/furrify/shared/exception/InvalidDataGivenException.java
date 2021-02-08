@@ -5,12 +5,12 @@ import lombok.Getter;
 /**
  * @author Skyte
  */
-public class ArrayCannotBeEmptyException extends RuntimeException implements RestException {
+public class InvalidDataGivenException extends RuntimeException implements RestException {
 
     @Getter
     private final HttpStatus status = HttpStatus.BAD_REQUEST;
 
-    public ArrayCannotBeEmptyException(String message) {
+    public InvalidDataGivenException(String message) {
         super(message);
     }
 

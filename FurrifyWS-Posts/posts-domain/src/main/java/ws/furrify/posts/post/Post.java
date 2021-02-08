@@ -111,6 +111,16 @@ class Post {
 
     void updateArtistDetailsInArtists(@NonNull final UUID artistId,
                                       @NonNull final String newPreferredNickname) {
+        // Filter artists to find a if artist exists by artistId.
+        this.artists.stream()
+                .filter(artist -> artist.getArtistId().equals(artistId))
+                .findAny()
+                .orElseThrow(() -> {
+                    log.severe("Original artist [artistId=" + artistId + "] was not found.");
+
+                    return new IllegalStateException("Original tag value was not found.");
+                });
+
         // Create artist with new preferred nickname
         PostArtist postArtist = new PostArtist(artistId, newPreferredNickname);
 

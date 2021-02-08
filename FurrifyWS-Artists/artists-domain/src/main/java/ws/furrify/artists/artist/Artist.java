@@ -5,10 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
-import ws.furrify.shared.exception.ArrayCannotBeEmptyException;
 import ws.furrify.shared.exception.Errors;
-import ws.furrify.shared.exception.PreferredNicknameIsNotValidException;
-import ws.furrify.shared.exception.PreferredNicknameIsTakenException;
+import ws.furrify.shared.exception.InvalidDataGivenException;
+import ws.furrify.shared.exception.RecordAlreadyExistsException;
 
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -75,7 +74,7 @@ class Artist {
 
         // Check if nicknames array is empty
         if (nicknames.size() == 0) {
-            throw new ArrayCannotBeEmptyException(Errors.NICKNAMES_CANNOT_BE_EMPTY.getErrorMessage());
+            throw new InvalidDataGivenException(Errors.NICKNAMES_CANNOT_BE_EMPTY.getErrorMessage());
         }
 
         // Verify if preferred nickname is in nicknames array
@@ -83,7 +82,7 @@ class Artist {
                 .anyMatch(nick -> nick.equals(preferredNickname));
 
         if (!isPreferredNicknameValid) {
-            throw new PreferredNicknameIsNotValidException(Errors.PREFERRED_NICKNAME_IS_NOT_VALID.getErrorMessage(preferredNickname));
+            throw new InvalidDataGivenException(Errors.PREFERRED_NICKNAME_IS_NOT_VALID.getErrorMessage(preferredNickname));
         }
 
         // Verify is preferred nickname is already taken
@@ -94,7 +93,7 @@ class Artist {
                         artistRepository.existsByOwnerIdAndPreferredNickname(ownerId, preferredNickname);
 
         if (isPreferredNicknameTaken) {
-            throw new PreferredNicknameIsTakenException(Errors.PREFERRED_NICKNAME_IS_TAKEN.getErrorMessage(preferredNickname));
+            throw new RecordAlreadyExistsException(Errors.PREFERRED_NICKNAME_IS_TAKEN.getErrorMessage(preferredNickname));
         }
 
         this.nicknames = nicknames;
