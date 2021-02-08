@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.java.Log;
+import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
 
 import java.time.ZonedDateTime;
@@ -30,6 +31,9 @@ class Post {
     private String description;
     @NonNull
     private Set<PostTag> tags;
+    @NonNull
+    private final Set<PostArtist> artists;
+
     private final ZonedDateTime createDate;
 
     static Post restore(PostSnapshot postSnapshot) {
@@ -40,6 +44,7 @@ class Post {
                 postSnapshot.getTitle(),
                 postSnapshot.getDescription(),
                 new HashSet<>(postSnapshot.getTags()),
+                new HashSet<>(postSnapshot.getArtists()),
                 postSnapshot.getCreateDate()
         );
     }
@@ -52,6 +57,7 @@ class Post {
                 .title(title)
                 .description(description)
                 .tags(tags.stream().collect(Collectors.toUnmodifiableSet()))
+                .artists(artists.stream().collect(Collectors.toUnmodifiableSet()))
                 .createDate(createDate)
                 .build();
     }

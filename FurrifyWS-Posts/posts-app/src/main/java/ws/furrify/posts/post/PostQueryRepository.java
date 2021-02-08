@@ -14,4 +14,6 @@ public interface PostQueryRepository {
     Optional<PostDetailsQueryDTO> findByOwnerIdAndPostId(UUID ownerId, UUID postId);
 
     Page<PostDetailsQueryDTO> findAllByOwnerId(UUID ownerId, Pageable pageable);
+
+    Page<PostDetailsQueryDTO> findAllByOwnerIdAndArtistId(UUID userId, UUID artistId, Pageable pageable);
 }

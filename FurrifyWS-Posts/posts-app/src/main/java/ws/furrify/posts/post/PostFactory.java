@@ -20,6 +20,9 @@ class PostFactory {
                 .tags(
                         (postDTO.getTags() != null) ? postDTO.getTags() : new HashSet<>()
                 )
+                .artists(
+                        (postDTO.getArtists() != null) ? postDTO.getArtists() : new HashSet<>()
+                )
                 .createDate(
                         (postDTO.getCreateDate() != null) ? postDTO.getCreateDate() : ZonedDateTime.now()
                 )

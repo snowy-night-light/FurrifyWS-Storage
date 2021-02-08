@@ -30,6 +30,11 @@
                     <join-column name="postId"/>
                 </collection-table>
             </element-collection>
+            <element-collection fetch="EAGER" name="artists">
+                <collection-table name="post_artists">
+                    <join-column name="postId"/>
+                </collection-table>
+            </element-collection>
         </attributes>
     </entity>
 
@@ -39,6 +44,16 @@
                 <column nullable="false"/>
             </basic>
             <basic name="type">
+                <column nullable="false"/>
+            </basic>
+        </attributes>
+    </embeddable>
+    <embeddable class="ws.furrify.posts.post.vo.PostArtist" access="FIELD">
+        <attributes>
+            <basic name="artistId">
+                <column nullable="false"/>
+            </basic>
+            <basic name="preferredNickname">
                 <column nullable="false"/>
             </basic>
         </attributes>

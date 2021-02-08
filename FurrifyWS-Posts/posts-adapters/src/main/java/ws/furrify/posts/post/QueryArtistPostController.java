@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ws.furrify.posts.post.dto.query.PostDetailsQueryDTO;
-import ws.furrify.shared.exception.Errors;
-import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.pageable.PageableRequest;
 
 import java.util.UUID;
@@ -25,9 +23,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/users/{userId}/posts")
+@RequestMapping("/users/{userId}/artists/{artistId}/posts")
 @RequiredArgsConstructor
-class QueryUserPostController {
+class QueryArtistPostController {
 
     private final SqlPostQueryRepository postQueryRepository;
     private final PagedResourcesAssembler<PostDetailsQueryDTO> pagedResourcesAssembler;
@@ -38,8 +36,9 @@ class QueryUserPostController {
                     "hasAuthority('admin') or " +
                     "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
-    public PagedModel<EntityModel<PostDetailsQueryDTO>> getUserPosts(
+    public PagedModel<EntityModel<PostDetailsQueryDTO>> getArtistPosts(
             @PathVariable UUID userId,
+            @PathVariable UUID artistId,
             @RequestParam(required = false) String order,
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer size,
@@ -55,14 +54,15 @@ class QueryUserPostController {
                 .build().toPageable();
 
         PagedModel<EntityModel<PostDetailsQueryDTO>> posts = pagedResourcesAssembler.toModel(
-                postQueryRepository.findAllByOwnerId(userId, pageable)
+                postQueryRepository.findAllByOwnerIdAndArtistId(userId, artistId, pageable)
         );
 
         posts.forEach(this::addPostRelations);
 
         // Add hateoas relation
-        var postsRel = linkTo(methodOn(QueryUserPostController.class).getUserPosts(
+        var postsRel = linkTo(methodOn(QueryArtistPostController.class).getArtistPosts(
                 userId,
+                artistId,
                 null,
                 null,
                 null,
@@ -75,25 +75,7 @@ class QueryUserPostController {
         return posts;
     }
 
-    @GetMapping("/{postId}")
-    @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
-    )
-    public EntityModel<PostDetailsQueryDTO> getUserPost(@PathVariable UUID userId,
-                                                        @PathVariable UUID postId,
-                                                        @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
-
-        PostDetailsQueryDTO postQueryDTO = postQueryRepository.findByOwnerIdAndPostId(userId, postId)
-                .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId)));
-
-        return addPostRelations(
-                EntityModel.of(postQueryDTO)
-        );
-    }
-
-    private EntityModel<PostDetailsQueryDTO> addPostRelations(EntityModel<PostDetailsQueryDTO> postQueryDtoModel) {
+    private void addPostRelations(EntityModel<PostDetailsQueryDTO> postQueryDtoModel) {
         var postQueryDto = postQueryDtoModel.getContent();
         // Check if model content is empty
         if (postQueryDto == null) {
@@ -129,7 +111,5 @@ class QueryUserPostController {
 
         postQueryDtoModel.add(selfRel);
         postQueryDtoModel.add(postsRel);
-
-        return postQueryDtoModel;
     }
 }

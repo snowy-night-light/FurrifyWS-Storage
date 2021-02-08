@@ -36,6 +36,10 @@ interface SqlPostQueryRepository extends PostQueryRepository, Repository<PostSna
 
     @Override
     Page<PostDetailsQueryDTO> findAllByOwnerId(UUID ownerId, Pageable pageable);
+
+    @Override
+    @Query("select post from PostSnapshot post join post.artists artist where artist.artistId = ?2 and post.ownerId = ?1")
+    Page<PostDetailsQueryDTO> findAllByOwnerIdAndArtistId(UUID ownerId, UUID artistId, Pageable pageable);
 }
 
 @org.springframework.stereotype.Repository
