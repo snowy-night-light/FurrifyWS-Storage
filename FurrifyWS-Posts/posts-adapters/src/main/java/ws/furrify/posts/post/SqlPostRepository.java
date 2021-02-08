@@ -26,6 +26,9 @@ interface SqlPostRepository extends Repository<PostSnapshot, Long> {
 
     @Query("from PostSnapshot post join post.tags tag where tag.value = ?2 and post.ownerId = ?1")
     Set<PostSnapshot> findAllByOwnerIdAndValueInTags(UUID ownerId, String value);
+
+    @Query("from PostSnapshot post join post.artists artist where artist.artistId = ?2 and post.ownerId = ?1")
+    Set<PostSnapshot> findAllByOwnerIdAndArtistIdInArtists(UUID ownerId, UUID artistId);
 }
 
 @Transactional(rollbackFor = {})
@@ -74,5 +77,13 @@ class PostRepositoryImpl implements PostRepository {
     @Override
     public void deleteByPostId(final UUID postId) {
         sqlPostRepository.deleteByPostId(postId);
+    }
+
+    @Override
+    public Set<Post> findAllByOwnerIdAndArtistIdInArtists(final UUID ownerId, final UUID artistId) {
+        return sqlPostRepository.findAllByOwnerIdAndArtistIdInArtists(ownerId, artistId)
+                .stream()
+                .map(Post::restore)
+                .collect(Collectors.toUnmodifiableSet());
     }
 }

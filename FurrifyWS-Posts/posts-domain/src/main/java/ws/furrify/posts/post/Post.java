@@ -32,7 +32,7 @@ class Post {
     @NonNull
     private Set<PostTag> tags;
     @NonNull
-    private final Set<PostArtist> artists;
+    private Set<PostArtist> artists;
 
     private final ZonedDateTime createDate;
 
@@ -89,7 +89,7 @@ class Post {
         // Create tag with new value and type
         PostTag postTag = new PostTag(newValue, newTagType);
 
-        // Filter tags to get all without updated tag
+        // Filter tags to get all without old tag
         Set<PostTag> filteredTags = this.tags.stream()
                 .filter(tag -> !tag.getValue().equals(originalValue))
                 .collect(Collectors.toSet());
@@ -99,7 +99,28 @@ class Post {
         this.tags = filteredTags;
     }
 
-    void replaceTags(final Set<PostTag> tags) {
+    void replaceTags(@NonNull final Set<PostTag> tags) {
         this.tags = new HashSet<>(tags);
+    }
+
+    void removeArtist(@NonNull final UUID artistId) {
+        this.artists = artists.stream()
+                .filter(artist -> !artist.getArtistId().equals(artistId))
+                .collect(Collectors.toSet());
+    }
+
+    void updateArtistDetailsInArtists(@NonNull final UUID artistId,
+                                      @NonNull final String newPreferredNickname) {
+        // Create artist with new preferred nickname
+        PostArtist postArtist = new PostArtist(artistId, newPreferredNickname);
+
+        // Filter artists to get all without old artist
+        Set<PostArtist> filteredArtists = this.artists.stream()
+                .filter(artist -> !artist.getArtistId().equals(artistId))
+                .collect(Collectors.toSet());
+        // Add updated artists to artists
+        filteredArtists.add(postArtist);
+
+        this.artists = filteredArtists;
     }
 }

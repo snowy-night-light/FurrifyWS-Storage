@@ -2,6 +2,7 @@ package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import ws.furrify.artists.ArtistEvent;
 import ws.furrify.posts.PostEvent;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
@@ -59,6 +60,22 @@ public class PostFacade {
     }
 
     /**
+     * Handle incoming artist events.
+     *
+     * @param artistEvent Artist event instance received from kafka.
+     */
+    public void handleEvent(final UUID key, final ArtistEvent artistEvent) {
+        switch (DomainEventPublisher.ArtistEventType.valueOf(artistEvent.getState())) {
+            case REMOVED -> deleteArtistFromPosts(key, UUID.fromString(artistEvent.getArtistId()));
+            case UPDATED, REPLACED -> updateArtistDetailsInPosts(key,
+                    UUID.fromString(artistEvent.getArtistId()),
+                    artistEvent.getData().getPreferredNickname());
+
+            default -> log.warning("State received from kafka is not defined. State=" + artistEvent.getState());
+        }
+    }
+
+    /**
      * Creates post.
      *
      * @param userId  User uuid to assign post to.
@@ -110,7 +127,7 @@ public class PostFacade {
                                          final String originalTagValue,
                                          final String newValue,
                                          final String newType) {
-        // Get all posts with tag value, change value and save.
+        // Get all posts with tag value, update value and save.
         postRepository.findAllByOwnerIdAndValueInTags(ownerId, originalTagValue).stream()
                 .peek(post -> post.updateTagDetailsInTags(originalTagValue, newValue, newType))
                 .forEach(postRepository::save);
@@ -121,6 +138,24 @@ public class PostFacade {
         // Get all posts with tag value, remove it and save.
         postRepository.findAllByOwnerIdAndValueInTags(ownerId, tagValue).stream()
                 .peek(post -> post.removeTag(tagValue))
+                .forEach(postRepository::save);
+    }
+
+    private void deleteArtistFromPosts(final UUID ownerId,
+                                       final UUID artistId) {
+        // Get all posts with tag value, remove it and save.
+        postRepository.findAllByOwnerIdAndArtistIdInArtists(ownerId, artistId).stream()
+                .peek(post -> post.removeArtist(artistId))
+                .forEach(postRepository::save);
+    }
+
+
+    private void updateArtistDetailsInPosts(final UUID ownerId,
+                                            final UUID artistId,
+                                            final String preferredNickname) {
+        // Get all posts with artistId in artists, update preferredNickname and save.
+        postRepository.findAllByOwnerIdAndArtistIdInArtists(ownerId, artistId).stream()
+                .peek(post -> post.updateArtistDetailsInArtists(artistId, preferredNickname))
                 .forEach(postRepository::save);
     }
 }
