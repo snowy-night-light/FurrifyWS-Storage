@@ -17,11 +17,11 @@ import java.util.Set;
 @ToString
 public class ArtistReplaceCommandDTO implements CommandDTO<ArtistDTO> {
 
-    @Size(min = 1, max = 255)
-    Set<@NotBlank @Size(max = 255) String> nicknames;
+    @Size(min = 1, max = 64)
+    Set<@NotBlank @Size(max = 256) String> nicknames;
 
     @NotBlank
-    @Size(min = 1, max = 255)
+    @Size(min = 1, max = 256)
     String preferredNickname;
 
     @Override

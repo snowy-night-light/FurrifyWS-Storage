@@ -6,6 +6,7 @@ import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.shared.dto.CommandDTO;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,13 +18,14 @@ import java.util.stream.Collectors;
 @ToString
 public class PostUpdateCommandDTO implements CommandDTO<PostDTO> {
 
-    @Size(max = 64)
+    @Size(min = 1, max = 64)
     String title;
 
-    @Size(max = 512)
+    @Size(min = 1, max = 512)
     String description;
 
-    Set<PostTagCreateCommandDTO> tags;
+    @Size(max = 256)
+    Set<@Valid PostTagCreateCommandDTO> tags;
 
     @Override
     public PostDTO toDTO() {
