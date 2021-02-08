@@ -37,7 +37,7 @@ public class TagFacade {
 
             case REMOVED -> deleteTagByValue(tagDTO.getValue());
 
-            default -> log.warning("State received from kafka is not defined. State=" + tagEvent.getState());
+            default -> log.warning("State received from kafka is not defined. State=" + tagEvent.getState() + "Topic=post_events");
         }
     }
 

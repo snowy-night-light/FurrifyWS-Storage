@@ -38,7 +38,7 @@ public class PostFacade {
             case CREATED, REPLACED, UPDATED -> savePost(postDTO);
             case REMOVED -> deletePostByPostId(postDTO.getPostId());
 
-            default -> log.warning("State received from kafka is not defined. State=" + postEvent.getState());
+            default -> log.warning("State received from kafka is not defined. State=" + postEvent.getState() + "Topic=post_events");
         }
     }
 
@@ -55,7 +55,7 @@ public class PostFacade {
                     tagEvent.getData().getValue(),
                     tagEvent.getData().getType());
 
-            default -> log.warning("State received from kafka is not defined. State=" + tagEvent.getState());
+            default -> log.warning("State received from kafka is not defined. State=" + tagEvent.getState() + "Topic=post_events");
         }
     }
 
@@ -71,7 +71,7 @@ public class PostFacade {
                     UUID.fromString(artistEvent.getArtistId()),
                     artistEvent.getData().getPreferredNickname());
 
-            default -> log.warning("State received from kafka is not defined. State=" + artistEvent.getState());
+            default -> log.warning("State received from kafka is not defined. State=" + artistEvent.getState() + "Topic=post_events");
         }
     }
 
