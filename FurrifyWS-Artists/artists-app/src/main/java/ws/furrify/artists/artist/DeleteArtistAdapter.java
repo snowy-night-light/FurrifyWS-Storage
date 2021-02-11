@@ -1,8 +1,7 @@
 package ws.furrify.artists.artist;
 
 import lombok.RequiredArgsConstructor;
-import ws.furrify.artists.ArtistEvent;
-import ws.furrify.artists.vo.ArtistData;
+import ws.furrify.artists.artist.vo.ArtistData;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;

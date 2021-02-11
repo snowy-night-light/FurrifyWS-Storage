@@ -1,12 +1,11 @@
 package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
-import ws.furrify.posts.PostEvent;
 import ws.furrify.posts.post.dto.PostDTO;
+import ws.furrify.posts.post.vo.PostData;
 import ws.furrify.posts.post.vo.PostTag;
+import ws.furrify.posts.post.vo.PostTagData;
 import ws.furrify.posts.tag.TagServiceClient;
-import ws.furrify.posts.vo.PostData;
-import ws.furrify.posts.vo.PostTagData;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.time.Instant;

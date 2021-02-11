@@ -3,7 +3,6 @@ package ws.furrify.artists.artist;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ws.furrify.artists.ArtistEvent;
 import ws.furrify.artists.artist.dto.ArtistDtoFactory;
 import ws.furrify.artists.kafka.KafkaTopicEventPublisher;
 

@@ -7,9 +7,8 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
-import ws.furrify.artists.ArtistEvent;
-import ws.furrify.posts.PostEvent;
-import ws.furrify.tags.TagEvent;
+import ws.furrify.artists.artist.ArtistEvent;
+import ws.furrify.tags.tag.TagEvent;
 
 import java.util.UUID;
 

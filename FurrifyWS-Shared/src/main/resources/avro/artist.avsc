@@ -1,7 +1,7 @@
 [
   {
     "type": "record",
-    "namespace": "ws.furrify.artists.vo",
+    "namespace": "ws.furrify.artists.artist.vo",
     "doc": "Artist data containing required information to perform state change across multiple microservices.",
     "name": "ArtistData",
     "fields": [
@@ -46,7 +46,7 @@
   },
   {
     "type": "record",
-    "namespace": "ws.furrify.artists",
+    "namespace": "ws.furrify.artists.artist",
     "doc": "Artist state change request.",
     "name": "ArtistEvent",
     "fields": [
@@ -71,7 +71,7 @@
       },
       {
         "name": "data",
-        "type": "ws.furrify.artists.vo.ArtistData",
+        "type": "ws.furrify.artists.artist.vo.ArtistData",
         "doc": "Artist data eg. changed fields."
       },
       {

@@ -2,12 +2,11 @@ package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import ws.furrify.artists.ArtistEvent;
-import ws.furrify.posts.PostEvent;
+import ws.furrify.artists.artist.ArtistEvent;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
 import ws.furrify.shared.kafka.DomainEventPublisher;
-import ws.furrify.tags.TagEvent;
+import ws.furrify.tags.tag.TagEvent;
 
 import java.util.UUID;
 

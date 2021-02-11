@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ws.furrify.artists.ArtistEvent;
 import ws.furrify.artists.artist.dto.ArtistDTO;
 import ws.furrify.artists.artist.dto.ArtistDtoFactory;
 import ws.furrify.shared.exception.RecordNotFoundException;

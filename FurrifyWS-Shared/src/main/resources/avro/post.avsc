@@ -1,7 +1,7 @@
 [
   {
     "type": "record",
-    "namespace": "ws.furrify.posts.vo",
+    "namespace": "ws.furrify.posts.post.vo",
     "doc": "Post artist containing most important values to user to access with artist.",
     "name": "PostArtistData",
     "fields": [
@@ -23,7 +23,7 @@
   },
   {
     "type": "record",
-    "namespace": "ws.furrify.posts.vo",
+    "namespace": "ws.furrify.posts.post.vo",
     "doc": "Post tag containing most important values to user to access with post.",
     "name": "PostTagData",
     "fields": [
@@ -45,7 +45,7 @@
   },
   {
     "type": "record",
-    "namespace": "ws.furrify.posts.vo",
+    "namespace": "ws.furrify.posts.post.vo",
     "doc": "Post data containing required information to perform state change across multiple microservices.",
     "name": "PostData",
     "fields": [
@@ -80,7 +80,7 @@
         "name": "tags",
         "type": {
           "type": "array",
-          "items": "ws.furrify.posts.vo.PostTagData"
+          "items": "ws.furrify.posts.post.vo.PostTagData"
         },
         "default": [],
         "doc": "Post tags value objects."
@@ -89,7 +89,7 @@
         "name": "artists",
         "type": {
           "type": "array",
-          "items": "ws.furrify.posts.vo.PostArtistData"
+          "items": "ws.furrify.posts.post.vo.PostArtistData"
         },
         "default": [],
         "doc": "Post artists value objects."
@@ -108,7 +108,7 @@
   },
   {
     "type": "record",
-    "namespace": "ws.furrify.posts",
+    "namespace": "ws.furrify.posts.post",
     "doc": "Post state change request.",
     "name": "PostEvent",
     "fields": [
@@ -133,7 +133,7 @@
       },
       {
         "name": "data",
-        "type": "ws.furrify.posts.vo.PostData",
+        "type": "ws.furrify.posts.post.vo.PostData",
         "doc": "Post data eg. changed fields."
       },
       {

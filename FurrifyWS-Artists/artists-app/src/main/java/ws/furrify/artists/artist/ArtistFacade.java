@@ -2,7 +2,6 @@ package ws.furrify.artists.artist;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import ws.furrify.artists.ArtistEvent;
 import ws.furrify.artists.artist.dto.ArtistDTO;
 import ws.furrify.artists.artist.dto.ArtistDtoFactory;
 import ws.furrify.shared.kafka.DomainEventPublisher;

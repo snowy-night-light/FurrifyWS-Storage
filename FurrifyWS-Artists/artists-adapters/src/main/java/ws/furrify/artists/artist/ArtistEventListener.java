@@ -7,7 +7,6 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
-import ws.furrify.artists.ArtistEvent;
 
 import java.util.UUID;
 

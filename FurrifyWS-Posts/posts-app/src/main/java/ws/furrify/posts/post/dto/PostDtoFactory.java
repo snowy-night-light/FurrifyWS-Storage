@@ -1,6 +1,6 @@
 package ws.furrify.posts.post.dto;
 
-import ws.furrify.posts.PostEvent;
+import ws.furrify.posts.post.PostEvent;
 import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
 

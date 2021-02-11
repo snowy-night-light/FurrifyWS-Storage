@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
-import ws.furrify.tags.TagEvent;
-import ws.furrify.tags.vo.TagData;
+import ws.furrify.tags.tag.vo.TagData;
 
 import java.time.Instant;
 import java.util.UUID;

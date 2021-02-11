@@ -1,6 +1,6 @@
 package ws.furrify.artists.artist.dto;
 
-import ws.furrify.artists.ArtistEvent;
+import ws.furrify.artists.artist.ArtistEvent;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
