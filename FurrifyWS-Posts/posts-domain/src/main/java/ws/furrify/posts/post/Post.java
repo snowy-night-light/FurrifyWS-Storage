@@ -133,4 +133,8 @@ class Post {
 
         this.artists = filteredArtists;
     }
+
+    void replaceArtists(@NonNull final Set<PostArtist> artists) {
+        this.artists = new HashSet<>(artists);
+    }
 }

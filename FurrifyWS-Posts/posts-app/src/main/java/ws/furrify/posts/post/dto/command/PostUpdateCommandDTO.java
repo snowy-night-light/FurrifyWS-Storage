@@ -3,6 +3,7 @@ package ws.furrify.posts.post.dto.command;
 import lombok.ToString;
 import lombok.Value;
 import ws.furrify.posts.post.dto.PostDTO;
+import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.shared.dto.CommandDTO;
 
@@ -27,6 +28,9 @@ public class PostUpdateCommandDTO implements CommandDTO<PostDTO> {
     @Size(max = 256)
     Set<@Valid PostTagCreateCommandDTO> tags;
 
+    @Size(max = 256)
+    Set<@Valid PostArtistCreateCommandDTO> artists;
+
     @Override
     public PostDTO toDTO() {
         return PostDTO.builder()
@@ -37,6 +41,11 @@ public class PostUpdateCommandDTO implements CommandDTO<PostDTO> {
                         (tags != null) ? tags.stream()
                                 .map(tag -> new PostTag(tag.getValue(), null))
                                 .collect(Collectors.toSet()) : null
+                )
+                .artists(
+                        artists.stream()
+                                .map(artist -> new PostArtist(artist.getArtistId(), null))
+                                .collect(Collectors.toSet())
                 )
                 .build();
     }

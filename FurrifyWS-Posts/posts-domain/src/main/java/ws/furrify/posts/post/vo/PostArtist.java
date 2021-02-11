@@ -24,6 +24,5 @@ import static lombok.AccessLevel.PROTECTED;
 public class PostArtist {
     @NonNull
     private UUID artistId;
-    @NonNull
     private String preferredNickname;
 }

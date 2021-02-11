@@ -1,7 +1,10 @@
 package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
+import ws.furrify.posts.artist.ArtistServiceClient;
 import ws.furrify.posts.post.dto.PostDTO;
+import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostArtistData;
 import ws.furrify.posts.post.vo.PostData;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.posts.post.vo.PostTagData;
@@ -21,6 +24,7 @@ class UpdatePostAdapter implements UpdatePostPort {
     private final DomainEventPublisher<PostEvent> domainEventPublisher;
     private final PostRepository postRepository;
     private final TagServiceClient tagServiceClient;
+    private final ArtistServiceClient artistServiceClient;
 
     @Override
     public void updatePost(final UUID userId, final UUID postId, final PostDTO postDTO) {
@@ -36,9 +40,15 @@ class UpdatePostAdapter implements UpdatePostPort {
         }
         if (postDTO.getTags() != null) {
             // Convert tags with values to tags with values and types
-            Set<PostTag> tags = PostTagUtils.tagValueToTagVO(userId, postDTO.getTags(), tagServiceClient);
+            Set<PostTag> tags = PostUtils.tagValueToTagVO(userId, postDTO.getTags(), tagServiceClient);
 
             post.replaceTags(tags);
+        }
+        if (postDTO.getArtists() != null) {
+            // Convert artists with artistId to artists with artistIds and preferredNicknames
+            Set<PostArtist> artists = PostUtils.artistWithArtistIdToArtistVO(userId, postDTO.getArtists(), artistServiceClient);
+
+            post.replaceArtists(artists);
         }
 
         // Publish update user event
@@ -70,6 +80,16 @@ class UpdatePostAdapter implements UpdatePostPort {
                                                         PostTagData.newBuilder()
                                                                 .setValue(tag.getValue())
                                                                 .setType(tag.getType())
+                                                                .build()
+                                                ).collect(Collectors.toList())
+                                )
+                                .setArtists(
+                                        // Map PostArtist to PostArtistData
+                                        postSnapshot.getArtists().stream()
+                                                .map(artist ->
+                                                        PostArtistData.newBuilder()
+                                                                .setArtistId(artist.getArtistId().toString())
+                                                                .setPreferredNickname(artist.getPreferredNickname())
                                                                 .build()
                                                 ).collect(Collectors.toList())
                                 )

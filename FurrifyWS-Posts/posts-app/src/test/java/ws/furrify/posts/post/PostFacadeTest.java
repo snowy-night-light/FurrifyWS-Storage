@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ws.furrify.posts.artist.ArtistServiceClient;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
 import ws.furrify.posts.post.vo.PostTag;
@@ -28,6 +29,7 @@ class PostFacadeTest {
     private static PostRepository postRepository;
     private static PostFacade postFacade;
     private static TagServiceClient tagServiceClient;
+    private static ArtistServiceClient artistServiceClient;
 
     private PostDTO postDTO;
     private Post post;
@@ -65,6 +67,7 @@ class PostFacadeTest {
     static void beforeAll() {
         postRepository = mock(PostRepository.class);
         tagServiceClient = mock(TagServiceClient.class);
+        artistServiceClient = mock(ArtistServiceClient.class);
 
         var postFactory = new PostFactory();
         var postDTOFactory = new PostDtoFactory();
@@ -72,10 +75,10 @@ class PostFacadeTest {
         var eventPublisher = (DomainEventPublisher<PostEvent>) mock(DomainEventPublisher.class);
 
         postFacade = new PostFacade(
-                new CreatePostAdapter(postFactory, eventPublisher, tagServiceClient),
+                new CreatePostAdapter(postFactory, eventPublisher, tagServiceClient, artistServiceClient),
                 new DeletePostAdapter(eventPublisher, postRepository),
-                new UpdatePostAdapter(eventPublisher, postRepository, tagServiceClient),
-                new ReplacePostAdapter(eventPublisher, postRepository, tagServiceClient),
+                new UpdatePostAdapter(eventPublisher, postRepository, tagServiceClient, artistServiceClient),
+                new ReplacePostAdapter(eventPublisher, postRepository, tagServiceClient, artistServiceClient),
                 postRepository,
                 postFactory,
                 postDTOFactory
