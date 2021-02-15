@@ -199,4 +199,21 @@ class PostTest {
                 "Exception was not thrown."
         );
     }
+
+    @Test
+    void replaceArtists() {
+        // Given new artists set
+        PostArtist postArtist = new PostArtist(UUID.randomUUID(), "preferred_nickname");
+
+        Set<PostArtist> newArtists = Collections.singleton(postArtist);
+        // When replaceArtists() method called
+        // Then replace artists
+        post.replaceArtists(newArtists);
+
+        assertEquals(
+                post.getSnapshot().getArtists().toArray()[0],
+                postArtist,
+                "Artists weren't replaced."
+        );
+    }
 }

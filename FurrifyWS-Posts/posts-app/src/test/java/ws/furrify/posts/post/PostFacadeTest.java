@@ -5,8 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.posts.artist.ArtistServiceClient;
+import ws.furrify.posts.artist.dto.query.ArtistDetailsQueryDTO;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
+import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.posts.tag.TagServiceClient;
 import ws.furrify.posts.tag.dto.query.TagDetailsQueryDTO;
@@ -34,11 +36,14 @@ class PostFacadeTest {
     private PostDTO postDTO;
     private Post post;
     private PostTag postTag;
+    private PostArtist postArtist;
     private TagDetailsQueryDTO tagDetailsQueryDTO;
+    private ArtistDetailsQueryDTO artistDetailsQueryDTO;
 
     @BeforeEach
     void setUp() {
         postTag = new PostTag("walking", "ACTION");
+        postArtist = new PostArtist(UUID.randomUUID(), "preferred_nickname");
 
         tagDetailsQueryDTO = new TagDetailsQueryDTO() {
             @Override
@@ -52,11 +57,24 @@ class PostFacadeTest {
             }
         };
 
+        artistDetailsQueryDTO = new ArtistDetailsQueryDTO() {
+            @Override
+            public UUID getArtistId() {
+                return UUID.randomUUID();
+            }
+
+            @Override
+            public String getPreferredNickname() {
+                return "preferred_nickname";
+            }
+        };
+
         postDTO = PostDTO.builder()
                 .title("Test")
                 .description("dsa")
                 .ownerId(UUID.randomUUID())
                 .tags(Collections.singleton(postTag))
+                .artists(Collections.singleton(postArtist))
                 .createDate(ZonedDateTime.now())
                 .build();
 
@@ -92,6 +110,7 @@ class PostFacadeTest {
         UUID userId = UUID.randomUUID();
         // When createPost() method called
         when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(tagDetailsQueryDTO);
+        when(artistServiceClient.getUserArtist(userId, postArtist.getArtistId())).thenReturn(artistDetailsQueryDTO);
         // Then return generated uuid
         assertNotNull(postFacade.createPost(userId, postDTO), "PostId was not returned.");
     }
@@ -103,6 +122,23 @@ class PostFacadeTest {
         UUID userId = UUID.randomUUID();
         // When createPost() method called
         when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(null);
+        when(artistServiceClient.getUserArtist(userId, postArtist.getArtistId())).thenReturn(artistDetailsQueryDTO);
+        // Then return generated uuid
+        assertThrows(
+                RecordNotFoundException.class,
+                () -> postFacade.createPost(userId, postDTO),
+                "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Create post with non existing artist")
+    void createPost3() {
+        // Given ownerId and postDTO with non existing artist
+        UUID userId = UUID.randomUUID();
+        // When createPost() method called
+        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(tagDetailsQueryDTO);
+        when(artistServiceClient.getUserArtist(userId, postArtist.getArtistId())).thenReturn(null);
         // Then return generated uuid
         assertThrows(
                 RecordNotFoundException.class,
@@ -120,6 +156,7 @@ class PostFacadeTest {
         UUID postId = UUID.randomUUID();
         // When replacePost() method called
         when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(tagDetailsQueryDTO);
+        when(artistServiceClient.getUserArtist(userId, postArtist.getArtistId())).thenReturn(artistDetailsQueryDTO);
         when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
         // Then run successfully
         assertDoesNotThrow(() -> postFacade.replacePost(userId, postId, postDTO), "Exception was thrown");
@@ -149,7 +186,26 @@ class PostFacadeTest {
         UUID postId = UUID.randomUUID();
         // When replacePost() method called
         when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
+        when(artistServiceClient.getUserArtist(userId, postArtist.getArtistId())).thenReturn(artistDetailsQueryDTO);
         when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(null);
+        // Then run successfully
+        assertThrows(
+                RecordNotFoundException.class,
+                () -> postFacade.replacePost(userId, postId, postDTO),
+                "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Replace post with non existing artist")
+    void replacePost4() {
+        // Given postDTO with non existing artist, userId and postId
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        // When replacePost() method called
+        when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
+        when(artistServiceClient.getUserArtist(userId, postArtist.getArtistId())).thenReturn(null);
+        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(tagDetailsQueryDTO);
         // Then run successfully
         assertThrows(
                 RecordNotFoundException.class,
@@ -166,6 +222,7 @@ class PostFacadeTest {
         UUID postId = UUID.randomUUID();
         // When updatePost() method called
         when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(tagDetailsQueryDTO);
+        when(artistServiceClient.getUserArtist(userId, postArtist.getArtistId())).thenReturn(artistDetailsQueryDTO);
         when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
         // Then run successfully
         assertDoesNotThrow(() -> postFacade.updatePost(userId, postId, postDTO), "Exception was thrown");
@@ -195,7 +252,26 @@ class PostFacadeTest {
         UUID postId = UUID.randomUUID();
         // When replacePost() method called
         when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
+        when(artistServiceClient.getUserArtist(userId, postArtist.getArtistId())).thenReturn(artistDetailsQueryDTO);
         when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(null);
+        // Then run successfully
+        assertThrows(
+                RecordNotFoundException.class,
+                () -> postFacade.updatePost(userId, postId, postDTO),
+                "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Update post with non existing artist")
+    void updatePost4() {
+        // Given postDTO with non existing artist, userId and postId
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        // When replacePost() method called
+        when(postRepository.findByOwnerIdAndPostId(userId, postId)).thenReturn(Optional.of(post));
+        when(tagServiceClient.getUserTag(userId, postTag.getValue())).thenReturn(tagDetailsQueryDTO);
+        when(artistServiceClient.getUserArtist(userId, postArtist.getArtistId())).thenReturn(null);
         // Then run successfully
         assertThrows(
                 RecordNotFoundException.class,
