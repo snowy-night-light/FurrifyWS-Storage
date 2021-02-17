@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ws.furrify.posts.post.dto.query.PostDetailsQueryDTO;
+import ws.furrify.posts.post.dto.vo.PostQuerySearchDTO;
 
 import java.util.Optional;
 import java.util.Set;
@@ -43,6 +44,26 @@ interface SqlPostQueryRepository extends PostQueryRepository, Repository<PostSna
     @Override
     @Query("select post from PostSnapshot post join post.artists artist where artist.artistId = ?2 and post.ownerId = ?1")
     Page<PostDetailsQueryDTO> findAllByOwnerIdAndArtistId(UUID ownerId, UUID artistId, Pageable pageable);
+
+    @Override
+    @Query("select post from PostSnapshot post join post.artists artist join post.tags tag where " +
+            // Check if user if matches
+            "post.ownerId = :#{#ownerId}" +
+            " and " +
+            // Check if required artists are present or if required artists are size 0 then ignore
+            "(artist.preferredNickname in (:#{#query.withArtists}) or :#{#query.withArtists.size()} = 0)" +
+            " and " +
+            // Check if excluded artists are present or if excluded artists are size 0 then ignore
+            "(artist.preferredNickname not in (:#{#query.withoutArtists}) or :#{#query.withoutArtists.size()} = 0)" +
+            " and " +
+            // Check if required tags are present or if required tags are size 0 then ignore
+            "(tag.value in (:#{#query.withTags}) or :#{#query.withTags.size()} = 0)" +
+            " and " +
+            // Check if excluded artists are present or if excluded tags are size 0 then ignore
+            "(tag.value not in (:#{#query.withoutTags}) or :#{#query.withoutTags.size()} = 0)")
+    Page<PostDetailsQueryDTO> findAllByOwnerIdAndQuery(UUID ownerId,
+                                                       PostQuerySearchDTO query,
+                                                       Pageable pageable);
 }
 
 @org.springframework.stereotype.Repository
