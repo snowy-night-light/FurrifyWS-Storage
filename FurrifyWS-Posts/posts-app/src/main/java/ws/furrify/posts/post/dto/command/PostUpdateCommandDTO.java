@@ -43,9 +43,10 @@ public class PostUpdateCommandDTO implements CommandDTO<PostDTO> {
                                 .collect(Collectors.toSet()) : null
                 )
                 .artists(
-                        artists.stream()
+                        // Checks if artists are null
+                        (artists != null) ? artists.stream()
                                 .map(artist -> new PostArtist(artist.getArtistId(), null))
-                                .collect(Collectors.toSet())
+                                .collect(Collectors.toSet()) : null
                 )
                 .build();
     }
