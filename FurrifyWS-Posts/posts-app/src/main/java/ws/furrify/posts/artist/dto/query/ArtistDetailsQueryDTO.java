@@ -1,18 +1,21 @@
 package ws.furrify.posts.artist.dto.query;
 
+import lombok.Data;
+
 import java.util.UUID;
 
 /**
  * @author Skyte
  */
-public interface ArtistDetailsQueryDTO {
+@Data
+public class ArtistDetailsQueryDTO {
     /**
      * Artist UUID.
      */
-    UUID getArtistId();
+    private UUID artistId;
 
     /**
      * Artist preferred nickname.
      */
-    String getPreferredNickname();
+    private String preferredNickname;
 }
