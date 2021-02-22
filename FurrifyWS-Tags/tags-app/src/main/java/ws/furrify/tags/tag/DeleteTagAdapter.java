@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
-import ws.furrify.tags.tag.vo.TagData;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -26,22 +24,10 @@ class DeleteTagAdapter implements DeleteTagPort {
                 DomainEventPublisher.Topic.TAG,
                 // Use userId as key
                 userId,
-                createTagEvent(userId, value)
-        );
-    }
-
-    private TagEvent createTagEvent(final UUID ownerId, final String value) {
-        return TagEvent.newBuilder()
-                .setState(DomainEventPublisher.TagEventType.REMOVED.name())
-                .setTagValue(value)
-                .setDataBuilder(
-                        TagData.newBuilder()
-                                .setValue(value)
-                                .setTitle("")
-                                .setDescription("")
-                                .setOwnerId(ownerId.toString())
+                TagUtils.deleteTagEvent(
+                        userId,
+                        value
                 )
-                .setOccurredOn(Instant.now().toEpochMilli())
-                .build();
+        );
     }
 }

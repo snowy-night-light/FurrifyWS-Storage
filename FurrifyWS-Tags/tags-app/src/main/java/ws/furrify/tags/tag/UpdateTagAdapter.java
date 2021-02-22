@@ -5,9 +5,7 @@ import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.tag.dto.TagDTO;
-import ws.furrify.tags.tag.vo.TagData;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -40,27 +38,10 @@ class UpdateTagAdapter implements UpdateTagPort {
                 DomainEventPublisher.Topic.TAG,
                 // User userId as key
                 userId,
-                createTagEvent(value, tag)
-        );
-    }
-
-    private TagEvent createTagEvent(final String oldTagValue, final Tag tag) {
-        TagSnapshot tagSnapshot = tag.getSnapshot();
-
-        return TagEvent.newBuilder()
-                .setState(DomainEventPublisher.TagEventType.UPDATED.name())
-                .setId(tagSnapshot.getId())
-                .setTagValue(oldTagValue)
-                .setDataBuilder(
-                        TagData.newBuilder()
-                                .setValue(tagSnapshot.getValue())
-                                .setTitle(tagSnapshot.getTitle())
-                                .setDescription(tagSnapshot.getDescription())
-                                .setOwnerId(tagSnapshot.getOwnerId().toString())
-                                .setType(tagSnapshot.getType().name())
-                                .setCreateDate(tagSnapshot.getCreateDate().toInstant().toEpochMilli())
+                TagUtils.createTagEvent(
+                        DomainEventPublisher.TagEventType.UPDATED,
+                        tag
                 )
-                .setOccurredOn(Instant.now().toEpochMilli())
-                .build();
+        );
     }
 }

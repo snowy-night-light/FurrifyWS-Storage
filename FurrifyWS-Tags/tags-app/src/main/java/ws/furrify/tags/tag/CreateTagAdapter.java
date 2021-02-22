@@ -5,9 +5,7 @@ import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.tag.dto.TagDTO;
-import ws.furrify.tags.tag.vo.TagData;
 
-import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -35,29 +33,12 @@ class CreateTagAdapter implements CreateTagPort {
                 DomainEventPublisher.Topic.TAG,
                 // User userId as key
                 userId,
-                createTagEvent(tagFactory.from(updatedTagToCreateDTO))
+                TagUtils.createTagEvent(
+                        DomainEventPublisher.TagEventType.CREATED,
+                        tagFactory.from(updatedTagToCreateDTO)
+                )
         );
 
         return updatedTagToCreateDTO.getValue();
-    }
-
-    private TagEvent createTagEvent(final Tag tag) {
-        TagSnapshot tagSnapshot = tag.getSnapshot();
-
-        return TagEvent.newBuilder()
-                .setState(DomainEventPublisher.TagEventType.UPDATED.name())
-                .setId(tagSnapshot.getId())
-                .setTagValue(tagSnapshot.getValue())
-                .setDataBuilder(
-                        TagData.newBuilder()
-                                .setValue(tagSnapshot.getValue())
-                                .setTitle(tagSnapshot.getTitle())
-                                .setDescription(tagSnapshot.getDescription())
-                                .setOwnerId(tagSnapshot.getOwnerId().toString())
-                                .setType(tagSnapshot.getType().name())
-                                .setCreateDate(tagSnapshot.getCreateDate().toInstant().toEpochMilli())
-                )
-                .setOccurredOn(Instant.now().toEpochMilli())
-                .build();
     }
 }

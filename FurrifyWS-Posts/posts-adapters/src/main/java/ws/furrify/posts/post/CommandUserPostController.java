@@ -34,7 +34,7 @@ class CommandUserPostController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public ResponseEntity<?> createPost(@PathVariable UUID userId,
                                         @RequestBody @Validated PostCreateCommandDTO postCreateCommandDTO,
@@ -53,7 +53,7 @@ class CommandUserPostController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public ResponseEntity<?> deletePost(@PathVariable UUID userId,
                                         @PathVariable UUID postId,
@@ -67,7 +67,7 @@ class CommandUserPostController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public ResponseEntity<?> updatePost(@PathVariable UUID userId,
                                         @PathVariable UUID postId,
@@ -82,7 +82,7 @@ class CommandUserPostController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public ResponseEntity<?> replacePost(@PathVariable UUID userId,
                                          @PathVariable UUID postId,

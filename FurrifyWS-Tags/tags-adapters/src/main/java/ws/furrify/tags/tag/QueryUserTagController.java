@@ -59,7 +59,7 @@ class QueryUserTagController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public EntityModel<TagDetailsQueryDTO> getUserTag(@PathVariable UUID userId,
                                                       @PathVariable String value,

@@ -2,12 +2,9 @@ package ws.furrify.artists.artist;
 
 import lombok.RequiredArgsConstructor;
 import ws.furrify.artists.artist.dto.ArtistDTO;
-import ws.furrify.artists.artist.vo.ArtistData;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
-import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -42,28 +39,13 @@ class CreateArtistAdapter implements CreateArtistPort {
                 DomainEventPublisher.Topic.ARTIST,
                 // Use ownerId as key
                 ownerId,
-                createArtistEvent(artist)
+                ArtistUtils.createArtistEvent(
+                        DomainEventPublisher.ArtistEventType.CREATED,
+                        artist
+                )
         );
 
 
         return artistId;
-    }
-
-    private ArtistEvent createArtistEvent(Artist artist) {
-        ArtistSnapshot artistSnapshot = artist.getSnapshot();
-
-        return ArtistEvent.newBuilder()
-                .setState(DomainEventPublisher.ArtistEventType.CREATED.name())
-                .setArtistId(artistSnapshot.getArtistId().toString())
-                .setData(
-                        ArtistData.newBuilder()
-                                .setOwnerId(artistSnapshot.getOwnerId().toString())
-                                .setNicknames(new ArrayList<>(artistSnapshot.getNicknames()))
-                                .setPreferredNickname(artistSnapshot.getPreferredNickname())
-                                .setCreateDate(artistSnapshot.getCreateDate().toInstant().toEpochMilli())
-                                .build()
-                )
-                .setOccurredOn(Instant.now().toEpochMilli())
-                .build();
     }
 }

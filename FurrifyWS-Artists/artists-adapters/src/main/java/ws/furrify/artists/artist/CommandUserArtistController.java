@@ -34,7 +34,7 @@ class CommandUserArtistController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public ResponseEntity<?> createArtist(@PathVariable UUID userId,
                                           @RequestBody @Validated ArtistCreateCommandDTO artistCreateCommandDTO,
@@ -53,7 +53,7 @@ class CommandUserArtistController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public ResponseEntity<?> deleteArtist(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,
@@ -67,7 +67,7 @@ class CommandUserArtistController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public ResponseEntity<?> updateArtist(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,
@@ -82,7 +82,7 @@ class CommandUserArtistController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public ResponseEntity<?> replaceArtist(@PathVariable UUID userId,
                                            @PathVariable UUID artistId,
