@@ -2,10 +2,12 @@ package ws.furrify.posts.post.dto.command;
 
 import lombok.ToString;
 import lombok.Value;
-import ws.furrify.posts.CommandDTO;
 import ws.furrify.posts.post.dto.PostDTO;
+import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
+import ws.furrify.shared.dto.CommandDTO;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,13 +19,17 @@ import java.util.stream.Collectors;
 @ToString
 public class PostUpdateCommandDTO implements CommandDTO<PostDTO> {
 
-    @Size(max = 64)
+    @Size(min = 1, max = 64)
     String title;
 
-    @Size(max = 512)
+    @Size(min = 1, max = 512)
     String description;
 
-    Set<PostTagCreateCommandDTO> tags;
+    @Size(max = 256)
+    Set<@Valid PostTagCreateCommandDTO> tags;
+
+    @Size(max = 256)
+    Set<@Valid PostArtistCreateCommandDTO> artists;
 
     @Override
     public PostDTO toDTO() {
@@ -34,6 +40,12 @@ public class PostUpdateCommandDTO implements CommandDTO<PostDTO> {
                         // Checks if tags are null
                         (tags != null) ? tags.stream()
                                 .map(tag -> new PostTag(tag.getValue(), null))
+                                .collect(Collectors.toSet()) : null
+                )
+                .artists(
+                        // Checks if artists are null
+                        (artists != null) ? artists.stream()
+                                .map(artist -> new PostArtist(artist.getArtistId(), null))
                                 .collect(Collectors.toSet()) : null
                 )
                 .build();

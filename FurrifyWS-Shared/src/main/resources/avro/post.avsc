@@ -1,7 +1,29 @@
 [
   {
     "type": "record",
-    "namespace": "ws.furrify.posts.vo",
+    "namespace": "ws.furrify.posts.post.vo",
+    "doc": "Post artist containing most important values to user to access with artist.",
+    "name": "PostArtistData",
+    "fields": [
+      {
+        "name": "artistId",
+        "type": "string",
+        "doc": "Artist UUID."
+      },
+      {
+        "name": "preferredNickname",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "An artist preferred nickname."
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "ws.furrify.posts.post.vo",
     "doc": "Post tag containing most important values to user to access with post.",
     "name": "PostTagData",
     "fields": [
@@ -23,7 +45,7 @@
   },
   {
     "type": "record",
-    "namespace": "ws.furrify.posts.vo",
+    "namespace": "ws.furrify.posts.post.vo",
     "doc": "Post data containing required information to perform state change across multiple microservices.",
     "name": "PostData",
     "fields": [
@@ -58,10 +80,19 @@
         "name": "tags",
         "type": {
           "type": "array",
-          "items": "ws.furrify.posts.vo.PostTagData"
+          "items": "ws.furrify.posts.post.vo.PostTagData"
         },
         "default": [],
         "doc": "Post tags value objects."
+      },
+      {
+        "name": "artists",
+        "type": {
+          "type": "array",
+          "items": "ws.furrify.posts.post.vo.PostArtistData"
+        },
+        "default": [],
+        "doc": "Post artists value objects."
       },
       {
         "name": "createDate",
@@ -77,7 +108,7 @@
   },
   {
     "type": "record",
-    "namespace": "ws.furrify.posts",
+    "namespace": "ws.furrify.posts.post",
     "doc": "Post state change request.",
     "name": "PostEvent",
     "fields": [
@@ -87,7 +118,7 @@
         "doc": "A event type performed on that record. (Can be acquired using PostEventType enum.)"
       },
       {
-        "name": "postId",
+        "name": "id",
         "type": [
           "null",
           "long"
@@ -96,13 +127,13 @@
         "doc": "A post database id."
       },
       {
-        "name": "postUUID",
+        "name": "postId",
         "type": "string",
         "doc": "A post UUID event is targeted at."
       },
       {
         "name": "data",
-        "type": "ws.furrify.posts.vo.PostData",
+        "type": "ws.furrify.posts.post.vo.PostData",
         "doc": "Post data eg. changed fields."
       },
       {

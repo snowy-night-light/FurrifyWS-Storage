@@ -2,8 +2,7 @@ package ws.furrify.tags.tag;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import ws.furrify.shared.DomainEventPublisher;
-import ws.furrify.tags.TagEvent;
+import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.tag.dto.TagDTO;
 import ws.furrify.tags.tag.dto.TagDtoFactory;
 
@@ -29,7 +28,7 @@ public class TagFacade {
      *
      * @param tagEvent Tag event instance received from kafka.
      */
-    public void handleEvent(final UUID key, final TagEvent tagEvent) {
+    void handleEvent(final UUID key, final TagEvent tagEvent) {
         TagDTO tagDTO = tagDtoFactory.from(key, tagEvent);
 
         switch (DomainEventPublisher.TagEventType.valueOf(tagEvent.getState())) {
@@ -37,7 +36,7 @@ public class TagFacade {
 
             case REMOVED -> deleteTagByValue(tagDTO.getValue());
 
-            default -> log.warning("State received from kafka is not defined. State=" + tagEvent.getState());
+            default -> log.warning("State received from kafka is not defined. State=" + tagEvent.getState() + "Topic=post_events");
         }
     }
 

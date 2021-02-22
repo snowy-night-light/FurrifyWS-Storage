@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import ws.furrify.posts.post.dto.PostDTO;
+import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
 
 import java.time.ZonedDateTime;
@@ -30,7 +31,7 @@ class PostTest implements CommandLineRunner {
     private void createTestingPosts() {
         var postFactory = new PostFactory();
 
-        var userId = UUID.fromString("152af668-4e26-4f78-9d4a-30e05e546536");
+        var userId = UUID.fromString("d56abf09-6fe6-4a38-b758-444633b2d13f");
         var postId = UUID.fromString("7c2c35f3-20e9-4b7e-a455-253b7b78e2fa");
 
         sqlPostRepository.save(
@@ -44,6 +45,14 @@ class PostTest implements CommandLineRunner {
                                         PostTag.builder()
                                                 .value("walking")
                                                 .type("ACTION")
+                                                .build()
+                                ))
+                                .artists(Set.of(
+                                        PostArtist.builder()
+                                                .artistId(
+                                                        UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00")
+                                                )
+                                                .preferredNickname("example_nickname")
                                                 .build()
                                 ))
                                 .createDate(ZonedDateTime.now())

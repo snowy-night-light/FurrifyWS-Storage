@@ -1,7 +1,7 @@
 [
   {
     "type": "record",
-    "namespace": "ws.furrify.tags.vo",
+    "namespace": "ws.furrify.tags.tag.vo",
     "doc": "Tag data containing required information to perform state change across multiple microservices.",
     "name": "TagData",
     "fields": [
@@ -52,7 +52,7 @@
   },
   {
     "type": "record",
-    "namespace": "ws.furrify.tags",
+    "namespace": "ws.furrify.tags.tag",
     "doc": "Tag state change request.",
     "name": "TagEvent",
     "fields": [
@@ -62,7 +62,7 @@
         "doc": "A event type performed on that record. (Can be acquired using TagEventType enum.)"
       },
       {
-        "name": "tagId",
+        "name": "id",
         "type": [
           "null",
           "long"
@@ -77,7 +77,7 @@
       },
       {
         "name": "data",
-        "type": "ws.furrify.tags.vo.TagData",
+        "type": "ws.furrify.tags.tag.vo.TagData",
         "doc": "Tag data ex. changed fields."
       },
       {

@@ -8,12 +8,12 @@ import lombok.Data;
 @Data
 public class TagDetailsQueryDTO {
     /**
-     * @return Tag unique value for user.
+     * Tag unique value for user.
      */
     private String value;
 
     /**
-     * @return Tag type from enum.
+     * Tag type from enum.
      */
     private String type;
 }

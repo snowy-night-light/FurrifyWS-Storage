@@ -1,13 +1,10 @@
 package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
-import ws.furrify.posts.PostEvent;
-import ws.furrify.posts.vo.PostData;
-import ws.furrify.shared.DomainEventPublisher;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
+import ws.furrify.shared.kafka.DomainEventPublisher;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -27,16 +24,7 @@ class DeletePostAdapter implements DeletePostPort {
                 DomainEventPublisher.Topic.POST,
                 // Use userId as key
                 userId,
-                createPostEvent(postId)
+                PostUtils.deletePostEvent(postId)
         );
-    }
-
-    private PostEvent createPostEvent(final UUID postId) {
-        return PostEvent.newBuilder()
-                .setState(DomainEventPublisher.PostEventType.REMOVED.name())
-                .setPostUUID(postId.toString())
-                .setDataBuilder(PostData.newBuilder())
-                .setOccurredOn(Instant.now().toEpochMilli())
-                .build();
     }
 }

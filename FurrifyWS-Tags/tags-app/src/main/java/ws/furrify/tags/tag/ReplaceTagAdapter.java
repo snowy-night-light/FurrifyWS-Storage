@@ -1,14 +1,11 @@
 package ws.furrify.tags.tag;
 
 import lombok.RequiredArgsConstructor;
-import ws.furrify.shared.DomainEventPublisher;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
-import ws.furrify.tags.TagEvent;
+import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.tag.dto.TagDTO;
-import ws.furrify.tags.vo.TagData;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -31,27 +28,10 @@ class ReplaceTagAdapter implements ReplaceTagPort {
                 DomainEventPublisher.Topic.TAG,
                 // User userId as key
                 userId,
-                createTagEvent(value, tag)
-        );
-    }
-
-    private TagEvent createTagEvent(final String oldTagValue, final Tag tag) {
-        TagSnapshot tagSnapshot = tag.getSnapshot();
-
-        return TagEvent.newBuilder()
-                .setState(DomainEventPublisher.TagEventType.REPLACED.name())
-                .setTagId(tagSnapshot.getId())
-                .setTagValue(oldTagValue)
-                .setDataBuilder(
-                        TagData.newBuilder()
-                                .setValue(tagSnapshot.getValue())
-                                .setTitle(tagSnapshot.getTitle())
-                                .setDescription(tagSnapshot.getDescription())
-                                .setOwnerId(tagSnapshot.getOwnerId().toString())
-                                .setType(tagSnapshot.getType().name())
-                                .setCreateDate(tagSnapshot.getCreateDate().toInstant().toEpochMilli())
+                TagUtils.createTagEvent(
+                        DomainEventPublisher.TagEventType.REPLACED,
+                        tag
                 )
-                .setOccurredOn(Instant.now().toEpochMilli())
-                .build();
+        );
     }
 }

@@ -1,20 +1,17 @@
 package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
-import ws.furrify.posts.PostEvent;
+import ws.furrify.posts.artist.ArtistServiceClient;
 import ws.furrify.posts.post.dto.PostDTO;
+import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.posts.tag.TagServiceClient;
-import ws.furrify.posts.vo.PostData;
-import ws.furrify.posts.vo.PostTagData;
-import ws.furrify.shared.DomainEventPublisher;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
+import ws.furrify.shared.kafka.DomainEventPublisher;
 
-import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 class ReplacePostAdapter implements ReplacePostPort {
@@ -22,6 +19,7 @@ class ReplacePostAdapter implements ReplacePostPort {
     private final DomainEventPublisher<PostEvent> domainEventPublisher;
     private final PostRepository postRepository;
     private final TagServiceClient tagServiceClient;
+    private final ArtistServiceClient artistServiceClient;
 
     @Override
     public void replacePost(final UUID userId, final UUID postId, final PostDTO postDTO) {
@@ -29,10 +27,16 @@ class ReplacePostAdapter implements ReplacePostPort {
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId.toString())));
 
         // Convert tags with values to tags with values and types
-        Set<PostTag> tags = PostTagUtils.tagValueToTagVO(userId, postDTO.getTags(), tagServiceClient);
+        Set<PostTag> tags = PostUtils.tagValueToTagVO(userId, postDTO.getTags(), tagServiceClient);
+
+        // Convert artists with artistId to artists with artistIds and preferredNicknames
+        Set<PostArtist> artists = PostUtils.artistWithArtistIdToArtistVO(userId, postDTO.getArtists(), artistServiceClient);
 
         // Update tags in post
         post.replaceTags(tags);
+
+        // Update artists in post
+        post.replaceArtists(artists);
 
         // Update all details in post
         post.updateDetails(postDTO.getTitle(), postDTO.getDescription());
@@ -42,34 +46,10 @@ class ReplacePostAdapter implements ReplacePostPort {
                 DomainEventPublisher.Topic.POST,
                 // User userId as key
                 userId,
-                createPostEvent(post)
+                PostUtils.createPostEvent(
+                        DomainEventPublisher.PostEventType.REPLACED,
+                        post
+                )
         );
-    }
-
-    private PostEvent createPostEvent(final Post post) {
-        PostSnapshot postSnapshot = post.getSnapshot();
-
-        return PostEvent.newBuilder()
-                .setState(DomainEventPublisher.PostEventType.REPLACED.name())
-                .setPostId(postSnapshot.getId())
-                .setPostUUID(postSnapshot.getPostId().toString())
-                .setOccurredOn(Instant.now().toEpochMilli())
-                .setDataBuilder(
-                        PostData.newBuilder()
-                                .setOwnerId(postSnapshot.getOwnerId().toString())
-                                .setTitle(postSnapshot.getTitle())
-                                .setDescription(postSnapshot.getDescription())
-                                .setTags(
-                                        // Map PostTag to PostTagData
-                                        postSnapshot.getTags().stream()
-                                                .map(tag ->
-                                                        PostTagData.newBuilder()
-                                                                .setValue(tag.getValue())
-                                                                .setType(tag.getType())
-                                                                .build()
-                                                ).collect(Collectors.toList())
-                                )
-                                .setCreateDate(postSnapshot.getCreateDate().toInstant().toEpochMilli())
-                ).build();
     }
 }

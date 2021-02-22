@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ws.furrify.posts.pageable.PageableRequest;
 import ws.furrify.posts.post.dto.query.PostDetailsQueryDTO;
+import ws.furrify.posts.post.dto.vo.PostQuerySearchDTO;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
+import ws.furrify.shared.pageable.PageableRequest;
 
 import java.util.UUID;
 
@@ -85,12 +86,59 @@ class QueryUserPostController {
                                                         @PathVariable UUID postId,
                                                         @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
-        PostDetailsQueryDTO postQueryDTO = postQueryRepository.findByPostIdAndOwnerId(postId, userId)
+        PostDetailsQueryDTO postQueryDTO = postQueryRepository.findByOwnerIdAndPostId(userId, postId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId)));
 
         return addPostRelations(
                 EntityModel.of(postQueryDTO)
         );
+    }
+
+    @GetMapping("/search")
+    @PreAuthorize(
+            "hasRole('admin') or " +
+                    "hasAuthority('admin') or " +
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+    )
+    public PagedModel<EntityModel<PostDetailsQueryDTO>> getUserPostsByQuery(
+            @PathVariable UUID userId,
+            @RequestParam(required = false) String order,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) Integer page,
+            @RequestParam String query,
+            @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+
+        // Build page from page information
+        Pageable pageable = PageableRequest.builder()
+                .order(order)
+                .sort(sort)
+                .size(size)
+                .page(page)
+                .build().toPageable();
+
+        PostQuerySearchDTO postQuerySearchDTO = PostQuerySearchDTO.from(query);
+
+        PagedModel<EntityModel<PostDetailsQueryDTO>> posts = pagedResourcesAssembler.toModel(
+                postQueryRepository.findAllByOwnerIdAndQuery(userId, postQuerySearchDTO, pageable)
+        );
+
+        posts.forEach(this::addPostRelations);
+
+        // Add hateoas relation
+        var postsRel = linkTo(methodOn(QueryUserPostController.class).getUserPostsByQuery(
+                userId,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        )).withSelfRel();
+
+        posts.add(postsRel);
+
+        return posts;
     }
 
     private EntityModel<PostDetailsQueryDTO> addPostRelations(EntityModel<PostDetailsQueryDTO> postQueryDtoModel) {
@@ -127,8 +175,19 @@ class QueryUserPostController {
                 null
         )).withRel("userPosts");
 
+        var postsQueryRel = linkTo(methodOn(QueryUserPostController.class).getUserPostsByQuery(
+                postQueryDto.getOwnerId(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        )).withRel("userPostsByQuery");
+
         postQueryDtoModel.add(selfRel);
         postQueryDtoModel.add(postsRel);
+        postQueryDtoModel.add(postsQueryRel);
 
         return postQueryDtoModel;
     }

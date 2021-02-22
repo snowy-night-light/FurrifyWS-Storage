@@ -22,6 +22,7 @@
         <module>FurrifyWS-Posts</module>
         <module>FurrifyWS-Shared</module>
         <module>FurrifyWS-Tags</module>
+        <module>FurrifyWS-Artists</module>
     </modules>
 
     <dependencies>

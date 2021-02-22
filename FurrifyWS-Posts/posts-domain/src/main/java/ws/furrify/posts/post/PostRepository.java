@@ -14,4 +14,6 @@ interface PostRepository {
     Optional<Post> findByOwnerIdAndPostId(UUID ownerId, UUID postId);
 
     void deleteByPostId(UUID postId);
+
+    Set<Post> findAllByOwnerIdAndArtistIdInArtists(UUID ownerId, UUID artistId);
 }

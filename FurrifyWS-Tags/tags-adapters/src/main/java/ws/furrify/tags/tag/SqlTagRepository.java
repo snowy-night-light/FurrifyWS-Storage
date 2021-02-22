@@ -21,9 +21,6 @@ interface SqlTagRepository extends Repository<TagSnapshot, Long> {
     void deleteByValue(String value);
 }
 
-/* PROJECTIONS ARE DONE MANUALLY CAUSE FOR WHATEVER REASON
-CLASS BASED PROJECTIONS DON'T WORK IN THIS PROJECT */
-
 @Transactional(rollbackFor = {})
 interface SqlTagQueryRepository extends TagQueryRepository, Repository<TagSnapshot, Long> {
 

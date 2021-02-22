@@ -3,7 +3,6 @@ package ws.furrify.tags.tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ws.furrify.tags.TagEvent;
 import ws.furrify.tags.kafka.KafkaTopicEventPublisher;
 import ws.furrify.tags.tag.dto.TagDtoFactory;
 

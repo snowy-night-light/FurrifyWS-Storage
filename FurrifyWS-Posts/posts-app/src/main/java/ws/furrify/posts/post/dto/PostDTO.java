@@ -3,6 +3,7 @@ package ws.furrify.posts.post.dto;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.Value;
+import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
 
 import java.time.ZonedDateTime;
@@ -26,6 +27,8 @@ public class PostDTO {
     String description;
 
     Set<PostTag> tags;
+
+    Set<PostArtist> artists;
 
     ZonedDateTime createDate;
 }

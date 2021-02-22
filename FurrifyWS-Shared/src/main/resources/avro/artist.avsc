@@ -1,0 +1,85 @@
+[
+  {
+    "type": "record",
+    "namespace": "ws.furrify.artists.artist.vo",
+    "doc": "Artist data containing required information to perform state change across multiple microservices.",
+    "name": "ArtistData",
+    "fields": [
+      {
+        "name": "ownerId",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Artist owner UUID."
+      },
+      {
+        "name": "nicknames",
+        "type": {
+          "type": "array",
+          "items": "string"
+        },
+        "default": [],
+        "doc": "Artist nicknames."
+      },
+      {
+        "name": "preferredNickname",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Artist preferred nickname from nicknames array."
+      },
+      {
+        "name": "createDate",
+        "type": [
+          "null",
+          "long"
+        ],
+        "default": null,
+        "logicalType": "timestamp-millis",
+        "doc": "Create timestamp."
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "ws.furrify.artists.artist",
+    "doc": "Artist state change request.",
+    "name": "ArtistEvent",
+    "fields": [
+      {
+        "name": "state",
+        "type": "string",
+        "doc": "A event type performed on that record. (Can be acquired using ArtistEventType enum.)"
+      },
+      {
+        "name": "id",
+        "type": [
+          "null",
+          "long"
+        ],
+        "default": null,
+        "doc": "A artist database id."
+      },
+      {
+        "name": "artistId",
+        "type": "string",
+        "doc": "A artist UUID event is targeted at."
+      },
+      {
+        "name": "data",
+        "type": "ws.furrify.artists.artist.vo.ArtistData",
+        "doc": "Artist data eg. changed fields."
+      },
+      {
+        "name": "occurredOn",
+        "type": "long",
+        "logicalType": "timestamp-millis",
+        "doc": "Instant event occurred on."
+      }
+    ]
+  }
+]

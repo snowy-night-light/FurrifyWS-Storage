@@ -1,7 +1,8 @@
 package ws.furrify.tags.tag.dto.command;
 
-import lombok.Data;
-import ws.furrify.tags.CommandDTO;
+import lombok.ToString;
+import lombok.Value;
+import ws.furrify.shared.dto.CommandDTO;
 import ws.furrify.tags.tag.TagType;
 import ws.furrify.tags.tag.dto.TagDTO;
 
@@ -11,20 +12,21 @@ import javax.validation.constraints.Size;
 /**
  * @author Skyte
  */
-@Data
+@Value
+@ToString
 public class TagUpdateCommandDTO implements CommandDTO<TagDTO> {
 
     @Size(min = 1, max = 64)
-    private String title;
+    String title;
 
-    @Size(max = 1024)
-    private String description;
+    @Size(min = 1, max = 1024)
+    String description;
 
-    @Size(max = 32)
+    @Size(min = 1, max = 32)
     @Pattern(regexp = "^[a-zA-Z0-9_-]*$")
-    private String value;
+    String value;
 
-    private TagType type;
+    TagType type;
 
     @Override
     public TagDTO toDTO() {

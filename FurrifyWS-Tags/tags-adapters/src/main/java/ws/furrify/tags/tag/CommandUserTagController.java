@@ -34,7 +34,7 @@ class CommandUserTagController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public ResponseEntity<?> createTag(@PathVariable UUID userId,
                                        @RequestBody @Validated TagCreateCommandDTO tagCreateCommandDTO,
@@ -53,7 +53,7 @@ class CommandUserTagController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public ResponseEntity<?> deleteTag(@PathVariable UUID userId,
                                        @PathVariable String value,
@@ -67,7 +67,7 @@ class CommandUserTagController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public ResponseEntity<?> updateTagDetails(@PathVariable UUID userId,
                                               @PathVariable String value,
@@ -82,7 +82,7 @@ class CommandUserTagController {
     @PreAuthorize(
             "hasRole('admin') or " +
                     "hasAuthority('admin') or " +
-                    "#userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()"
+                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
     public ResponseEntity<?> replaceTagDetails(@PathVariable UUID userId,
                                                @PathVariable String value,

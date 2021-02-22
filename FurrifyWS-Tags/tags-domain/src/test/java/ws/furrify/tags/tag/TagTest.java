@@ -9,6 +9,7 @@ import ws.furrify.shared.exception.RecordAlreadyExistsException;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
@@ -60,6 +61,22 @@ class TagTest {
         TagSnapshot tagSnapshot = tag.getSnapshot();
         // Then get snapshot of current data in aggregate
         assertEquals(this.tagSnapshot, tagSnapshot, "Data was lost in snapshot.");
+    }
+
+    @Test
+    @DisplayName("Update details")
+    void updateDetails() {
+        // Given title and description
+        String newTitle = "Title2";
+        String newDesc = "dsadasdsa";
+        // When updateDetails() method called
+        // Then update title and description
+        tag.updateDetails(newTitle, newDesc);
+
+        assertAll(() -> {
+            assertEquals(newTitle, tag.getSnapshot().getTitle(), "Title was not updated.");
+            assertEquals(newDesc, tag.getSnapshot().getDescription(), "Description was not updated.");
+        });
     }
 
     @Test

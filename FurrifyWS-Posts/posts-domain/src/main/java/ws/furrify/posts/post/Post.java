@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.java.Log;
+import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
 
 import java.time.ZonedDateTime;
@@ -30,6 +31,9 @@ class Post {
     private String description;
     @NonNull
     private Set<PostTag> tags;
+    @NonNull
+    private Set<PostArtist> artists;
+
     private final ZonedDateTime createDate;
 
     static Post restore(PostSnapshot postSnapshot) {
@@ -40,6 +44,7 @@ class Post {
                 postSnapshot.getTitle(),
                 postSnapshot.getDescription(),
                 new HashSet<>(postSnapshot.getTags()),
+                new HashSet<>(postSnapshot.getArtists()),
                 postSnapshot.getCreateDate()
         );
     }
@@ -52,6 +57,7 @@ class Post {
                 .title(title)
                 .description(description)
                 .tags(tags.stream().collect(Collectors.toUnmodifiableSet()))
+                .artists(artists.stream().collect(Collectors.toUnmodifiableSet()))
                 .createDate(createDate)
                 .build();
     }
@@ -83,7 +89,7 @@ class Post {
         // Create tag with new value and type
         PostTag postTag = new PostTag(newValue, newTagType);
 
-        // Filter tags to get all without updated tag
+        // Filter tags to get all without old tag
         Set<PostTag> filteredTags = this.tags.stream()
                 .filter(tag -> !tag.getValue().equals(originalValue))
                 .collect(Collectors.toSet());
@@ -93,7 +99,42 @@ class Post {
         this.tags = filteredTags;
     }
 
-    void replaceTags(final Set<PostTag> tags) {
+    void replaceTags(@NonNull final Set<PostTag> tags) {
         this.tags = new HashSet<>(tags);
+    }
+
+    void removeArtist(@NonNull final UUID artistId) {
+        this.artists = artists.stream()
+                .filter(artist -> !artist.getArtistId().equals(artistId))
+                .collect(Collectors.toSet());
+    }
+
+    void updateArtistDetailsInArtists(@NonNull final UUID artistId,
+                                      @NonNull final String newPreferredNickname) {
+        // Filter artists to find a if artist exists by artistId.
+        this.artists.stream()
+                .filter(artist -> artist.getArtistId().equals(artistId))
+                .findAny()
+                .orElseThrow(() -> {
+                    log.severe("Original artist [artistId=" + artistId + "] was not found.");
+
+                    return new IllegalStateException("Original tag value was not found.");
+                });
+
+        // Create artist with new preferred nickname
+        PostArtist postArtist = new PostArtist(artistId, newPreferredNickname);
+
+        // Filter artists to get all without old artist
+        Set<PostArtist> filteredArtists = this.artists.stream()
+                .filter(artist -> !artist.getArtistId().equals(artistId))
+                .collect(Collectors.toSet());
+        // Add updated artists to artists
+        filteredArtists.add(postArtist);
+
+        this.artists = filteredArtists;
+    }
+
+    void replaceArtists(@NonNull final Set<PostArtist> artists) {
+        this.artists = new HashSet<>(artists);
     }
 }

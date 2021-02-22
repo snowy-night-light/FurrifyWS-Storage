@@ -1,6 +1,7 @@
 package ws.furrify.posts.post.dto;
 
-import ws.furrify.posts.PostEvent;
+import ws.furrify.posts.post.PostEvent;
+import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
 
 import java.time.ZoneId;
@@ -26,14 +27,21 @@ public class PostDtoFactory {
         }
 
         return PostDTO.builder()
-                .id(postEvent.getPostId())
-                .postId(UUID.fromString(postEvent.getPostUUID()))
+                .id(postEvent.getId())
+                .postId(UUID.fromString(postEvent.getPostId()))
                 .ownerId(key)
                 .title(postEvent.getData().getTitle())
                 .description(postEvent.getData().getDescription())
                 .tags(
                         postEvent.getData().getTags().stream()
                                 .map(postTag -> new PostTag(postTag.getValue(), postTag.getType()))
+                                .collect(Collectors.toSet())
+                )
+                .artists(
+                        postEvent.getData().getArtists().stream()
+                                .map(postArtist -> new PostArtist(
+                                        UUID.fromString(postArtist.getArtistId()), postArtist.getPreferredNickname()
+                                ))
                                 .collect(Collectors.toSet())
                 )
                 .createDate(createDate)

@@ -128,7 +128,9 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
     @ExceptionHandler({
             RecordNotFoundException.class,
             RecordAlreadyExistsException.class,
-            ChainOfRequestsUnauthorizedException.class
+            ChainOfRequestsUnauthorizedException.class,
+            ChainOfRequestsBrokenException.class,
+            InvalidDataGivenException.class
     })
     protected ResponseEntity<Object> handleException(
             RestException exception) {
