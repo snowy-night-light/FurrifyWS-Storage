@@ -5,6 +5,7 @@ import lombok.extern.java.Log;
 import ws.furrify.artists.artist.ArtistEvent;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
+import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.tag.TagEvent;
 
@@ -128,7 +129,10 @@ public class PostFacade {
                                          final String newType) {
         // Get all posts with tag value, update value and save.
         postRepository.findAllByOwnerIdAndValueInTags(ownerId, originalTagValue).stream()
-                .peek(post -> post.updateTagDetailsInTags(originalTagValue, newValue, newType))
+                .peek(post -> post.updateTagDetailsInTags(
+                        originalTagValue,
+                        new PostTag(newValue, newType)
+                ))
                 .forEach(postRepository::save);
     }
 

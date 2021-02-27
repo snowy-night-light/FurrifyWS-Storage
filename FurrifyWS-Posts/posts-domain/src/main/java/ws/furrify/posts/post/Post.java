@@ -7,7 +7,9 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.java.Log;
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostDescription;
 import ws.furrify.posts.post.vo.PostTag;
+import ws.furrify.posts.post.vo.PostTitle;
 
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -26,9 +28,9 @@ class Post {
     @NonNull
     private final UUID ownerId;
     @NonNull
-    private String title;
+    private PostTitle title;
     @NonNull
-    private String description;
+    private PostDescription description;
     @NonNull
     private Set<PostTag> tags;
     @NonNull
@@ -41,8 +43,12 @@ class Post {
                 postSnapshot.getId(),
                 postSnapshot.getPostId(),
                 postSnapshot.getOwnerId(),
-                postSnapshot.getTitle(),
-                postSnapshot.getDescription(),
+                PostTitle.of(
+                        postSnapshot.getTitle()
+                ),
+                PostDescription.of(
+                        postSnapshot.getDescription()
+                ),
                 new HashSet<>(postSnapshot.getTags()),
                 new HashSet<>(postSnapshot.getArtists()),
                 postSnapshot.getCreateDate()
@@ -54,16 +60,16 @@ class Post {
                 .id(id)
                 .postId(postId)
                 .ownerId(ownerId)
-                .title(title)
-                .description(description)
+                .title(title.getNickname())
+                .description(description.getNickname())
                 .tags(tags.stream().collect(Collectors.toUnmodifiableSet()))
                 .artists(artists.stream().collect(Collectors.toUnmodifiableSet()))
                 .createDate(createDate)
                 .build();
     }
 
-    void updateDetails(@NonNull final String newTitle,
-                       final String newDescription) {
+    void updateDetails(@NonNull final PostTitle newTitle,
+                       final PostDescription newDescription) {
         this.title = newTitle;
         this.description = newDescription;
     }
@@ -75,8 +81,7 @@ class Post {
     }
 
     void updateTagDetailsInTags(@NonNull final String originalValue,
-                                @NonNull final String newValue,
-                                @NonNull final String newTagType) {
+                                @NonNull final PostTag newTag) {
         // Filter tags to find a if tag exists by original value.
         this.tags.stream()
                 .filter(tag -> tag.getValue().equals(originalValue))
@@ -86,15 +91,13 @@ class Post {
 
                     return new IllegalStateException("Original tag value was not found.");
                 });
-        // Create tag with new value and type
-        PostTag postTag = new PostTag(newValue, newTagType);
 
         // Filter tags to get all without old tag
         Set<PostTag> filteredTags = this.tags.stream()
                 .filter(tag -> !tag.getValue().equals(originalValue))
                 .collect(Collectors.toSet());
         // Add updated tag to tags
-        filteredTags.add(postTag);
+        filteredTags.add(newTag);
 
         this.tags = filteredTags;
     }

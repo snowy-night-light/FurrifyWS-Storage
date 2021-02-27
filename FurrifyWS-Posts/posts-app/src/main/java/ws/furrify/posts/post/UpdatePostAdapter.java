@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import ws.furrify.posts.artist.ArtistServiceClient;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostDescription;
 import ws.furrify.posts.post.vo.PostTag;
+import ws.furrify.posts.post.vo.PostTitle;
 import ws.furrify.posts.tag.TagServiceClient;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
@@ -28,10 +30,16 @@ class UpdatePostAdapter implements UpdatePostPort {
 
         // Update changed fields in post
         if (postDTO.getTitle() != null) {
-            post.updateDetails(postDTO.getTitle(), post.getSnapshot().getDescription());
+            post.updateDetails(
+                    PostTitle.of(postDTO.getTitle()),
+                    PostDescription.of(post.getSnapshot().getDescription())
+            );
         }
         if (postDTO.getDescription() != null) {
-            post.updateDetails(post.getSnapshot().getTitle(), postDTO.getDescription());
+            post.updateDetails(
+                    PostTitle.of(post.getSnapshot().getTitle()),
+                    PostDescription.of(postDTO.getDescription())
+            );
         }
         if (postDTO.getTags() != null) {
             // Convert tags with values to tags with values and types
