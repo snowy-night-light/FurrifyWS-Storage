@@ -7,6 +7,10 @@ import lombok.NonNull;
 import lombok.ToString;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
+import ws.furrify.tags.tag.vo.TagDescription;
+import ws.furrify.tags.tag.vo.TagTitle;
+import ws.furrify.tags.tag.vo.TagType;
+import ws.furrify.tags.tag.vo.TagValue;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -17,10 +21,10 @@ import java.util.UUID;
 class Tag {
     private final Long id;
     @NonNull
-    private String title;
-    private String description;
+    private TagTitle title;
+    private TagDescription description;
     @NonNull
-    private String value;
+    private TagValue value;
     @NonNull
     private final UUID ownerId;
     @NonNull
@@ -30,9 +34,9 @@ class Tag {
     static Tag restore(TagSnapshot tagSnapshot) {
         return new Tag(
                 tagSnapshot.getId(),
-                tagSnapshot.getTitle(),
-                tagSnapshot.getDescription(),
-                tagSnapshot.getValue(),
+                TagTitle.of(tagSnapshot.getTitle()),
+                TagDescription.of(tagSnapshot.getDescription()),
+                TagValue.of(tagSnapshot.getValue()),
                 tagSnapshot.getOwnerId(),
                 tagSnapshot.getType(),
                 tagSnapshot.getCreateDate()
@@ -42,26 +46,26 @@ class Tag {
     TagSnapshot getSnapshot() {
         return TagSnapshot.builder()
                 .id(id)
-                .title(title)
-                .description(description)
-                .value(value)
+                .title(title.getTitle())
+                .description(description.getDescription())
+                .value(value.getValue())
                 .ownerId(ownerId)
                 .type(type)
                 .createDate(createDate)
                 .build();
     }
 
-    void updateValue(@NonNull final String value,
+    void updateValue(@NonNull final TagValue value,
                      @NonNull final TagRepository tagRepository) {
-        if (tagRepository.existsByOwnerIdAndValue(ownerId, value)) {
-            throw new RecordAlreadyExistsException(Errors.TAG_ALREADY_EXISTS.getErrorMessage(value));
+        if (tagRepository.existsByOwnerIdAndValue(ownerId, value.getValue())) {
+            throw new RecordAlreadyExistsException(Errors.TAG_ALREADY_EXISTS.getErrorMessage(value.getValue()));
         }
 
         this.value = value;
     }
 
-    void updateDetails(final String title,
-                       final String description) {
+    void updateDetails(final TagTitle title,
+                       final TagDescription description) {
         this.title = title;
         this.description = description;
     }

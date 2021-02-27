@@ -1,6 +1,6 @@
 package ws.furrify.tags.tag.dto.query;
 
-import ws.furrify.tags.tag.TagType;
+import ws.furrify.tags.tag.vo.TagType;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;

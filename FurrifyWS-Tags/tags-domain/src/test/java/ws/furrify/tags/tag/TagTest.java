@@ -5,6 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
+import ws.furrify.tags.tag.vo.TagDescription;
+import ws.furrify.tags.tag.vo.TagTitle;
+import ws.furrify.tags.tag.vo.TagType;
+import ws.furrify.tags.tag.vo.TagValue;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -71,7 +75,10 @@ class TagTest {
         String newDesc = "dsadasdsa";
         // When updateDetails() method called
         // Then update title and description
-        tag.updateDetails(newTitle, newDesc);
+        tag.updateDetails(
+                TagTitle.of(newTitle),
+                TagDescription.of(newDesc)
+        );
 
         assertAll(() -> {
             assertEquals(newTitle, tag.getSnapshot().getTitle(), "Title was not updated.");
@@ -100,7 +107,10 @@ class TagTest {
         // When updateValue() method called
         when(tagRepository.existsByOwnerIdAndValue(ownerId, newValue)).thenReturn(false);
         // Then update value
-        tag.updateValue(newValue, tagRepository);
+        tag.updateValue(
+                TagValue.of(newValue),
+                tagRepository
+        );
 
         assertEquals(newValue, tag.getSnapshot().getValue(), "Value was not updated.");
     }
@@ -115,7 +125,10 @@ class TagTest {
         // Then throw RecordAlreadyExistsException
         assertThrows(
                 RecordAlreadyExistsException.class,
-                () -> tag.updateValue(newValue, tagRepository),
+                () -> tag.updateValue(
+                        TagValue.of(newValue),
+                        tagRepository
+                ),
                 "Exception was not thrown."
         );
     }

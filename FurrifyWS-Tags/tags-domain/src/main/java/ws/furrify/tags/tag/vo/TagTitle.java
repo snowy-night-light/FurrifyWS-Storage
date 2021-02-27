@@ -1,4 +1,4 @@
-package ws.furrify.posts.post.vo;
+package ws.furrify.tags.tag.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
@@ -6,13 +6,13 @@ import lombok.Value;
 import static lombok.AccessLevel.PRIVATE;
 
 /**
- * Post title wrapper.
+ * Tag title wrapper.
  *
  * @author Skyte
  */
 @Value
 @AllArgsConstructor(access = PRIVATE)
-public class PostTitle {
+public class TagTitle {
 
     private final static short MAX_LENGTH = 64;
     private final static short MIN_LENGTH = 1;
@@ -20,22 +20,22 @@ public class PostTitle {
     String title;
 
     /**
-     * Create post title from string.
+     * Create tag title from string.
      * Validate given value.
      *
-     * @param title Post title.
-     * @return Post title instance.
+     * @param title Tag title.
+     * @return Tag title instance.
      */
-    public static PostTitle of(String title) {
+    public static TagTitle of(String title) {
         if (title.isBlank()) {
-            throw new IllegalStateException("Post title [title=" + title + "] can't be blank.");
+            throw new IllegalStateException("Tag title [title=" + title + "] can't be blank.");
         }
 
         if (title.length() < MIN_LENGTH || title.length() > MAX_LENGTH) {
-            throw new IllegalStateException("Post title [title=" + title + "] must be between "
+            throw new IllegalStateException("Tag title [title=" + title + "] must be between "
                     + MIN_LENGTH + " and " + MAX_LENGTH + " but is " + title.length() + ".");
         }
 
-        return new PostTitle(title);
+        return new TagTitle(title);
     }
 }

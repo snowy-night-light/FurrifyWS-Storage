@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import ws.furrify.tags.tag.vo.TagType;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;

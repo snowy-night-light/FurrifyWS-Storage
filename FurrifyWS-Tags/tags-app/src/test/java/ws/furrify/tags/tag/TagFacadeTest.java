@@ -9,6 +9,7 @@ import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.tag.dto.TagDTO;
 import ws.furrify.tags.tag.dto.TagDtoFactory;
+import ws.furrify.tags.tag.vo.TagType;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;

@@ -5,6 +5,9 @@ import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.tag.dto.TagDTO;
+import ws.furrify.tags.tag.vo.TagDescription;
+import ws.furrify.tags.tag.vo.TagTitle;
+import ws.furrify.tags.tag.vo.TagValue;
 
 import java.util.UUID;
 
@@ -21,16 +24,25 @@ class UpdateTagAdapter implements UpdateTagPort {
 
         // Update changed fields in tag
         if (tagDTO.getValue() != null) {
-            tag.updateValue(tagDTO.getValue(), tagRepository);
+            tag.updateValue(
+                    TagValue.of(tagDTO.getValue()),
+                    tagRepository
+            );
         }
         if (tagDTO.getType() != null) {
             tag.updateType(tagDTO.getType());
         }
         if (tagDTO.getTitle() != null) {
-            tag.updateDetails(tagDTO.getTitle(), tag.getSnapshot().getDescription());
+            tag.updateDetails(
+                    TagTitle.of(tagDTO.getTitle()),
+                    TagDescription.of(tag.getSnapshot().getDescription())
+            );
         }
         if (tagDTO.getDescription() != null) {
-            tag.updateDetails(tag.getSnapshot().getTitle(), tagDTO.getDescription());
+            tag.updateDetails(
+                    TagTitle.of(tag.getSnapshot().getTitle()),
+                    TagDescription.of(tagDTO.getDescription())
+            );
         }
 
         // Publish update tag event

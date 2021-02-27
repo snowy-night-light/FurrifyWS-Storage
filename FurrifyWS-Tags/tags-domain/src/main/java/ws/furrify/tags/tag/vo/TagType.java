@@ -1,4 +1,4 @@
-package ws.furrify.tags.tag;
+package ws.furrify.tags.tag.vo;
 
 /**
  * Tag type which describes what tag should be used for.

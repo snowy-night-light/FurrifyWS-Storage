@@ -3,8 +3,8 @@ package ws.furrify.tags.tag.dto.command;
 import lombok.ToString;
 import lombok.Value;
 import ws.furrify.shared.dto.CommandDTO;
-import ws.furrify.tags.tag.TagType;
 import ws.furrify.tags.tag.dto.TagDTO;
+import ws.furrify.tags.tag.vo.TagType;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
