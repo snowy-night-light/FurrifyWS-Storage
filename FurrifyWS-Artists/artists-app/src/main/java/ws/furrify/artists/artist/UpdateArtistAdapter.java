@@ -2,11 +2,13 @@ package ws.furrify.artists.artist;
 
 import lombok.RequiredArgsConstructor;
 import ws.furrify.artists.artist.dto.ArtistDTO;
+import ws.furrify.artists.artist.vo.ArtistNickname;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 class UpdateArtistAdapter implements UpdateArtistPort {
@@ -22,7 +24,11 @@ class UpdateArtistAdapter implements UpdateArtistPort {
         // Update changed fields in artist
         if (artistDTO.getNicknames() != null || artistDTO.getPreferredNickname() != null) {
             artist.updateNicknames(
-                    artistDTO.getNicknames(), artistDTO.getPreferredNickname(), artistRepository
+                    artistDTO.getNicknames().stream()
+                            .map(ArtistNickname::of)
+                            .collect(Collectors.toSet()),
+                    ArtistNickname.of(artistDTO.getPreferredNickname()),
+                    artistRepository
             );
         }
 

@@ -2,10 +2,12 @@ package ws.furrify.artists.artist;
 
 import lombok.RequiredArgsConstructor;
 import ws.furrify.artists.artist.dto.ArtistDTO;
+import ws.furrify.artists.artist.vo.ArtistNickname;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 class CreateArtistAdapter implements CreateArtistPort {
@@ -29,8 +31,10 @@ class CreateArtistAdapter implements CreateArtistPort {
         );
         // Update nicknames array
         artist.updateNicknames(
-                artistDTO.getNicknames(),
-                artistDTO.getPreferredNickname(),
+                artistDTO.getNicknames().stream()
+                        .map(ArtistNickname::of)
+                        .collect(Collectors.toSet()),
+                ArtistNickname.of(artistDTO.getPreferredNickname()),
                 artistRepository
         );
 

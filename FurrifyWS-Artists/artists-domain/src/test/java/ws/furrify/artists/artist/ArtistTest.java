@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ws.furrify.artists.artist.vo.ArtistNickname;
 import ws.furrify.shared.exception.InvalidDataGivenException;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
 
@@ -13,6 +14,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -70,14 +72,14 @@ class ArtistTest {
     @DisplayName("Update nicknames with new preferred nickname")
     void updateNicknames() {
         // Given new preferredNickname
-        String newPreferredNickname = "Test2";
+        ArtistNickname newPreferredNickname = ArtistNickname.of("Test2");
         // When updateNicknames() method called
-        when(artistRepository.existsByOwnerIdAndPreferredNickname(artistSnapshot.getOwnerId(), newPreferredNickname)).thenReturn(false);
+        when(artistRepository.existsByOwnerIdAndPreferredNickname(artistSnapshot.getOwnerId(), newPreferredNickname.getNickname())).thenReturn(false);
         // Then update preferred nickname
         artist.updateNicknames(null, newPreferredNickname, artistRepository);
 
         assertEquals(
-                newPreferredNickname,
+                newPreferredNickname.getNickname(),
                 artist.getSnapshot().getPreferredNickname(),
                 "Artist preferred nickname was not updated."
         );
@@ -87,9 +89,9 @@ class ArtistTest {
     @DisplayName("Update nicknames with existing new preferred nickname")
     void updateNicknames2() {
         // Given existing new preferredNickname
-        String newPreferredNickname = "Test2";
+        ArtistNickname newPreferredNickname = ArtistNickname.of("Test2");
         // When updateNicknames() method called
-        when(artistRepository.existsByOwnerIdAndPreferredNickname(artistSnapshot.getOwnerId(), newPreferredNickname)).thenReturn(true);
+        when(artistRepository.existsByOwnerIdAndPreferredNickname(artistSnapshot.getOwnerId(), newPreferredNickname.getNickname())).thenReturn(true);
         // Then throw record already exists exception
 
         assertThrows(
@@ -103,14 +105,21 @@ class ArtistTest {
     @DisplayName("Update nicknames with new nicknames")
     void updateNicknames3() {
         // Given new nicknames
-        Set<String> newNicknames = new HashSet<>(Arrays.asList("Test", "Test3"));
+        Set<ArtistNickname> newNicknames = new HashSet<>(
+                Arrays.asList(
+                        ArtistNickname.of("Test"),
+                        ArtistNickname.of("Test3")
+                )
+        );
         // When updateNicknames() method called
         when(artistRepository.existsByOwnerIdAndPreferredNickname(artistSnapshot.getOwnerId(), artistSnapshot.getPreferredNickname())).thenReturn(false);
         // Then update preferred nickname
         artist.updateNicknames(newNicknames, null, artistRepository);
 
         assertEquals(
-                newNicknames,
+                newNicknames.stream()
+                        .map(ArtistNickname::getNickname).
+                        collect(Collectors.toSet()),
                 artist.getSnapshot().getNicknames(),
                 "Artist nicknames were not updated."
         );
@@ -120,7 +129,9 @@ class ArtistTest {
     @DisplayName("Update nicknames with new nicknames without preferred nickname")
     void updateNicknames4() {
         // Given new nicknames without preferred nickname
-        Set<String> newNicknames = Collections.singleton("Test3");
+        Set<ArtistNickname> newNicknames = new HashSet<>(
+                Collections.singletonList(ArtistNickname.of("Test3"))
+        );
         // When updateNicknames() method called
         when(artistRepository.existsByOwnerIdAndPreferredNickname(artistSnapshot.getOwnerId(), artistSnapshot.getPreferredNickname())).thenReturn(true);
         // Then throw InvalidDataGivenException
@@ -136,7 +147,7 @@ class ArtistTest {
     @DisplayName("Update nicknames with new preferredNickname not contained in nicknames")
     void updateNicknames5() {
         // Given new preferredNickname not contained in nicknames
-        String newPreferredNickname = "Test3";
+        ArtistNickname newPreferredNickname = ArtistNickname.of("Test3");
         // When updateNicknames() method called
         when(artistRepository.existsByOwnerIdAndPreferredNickname(artistSnapshot.getOwnerId(), artistSnapshot.getPreferredNickname())).thenReturn(true);
         // Then throw InvalidDataGivenException
@@ -152,7 +163,7 @@ class ArtistTest {
     @DisplayName("Update nicknames with empty set")
     void updateNicknames6() {
         // Given new nicknames without preferred nickname
-        Set<String> newNicknames = Collections.emptySet();
+        Set<ArtistNickname> newNicknames = Collections.emptySet();
         // When updateNicknames() method called
         when(artistRepository.existsByOwnerIdAndPreferredNickname(artistSnapshot.getOwnerId(), artistSnapshot.getPreferredNickname())).thenReturn(true);
         // Then throw InvalidDataGivenException
