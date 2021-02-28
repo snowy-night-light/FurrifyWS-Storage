@@ -25,7 +25,7 @@ public class PostCreateCommandDTO implements CommandDTO<PostDTO> {
     @Size(min = 1, max = 64)
     String title;
 
-    @Size(min = 1, max = 512)
+    @Size(min = 1, max = 1024)
     String description;
 
     @NotNull

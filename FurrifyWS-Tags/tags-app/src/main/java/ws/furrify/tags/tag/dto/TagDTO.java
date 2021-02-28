@@ -3,7 +3,7 @@ package ws.furrify.tags.tag.dto;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.Value;
-import ws.furrify.tags.tag.TagType;
+import ws.furrify.tags.tag.vo.TagType;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;

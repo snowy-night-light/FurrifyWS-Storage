@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
+import ws.furrify.artists.artist.vo.ArtistNickname;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.InvalidDataGivenException;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
@@ -25,9 +26,9 @@ class Artist {
     @NonNull
     private final UUID ownerId;
     @NonNull
-    private Set<String> nicknames;
+    private Set<ArtistNickname> nicknames;
     @NonNull
-    private String preferredNickname;
+    private ArtistNickname preferredNickname;
 
     private final ZonedDateTime createDate;
 
@@ -36,8 +37,14 @@ class Artist {
                 artistSnapshot.getId(),
                 artistSnapshot.getArtistId(),
                 artistSnapshot.getOwnerId(),
-                new HashSet<>(artistSnapshot.getNicknames()),
-                artistSnapshot.getPreferredNickname(),
+                new HashSet<>(
+                        artistSnapshot.getNicknames().stream()
+                                .map(ArtistNickname::of)
+                                .collect(Collectors.toSet())
+                ),
+                ArtistNickname.of(
+                        artistSnapshot.getPreferredNickname()
+                ),
                 artistSnapshot.getCreateDate()
         );
     }
@@ -47,14 +54,17 @@ class Artist {
                 .id(id)
                 .artistId(artistId)
                 .ownerId(ownerId)
-                .nicknames(nicknames.stream().collect(Collectors.toUnmodifiableSet()))
-                .preferredNickname(preferredNickname)
+                .nicknames(nicknames.stream()
+                        .map(ArtistNickname::getNickname)
+                        .collect(Collectors.toUnmodifiableSet())
+                )
+                .preferredNickname(preferredNickname.getNickname())
                 .createDate(createDate)
                 .build();
     }
 
-    void updateNicknames(Set<String> newNicknames,
-                         String newPreferredNickname,
+    void updateNicknames(Set<ArtistNickname> newNicknames,
+                         ArtistNickname newPreferredNickname,
                          @NonNull final ArtistRepository artistRepository) {
         // Check if both parameters are null
         if (newPreferredNickname == null && newNicknames == null) {
@@ -69,8 +79,8 @@ class Artist {
         }
 
         // Copy fields to final fields
-        final String preferredNickname = newPreferredNickname;
-        final Set<String> nicknames = newNicknames;
+        final ArtistNickname preferredNickname = newPreferredNickname;
+        final Set<ArtistNickname> nicknames = newNicknames;
 
         // Check if nicknames array is empty
         if (nicknames.size() == 0) {
@@ -82,7 +92,8 @@ class Artist {
                 .anyMatch(nick -> nick.equals(preferredNickname));
 
         if (!isPreferredNicknameValid) {
-            throw new InvalidDataGivenException(Errors.PREFERRED_NICKNAME_IS_NOT_VALID.getErrorMessage(preferredNickname));
+            throw new
+                    InvalidDataGivenException(Errors.PREFERRED_NICKNAME_IS_NOT_VALID.getErrorMessage(preferredNickname.getNickname()));
         }
 
         // Verify is preferred nickname is already taken
@@ -90,10 +101,11 @@ class Artist {
                 // Is nickname different than original
                 !this.preferredNickname.equals(preferredNickname) &&
                         // Do nickname is selected as preferred in other artists
-                        artistRepository.existsByOwnerIdAndPreferredNickname(ownerId, preferredNickname);
+                        artistRepository.existsByOwnerIdAndPreferredNickname(ownerId, preferredNickname.getNickname());
 
         if (isPreferredNicknameTaken) {
-            throw new RecordAlreadyExistsException(Errors.PREFERRED_NICKNAME_IS_TAKEN.getErrorMessage(preferredNickname));
+            throw new
+                    RecordAlreadyExistsException(Errors.PREFERRED_NICKNAME_IS_TAKEN.getErrorMessage(preferredNickname.getNickname()));
         }
 
         this.nicknames = nicknames;

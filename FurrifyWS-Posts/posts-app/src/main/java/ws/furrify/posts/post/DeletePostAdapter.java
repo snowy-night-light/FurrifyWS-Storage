@@ -1,5 +1,6 @@
 package ws.furrify.posts.post;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
@@ -14,7 +15,8 @@ class DeletePostAdapter implements DeletePostPort {
     private final PostRepository postRepository;
 
     @Override
-    public void deletePost(final UUID userId, final UUID postId) {
+    public void deletePost(@NonNull final UUID userId,
+                           @NonNull final UUID postId) {
         if (!postRepository.existsByOwnerIdAndPostId(userId, postId)) {
             throw new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId.toString()));
         }

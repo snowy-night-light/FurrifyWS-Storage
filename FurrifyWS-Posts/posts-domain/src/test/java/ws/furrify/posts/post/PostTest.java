@@ -5,7 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostDescription;
 import ws.furrify.posts.post.vo.PostTag;
+import ws.furrify.posts.post.vo.PostTitle;
 
 import java.time.ZonedDateTime;
 import java.util.Collections;
@@ -74,7 +76,10 @@ class PostTest {
         String newDesc = "dsadasdsa";
         // When updateDetails() method called
         // Then update title and description
-        post.updateDetails(newTitle, newDesc);
+        post.updateDetails(
+                PostTitle.of(newTitle),
+                PostDescription.of(newDesc)
+        );
 
         assertAll(() -> {
             assertEquals(newTitle, post.getSnapshot().getTitle(), "Title was not updated.");
@@ -107,7 +112,7 @@ class PostTest {
         String newTagType = "BACKGROUND";
         // When updateTagDetailsInTags() method called
         // Then update tag details in tags
-        post.updateTagDetailsInTags(tagValue, newTagValue, newTagType);
+        post.updateTagDetailsInTags(tagValue, new PostTag(newTagValue, newTagType));
 
         assertEquals(
                 post.getSnapshot().getTags().toArray()[0],
@@ -128,7 +133,7 @@ class PostTest {
 
         assertThrows(
                 IllegalStateException.class,
-                () -> post.updateTagDetailsInTags(tagValue, newTagValue, newTagType),
+                () -> post.updateTagDetailsInTags(tagValue, new PostTag(newTagValue, newTagType)),
                 "Exception was not thrown."
         );
     }

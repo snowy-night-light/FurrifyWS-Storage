@@ -1,10 +1,13 @@
 package ws.furrify.posts.post;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ws.furrify.posts.artist.ArtistServiceClient;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostDescription;
 import ws.furrify.posts.post.vo.PostTag;
+import ws.furrify.posts.post.vo.PostTitle;
 import ws.furrify.posts.tag.TagServiceClient;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
@@ -22,7 +25,9 @@ class ReplacePostAdapter implements ReplacePostPort {
     private final ArtistServiceClient artistServiceClient;
 
     @Override
-    public void replacePost(final UUID userId, final UUID postId, final PostDTO postDTO) {
+    public void replacePost(@NonNull final UUID userId,
+                            @NonNull final UUID postId,
+                            @NonNull final PostDTO postDTO) {
         Post post = postRepository.findByOwnerIdAndPostId(userId, postId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId.toString())));
 
@@ -39,7 +44,10 @@ class ReplacePostAdapter implements ReplacePostPort {
         post.replaceArtists(artists);
 
         // Update all details in post
-        post.updateDetails(postDTO.getTitle(), postDTO.getDescription());
+        post.updateDetails(
+                PostTitle.of(postDTO.getTitle()),
+                PostDescription.of(postDTO.getDescription())
+        );
 
         // Publish replace post details event
         domainEventPublisher.publish(

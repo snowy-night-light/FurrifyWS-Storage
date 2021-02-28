@@ -1,5 +1,6 @@
 package ws.furrify.tags.tag;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
@@ -17,7 +18,8 @@ class CreateTagAdapter implements CreateTagPort {
     private final TagRepository tagRepository;
 
     @Override
-    public String createTag(final UUID userId, final TagDTO tagDTO) {
+    public String createTag(@NonNull final UUID userId,
+                            @NonNull final TagDTO tagDTO) {
         if (tagRepository.existsByOwnerIdAndValue(userId, tagDTO.getValue())) {
             throw new RecordAlreadyExistsException(Errors.TAG_ALREADY_EXISTS.getErrorMessage(tagDTO.getValue()));
         }

@@ -1,5 +1,6 @@
 package ws.furrify.tags.tag;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
@@ -14,7 +15,8 @@ class DeleteTagAdapter implements DeleteTagPort {
     private final TagRepository tagRepository;
 
     @Override
-    public void deleteTag(final UUID userId, final String value) {
+    public void deleteTag(@NonNull final UUID userId,
+                          @NonNull final String value) {
         if (!tagRepository.existsByOwnerIdAndValue(userId, value)) {
             throw new RecordNotFoundException(Errors.NO_TAG_FOUND.getErrorMessage(value));
         }

@@ -2,7 +2,7 @@ package ws.furrify.tags.tag.dto;
 
 
 import ws.furrify.tags.tag.TagEvent;
-import ws.furrify.tags.tag.TagType;
+import ws.furrify.tags.tag.vo.TagType;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
