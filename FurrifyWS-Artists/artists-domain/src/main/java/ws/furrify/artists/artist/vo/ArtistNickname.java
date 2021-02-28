@@ -1,6 +1,7 @@
 package ws.furrify.artists.artist.vo;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.Value;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -26,7 +27,7 @@ public class ArtistNickname {
      * @param nickname Artist nickname.
      * @return Artist nickname instance.
      */
-    public static ArtistNickname of(String nickname) {
+    public static ArtistNickname of(@NonNull String nickname) {
         if (nickname.isBlank()) {
             throw new IllegalStateException("Nickname [nickname=" + nickname + "] can't be blank.");
         }

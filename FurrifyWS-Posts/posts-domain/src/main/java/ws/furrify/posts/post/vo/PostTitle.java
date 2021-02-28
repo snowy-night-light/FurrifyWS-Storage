@@ -1,6 +1,7 @@
 package ws.furrify.posts.post.vo;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.Value;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -26,7 +27,7 @@ public class PostTitle {
      * @param title Post title.
      * @return Post title instance.
      */
-    public static PostTitle of(String title) {
+    public static PostTitle of(@NonNull String title) {
         if (title.isBlank()) {
             throw new IllegalStateException("Post title [title=" + title + "] can't be blank.");
         }

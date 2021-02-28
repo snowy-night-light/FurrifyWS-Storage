@@ -1,6 +1,7 @@
 package ws.furrify.posts.post.vo;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.Value;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -26,7 +27,7 @@ public class PostDescription {
      * @param description Post description.
      * @return Post description instance.
      */
-    public static PostDescription of(String description) {
+    public static PostDescription of(@NonNull String description) {
         if (description.length() < MIN_LENGTH || description.length() > MAX_LENGTH) {
             throw new IllegalStateException("Post description [description=" + description + "] must be between "
                     + MIN_LENGTH + " and " + MAX_LENGTH + " but is " + description.length() + ".");

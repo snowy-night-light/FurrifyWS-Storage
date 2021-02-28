@@ -1,6 +1,7 @@
 package ws.furrify.tags.tag.vo;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.Value;
 
 import java.util.regex.Pattern;
@@ -33,7 +34,7 @@ public class TagValue {
      * @param value Tag value.
      * @return Tag value instance.
      */
-    public static TagValue of(String value) {
+    public static TagValue of(@NonNull String value) {
         if (value.isBlank()) {
             throw new IllegalStateException("Tag value [value=" + value + "] can't be blank.");
         }

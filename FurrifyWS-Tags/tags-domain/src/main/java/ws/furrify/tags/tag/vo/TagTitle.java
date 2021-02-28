@@ -1,6 +1,7 @@
 package ws.furrify.tags.tag.vo;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.Value;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -26,7 +27,7 @@ public class TagTitle {
      * @param title Tag title.
      * @return Tag title instance.
      */
-    public static TagTitle of(String title) {
+    public static TagTitle of(@NonNull String title) {
         if (title.isBlank()) {
             throw new IllegalStateException("Tag title [title=" + title + "] can't be blank.");
         }
