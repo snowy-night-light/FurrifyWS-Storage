@@ -1,5 +1,6 @@
 package ws.furrify.artists.artist;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ws.furrify.artists.artist.dto.ArtistDTO;
 import ws.furrify.artists.artist.vo.ArtistNickname;
@@ -17,7 +18,8 @@ class CreateArtistAdapter implements CreateArtistPort {
     private final DomainEventPublisher<ArtistEvent> eventPublisher;
 
     @Override
-    public UUID createArtist(final UUID ownerId, final ArtistDTO artistDTO) {
+    public UUID createArtist(@NonNull final UUID ownerId,
+                             @NonNull final ArtistDTO artistDTO) {
         // Generate artist UUID
         UUID artistId = UUID.randomUUID();
 

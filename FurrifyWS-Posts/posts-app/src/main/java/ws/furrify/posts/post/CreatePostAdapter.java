@@ -1,5 +1,6 @@
 package ws.furrify.posts.post;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ws.furrify.posts.artist.ArtistServiceClient;
 import ws.furrify.posts.post.dto.PostDTO;
@@ -21,7 +22,8 @@ class CreatePostAdapter implements CreatePostPort {
     private final ArtistServiceClient artistServiceClient;
 
     @Override
-    public UUID createPost(final UUID userId, final PostDTO postDTO) {
+    public UUID createPost(@NonNull final UUID userId,
+                           @NonNull final PostDTO postDTO) {
         // Generate post uuid
         UUID postId = UUID.randomUUID();
 

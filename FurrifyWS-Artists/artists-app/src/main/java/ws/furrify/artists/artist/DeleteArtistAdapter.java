@@ -1,5 +1,6 @@
 package ws.furrify.artists.artist;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
@@ -14,7 +15,8 @@ class DeleteArtistAdapter implements DeleteArtistPort {
     private final DomainEventPublisher<ArtistEvent> domainEventPublisher;
 
     @Override
-    public void deleteArtist(final UUID ownerId, final UUID artistId) {
+    public void deleteArtist(@NonNull final UUID ownerId,
+                             @NonNull final UUID artistId) {
         if (!artistRepository.existsByOwnerIdAndArtistId(ownerId, artistId)) {
             throw new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(artistId.toString()));
         }

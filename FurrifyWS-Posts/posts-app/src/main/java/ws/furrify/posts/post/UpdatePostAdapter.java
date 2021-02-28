@@ -1,5 +1,6 @@
 package ws.furrify.posts.post;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ws.furrify.posts.artist.ArtistServiceClient;
 import ws.furrify.posts.post.dto.PostDTO;
@@ -24,7 +25,9 @@ class UpdatePostAdapter implements UpdatePostPort {
     private final ArtistServiceClient artistServiceClient;
 
     @Override
-    public void updatePost(final UUID userId, final UUID postId, final PostDTO postDTO) {
+    public void updatePost(@NonNull final UUID userId,
+                           @NonNull final UUID postId,
+                           @NonNull final PostDTO postDTO) {
         Post post = postRepository.findByOwnerIdAndPostId(userId, postId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId.toString())));
 

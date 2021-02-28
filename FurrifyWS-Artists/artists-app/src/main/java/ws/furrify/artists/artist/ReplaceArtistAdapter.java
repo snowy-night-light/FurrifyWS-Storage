@@ -1,5 +1,6 @@
 package ws.furrify.artists.artist;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ws.furrify.artists.artist.dto.ArtistDTO;
 import ws.furrify.artists.artist.vo.ArtistNickname;
@@ -17,7 +18,9 @@ class ReplaceArtistAdapter implements ReplaceArtistPort {
     private final DomainEventPublisher<ArtistEvent> eventPublisher;
 
     @Override
-    public void replaceArtist(final UUID ownerId, final UUID artistId, final ArtistDTO artistDTO) {
+    public void replaceArtist(@NonNull final UUID ownerId,
+                              @NonNull final UUID artistId,
+                              @NonNull final ArtistDTO artistDTO) {
         Artist artist = artistRepository.findByOwnerIdAndArtistId(ownerId, artistId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(artistId.toString())));
 

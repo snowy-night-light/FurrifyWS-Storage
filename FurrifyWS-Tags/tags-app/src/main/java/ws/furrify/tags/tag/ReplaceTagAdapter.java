@@ -1,5 +1,6 @@
 package ws.furrify.tags.tag;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
@@ -16,7 +17,9 @@ class ReplaceTagAdapter implements ReplaceTagPort {
     private final TagRepository tagRepository;
 
     @Override
-    public void replaceTag(final UUID userId, final String value, final TagDTO tagDTO) {
+    public void replaceTag(@NonNull final UUID userId,
+                           @NonNull final String value,
+                           @NonNull final TagDTO tagDTO) {
         Tag tag = tagRepository.findByOwnerIdAndValue(userId, value)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_TAG_FOUND.getErrorMessage(value)));
 
