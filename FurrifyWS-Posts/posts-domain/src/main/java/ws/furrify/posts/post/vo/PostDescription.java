@@ -6,7 +6,7 @@ import lombok.Value;
 import static lombok.AccessLevel.PRIVATE;
 
 /**
- * Post title wrapper.
+ * Post description wrapper.
  *
  * @author Skyte
  */

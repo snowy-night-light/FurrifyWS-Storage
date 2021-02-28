@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import static lombok.AccessLevel.PRIVATE;
 
 /**
- * Tag title wrapper.
+ * Tag value wrapper.
  *
  * @author Skyte
  */
