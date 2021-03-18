@@ -12,7 +12,7 @@
     <description>Shared module for all microservices.</description>
 
     <properties>
-        <avro.version>1.10.1</avro.version>
+        <avro.version>1.10.2</avro.version>
         <maven.compiler.source>15</maven.compiler.source>
         <maven.compiler.target>15</maven.compiler.target>
     </properties>
