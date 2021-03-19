@@ -20,8 +20,8 @@
     <packaging>pom</packaging>
 
     <properties>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
         <spring-cloud.version>2020.0.2</spring-cloud.version>
     </properties>
 
