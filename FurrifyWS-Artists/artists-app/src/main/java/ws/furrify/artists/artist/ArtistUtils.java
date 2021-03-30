@@ -33,10 +33,10 @@ class ArtistUtils {
                                 .setOwnerId(artistSnapshot.getOwnerId().toString())
                                 .setNicknames(new ArrayList<>(artistSnapshot.getNicknames()))
                                 .setPreferredNickname(artistSnapshot.getPreferredNickname())
-                                .setCreateDate(artistSnapshot.getCreateDate().toInstant().toEpochMilli())
+                                .setCreateDate(artistSnapshot.getCreateDate().toInstant())
                                 .build()
                 )
-                .setOccurredOn(Instant.now().toEpochMilli())
+                .setOccurredOn(Instant.now())
                 .build();
     }
 
@@ -51,7 +51,7 @@ class ArtistUtils {
                 .setState(DomainEventPublisher.ArtistEventType.REMOVED.name())
                 .setArtistId(artistId.toString())
                 .setDataBuilder(ArtistData.newBuilder())
-                .setOccurredOn(Instant.now().toEpochMilli())
+                .setOccurredOn(Instant.now())
                 .build();
     }
 

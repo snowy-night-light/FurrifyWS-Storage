@@ -31,11 +31,13 @@ public enum Errors {
     PREFERRED_NICKNAME_IS_NOT_VALID("Preferred nickname [nickname={0}] is not in nicknames array."),
     PREFERRED_NICKNAME_IS_TAKEN("Preferred nickname [nickname={0}] is already taken."),
     NICKNAMES_CANNOT_BE_EMPTY("Nicknames array must not be empty."),
+    FILE_CONTENT_IS_CORRUPTED("File content is corrupted or invalid extension in filename was given."),
     UNIDENTIFIED("Unknown error occurred.");
 
     private final String errorMessage;
 
-    public String getErrorMessage(Object[] data) {
+    // TODO Test this
+    public String getErrorMessage(Object... data) {
         return MessageFormat.format(errorMessage, data);
     }
 

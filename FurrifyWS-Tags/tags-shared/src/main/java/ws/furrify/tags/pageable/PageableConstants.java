@@ -1,10 +1,14 @@
 package ws.furrify.tags.pageable;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Pageable constants.
  *
  * @author Skyte
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class PageableConstants {
 
     /**

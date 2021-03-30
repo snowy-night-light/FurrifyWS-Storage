@@ -18,6 +18,7 @@ public class ArtistNickname {
     private final static short MAX_LENGTH = 256;
     private final static short MIN_LENGTH = 1;
 
+    @NonNull
     String nickname;
 
     /**

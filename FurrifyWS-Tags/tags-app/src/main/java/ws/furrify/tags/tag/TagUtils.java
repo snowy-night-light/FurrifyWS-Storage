@@ -26,7 +26,6 @@ class TagUtils {
 
         return TagEvent.newBuilder()
                 .setState(eventType.name())
-                .setId(tagSnapshot.getId())
                 .setTagValue(tagSnapshot.getValue())
                 .setDataBuilder(
                         TagData.newBuilder()
@@ -35,9 +34,9 @@ class TagUtils {
                                 .setDescription(tagSnapshot.getDescription())
                                 .setOwnerId(tagSnapshot.getOwnerId().toString())
                                 .setType(tagSnapshot.getType().name())
-                                .setCreateDate(tagSnapshot.getCreateDate().toInstant().toEpochMilli())
+                                .setCreateDate(tagSnapshot.getCreateDate().toInstant())
                 )
-                .setOccurredOn(Instant.now().toEpochMilli())
+                .setOccurredOn(Instant.now())
                 .build();
     }
 
@@ -54,12 +53,8 @@ class TagUtils {
                 .setTagValue(value)
                 .setDataBuilder(
                         TagData.newBuilder()
-                                .setValue(value)
-                                .setTitle("")
-                                .setDescription("")
-                                .setOwnerId(ownerId.toString())
                 )
-                .setOccurredOn(Instant.now().toEpochMilli())
+                .setOccurredOn(Instant.now())
                 .build();
     }
 

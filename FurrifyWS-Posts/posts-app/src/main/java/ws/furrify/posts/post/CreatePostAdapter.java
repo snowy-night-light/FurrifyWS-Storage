@@ -33,7 +33,7 @@ class CreatePostAdapter implements CreatePostPort {
         // Convert artists with artistId to artists with artistIds and preferredNicknames
         Set<PostArtist> artists = PostUtils.artistWithArtistIdToArtistVO(userId, postDTO.getArtists(), artistServiceClient);
 
-        // Edit postDTO with generated user uuid, encrypted password and current time
+        // Edit postDTO with generated post uuid, encrypted password and current time
         PostDTO updatedPostToCreateDTO = postDTO.toBuilder()
                 .postId(postId)
                 .ownerId(userId)

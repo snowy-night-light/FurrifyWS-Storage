@@ -12,6 +12,60 @@
         "doc": "Media priority."
       },
       {
+        "name": "extension",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media file extension enum field name."
+      },
+      {
+        "name": "filename",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media filename enum field name."
+      },
+      {
+        "name": "fileUrl",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media file URL."
+      },
+      {
+        "name": "fileHash",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media file MD5 hash."
+      },
+      {
+        "name": "thumbnailUrl",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media file thumbnail URL."
+      },
+      {
+        "name": "status",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media file status on processing server."
+      },
+      {
         "name": "ownerId",
         "type": [
           "null",

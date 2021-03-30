@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class PostFacadeTest {
+class MediaFacadeTest {
 
     private static PostRepository postRepository;
     private static PostFacade postFacade;

@@ -4,9 +4,9 @@ import ws.furrify.posts.post.PostEvent;
 import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -19,15 +19,14 @@ import java.util.stream.Collectors;
 public class PostDtoFactory {
 
     public PostDTO from(UUID key, PostEvent postEvent) {
-        Long createDateMillis = postEvent.getData().getCreateDate();
+        Instant createDateInstant = postEvent.getData().getCreateDate();
         ZonedDateTime createDate = null;
 
-        if (createDateMillis != null) {
-            createDate = new Date(createDateMillis).toInstant().atZone(ZoneId.systemDefault());
+        if (createDateInstant != null) {
+            createDate = createDateInstant.atZone(ZoneId.systemDefault());
         }
 
         return PostDTO.builder()
-                .id(postEvent.getId())
                 .postId(UUID.fromString(postEvent.getPostId()))
                 .ownerId(key)
                 .title(postEvent.getData().getTitle())

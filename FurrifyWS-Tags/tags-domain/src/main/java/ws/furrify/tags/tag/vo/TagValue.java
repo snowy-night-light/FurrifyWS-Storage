@@ -25,6 +25,7 @@ public class TagValue {
      */
     private final static String PATTERN = "^[a-zA-Z0-9_-]*$";
 
+    @NonNull
     String value;
 
     /**

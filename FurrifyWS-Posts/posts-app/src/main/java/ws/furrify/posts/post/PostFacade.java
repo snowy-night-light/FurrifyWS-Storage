@@ -38,7 +38,8 @@ public class PostFacade {
             case CREATED, REPLACED, UPDATED -> savePost(postDTO);
             case REMOVED -> deletePostByPostId(postDTO.getPostId());
 
-            default -> log.warning("State received from kafka is not defined. State=" + postEvent.getState() + "Topic=post_events");
+            default -> log.warning("State received from kafka is not defined. " +
+                    "State=" + postEvent.getState() + " Topic=post_events");
         }
     }
 
@@ -55,7 +56,8 @@ public class PostFacade {
                     tagEvent.getData().getValue(),
                     tagEvent.getData().getType());
 
-            default -> log.warning("State received from kafka is not defined. State=" + tagEvent.getState() + "Topic=post_events");
+            default -> log.warning("State received from kafka is not defined. " +
+                    "State=" + tagEvent.getState() + " Topic=tag_events");
         }
     }
 
@@ -71,7 +73,8 @@ public class PostFacade {
                     UUID.fromString(artistEvent.getArtistId()),
                     artistEvent.getData().getPreferredNickname());
 
-            default -> log.warning("State received from kafka is not defined. State=" + artistEvent.getState() + "Topic=post_events");
+            default -> log.warning("State received from kafka is not defined. " +
+                    "State=" + artistEvent.getState() + " Topic=artist_events");
         }
     }
 
@@ -89,6 +92,7 @@ public class PostFacade {
     /**
      * Deletes post.
      *
+     * @param userId Post owner UUID.
      * @param postId Post UUID.
      */
     public void deletePost(final UUID userId, final UUID postId) {
@@ -98,6 +102,7 @@ public class PostFacade {
     /**
      * Replaces all fields in post.
      *
+     * @param userId  Post owner UUID.
      * @param postId  Post UUID
      * @param postDTO Replacement post.
      */
@@ -108,6 +113,7 @@ public class PostFacade {
     /**
      * Updates specified fields in post.
      *
+     * @param userId  Post owner UUID.
      * @param postId  Post UUID.
      * @param postDTO Post with updated specific fields.
      */

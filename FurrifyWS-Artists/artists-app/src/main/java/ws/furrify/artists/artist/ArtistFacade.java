@@ -36,7 +36,8 @@ public class ArtistFacade {
             case CREATED, REPLACED, UPDATED -> saveArtist(artistDTO);
             case REMOVED -> deleteArtistByArtistId(artistDTO.getArtistId());
 
-            default -> log.warning("State received from kafka is not defined. State=" + artistEvent.getState() + "Topic=post_events");
+            default -> log.warning("State received from kafka is not defined. " +
+                    "State=" + artistEvent.getState() + " Topic=artist_events");
         }
     }
 
