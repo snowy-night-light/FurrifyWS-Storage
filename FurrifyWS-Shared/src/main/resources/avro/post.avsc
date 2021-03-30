@@ -106,10 +106,12 @@
         "name": "createDate",
         "type": [
           "null",
-          "long"
+          {
+            "type": "long",
+            "logicalType": "timestamp-millis"
+          }
         ],
         "default": null,
-        "logicalType": "timestamp-millis",
         "doc": "Create timestamp."
       }
     ]
