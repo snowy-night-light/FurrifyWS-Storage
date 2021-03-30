@@ -67,8 +67,10 @@
       },
       {
         "name": "occurredOn",
-        "type": "long",
-        "logicalType": "timestamp-millis",
+        "type": {
+          "type": "long",
+          "logicalType": "timestamp-millis"
+        },
         "doc": "Instant event occurred on."
       }
     ]
