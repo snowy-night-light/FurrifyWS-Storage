@@ -7,12 +7,20 @@
     "fields": [
       {
         "name": "value",
-        "type": "string",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
         "doc": "Tag new unique value."
       },
       {
         "name": "title",
-        "type": "string",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
         "doc": "Tag title."
       },
       {
@@ -26,7 +34,11 @@
       },
       {
         "name": "ownerId",
-        "type": "string",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
         "doc": "Tag owner UUID."
       },
       {
@@ -60,15 +72,6 @@
         "name": "state",
         "type": "string",
         "doc": "A event type performed on that record. (Can be acquired using TagEventType enum.)"
-      },
-      {
-        "name": "id",
-        "type": [
-          "null",
-          "long"
-        ],
-        "default": null,
-        "doc": "A tag database id."
       },
       {
         "name": "tagValue",

@@ -7,7 +7,11 @@
     "fields": [
       {
         "name": "artistId",
-        "type": "string",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
         "doc": "Artist UUID."
       },
       {
@@ -29,7 +33,11 @@
     "fields": [
       {
         "name": "value",
-        "type": "string",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
         "doc": "Tag value."
       },
       {
@@ -116,15 +124,6 @@
         "name": "state",
         "type": "string",
         "doc": "A event type performed on that record. (Can be acquired using PostEventType enum.)"
-      },
-      {
-        "name": "id",
-        "type": [
-          "null",
-          "long"
-        ],
-        "default": null,
-        "doc": "A post database id."
       },
       {
         "name": "postId",

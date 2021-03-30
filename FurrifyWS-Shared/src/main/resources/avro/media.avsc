@@ -1,0 +1,73 @@
+[
+  {
+    "type": "record",
+    "namespace": "ws.furrify.posts.media.vo",
+    "doc": "Media data containing required information to perform state change across multiple microservices.",
+    "name": "MediaData",
+    "fields": [
+      {
+        "name": "priority",
+        "type": "int",
+        "default": 0,
+        "doc": "Media priority."
+      },
+      {
+        "name": "ownerId",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media owner UUID."
+      },
+      {
+        "name": "postId",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media owning post UUID."
+      },
+      {
+        "name": "createDate",
+        "type": [
+          "null",
+          "long"
+        ],
+        "default": null,
+        "logicalType": "timestamp-millis",
+        "doc": "Create timestamp."
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "ws.furrify.posts.media",
+    "doc": "Media state change request.",
+    "name": "MediaEvent",
+    "fields": [
+      {
+        "name": "state",
+        "type": "string",
+        "doc": "A event type performed on that record. (Can be acquired using MediaEventType enum.)"
+      },
+      {
+        "name": "mediaId",
+        "type": "string",
+        "doc": "A media UUID event is targeted at."
+      },
+      {
+        "name": "data",
+        "type": "ws.furrify.posts.media.vo.MediaData",
+        "doc": "Media data eg. changed fields."
+      },
+      {
+        "name": "occurredOn",
+        "type": "long",
+        "logicalType": "timestamp-millis",
+        "doc": "Instant event occurred on."
+      }
+    ]
+  }
+]

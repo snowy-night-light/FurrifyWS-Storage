@@ -56,15 +56,6 @@
         "doc": "A event type performed on that record. (Can be acquired using ArtistEventType enum.)"
       },
       {
-        "name": "id",
-        "type": [
-          "null",
-          "long"
-        ],
-        "default": null,
-        "doc": "A artist database id."
-      },
-      {
         "name": "artistId",
         "type": "string",
         "doc": "A artist UUID event is targeted at."
