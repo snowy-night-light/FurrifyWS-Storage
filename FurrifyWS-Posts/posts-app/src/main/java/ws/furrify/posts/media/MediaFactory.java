@@ -1,7 +1,6 @@
 package ws.furrify.posts.media;
 
 import ws.furrify.posts.media.dto.MediaDTO;
-import ws.furrify.posts.media.vo.MediaPriority;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -17,9 +16,7 @@ class MediaFactory {
                 .postId(mediaDTO.getPostId())
                 .ownerId(mediaDTO.getOwnerId())
                 .priority(
-                        MediaPriority.of(
-                                (mediaDTO.getPriority() != null) ? mediaDTO.getPriority() : 0
-                        )
+                        (mediaDTO.getPriority() != null) ? mediaDTO.getPriority() : 0
                 )
                 .createDate(
                         (mediaDTO.getCreateDate() != null) ? mediaDTO.getCreateDate() : ZonedDateTime.now()

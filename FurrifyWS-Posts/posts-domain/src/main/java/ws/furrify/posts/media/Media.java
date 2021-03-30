@@ -27,7 +27,7 @@ class Media {
     @NonNull
     private MediaPriority priority;
     @NonNull
-    private final MediaFile mediaFile;
+    private final MediaFile file;
 
     private final ZonedDateTime createDate;
 
@@ -37,8 +37,14 @@ class Media {
                 mediaSnapshot.getMediaId(),
                 mediaSnapshot.getPostId(),
                 mediaSnapshot.getOwnerId(),
-                mediaSnapshot.getPriority(),
-                mediaSnapshot.getMediaFile(),
+                MediaPriority.of(mediaSnapshot.getPriority()),
+                MediaFile.builder()
+                        .extension(mediaSnapshot.getExtension())
+                        .thumbnailUrl(mediaSnapshot.getThumbnailUrl())
+                        .filename(mediaSnapshot.getFilename())
+                        .fileHash(mediaSnapshot.getFileHash())
+                        .fileUrl(mediaSnapshot.getFileUrl())
+                        .build(),
                 mediaSnapshot.getCreateDate()
         );
     }
@@ -49,8 +55,12 @@ class Media {
                 .mediaId(mediaId)
                 .postId(postId)
                 .ownerId(ownerId)
-                .priority(priority)
-                .mediaFile(mediaFile)
+                .priority(priority.getPriority())
+                .extension(file.getExtension())
+                .thumbnailUrl(file.getThumbnailUrl())
+                .filename(file.getFilename())
+                .fileHash(file.getFileHash())
+                .fileUrl(file.getFileUrl())
                 .createDate(createDate)
                 .build();
     }

@@ -6,9 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import ws.furrify.posts.media.vo.MediaFile;
-import ws.furrify.posts.media.vo.MediaPriority;
 
+import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -29,9 +28,17 @@ class MediaSnapshot {
     private UUID postId;
     private UUID ownerId;
 
-    private MediaPriority priority;
+    private Integer priority;
 
-    private MediaFile mediaFile;
+    private String filename;
+    private String fileHash;
+
+    private MediaExtension extension;
+
+    private URL fileUrl;
+    private URL thumbnailUrl;
+
+    private MediaStatus status;
 
     private ZonedDateTime createDate;
 }
