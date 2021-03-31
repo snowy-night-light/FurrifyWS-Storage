@@ -42,7 +42,6 @@ class MediaTest implements CommandLineRunner {
                                 .extension(MediaExtension.PNG)
                                 .filename("yes.png")
                                 .fileHash("3c518eeb674c71b30297f072fde7eba5")
-                                .status(MediaStatus.ACCEPTED)
                                 .createDate(ZonedDateTime.now())
                                 .build()
                 ).getSnapshot()
