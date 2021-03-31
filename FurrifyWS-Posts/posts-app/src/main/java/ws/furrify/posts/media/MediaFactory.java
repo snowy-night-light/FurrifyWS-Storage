@@ -18,6 +18,14 @@ class MediaFactory {
                 .priority(
                         (mediaDTO.getPriority() != null) ? mediaDTO.getPriority() : 0
                 )
+                .filename(mediaDTO.getFilename())
+                .fileHash(mediaDTO.getFileHash())
+                .extension(mediaDTO.getExtension())
+                .fileUrl(mediaDTO.getFileUrl())
+                .thumbnailUrl(mediaDTO.getThumbnailUrl())
+                .status(
+                        (mediaDTO.getStatus() != null) ? mediaDTO.getStatus() : MediaStatus.REQUEST_PENDING
+                )
                 .createDate(
                         (mediaDTO.getCreateDate() != null) ? mediaDTO.getCreateDate() : ZonedDateTime.now()
                 )

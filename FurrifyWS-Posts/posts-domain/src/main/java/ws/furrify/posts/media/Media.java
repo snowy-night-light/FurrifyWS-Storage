@@ -61,6 +61,7 @@ class Media {
                 .filename(file.getFilename())
                 .fileHash(file.getFileHash())
                 .fileUrl(file.getFileUrl())
+                .status(file.getStatus())
                 .createDate(createDate)
                 .build();
     }

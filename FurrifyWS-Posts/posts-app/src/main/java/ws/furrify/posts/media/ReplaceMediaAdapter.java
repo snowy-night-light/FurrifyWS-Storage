@@ -2,10 +2,8 @@ package ws.furrify.posts.media;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import ws.furrify.posts.artist.ArtistServiceClient;
 import ws.furrify.posts.media.dto.MediaDTO;
 import ws.furrify.posts.media.vo.MediaPriority;
-import ws.furrify.posts.tag.TagServiceClient;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
@@ -17,8 +15,6 @@ class ReplaceMediaAdapter implements ReplaceMediaPort {
 
     private final DomainEventPublisher<MediaEvent> domainEventPublisher;
     private final MediaRepository mediaRepository;
-    private final TagServiceClient tagServiceClient;
-    private final ArtistServiceClient artistServiceClient;
 
     @Override
     public void replaceMedia(@NonNull final UUID userId,

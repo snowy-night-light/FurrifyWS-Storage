@@ -38,6 +38,7 @@ public class MediaFile {
 
     private final static String FILENAME_EXTENSION_DIVIDER = "\\.";
     private final static byte MINIMUM_DIVIDE_COUNT = 2;
+    private final static String MD5_HASH_PATTERN = "[a-fA-F0-9]{32}";
 
     @Builder
     private MediaFile(@NonNull final String filename,
@@ -45,11 +46,26 @@ public class MediaFile {
                       final URL fileUrl,
                       final URL thumbnailUrl,
                       @NonNull final String fileHash) {
-        if (filename.split(FILENAME_EXTENSION_DIVIDER).length < MINIMUM_DIVIDE_COUNT) {
+
+        // Validate given values
+        String[] filenameWithExt = filename.split(FILENAME_EXTENSION_DIVIDER);
+
+        // Check if valid filename
+        if (filenameWithExt.length < MINIMUM_DIVIDE_COUNT) {
             throw new IllegalStateException("Media filename [filename=" + filename + "] must contain extension.");
         }
-        this.filename = filename;
 
+        // Check if filename extension matches declared
+        if (!filenameWithExt[1].equalsIgnoreCase(extension.name())) {
+            throw new IllegalStateException("Media filename [filename=" + filename + "] must be the same as declared extension.");
+        }
+
+        // Check if MD5 hash is valid
+        if (!fileHash.matches(MD5_HASH_PATTERN)) {
+            throw new IllegalStateException("Media file hash [hash=" + fileHash + "] is not valid MD5 hash.");
+        }
+
+        this.filename = filename;
         this.extension = extension;
         this.fileUrl = fileUrl;
         this.thumbnailUrl = thumbnailUrl;
