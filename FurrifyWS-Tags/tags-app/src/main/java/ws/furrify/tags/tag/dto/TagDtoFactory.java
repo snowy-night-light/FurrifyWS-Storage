@@ -4,9 +4,9 @@ package ws.furrify.tags.tag.dto;
 import ws.furrify.tags.tag.TagEvent;
 import ws.furrify.tags.tag.vo.TagType;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -18,15 +18,14 @@ import java.util.UUID;
 public class TagDtoFactory {
 
     public TagDTO from(UUID key, TagEvent tagEvent) {
-        Long createDateMillis = tagEvent.getData().getCreateDate();
+        Instant createDateInstant = tagEvent.getData().getCreateDate();
         ZonedDateTime createDate = null;
 
-        if (createDateMillis != null) {
-            createDate = new Date(createDateMillis).toInstant().atZone(ZoneId.systemDefault());
+        if (createDateInstant != null) {
+            createDate = createDateInstant.atZone(ZoneId.systemDefault());
         }
 
         return TagDTO.builder()
-                .id(tagEvent.getId())
                 .title(tagEvent.getData().getTitle())
                 .description(tagEvent.getData().getDescription())
                 .value(tagEvent.getData().getValue())

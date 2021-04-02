@@ -12,9 +12,12 @@
     <description>Shared module for all microservices.</description>
 
     <properties>
-        <avro.version>1.10.1</avro.version>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
+        <java.version>16</java.version>
+        <avro.version>1.10.2</avro.version>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencies>
@@ -28,8 +31,9 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.18</version>
-            <scope>provided</scope>
+            <version>1.18.20</version>
+            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
         <!-- Mapping -->
         <dependency>
@@ -49,17 +53,11 @@
             <version>2.5</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
-            <version>2.0.2</version>
-            <scope>compile</scope>
-        </dependency>
         <!-- Web -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>5.3.4</version>
+            <version>5.3.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -98,13 +96,13 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>5.3.4</version>
+            <version>5.3.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.4.29.Final</version>
+            <version>5.4.30.Final</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -150,6 +148,15 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

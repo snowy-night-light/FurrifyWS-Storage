@@ -57,7 +57,7 @@ class UpdatePostAdapter implements UpdatePostPort {
             post.replaceArtists(artists);
         }
 
-        // Publish update user event
+        // Publish update post event
         domainEventPublisher.publish(
                 DomainEventPublisher.Topic.POST,
                 // User userId as key

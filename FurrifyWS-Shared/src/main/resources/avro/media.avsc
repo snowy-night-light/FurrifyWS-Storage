@@ -1,0 +1,131 @@
+[
+  {
+    "type": "record",
+    "namespace": "ws.furrify.posts.media.vo",
+    "doc": "Media data containing required information to perform state change across multiple microservices.",
+    "name": "MediaData",
+    "fields": [
+      {
+        "name": "priority",
+        "type": "int",
+        "default": 0,
+        "doc": "Media priority."
+      },
+      {
+        "name": "extension",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media file extension enum field name."
+      },
+      {
+        "name": "filename",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media filename enum field name."
+      },
+      {
+        "name": "fileUrl",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media file URL."
+      },
+      {
+        "name": "fileHash",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media file MD5 hash."
+      },
+      {
+        "name": "thumbnailUrl",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media file thumbnail URL."
+      },
+      {
+        "name": "status",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media file status on processing server."
+      },
+      {
+        "name": "ownerId",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media owner UUID."
+      },
+      {
+        "name": "postId",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media owning post UUID."
+      },
+      {
+        "name": "createDate",
+        "type": [
+          "null",
+          {
+            "type": "long",
+            "logicalType": "timestamp-millis"
+          }
+        ],
+        "default": null,
+        "doc": "Create timestamp."
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "ws.furrify.posts.media",
+    "doc": "Media state change request.",
+    "name": "MediaEvent",
+    "fields": [
+      {
+        "name": "state",
+        "type": "string",
+        "doc": "A event type performed on that record. (Can be acquired using MediaEventType enum.)"
+      },
+      {
+        "name": "mediaId",
+        "type": "string",
+        "doc": "A media UUID event is targeted at."
+      },
+      {
+        "name": "data",
+        "type": "ws.furrify.posts.media.vo.MediaData",
+        "doc": "Media data eg. changed fields."
+      },
+      {
+        "name": "occurredOn",
+        "type": {
+          "type": "long",
+          "logicalType": "timestamp-millis"
+        },
+        "doc": "Instant event occurred on."
+      }
+    ]
+  }
+]

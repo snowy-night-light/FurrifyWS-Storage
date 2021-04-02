@@ -18,6 +18,7 @@ public class PostTitle {
     private final static short MAX_LENGTH = 64;
     private final static short MIN_LENGTH = 1;
 
+    @NonNull
     String title;
 
     /**

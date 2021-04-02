@@ -18,6 +18,7 @@ public class TagDescription {
     private final static short MAX_LENGTH = 1024;
     private final static short MIN_LENGTH = 1;
 
+    @NonNull
     String description;
 
     /**

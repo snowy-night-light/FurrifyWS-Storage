@@ -2,9 +2,9 @@ package ws.furrify.artists.artist.dto;
 
 import ws.furrify.artists.artist.ArtistEvent;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -18,15 +18,14 @@ public class ArtistDtoFactory {
 
 
     public ArtistDTO from(UUID key, ArtistEvent artistEvent) {
-        Long createDateMillis = artistEvent.getData().getCreateDate();
+        Instant createDateInstant = artistEvent.getData().getCreateDate();
         ZonedDateTime createDate = null;
 
-        if (createDateMillis != null) {
-            createDate = new Date(createDateMillis).toInstant().atZone(ZoneId.systemDefault());
+        if (createDateInstant != null) {
+            createDate = createDateInstant.atZone(ZoneId.systemDefault());
         }
 
         return ArtistDTO.builder()
-                .id(artistEvent.getId())
                 .artistId(UUID.fromString(artistEvent.getArtistId()))
                 .ownerId(key)
                 .nicknames(new HashSet<>(artistEvent.getData().getNicknames()))

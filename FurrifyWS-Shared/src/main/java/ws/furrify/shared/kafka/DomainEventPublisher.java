@@ -19,6 +19,7 @@ public interface DomainEventPublisher<T> {
         /**
          * Represents post_events topic in kafka.
          */
+        MEDIA("media_events"),
         POST("post_events"),
         ARTIST("artist_events"),
         TAG("tag_events");
@@ -60,6 +61,16 @@ public interface DomainEventPublisher<T> {
     enum TagEventType {
         /**
          * Events that can occur on Tag entity.
+         */
+        CREATED,
+        REMOVED,
+        REPLACED,
+        UPDATED
+    }
+
+    enum MediaEventType {
+        /**
+         * Events that can occur on Media entity.
          */
         CREATED,
         REMOVED,

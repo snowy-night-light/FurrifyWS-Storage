@@ -1,0 +1,13 @@
+file,mime
+ws/furrify/shared/files/example.png,image/png
+ws/furrify/shared/files/example.jpg,image/jpeg
+ws/furrify/shared/files/example.bmp,image/bmp
+ws/furrify/shared/files/example.gif,image/gif
+ws/furrify/shared/files/example.tif,image/tiff
+ws/furrify/shared/files/example.psd,image/vnd.adobe.photoshop
+ws/furrify/shared/files/example.cbz,application/zip
+ws/furrify/shared/files/example.zip,application/zip
+ws/furrify/shared/files/example.epub,application/epub+zip
+ws/furrify/shared/files/example.sai,application/octet-stream
+ws/furrify/shared/files/example.pdf,application/pdf
+ws/furrify/shared/files/example.mp4,video/mp4

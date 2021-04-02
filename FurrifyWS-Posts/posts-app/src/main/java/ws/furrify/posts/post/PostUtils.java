@@ -84,7 +84,7 @@ class PostUtils {
         return PostEvent.newBuilder()
                 .setState(eventType.name())
                 .setPostId(postSnapshot.getPostId().toString())
-                .setOccurredOn(Instant.now().toEpochMilli())
+                .setOccurredOn(Instant.now())
                 .setDataBuilder(
                         PostData.newBuilder()
                                 .setOwnerId(postSnapshot.getOwnerId().toString())
@@ -110,7 +110,7 @@ class PostUtils {
                                                                 .build()
                                                 ).collect(Collectors.toList())
                                 )
-                                .setCreateDate(postSnapshot.getCreateDate().toInstant().toEpochMilli())
+                                .setCreateDate(postSnapshot.getCreateDate().toInstant())
                 ).build();
     }
 
@@ -125,7 +125,7 @@ class PostUtils {
                 .setState(DomainEventPublisher.PostEventType.REMOVED.name())
                 .setPostId(postId.toString())
                 .setDataBuilder(PostData.newBuilder())
-                .setOccurredOn(Instant.now().toEpochMilli())
+                .setOccurredOn(Instant.now())
                 .build();
     }
 

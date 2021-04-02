@@ -14,6 +14,11 @@
     <dependencies>
         <dependency>
             <groupId>ws.furrify</groupId>
+            <artifactId>shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ws.furrify</groupId>
             <artifactId>posts-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -21,6 +26,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
@@ -37,12 +43,19 @@
             <version>3.8.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>ws.furrify</groupId>
-            <artifactId>shared</artifactId>
-            <version>0.0.1</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

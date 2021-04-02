@@ -21,7 +21,7 @@ class DeleteArtistAdapter implements DeleteArtistPort {
             throw new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(artistId.toString()));
         }
 
-        // Publish delete post event
+        // Publish delete artist event
         domainEventPublisher.publish(
                 DomainEventPublisher.Topic.ARTIST,
                 // Use ownerId as key

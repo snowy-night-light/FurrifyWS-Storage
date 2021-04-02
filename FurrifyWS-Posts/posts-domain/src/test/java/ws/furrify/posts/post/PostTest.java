@@ -206,6 +206,7 @@ class PostTest {
     }
 
     @Test
+    @DisplayName("Replace artists in post")
     void replaceArtists() {
         // Given new artists set
         PostArtist postArtist = new PostArtist(UUID.randomUUID(), "preferred_nickname");

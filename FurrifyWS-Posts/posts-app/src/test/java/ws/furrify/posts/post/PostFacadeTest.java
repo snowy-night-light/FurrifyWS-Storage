@@ -295,7 +295,7 @@ class PostFacadeTest {
     @Test
     @DisplayName("Delete post with non existing postId")
     void deletePost2() {
-        // Given userId and postId
+        // Given userId and non existing postId
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
         // When deletePost() method called

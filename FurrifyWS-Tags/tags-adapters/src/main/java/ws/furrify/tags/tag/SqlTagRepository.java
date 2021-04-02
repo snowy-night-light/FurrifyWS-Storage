@@ -2,6 +2,7 @@ package ws.furrify.tags.tag;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ws.furrify.tags.tag.dto.query.TagDetailsQueryDTO;
@@ -28,6 +29,7 @@ interface SqlTagQueryRepository extends TagQueryRepository, Repository<TagSnapsh
     Optional<TagDetailsQueryDTO> findByOwnerIdAndValue(UUID userId, String value);
 
     @Override
+    @Query("from TagSnapshot where ownerId = ?1 order by value desc")
     List<TagDetailsQueryDTO> findAllByOwnerId(UUID userId);
 }
 

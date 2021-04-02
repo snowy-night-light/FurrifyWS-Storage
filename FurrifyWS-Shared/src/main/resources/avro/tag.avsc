@@ -7,12 +7,20 @@
     "fields": [
       {
         "name": "value",
-        "type": "string",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
         "doc": "Tag new unique value."
       },
       {
         "name": "title",
-        "type": "string",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
         "doc": "Tag title."
       },
       {
@@ -26,7 +34,11 @@
       },
       {
         "name": "ownerId",
-        "type": "string",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
         "doc": "Tag owner UUID."
       },
       {
@@ -42,10 +54,12 @@
         "name": "createDate",
         "type": [
           "null",
-          "long"
+          {
+            "type": "long",
+            "logicalType": "timestamp-millis"
+          }
         ],
         "default": null,
-        "logicalType": "timestamp-millis",
         "doc": "Create timestamp."
       }
     ]
@@ -62,15 +76,6 @@
         "doc": "A event type performed on that record. (Can be acquired using TagEventType enum.)"
       },
       {
-        "name": "id",
-        "type": [
-          "null",
-          "long"
-        ],
-        "default": null,
-        "doc": "A tag database id."
-      },
-      {
         "name": "tagValue",
         "type": "string",
         "doc": "A tag old unique value."
@@ -82,8 +87,10 @@
       },
       {
         "name": "occurredOn",
-        "type": "long",
-        "logicalType": "timestamp-millis",
+        "type": {
+          "type": "long",
+          "logicalType": "timestamp-millis"
+        },
         "doc": "Instant event occurred on."
       }
     ]

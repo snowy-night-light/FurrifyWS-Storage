@@ -4,6 +4,50 @@
 
     <description>XML Mapping file</description>
 
+    <entity class="ws.furrify.posts.media.MediaSnapshot" access="FIELD">
+        <table name="media"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="SEQUENCE"/>
+            </id>
+            <basic name="mediaId">
+                <column unique="true" updatable="false" nullable="false"/>
+            </basic>
+            <basic name="postId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="ownerId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="priority">
+                <column nullable="false"/>
+            </basic>
+            <basic name="filename">
+                <column nullable="false"/>
+            </basic>
+            <basic name="fileHash">
+                <column nullable="false"/>
+            </basic>
+            <basic name="extension">
+                <column nullable="false"/>
+                <enumerated>STRING</enumerated>
+            </basic>
+            <basic name="fileUrl">
+                <column nullable="true"/>
+            </basic>
+            <basic name="thumbnailUrl">
+                <column nullable="true"/>
+            </basic>
+            <basic name="status">
+                <column nullable="false"/>
+                <enumerated>STRING</enumerated>
+            </basic>
+            <basic name="createDate">
+                <column updatable="false" nullable="false"/>
+            </basic>
+        </attributes>
+    </entity>
+
     <entity class="ws.furrify.posts.post.PostSnapshot" access="FIELD">
         <table name="posts"/>
         <attributes>
