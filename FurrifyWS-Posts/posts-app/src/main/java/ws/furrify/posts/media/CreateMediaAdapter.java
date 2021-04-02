@@ -30,7 +30,6 @@ class CreateMediaAdapter implements CreateMediaPort {
                 .createDate(ZonedDateTime.now())
                 .build();
 
-
         // Publish create media event
         domainEventPublisher.publish(
                 DomainEventPublisher.Topic.MEDIA,
