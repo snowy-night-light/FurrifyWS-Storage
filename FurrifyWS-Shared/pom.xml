@@ -12,10 +12,10 @@
     <description>Shared module for all microservices.</description>
 
     <properties>
-        <java.version>15</java.version>
+        <java.version>16</java.version>
         <avro.version>1.10.2</avro.version>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -31,8 +31,9 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.18</version>
-            <scope>provided</scope>
+            <version>1.18.20</version>
+            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
         <!-- Mapping -->
         <dependency>
@@ -153,8 +154,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>15</source>
-                    <target>15</target>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
         </plugins>
