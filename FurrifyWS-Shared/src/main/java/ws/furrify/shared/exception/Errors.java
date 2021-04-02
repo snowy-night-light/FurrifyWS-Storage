@@ -36,7 +36,6 @@ public enum Errors {
 
     private final String errorMessage;
 
-    // TODO Test this
     public String getErrorMessage(Object... data) {
         return MessageFormat.format(errorMessage, data);
     }
