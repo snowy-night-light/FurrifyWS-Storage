@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
 /**
- * Media priority wrapper.
+ * Media file wrapper.
  *
  * @author Skyte
  */

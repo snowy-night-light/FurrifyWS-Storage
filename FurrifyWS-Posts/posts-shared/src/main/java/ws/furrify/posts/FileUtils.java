@@ -25,6 +25,6 @@ public class FileUtils {
         Metadata metadata = new Metadata();
         metadata.add(Metadata.RESOURCE_NAME_KEY, filename);
 
-        return detector.detect(stream, metadata).getType();
+        return detector.detect(stream, metadata).toString();
     }
 }
