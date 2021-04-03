@@ -22,7 +22,7 @@ class UpdateMediaAdapter implements UpdateMediaPort {
                             @NonNull final UUID mediaId,
                             @NonNull final MediaDTO mediaDTO) {
         Media media = mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId)
-                .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(mediaDTO.toString())));
+                .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(mediaId.toString())));
 
         // Update changed fields in media
         if (mediaDTO.getPriority() != null) {
