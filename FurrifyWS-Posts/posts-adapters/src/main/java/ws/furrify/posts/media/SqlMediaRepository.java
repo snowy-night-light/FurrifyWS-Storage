@@ -35,6 +35,10 @@ interface SqlMediaQueryRepository extends MediaQueryRepository, Repository<Media
     @Override
     @Query("from MediaSnapshot where ownerId = ?1 and postId = ?2 order by priority desc")
     List<MediaDetailsQueryDTO> findAllByOwnerIdAndPostId(UUID ownerId, UUID postId);
+
+    @Override
+    @Query("select id from MediaSnapshot where mediaId = ?1")
+    Long getIdByMediaId(UUID mediaId);
 }
 
 @org.springframework.stereotype.Repository

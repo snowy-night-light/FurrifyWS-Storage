@@ -64,6 +64,10 @@ interface SqlPostQueryRepository extends PostQueryRepository, Repository<PostSna
     Page<PostDetailsQueryDTO> findAllByOwnerIdAndQuery(UUID ownerId,
                                                        PostQuerySearchDTO query,
                                                        Pageable pageable);
+
+    @Override
+    @Query("select id from PostSnapshot where postId = ?1")
+    Long getIdByPostId(UUID postId);
 }
 
 @org.springframework.stereotype.Repository

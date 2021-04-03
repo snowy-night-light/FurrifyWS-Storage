@@ -14,4 +14,6 @@ public interface MediaQueryRepository {
     Optional<MediaDetailsQueryDTO> findByOwnerIdAndPostIdAndMediaId(UUID ownerId, UUID artistId, UUID mediaId);
 
     List<MediaDetailsQueryDTO> findAllByOwnerIdAndPostId(UUID ownerId, UUID postId);
+
+    Long getIdByMediaId(UUID mediaId);
 }

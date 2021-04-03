@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ws.furrify.artists.artist.dto.query.ArtistDetailsQueryDTO;
@@ -32,6 +33,10 @@ interface SqlArtistQueryRepository extends ArtistQueryRepository, Repository<Art
 
     @Override
     Page<ArtistDetailsQueryDTO> findAllByOwnerId(UUID ownerId, Pageable pageable);
+
+    @Override
+    @Query("select id from ArtistSnapshot where artistId = ?1")
+    Long getIdByArtistId(UUID artistId);
 }
 
 @org.springframework.stereotype.Repository

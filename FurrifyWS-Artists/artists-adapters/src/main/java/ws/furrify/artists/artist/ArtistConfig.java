@@ -11,12 +11,13 @@ import ws.furrify.artists.kafka.KafkaTopicEventPublisher;
 class ArtistConfig {
 
     private final ArtistRepositoryImpl artistRepository;
+    private final ArtistQueryRepository artistQueryRepository;
     private final KafkaTopicEventPublisher<ArtistEvent> eventPublisher;
 
     @Bean
     ArtistFacade artistFacade() {
         var artistFactory = new ArtistFactory();
-        var artistDtoFactory = new ArtistDtoFactory();
+        var artistDtoFactory = new ArtistDtoFactory(artistQueryRepository);
 
         return new ArtistFacade(
                 new CreateArtistAdapter(artistRepository, artistFactory, eventPublisher),

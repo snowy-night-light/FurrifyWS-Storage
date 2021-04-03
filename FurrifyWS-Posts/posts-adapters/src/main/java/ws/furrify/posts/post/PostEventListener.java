@@ -18,7 +18,7 @@ import java.util.UUID;
 class PostEventListener {
     private final PostFacade postFacade;
 
-    @KafkaListener(groupId = "furrify-storage_posts", topics = "post_events")
+    @KafkaListener(topics = "post_events")
     public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
                    @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                    @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
@@ -28,7 +28,7 @@ class PostEventListener {
         postFacade.handleEvent(UUID.fromString(key), postEvent);
     }
 
-    @KafkaListener(groupId = "furrify-storage_posts", topics = "tag_events")
+    @KafkaListener(topics = "tag_events")
     public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
                    @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                    @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
@@ -38,7 +38,7 @@ class PostEventListener {
         postFacade.handleEvent(UUID.fromString(key), tagEvent);
     }
 
-    @KafkaListener(groupId = "furrify-storage_posts", topics = "artist_events")
+    @KafkaListener(topics = "artist_events")
     public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
                    @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                    @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,

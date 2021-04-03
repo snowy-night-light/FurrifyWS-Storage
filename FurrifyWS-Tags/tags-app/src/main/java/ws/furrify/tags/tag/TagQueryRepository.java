@@ -13,4 +13,6 @@ public interface TagQueryRepository {
     Optional<TagDetailsQueryDTO> findByOwnerIdAndValue(UUID userId, String value);
 
     List<TagDetailsQueryDTO> findAllByOwnerId(UUID userId);
+
+    Long getIdByValue(String value);
 }

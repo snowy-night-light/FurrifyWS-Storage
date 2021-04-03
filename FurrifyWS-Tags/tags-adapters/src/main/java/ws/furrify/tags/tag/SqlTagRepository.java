@@ -31,6 +31,10 @@ interface SqlTagQueryRepository extends TagQueryRepository, Repository<TagSnapsh
     @Override
     @Query("from TagSnapshot where ownerId = ?1 order by value desc")
     List<TagDetailsQueryDTO> findAllByOwnerId(UUID userId);
+
+    @Override
+    @Query("select id from TagSnapshot where value = ?1")
+    Long getIdByValue(String value);
 }
 
 @org.springframework.stereotype.Repository

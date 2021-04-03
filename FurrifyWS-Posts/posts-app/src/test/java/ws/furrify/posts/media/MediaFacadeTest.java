@@ -46,9 +46,10 @@ class MediaFacadeTest {
     @BeforeAll
     static void beforeAll() {
         mediaRepository = mock(MediaRepository.class);
+        var mediaQueryRepository = mock(MediaQueryRepository.class);
 
         var mediaFactory = new MediaFactory();
-        var mediaDtoFactory = new MediaDtoFactory();
+        var mediaDtoFactory = new MediaDtoFactory(mediaQueryRepository);
 
         @SuppressWarnings("unchecked")
         var eventPublisher = (DomainEventPublisher<MediaEvent>) mock(DomainEventPublisher.class);

@@ -16,7 +16,7 @@ import java.util.UUID;
 class MediaEventListener {
     private final MediaFacade mediaFacade;
 
-    @KafkaListener(groupId = "furrify-storage_media", topics = "media_events")
+    @KafkaListener(topics = "media_events")
     public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
                    @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                    @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,

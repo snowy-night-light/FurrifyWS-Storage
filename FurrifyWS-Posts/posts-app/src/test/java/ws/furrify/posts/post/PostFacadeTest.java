@@ -87,8 +87,10 @@ class PostFacadeTest {
         tagServiceClient = mock(TagServiceClient.class);
         artistServiceClient = mock(ArtistServiceClient.class);
 
+        var postQueryRepository = mock(PostQueryRepository.class);
+
         var postFactory = new PostFactory();
-        var postDTOFactory = new PostDtoFactory();
+        var postDTOFactory = new PostDtoFactory(postQueryRepository);
         @SuppressWarnings("unchecked")
         var eventPublisher = (DomainEventPublisher<PostEvent>) mock(DomainEventPublisher.class);
 
