@@ -53,11 +53,14 @@ class MediaUtils {
      * @param mediaId MediaId the delete event will regard.
      * @return Created media event.
      */
-    public static MediaEvent deleteMediaEvent(final UUID mediaId) {
+    public static MediaEvent deleteMediaEvent(final UUID postId, final UUID mediaId) {
         return MediaEvent.newBuilder()
                 .setState(DomainEventPublisher.MediaEventType.REMOVED.name())
                 .setMediaId(mediaId.toString())
-                .setDataBuilder(MediaData.newBuilder())
+                .setDataBuilder(
+                        MediaData.newBuilder()
+                                .setPostId(postId.toString())
+                )
                 .setOccurredOn(Instant.now())
                 .build();
     }

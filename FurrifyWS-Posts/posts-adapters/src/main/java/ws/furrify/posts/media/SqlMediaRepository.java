@@ -9,17 +9,13 @@ import ws.furrify.posts.media.dto.query.MediaDetailsQueryDTO;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Transactional(rollbackFor = RuntimeException.class)
 interface SqlMediaRepository extends Repository<MediaSnapshot, Long> {
     MediaSnapshot save(MediaSnapshot mediaSnapshot);
 
     void deleteByMediaId(UUID mediaId);
-
-    Set<MediaSnapshot> findAllByOwnerIdAndPostId(UUID ownerId, UUID postId);
 
     Optional<MediaSnapshot> findByOwnerIdAndPostIdAndMediaId(UUID ownerId, UUID postId, UUID mediaId);
 
@@ -52,13 +48,6 @@ class MediaRepositoryImpl implements MediaRepository {
         return Media.restore(
                 sqlMediaRepository.save(media.getSnapshot())
         );
-    }
-
-    @Override
-    public Set<Media> findAllByOwnerIdAndPostId(final UUID ownerId, final UUID postId) {
-        return sqlMediaRepository.findAllByOwnerIdAndPostId(ownerId, postId).stream()
-                .map(Media::restore)
-                .collect(Collectors.toUnmodifiableSet());
     }
 
     @Override

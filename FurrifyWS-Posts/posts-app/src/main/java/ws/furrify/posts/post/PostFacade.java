@@ -200,7 +200,8 @@ public class PostFacade {
     private void deleteMediaFromPost(final UUID ownerId,
                                      final UUID postId,
                                      final UUID mediaId) {
-        Post post = postRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, mediaId);
+        Post post = postRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, mediaId)
+                .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
         post.removeMedia(mediaId);
 
         postRepository.save(post);
@@ -213,7 +214,8 @@ public class PostFacade {
                                           final URL thumbnailUrl,
                                           final String extension,
                                           final String status) {
-        Post post = postRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, mediaId);
+        Post post = postRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, mediaId)
+                .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
         post.updateMediaDetailsInMediaSet(
                 mediaId,
                 priority,

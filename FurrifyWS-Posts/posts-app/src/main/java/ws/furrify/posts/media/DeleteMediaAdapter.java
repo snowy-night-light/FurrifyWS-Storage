@@ -27,7 +27,7 @@ class DeleteMediaAdapter implements DeleteMediaPort {
                 DomainEventPublisher.Topic.MEDIA,
                 // Use userId as key
                 userId,
-                MediaUtils.deleteMediaEvent(postId)
+                MediaUtils.deleteMediaEvent(postId, mediaId)
         );
     }
 }
