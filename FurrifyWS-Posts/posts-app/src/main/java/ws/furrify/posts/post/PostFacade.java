@@ -1,14 +1,17 @@
 package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import ws.furrify.artists.artist.ArtistEvent;
+import ws.furrify.posts.media.MediaEvent;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.tag.TagEvent;
 
+import java.net.URL;
 import java.util.UUID;
 
 /**
@@ -40,6 +43,32 @@ public class PostFacade {
 
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + postEvent.getState() + " Topic=post_events");
+        }
+    }
+
+    /**
+     * Handle incoming media events.
+     *
+     * @param mediaEvent Media event instance received from kafka.
+     */
+    @SneakyThrows
+    void handleEvent(final UUID key, final MediaEvent mediaEvent) {
+        switch (DomainEventPublisher.MediaEventType.valueOf(mediaEvent.getState())) {
+            case REMOVED -> deleteMediaFromPost(
+                    key,
+                    UUID.fromString(mediaEvent.getData().getPostId()),
+                    UUID.fromString(mediaEvent.getMediaId())
+            );
+            case UPDATED, REPLACED -> updateMediaDetailsInPost(key, UUID.fromString(mediaEvent.getData().getPostId()),
+                    UUID.fromString(mediaEvent.getMediaId()),
+                    mediaEvent.getData().getPriority(),
+                    new URL(mediaEvent.getData().getThumbnailUrl()),
+                    mediaEvent.getData().getExtension(),
+                    mediaEvent.getData().getStatus()
+            );
+
+            default -> log.warning("State received from kafka is not defined. " +
+                    "State=" + mediaEvent.getState() + " Topic=media_events");
         }
     }
 
@@ -166,5 +195,33 @@ public class PostFacade {
         postRepository.findAllByOwnerIdAndArtistIdInArtists(ownerId, artistId).stream()
                 .peek(post -> post.updateArtistDetailsInArtists(artistId, preferredNickname))
                 .forEach(postRepository::save);
+    }
+
+    private void deleteMediaFromPost(final UUID ownerId,
+                                     final UUID postId,
+                                     final UUID mediaId) {
+        Post post = postRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, mediaId);
+        post.removeMedia(mediaId);
+
+        postRepository.save(post);
+    }
+
+    private void updateMediaDetailsInPost(final UUID ownerId,
+                                          final UUID postId,
+                                          final UUID mediaId,
+                                          final Integer priority,
+                                          final URL thumbnailUrl,
+                                          final String extension,
+                                          final String status) {
+        Post post = postRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, mediaId);
+        post.updateMediaDetailsInMediaSet(
+                mediaId,
+                priority,
+                thumbnailUrl,
+                extension,
+                status
+        );
+
+        postRepository.save(post);
     }
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Log
-class ArtistEventListener {
+class ArtistEventListenerRegistry {
     private final ArtistFacade artistFacade;
 
     @KafkaListener(topics = "artist_events")

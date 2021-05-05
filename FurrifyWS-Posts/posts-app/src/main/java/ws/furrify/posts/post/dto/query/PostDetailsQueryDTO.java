@@ -1,6 +1,7 @@
 package ws.furrify.posts.post.dto.query;
 
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 
 import java.io.Serializable;
@@ -24,6 +25,8 @@ public interface PostDetailsQueryDTO extends Serializable {
     Set<PostTag> getTags();
 
     Set<PostArtist> getArtists();
+
+    Set<PostMedia> getMediaSet();
 
     ZonedDateTime getCreateDate();
 }

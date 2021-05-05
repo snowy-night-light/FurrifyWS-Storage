@@ -69,6 +69,11 @@
             <basic name="createDate">
                 <column updatable="false" nullable="false"/>
             </basic>
+            <element-collection fetch="EAGER" name="mediaSet">
+                <collection-table name="post_mediaSet">
+                    <join-column name="postId"/>
+                </collection-table>
+            </element-collection>
             <element-collection fetch="EAGER" name="tags">
                 <collection-table name="post_tags">
                     <join-column name="postId"/>
@@ -82,6 +87,25 @@
         </attributes>
     </entity>
 
+    <embeddable class="ws.furrify.posts.post.vo.PostMedia" access="FIELD">
+        <attributes>
+            <basic name="mediaId">
+                <column nullable="false"/>
+            </basic>
+            <basic name="priority">
+                <column nullable="false"/>
+            </basic>
+            <basic name="thumbnailUrl">
+                <column nullable="true"/>
+            </basic>
+            <basic name="extension">
+                <column nullable="false"/>
+            </basic>
+            <basic name="status">
+                <column nullable="false"/>
+            </basic>
+        </attributes>
+    </embeddable>
     <embeddable class="ws.furrify.posts.post.vo.PostTag" access="FIELD">
         <attributes>
             <basic name="value">

@@ -30,6 +30,9 @@ interface SqlPostRepository extends Repository<PostSnapshot, Long> {
 
     @Query("from PostSnapshot post join post.artists artist where artist.artistId = ?2 and post.ownerId = ?1")
     Set<PostSnapshot> findAllByOwnerIdAndArtistIdInArtists(UUID ownerId, UUID artistId);
+
+    @Query("from PostSnapshot post join post.mediaSet media where media.mediaId = ?3 and post.postId = ?2 and post.ownerId = ?1")
+    Post findByOwnerIdAndPostIdAndMediaId(UUID ownerId, UUID postId, UUID mediaId);
 }
 
 @Transactional(rollbackFor = {})
@@ -110,5 +113,10 @@ class PostRepositoryImpl implements PostRepository {
                 .stream()
                 .map(Post::restore)
                 .collect(Collectors.toUnmodifiableSet());
+    }
+
+    @Override
+    public Post findByOwnerIdAndPostIdAndMediaId(final UUID ownerId, final UUID postId, final UUID mediaId) {
+        return sqlPostRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, mediaId);
     }
 }

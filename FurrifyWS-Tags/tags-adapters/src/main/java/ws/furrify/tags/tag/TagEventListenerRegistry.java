@@ -1,4 +1,4 @@
-package ws.furrify.posts.media;
+package ws.furrify.tags.tag;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -13,16 +13,16 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Log
-class MediaEventListener {
-    private final MediaFacade mediaFacade;
+class TagEventListenerRegistry {
+    private final TagFacade tagFacade;
 
-    @KafkaListener(topics = "media_events")
+    @KafkaListener(topics = "tag_events")
     public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
                    @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                    @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                   @Payload MediaEvent mediaEvent) {
+                   @Payload TagEvent tagEvent) {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
-        mediaFacade.handleEvent(UUID.fromString(key), mediaEvent);
+        tagFacade.handleEvent(UUID.fromString(key), tagEvent);
     }
 }
