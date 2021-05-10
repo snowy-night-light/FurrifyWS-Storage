@@ -4,16 +4,21 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.media.dto.MediaDTO;
 import ws.furrify.posts.media.dto.MediaDtoFactory;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -65,16 +70,58 @@ class MediaFacadeTest {
     }
 
     // FIXME
-/*    @Test
+    @Test
     @DisplayName("Create media")
     void createMedia() {
-        // Given ownerId and mediaDTO
+        // Given ownerId, mediaDTO and multipart file
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
+
+        MultipartFile mediaFile = new MultipartFile() {
+            @Override
+            public String getName() {
+                return "test";
+            }
+
+            @Override
+            public String getOriginalFilename() {
+                return "test.png";
+            }
+
+            @Override
+            public String getContentType() {
+                return null;
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
+
+            @Override
+            public long getSize() {
+                return 0;
+            }
+
+            @Override
+            public byte[] getBytes() throws IOException {
+                return new byte[0];
+            }
+
+            @Override
+            public InputStream getInputStream() throws IOException {
+                return getClass().getClassLoader().getResourceAsStream("example.png");
+            }
+
+            @Override
+            public void transferTo(final File file) throws IOException, IllegalStateException {
+
+            }
+        };
         // When createMedia() method called
         // Then return generated uuid
         assertNotNull(mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile), "MediaId was not returned.");
-    }*/
+    }
 
     @Test
     @DisplayName("Replace media")

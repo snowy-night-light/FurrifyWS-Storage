@@ -4,8 +4,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ws.furrify.posts.media.MediaExtension;
+import ws.furrify.posts.media.MediaStatus;
 import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostDescription;
+import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.posts.post.vo.PostTitle;
 
@@ -37,6 +40,7 @@ class PostTest {
                 .description("dsa")
                 .tags(Collections.singleton(new PostTag("tag_value", "ACTION")))
                 .artists(Collections.singleton(new PostArtist(UUID.randomUUID(), "example_nickname")))
+                .mediaSet(Collections.singleton(new PostMedia(UUID.randomUUID(), 1, null, MediaExtension.PNG.toString(), MediaStatus.REQUEST_PENDING.name())))
                 .createDate(ZonedDateTime.now())
                 .build();
 

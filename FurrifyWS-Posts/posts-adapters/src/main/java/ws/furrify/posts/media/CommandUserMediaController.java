@@ -41,7 +41,6 @@ class CommandUserMediaController {
     public ResponseEntity<?> createMedia(@PathVariable UUID userId,
                                          @PathVariable UUID postId,
                                          @RequestPart("media") @Validated MediaCreateCommandDTO mediaCreateCommandDTO,
-                                         // FIXME Make file required
                                          @RequestPart("file") MultipartFile mediaFile,
                                          @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken,
                                          HttpServletResponse response) {
