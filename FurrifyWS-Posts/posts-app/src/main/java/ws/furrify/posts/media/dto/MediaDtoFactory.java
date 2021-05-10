@@ -44,7 +44,9 @@ public class MediaDtoFactory {
                 .ownerId(key)
                 .priority(mediaEvent.getData().getPriority())
                 .extension(
-                        MediaExtension.valueOf(mediaEvent.getData().getExtension())
+                        (mediaEvent.getData().getExtension() != null) ?
+                                MediaExtension.valueOf(mediaEvent.getData().getExtension()) :
+                                null
                 )
                 .filename(mediaEvent.getData().getFilename())
                 .fileUrl(
@@ -60,7 +62,9 @@ public class MediaDtoFactory {
 
                 )
                 .status(
-                        MediaStatus.valueOf(mediaEvent.getData().getStatus())
+                        (mediaEvent.getData().getStatus() != null) ?
+                                MediaStatus.valueOf(mediaEvent.getData().getStatus()) :
+                                null
                 )
                 .createDate(createDate)
                 .build();

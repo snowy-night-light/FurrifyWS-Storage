@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import ws.furrify.artists.artist.ArtistEvent;
 import ws.furrify.posts.media.MediaEvent;
+import ws.furrify.posts.media.MediaFacade;
 import ws.furrify.tags.tag.TagEvent;
 
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Log
 class PostEventListenerRegistry {
     private final PostFacade postFacade;
+    private final MediaFacade mediaFacade;
 
     @KafkaListener(topics = "post_events")
     public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
@@ -56,6 +58,9 @@ class PostEventListenerRegistry {
                    @Payload MediaEvent mediaEvent) {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
-        postFacade.handleEvent(UUID.fromString(key), mediaEvent);
+        UUID keyId = UUID.fromString(key);
+
+        mediaFacade.handleEvent(keyId, mediaEvent);
+        postFacade.handleEvent(keyId, mediaEvent);
     }
 }

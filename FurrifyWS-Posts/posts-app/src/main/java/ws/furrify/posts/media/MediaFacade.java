@@ -28,7 +28,7 @@ public class MediaFacade {
      *
      * @param mediaEvent Media event instance received from kafka.
      */
-    void handleEvent(final UUID key, final MediaEvent mediaEvent) {
+    public void handleEvent(final UUID key, final MediaEvent mediaEvent) {
         MediaDTO mediaDTO = mediaDTOFactory.from(key, mediaEvent);
 
         switch (DomainEventPublisher.MediaEventType.valueOf(mediaEvent.getState())) {
