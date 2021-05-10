@@ -66,7 +66,8 @@ public class PostFacade {
                     mediaEvent.getData().getExtension(),
                     mediaEvent.getData().getStatus()
             );
-
+            case CREATED -> {
+            }
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + mediaEvent.getState() + " Topic=media_events");
         }

@@ -31,7 +31,7 @@ class MediaUtils {
                 .setDataBuilder(
                         MediaData.newBuilder()
                                 .setOwnerId(mediaSnapshot.getOwnerId().toString())
-                                .setPostId(mediaSnapshot.getOwnerId().toString())
+                                .setPostId(mediaSnapshot.getPostId().toString())
                                 .setPriority(mediaSnapshot.getPriority())
                                 .setExtension(mediaSnapshot.getExtension().name())
                                 .setFilename(mediaSnapshot.getFilename())

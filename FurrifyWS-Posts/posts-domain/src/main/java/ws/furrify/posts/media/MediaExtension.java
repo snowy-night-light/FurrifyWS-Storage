@@ -3,12 +3,10 @@ package ws.furrify.posts.media;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.FileUtils;
-import ws.furrify.shared.exception.Errors;
-import ws.furrify.shared.exception.FileContentIsCorruptedException;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Supported media extensions by system.
@@ -36,14 +34,14 @@ public enum MediaExtension {
     private final MediaType type;
 
     public static boolean isValidFile(String filename,
-                                      InputStream inputStream,
+                                      MultipartFile file,
                                       MediaExtension mediaExtension) {
         try {
-            String mimeType = FileUtils.getMimeType(filename, inputStream);
+            String mimeType = FileUtils.getMimeType(filename, file.getInputStream());
 
             return mimeType.equals(mediaExtension.getMimeType());
         } catch (IOException e) {
-            throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
+            return false;
         }
     }
 

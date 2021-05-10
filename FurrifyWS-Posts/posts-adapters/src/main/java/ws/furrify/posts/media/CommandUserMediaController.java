@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.media.dto.MediaDTO;
 import ws.furrify.posts.media.dto.command.MediaCreateCommandDTO;
 import ws.furrify.posts.media.dto.command.MediaReplaceCommandDTO;
@@ -38,13 +40,15 @@ class CommandUserMediaController {
     )
     public ResponseEntity<?> createMedia(@PathVariable UUID userId,
                                          @PathVariable UUID postId,
-                                         @RequestBody @Validated MediaCreateCommandDTO mediaCreateCommandDTO,
+                                         @RequestPart("media") @Validated MediaCreateCommandDTO mediaCreateCommandDTO,
+                                         // FIXME Make file required
+                                         @RequestPart("file") MultipartFile mediaFile,
                                          @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken,
                                          HttpServletResponse response) {
         MediaDTO mediaDTO = mediaCreateCommandDTO.toDTO();
 
         response.addHeader("Id",
-                mediaFacade.createMedia(userId, postId, mediaDTO).toString()
+                mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile).toString()
         );
 
         return ResponseEntity.accepted().build();
