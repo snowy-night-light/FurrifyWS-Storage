@@ -69,7 +69,6 @@ class MediaFacadeTest {
         );
     }
 
-    // FIXME
     @Test
     @DisplayName("Create media")
     void createMedia() {
