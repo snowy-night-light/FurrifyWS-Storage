@@ -26,7 +26,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 class QueryPostMediaController {
 
-    private final SqlMediaQueryRepository mediaQueryRepository;
+    private final SqlMediaQueryRepositoryImpl mediaQueryRepository;
 
     @GetMapping
     @PreAuthorize(

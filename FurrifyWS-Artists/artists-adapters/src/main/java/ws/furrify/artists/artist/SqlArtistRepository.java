@@ -26,7 +26,7 @@ interface SqlArtistRepository extends Repository<ArtistSnapshot, Long> {
 }
 
 @Transactional(rollbackFor = {})
-interface SqlArtistQueryRepository extends ArtistQueryRepository, Repository<ArtistSnapshot, Long> {
+interface SqlArtistQueryRepositoryImpl extends ArtistQueryRepository, Repository<ArtistSnapshot, Long> {
 
     @Override
     Optional<ArtistDetailsQueryDTO> findByOwnerIdAndArtistId(UUID ownerId, UUID artistId);

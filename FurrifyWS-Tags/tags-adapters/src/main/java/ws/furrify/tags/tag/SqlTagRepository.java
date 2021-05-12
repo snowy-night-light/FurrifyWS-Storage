@@ -23,7 +23,7 @@ interface SqlTagRepository extends Repository<TagSnapshot, Long> {
 }
 
 @Transactional(rollbackFor = {})
-interface SqlTagQueryRepository extends TagQueryRepository, Repository<TagSnapshot, Long> {
+interface SqlTagQueryRepositoryImpl extends TagQueryRepository, Repository<TagSnapshot, Long> {
 
     @Override
     Optional<TagDetailsQueryDTO> findByOwnerIdAndValue(UUID userId, String value);

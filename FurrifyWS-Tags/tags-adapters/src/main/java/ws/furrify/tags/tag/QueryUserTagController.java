@@ -26,7 +26,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 class QueryUserTagController {
 
-    private final SqlTagQueryRepository tagQueryRepository;
+    private final SqlTagQueryRepositoryImpl tagQueryRepository;
 
     @GetMapping
     @PreAuthorize(

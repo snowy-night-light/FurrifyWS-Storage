@@ -23,7 +23,7 @@ interface SqlMediaRepository extends Repository<MediaSnapshot, Long> {
 }
 
 @Transactional(rollbackFor = {})
-interface SqlMediaQueryRepository extends MediaQueryRepository, Repository<MediaSnapshot, Long> {
+interface SqlMediaQueryRepositoryImpl extends MediaQueryRepository, Repository<MediaSnapshot, Long> {
 
     @Override
     Optional<MediaDetailsQueryDTO> findByOwnerIdAndPostIdAndMediaId(UUID ownerId, UUID artistId, UUID mediaId);

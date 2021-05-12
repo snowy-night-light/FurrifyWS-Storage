@@ -36,7 +36,7 @@ interface SqlPostRepository extends Repository<PostSnapshot, Long> {
 }
 
 @Transactional(rollbackFor = {})
-interface SqlPostQueryRepository extends PostQueryRepository, Repository<PostSnapshot, Long> {
+interface SqlPostQueryRepositoryImpl extends PostQueryRepository, Repository<PostSnapshot, Long> {
 
     @Override
     Optional<PostDetailsQueryDTO> findByOwnerIdAndPostId(UUID ownerId, UUID postId);
