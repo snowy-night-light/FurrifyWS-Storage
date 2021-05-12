@@ -24,7 +24,7 @@ class MediaTest {
                 .ownerId(UUID.randomUUID())
                 .priority(3)
                 .filename("file.png")
-                .fileHash("3c518eeb674c71b30297f072fde7eba5")
+                .md5("3c518eeb674c71b30297f072fde7eba5")
                 .extension(MediaExtension.PNG)
                 .status(MediaStatus.REQUEST_PENDING)
                 .createDate(ZonedDateTime.now())

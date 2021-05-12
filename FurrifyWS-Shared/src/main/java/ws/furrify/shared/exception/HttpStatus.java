@@ -15,6 +15,7 @@ public enum HttpStatus {
      * Http status codes
      */
 
+    TIMED_OUT(-1),
     OK(200),
     CREATED(201),
     ACCEPTED(202),
@@ -42,6 +43,7 @@ public enum HttpStatus {
      */
     public static HttpStatus of(int status) {
         return switch (status) {
+            case -1 -> TIMED_OUT;
             case 200 -> OK;
             case 201 -> CREATED;
             case 202 -> ACCEPTED;

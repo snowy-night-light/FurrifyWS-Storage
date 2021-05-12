@@ -1,8 +1,10 @@
 package ws.furrify.posts.media.dto;
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import ws.furrify.posts.media.MediaEvent;
 import ws.furrify.posts.media.MediaExtension;
+import ws.furrify.posts.media.MediaQueryRepository;
 import ws.furrify.posts.media.MediaStatus;
 
 import java.net.URL;
@@ -17,7 +19,10 @@ import java.util.UUID;
  *
  * @author Skyte
  */
+@RequiredArgsConstructor
 public class MediaDtoFactory {
+
+    private final MediaQueryRepository mediaQueryRepository;
 
     @SneakyThrows
     public MediaDTO from(UUID key, MediaEvent mediaEvent) {
@@ -28,20 +33,38 @@ public class MediaDtoFactory {
             createDate = createDateInstant.atZone(ZoneId.systemDefault());
         }
 
+        var mediaId = UUID.fromString(mediaEvent.getMediaId());
+
         return MediaDTO.builder()
-                .mediaId(UUID.fromString(mediaEvent.getMediaId()))
+                .id(
+                        mediaQueryRepository.getIdByMediaId(mediaId)
+                )
+                .mediaId(mediaId)
                 .postId(UUID.fromString(mediaEvent.getData().getPostId()))
                 .ownerId(key)
                 .priority(mediaEvent.getData().getPriority())
                 .extension(
-                        MediaExtension.valueOf(mediaEvent.getData().getExtension())
+                        (mediaEvent.getData().getExtension() != null) ?
+                                MediaExtension.valueOf(mediaEvent.getData().getExtension()) :
+                                null
                 )
                 .filename(mediaEvent.getData().getFilename())
-                .fileUrl(new URL(mediaEvent.getData().getFileUrl()))
-                .fileHash(mediaEvent.getData().getFileHash())
-                .thumbnailUrl(new URL(mediaEvent.getData().getThumbnailUrl()))
+                .fileUrl(
+                        (mediaEvent.getData().getFileUrl() != null) ?
+                                new URL(mediaEvent.getData().getFileUrl()) :
+                                null
+                )
+                .md5(mediaEvent.getData().getMd5())
+                .thumbnailUrl(
+                        (mediaEvent.getData().getThumbnailUrl() != null) ?
+                                new URL(mediaEvent.getData().getThumbnailUrl()) :
+                                null
+
+                )
                 .status(
-                        MediaStatus.valueOf(mediaEvent.getData().getStatus())
+                        (mediaEvent.getData().getStatus() != null) ?
+                                MediaStatus.valueOf(mediaEvent.getData().getStatus()) :
+                                null
                 )
                 .createDate(createDate)
                 .build();

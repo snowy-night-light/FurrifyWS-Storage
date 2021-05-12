@@ -1,6 +1,8 @@
 package ws.furrify.artists.artist.dto;
 
+import lombok.RequiredArgsConstructor;
 import ws.furrify.artists.artist.ArtistEvent;
+import ws.furrify.artists.artist.ArtistQueryRepository;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -14,8 +16,10 @@ import java.util.UUID;
  *
  * @author Skyte
  */
+@RequiredArgsConstructor
 public class ArtistDtoFactory {
 
+    private final ArtistQueryRepository artistQueryRepository;
 
     public ArtistDTO from(UUID key, ArtistEvent artistEvent) {
         Instant createDateInstant = artistEvent.getData().getCreateDate();
@@ -25,8 +29,13 @@ public class ArtistDtoFactory {
             createDate = createDateInstant.atZone(ZoneId.systemDefault());
         }
 
+        var artistId = UUID.fromString(artistEvent.getArtistId());
+
         return ArtistDTO.builder()
-                .artistId(UUID.fromString(artistEvent.getArtistId()))
+                .id(
+                        artistQueryRepository.getIdByArtistId(artistId)
+                )
+                .artistId(artistId)
                 .ownerId(key)
                 .nicknames(new HashSet<>(artistEvent.getData().getNicknames()))
                 .preferredNickname(artistEvent.getData().getPreferredNickname())

@@ -30,7 +30,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 class QueryUserPostController {
 
-    private final SqlPostQueryRepository postQueryRepository;
+    private final SqlPostQueryRepositoryImpl postQueryRepository;
     private final PagedResourcesAssembler<PostDetailsQueryDTO> pagedResourcesAssembler;
 
     @GetMapping

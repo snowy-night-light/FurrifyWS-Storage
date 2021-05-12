@@ -27,7 +27,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 class QueryArtistPostController {
 
-    private final SqlPostQueryRepository postQueryRepository;
+    private final SqlPostQueryRepositoryImpl postQueryRepository;
     private final PagedResourcesAssembler<PostDetailsQueryDTO> pagedResourcesAssembler;
 
     @GetMapping

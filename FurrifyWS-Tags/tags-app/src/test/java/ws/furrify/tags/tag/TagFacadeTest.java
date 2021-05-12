@@ -47,8 +47,10 @@ class TagFacadeTest {
     static void beforeAll() {
         tagRepository = mock(TagRepository.class);
 
+        var tagQueryRepository = mock(TagQueryRepository.class);
+
         var tagFactory = new TagFactory();
-        var tagDtoFactory = new TagDtoFactory();
+        var tagDtoFactory = new TagDtoFactory(tagQueryRepository);
         @SuppressWarnings("unchecked")
         var eventPublisher = (DomainEventPublisher<TagEvent>) mock(DomainEventPublisher.class);
 

@@ -1,5 +1,7 @@
 package ws.furrify.posts.media.dto.command;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.AllArgsConstructor;
 import lombok.ToString;
 import lombok.Value;
 import ws.furrify.posts.media.dto.MediaDTO;
@@ -12,10 +14,11 @@ import javax.validation.constraints.Min;
  * @author Skyte
  */
 @Value
+@AllArgsConstructor(onConstructor_ = @JsonCreator)
 @ToString
 public class MediaUpdateCommandDTO implements CommandDTO<MediaDTO> {
 
-    @Max(255)
+    @Max(1000)
     @Min(0)
     Integer priority;
 

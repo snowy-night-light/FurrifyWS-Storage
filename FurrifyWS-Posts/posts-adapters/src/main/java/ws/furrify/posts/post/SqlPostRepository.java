@@ -30,10 +30,13 @@ interface SqlPostRepository extends Repository<PostSnapshot, Long> {
 
     @Query("from PostSnapshot post join post.artists artist where artist.artistId = ?2 and post.ownerId = ?1")
     Set<PostSnapshot> findAllByOwnerIdAndArtistIdInArtists(UUID ownerId, UUID artistId);
+
+    @Query("from PostSnapshot post join post.mediaSet media where media.mediaId = ?3 and post.postId = ?2 and post.ownerId = ?1")
+    Optional<PostSnapshot> findByOwnerIdAndPostIdAndMediaId(UUID ownerId, UUID postId, UUID mediaId);
 }
 
 @Transactional(rollbackFor = {})
-interface SqlPostQueryRepository extends PostQueryRepository, Repository<PostSnapshot, Long> {
+interface SqlPostQueryRepositoryImpl extends PostQueryRepository, Repository<PostSnapshot, Long> {
 
     @Override
     Optional<PostDetailsQueryDTO> findByOwnerIdAndPostId(UUID ownerId, UUID postId);
@@ -46,24 +49,34 @@ interface SqlPostQueryRepository extends PostQueryRepository, Repository<PostSna
     Page<PostDetailsQueryDTO> findAllByOwnerIdAndArtistId(UUID ownerId, UUID artistId, Pageable pageable);
 
     @Override
-    @Query("select post from PostSnapshot post join post.artists artist join post.tags tag where " +
+    @Query("select post from PostSnapshot post join post.artists artist join post.tags tag join post.mediaSet media where " +
             // Check if user if matches
             "post.ownerId = :#{#ownerId}" +
             " and " +
             // Check if required artists are present or if required artists are size 0 then ignore
-            "(artist.preferredNickname in (:#{#query.withArtists}) or :#{#query.withArtists.size()} = 0)" +
+            "(:#{#query.withArtists.size()} = 0 or artist.preferredNickname in (:#{#query.withArtists}))" +
             " and " +
             // Check if excluded artists are present or if excluded artists are size 0 then ignore
-            "(artist.preferredNickname not in (:#{#query.withoutArtists}) or :#{#query.withoutArtists.size()} = 0)" +
+            "(:#{#query.withoutArtists.size()} = 0 or artist.preferredNickname not in (:#{#query.withoutArtists}))" +
+            " and " +
+            // Check if required media extensions are present or if required media extensions are size 0 then ignore
+            "(:#{#query.withMediaExtensions.size()} = 0 or media.extension in (:#{#query.withMediaExtensions}))" +
+            " and " +
+            // Check if excluded media extensions are present or if excluded media extensions are size 0 then ignore
+            "(:#{#query.withoutMediaExtensions.size()} = 0 or media.extension not in (:#{#query.withoutMediaExtensions}))" +
             " and " +
             // Check if required tags are present or if required tags are size 0 then ignore
-            "(tag.value in (:#{#query.withTags}) or :#{#query.withTags.size()} = 0)" +
+            "(:#{#query.withTags.size()} = 0 or tag.value in (:#{#query.withTags}))" +
             " and " +
             // Check if excluded artists are present or if excluded tags are size 0 then ignore
-            "(tag.value not in (:#{#query.withoutTags}) or :#{#query.withoutTags.size()} = 0)")
+            "(:#{#query.withoutTags.size()} = 0 or tag.value not in (:#{#query.withoutTags}))")
     Page<PostDetailsQueryDTO> findAllByOwnerIdAndQuery(UUID ownerId,
                                                        PostQuerySearchDTO query,
                                                        Pageable pageable);
+
+    @Override
+    @Query("select id from PostSnapshot where postId = ?1")
+    Long getIdByPostId(UUID postId);
 }
 
 @org.springframework.stereotype.Repository
@@ -106,5 +119,10 @@ class PostRepositoryImpl implements PostRepository {
                 .stream()
                 .map(Post::restore)
                 .collect(Collectors.toUnmodifiableSet());
+    }
+
+    @Override
+    public Optional<Post> findByOwnerIdAndPostIdAndMediaId(final UUID ownerId, final UUID postId, final UUID mediaId) {
+        return sqlPostRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, mediaId).map(Post::restore);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 
 import java.time.ZonedDateTime;
@@ -53,6 +54,16 @@ class PostTest implements CommandLineRunner {
                                                         UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00")
                                                 )
                                                 .preferredNickname("example_nickname")
+                                                .build()
+                                ))
+                                .mediaSet(Set.of(
+                                        PostMedia.builder()
+                                                .mediaId(
+                                                        UUID.fromString("19c02f53-486e-4205-b1b7-74977ae13941")
+                                                )
+                                                .priority(1)
+                                                .extension("PNG")
+                                                .status("REQUEST_PENDING")
                                                 .build()
                                 ))
                                 .createDate(ZonedDateTime.now())

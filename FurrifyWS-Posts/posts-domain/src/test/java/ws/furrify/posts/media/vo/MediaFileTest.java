@@ -18,7 +18,7 @@ class MediaFileTest {
     private static MediaExtension extension;
     private static URL fileUrl;
     private static URL thumbnailUrl;
-    private static String fileHash;
+    private static String md5;
 
     @BeforeAll
     static void setUp() throws MalformedURLException {
@@ -26,20 +26,20 @@ class MediaFileTest {
         extension = MediaExtension.PNG;
         fileUrl = new URL("https://google.pl");
         thumbnailUrl = new URL("https://google2.pl");
-        fileHash = "3c518eeb674c71b30297f072fde7eba5";
+        md5 = "3c518eeb674c71b30297f072fde7eba5";
     }
 
     @Test
     @DisplayName("Create MediaFile")
     void of() {
-        // Given filename, extension, fileUrl, thumbnailUrl and fileHash
+        // Given filename, extension, fileUrl, thumbnailUrl and md5
         // When builder build
         var mediaFile = MediaFile.builder()
                 .filename(filename)
                 .extension(extension)
                 .fileUrl(fileUrl)
                 .thumbnailUrl(thumbnailUrl)
-                .fileHash(fileHash)
+                .md5(md5)
                 .build();
         // Then return created MediaFile
         assertAll(
@@ -64,9 +64,9 @@ class MediaFileTest {
                         "Created thumbnailUrl is not the same."
                 ),
                 () -> assertEquals(
-                        fileHash,
-                        mediaFile.getFileHash(),
-                        "Created fileHash is not the same."
+                        md5,
+                        mediaFile.getMd5(),
+                        "Created md5 is not the same."
                 )
         );
     }
@@ -82,7 +82,7 @@ class MediaFileTest {
                 .extension(extension)
                 .fileUrl(fileUrl)
                 .thumbnailUrl(thumbnailUrl)
-                .fileHash(fileHash);
+                .md5(md5);
         // Then throw IllegalStateException
         assertThrows(
                 IllegalStateException.class,
@@ -102,7 +102,7 @@ class MediaFileTest {
                 .extension(extension)
                 .fileUrl(fileUrl)
                 .thumbnailUrl(thumbnailUrl)
-                .fileHash(fileHash);
+                .md5(md5);
         // Then throw IllegalStateException
         assertThrows(
                 IllegalStateException.class,
@@ -114,15 +114,15 @@ class MediaFileTest {
     @Test
     @DisplayName("Create MediaFile from invalid files hash")
     void of4() {
-        // Given invalid fileHash
-        String fileHash = "test";
+        // Given invalid md5
+        String md5 = "test";
         // When builder
         var mediaFileBuilder = MediaFile.builder()
                 .filename(filename)
                 .extension(extension)
                 .fileUrl(fileUrl)
                 .thumbnailUrl(thumbnailUrl)
-                .fileHash(fileHash);
+                .md5(md5);
         // Then throw IllegalStateException
         assertThrows(
                 IllegalStateException.class,

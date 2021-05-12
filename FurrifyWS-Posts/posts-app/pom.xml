@@ -90,6 +90,12 @@
             <version>12.0.4</version>
             <scope>compile</scope>
         </dependency>
+        <!-- Utils -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.15</version>
+        </dependency>
     </dependencies>
 
 </project>

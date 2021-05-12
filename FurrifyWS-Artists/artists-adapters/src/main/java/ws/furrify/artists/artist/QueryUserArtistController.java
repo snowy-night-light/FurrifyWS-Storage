@@ -29,7 +29,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 class QueryUserArtistController {
 
-    private final SqlArtistQueryRepository artistQueryRepository;
+    private final SqlArtistQueryRepositoryImpl artistQueryRepository;
     private final PagedResourcesAssembler<ArtistDetailsQueryDTO> pagedResourcesAssembler;
 
     @GetMapping

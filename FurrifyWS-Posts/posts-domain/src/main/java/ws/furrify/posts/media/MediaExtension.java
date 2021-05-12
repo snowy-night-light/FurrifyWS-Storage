@@ -3,12 +3,11 @@ package ws.furrify.posts.media;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.FileUtils;
-import ws.furrify.shared.exception.Errors;
-import ws.furrify.shared.exception.FileContentIsCorruptedException;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Arrays;
 
 /**
  * Supported media extensions by system.
@@ -21,29 +20,34 @@ public enum MediaExtension {
     /**
      * File extensions
      */
-    JPEG("image/jpeg", MediaType.IMAGE),
-    PNG("image/png", MediaType.IMAGE),
-    JPG("image/jpeg", MediaType.IMAGE);
+    JPEG(MediaType.IMAGE, "image/jpeg"),
+    PNG(MediaType.IMAGE, "image/png"),
+    JPG(MediaType.IMAGE, "image/jpeg");
 
     /**
      * Mime type of extension.
      */
-    private final String mimeType;
+    private final String[] mimeTypes;
 
     /**
      * Media type ex. VIDEO, IMAGE.
      */
     private final MediaType type;
 
+    MediaExtension(final MediaType type, final String... mimeTypes) {
+        this.mimeTypes = mimeTypes;
+        this.type = type;
+    }
+
     public static boolean isValidFile(String filename,
-                                      InputStream inputStream,
+                                      MultipartFile file,
                                       MediaExtension mediaExtension) {
         try {
-            String mimeType = FileUtils.getMimeType(filename, inputStream);
+            String mimeType = FileUtils.getMimeType(filename, file.getInputStream());
 
-            return mimeType.equals(mediaExtension.getMimeType());
+            return Arrays.asList(mediaExtension.getMimeTypes()).contains(mimeType);
         } catch (IOException e) {
-            throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
+            return false;
         }
     }
 

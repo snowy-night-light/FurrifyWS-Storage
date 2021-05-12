@@ -4,11 +4,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ws.furrify.posts.media.MediaExtension;
+import ws.furrify.posts.media.MediaStatus;
 import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostDescription;
+import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.posts.post.vo.PostTitle;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Set;
@@ -37,6 +42,7 @@ class PostTest {
                 .description("dsa")
                 .tags(Collections.singleton(new PostTag("tag_value", "ACTION")))
                 .artists(Collections.singleton(new PostArtist(UUID.randomUUID(), "example_nickname")))
+                .mediaSet(Collections.singleton(new PostMedia(UUID.randomUUID(), 1, null, MediaExtension.PNG.toString(), MediaStatus.REQUEST_PENDING.name())))
                 .createDate(ZonedDateTime.now())
                 .build();
 
@@ -117,7 +123,7 @@ class PostTest {
         assertEquals(
                 post.getSnapshot().getTags().toArray()[0],
                 new PostTag(newTagValue, newTagType),
-                "Tag was not removed."
+                "Tag was not updated."
         );
     }
 
@@ -175,7 +181,7 @@ class PostTest {
     @Test
     @DisplayName("Update artist details in artists")
     void updateArtistDetailsInArtists() {
-        // Given existing artistId nad new artist preferredNickname
+        // Given existing artistId and new artist preferredNickname
         UUID artistId = ((PostArtist) postSnapshot.getArtists().toArray()[0]).getArtistId();
         String newPreferredNickname = "example_nickname2";
         // When updateArtistDetailsInArtists() method called
@@ -185,14 +191,14 @@ class PostTest {
         assertEquals(
                 post.getSnapshot().getArtists().toArray()[0],
                 new PostArtist(artistId, newPreferredNickname),
-                "Tag was not removed."
+                "Artist was not updated."
         );
     }
 
     @Test
     @DisplayName("Update artist details in artists with non existing artistId")
     void updateArtistDetailsInArtists2() {
-        // Given non existing artistId nad new artist preferredNickname
+        // Given non existing artistId and new artist preferredNickname
         UUID artistId = UUID.randomUUID();
         String newPreferredNickname = "example_nickname2";
         // When updateArtistDetailsInArtists() method called
@@ -220,6 +226,79 @@ class PostTest {
                 post.getSnapshot().getArtists().toArray()[0],
                 postArtist,
                 "Artists weren't replaced."
+        );
+    }
+
+    @Test
+    @DisplayName("Remove media")
+    void removeMedia() {
+        // Given mediaId
+        UUID mediaId = ((PostMedia) postSnapshot.getMediaSet().toArray()[0]).getMediaId();
+        // When removeMedia() method called
+        // Then remove media from mediaSet
+        post.removeMedia(mediaId);
+
+        assertEquals(
+                0,
+                post.getSnapshot().getMediaSet().size(),
+                "Media was not removed."
+        );
+    }
+
+    @Test
+    @DisplayName("Update media details in mediaSet")
+    void updateMediaDetailsInMediaSet() throws MalformedURLException {
+        // Given existing mediaId, new priority, new thumbnailUrl, new extension and new status
+        UUID mediaId = ((PostMedia) postSnapshot.getMediaSet().toArray()[0]).getMediaId();
+        Integer newPriority = 32;
+        URL newThumbnailUrl = new URL("https://google.pl/");
+        String newExtension = "JPEG";
+        String newStatus = "REQUEST_ACCEPTED";
+        // When updateMediaDetailsInMediaSet() method called
+        // Then update artist details in artists
+        post.updateMediaDetailsInMediaSet(
+                mediaId,
+                newPriority,
+                newThumbnailUrl,
+                newExtension,
+                newStatus
+        );
+
+        assertEquals(
+                post.getSnapshot().getMediaSet().toArray()[0],
+                new PostMedia(
+                        mediaId,
+                        newPriority,
+                        newThumbnailUrl,
+                        newExtension,
+                        newStatus
+                ),
+                "Media was not updated."
+        );
+    }
+
+    @Test
+    @DisplayName("Update media details in mediaSet with non existing mediaID")
+    void updateMediaDetailsInMediaSet2() throws MalformedURLException {
+        // Given non existing mediaId, new priority, new thumbnailUrl, new extension and new status
+        UUID mediaId = UUID.randomUUID();
+        Integer newPriority = 32;
+        URL newThumbnailUrl = new URL("https://google.pl/");
+        String newExtension = "JPEG";
+        String newStatus = "REQUEST_ACCEPTED";
+        // When updateMediaDetailsInMediaSet() method called
+        // Then throw IllegalStateException
+
+        assertThrows(
+                IllegalStateException.class,
+                () -> post.updateMediaDetailsInMediaSet(
+                        mediaId,
+                        newPriority,
+                        newThumbnailUrl,
+                        newExtension,
+                        newStatus
+                ),
+                "Exception was not thrown."
         );
     }
 }

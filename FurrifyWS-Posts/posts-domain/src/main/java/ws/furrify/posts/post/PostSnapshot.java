@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 
 import java.time.ZonedDateTime;
@@ -35,6 +36,8 @@ class PostSnapshot {
     private Set<PostTag> tags;
 
     private Set<PostArtist> artists;
+
+    private Set<PostMedia> mediaSet;
 
     private ZonedDateTime createDate;
 }

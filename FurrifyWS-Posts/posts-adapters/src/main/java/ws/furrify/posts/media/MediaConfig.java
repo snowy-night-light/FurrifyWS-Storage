@@ -11,12 +11,13 @@ import ws.furrify.posts.media.dto.MediaDtoFactory;
 class MediaConfig {
 
     private final MediaRepositoryImpl mediaRepository;
+    private final MediaQueryRepository mediaQueryRepository;
     private final KafkaTopicEventPublisher<MediaEvent> eventPublisher;
 
     @Bean
     MediaFacade mediaFacade() {
         var mediaFactory = new MediaFactory();
-        var mediaDtoFactory = new MediaDtoFactory();
+        var mediaDtoFactory = new MediaDtoFactory(mediaQueryRepository);
 
         return new MediaFacade(
                 new CreateMediaAdapter(mediaFactory, eventPublisher),

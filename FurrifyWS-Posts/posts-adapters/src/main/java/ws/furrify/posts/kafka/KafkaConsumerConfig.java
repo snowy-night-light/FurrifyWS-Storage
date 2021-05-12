@@ -15,7 +15,6 @@ import ws.furrify.posts.post.PostEvent;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Configuration
 class KafkaConsumerConfig {
@@ -29,13 +28,16 @@ class KafkaConsumerConfig {
     @Value("${spring.kafka.consumer.group-id.prefix}")
     private String groupIdPrefix;
 
+    @Value("${REGION:}")
+    private String groupIdRegion;
+
     @Bean
     public Map<String, Object> consumerConfigs() {
         Map<String, Object> properties = new HashMap<>(7);
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
-        properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupIdPrefix + UUID.randomUUID().toString());
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupIdPrefix + groupIdRegion);
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         properties.put("schema.registry.url", schemaRegistryServers);
         properties.put("specific.avro.reader", true);

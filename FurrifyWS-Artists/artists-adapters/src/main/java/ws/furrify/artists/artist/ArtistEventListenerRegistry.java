@@ -1,4 +1,4 @@
-package ws.furrify.tags.tag;
+package ws.furrify.artists.artist;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -13,16 +13,16 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Log
-class TagEventListener {
-    private final TagFacade tagFacade;
+class ArtistEventListenerRegistry {
+    private final ArtistFacade artistFacade;
 
-    @KafkaListener(groupId = "furrify-storage_tags", topics = "tag_events")
+    @KafkaListener(topics = "artist_events")
     public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
                    @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                    @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                   @Payload TagEvent tagEvent) {
+                   @Payload ArtistEvent artistEvent) {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
-        tagFacade.handleEvent(UUID.fromString(key), tagEvent);
+        artistFacade.handleEvent(UUID.fromString(key), artistEvent);
     }
 }

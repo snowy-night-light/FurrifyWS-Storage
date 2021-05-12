@@ -23,4 +23,6 @@ public interface PostQueryRepository {
             PostQuerySearchDTO query,
             Pageable pageable
     );
+
+    Long getIdByPostId(UUID postId);
 }
