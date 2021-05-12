@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.FileUtils;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Supported media extensions by system.
@@ -19,19 +20,24 @@ public enum MediaExtension {
     /**
      * File extensions
      */
-    JPEG("image/jpeg", MediaType.IMAGE),
-    PNG("image/png", MediaType.IMAGE),
-    JPG("image/jpeg", MediaType.IMAGE);
+    JPEG(MediaType.IMAGE, "image/jpeg"),
+    PNG(MediaType.IMAGE, "image/png"),
+    JPG(MediaType.IMAGE, "image/jpeg");
 
     /**
      * Mime type of extension.
      */
-    private final String mimeType;
+    private final String[] mimeTypes;
 
     /**
      * Media type ex. VIDEO, IMAGE.
      */
     private final MediaType type;
+
+    MediaExtension(final MediaType type, final String... mimeTypes) {
+        this.mimeTypes = mimeTypes;
+        this.type = type;
+    }
 
     public static boolean isValidFile(String filename,
                                       MultipartFile file,
@@ -39,7 +45,7 @@ public enum MediaExtension {
         try {
             String mimeType = FileUtils.getMimeType(filename, file.getInputStream());
 
-            return mimeType.equals(mediaExtension.getMimeType());
+            return Arrays.asList(mediaExtension.getMimeTypes()).contains(mimeType);
         } catch (IOException e) {
             return false;
         }
