@@ -49,7 +49,7 @@ interface SqlPostQueryRepositoryImpl extends PostQueryRepository, Repository<Pos
     Page<PostDetailsQueryDTO> findAllByOwnerIdAndArtistId(UUID ownerId, UUID artistId, Pageable pageable);
 
     @Override
-    @Query("select post from PostSnapshot post join post.artists artist join post.tags tag where " +
+    @Query("select post from PostSnapshot post join post.artists artist join post.tags tag join post.mediaSet media where " +
             // Check if user if matches
             "post.ownerId = :#{#ownerId}" +
             " and " +
@@ -58,6 +58,12 @@ interface SqlPostQueryRepositoryImpl extends PostQueryRepository, Repository<Pos
             " and " +
             // Check if excluded artists are present or if excluded artists are size 0 then ignore
             "(artist.preferredNickname not in (:#{#query.withoutArtists}) or :#{#query.withoutArtists.size()} = 0)" +
+            " and " +
+            // Check if required media extensions are present or if required media extensions are size 0 then ignore
+            "(media.extension in (:#{#query.withMediaExtensions}) or :#{#query.withMediaExtensions.size()} = 0)" +
+            " and " +
+            // Check if excluded media extensions are present or if excluded media extensions are size 0 then ignore
+            "(media.extension not in (:#{#query.withoutMediaExtensions}) or :#{#query.withoutMediaExtensions.size()} = 0)" +
             " and " +
             // Check if required tags are present or if required tags are size 0 then ignore
             "(tag.value in (:#{#query.withTags}) or :#{#query.withTags.size()} = 0)" +
