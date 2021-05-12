@@ -2,20 +2,23 @@ package ws.furrify.posts.media;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.hateoas.CollectionModel;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ws.furrify.posts.media.dto.query.MediaDetailsQueryDTO;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
+import ws.furrify.shared.pageable.PageableRequest;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.afford;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -27,6 +30,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 class QueryPostMediaController {
 
     private final SqlMediaQueryRepositoryImpl mediaQueryRepository;
+    private final PagedResourcesAssembler<MediaDetailsQueryDTO> pagedResourcesAssembler;
 
     @GetMapping
     @PreAuthorize(
@@ -34,21 +38,38 @@ class QueryPostMediaController {
                     "hasAuthority('admin') or " +
                     "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
-    public CollectionModel<EntityModel<MediaDetailsQueryDTO>> getPostMediaList(
+    public PagedModel<EntityModel<MediaDetailsQueryDTO>> getPostMediaList(
             @PathVariable UUID userId,
             @PathVariable UUID postId,
+            @RequestParam(required = false) String order,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) Integer page,
             @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
-        // Get tags and add relations
-        CollectionModel<EntityModel<MediaDetailsQueryDTO>> mediaResponses = mediaQueryRepository.findAllByOwnerIdAndPostId(userId, postId).stream()
-                .map(EntityModel::of)
-                .map(this::addMediaRelations)
-                .collect(Collectors.collectingAndThen(Collectors.toUnmodifiableList(), CollectionModel::of));
+        // Build page from page information
+        Pageable pageable = PageableRequest.builder()
+                .order(order)
+                .sort(sort)
+                .size(size)
+                .page(page)
+                .build().toPageable();
+
+        PagedModel<EntityModel<MediaDetailsQueryDTO>> mediaResponses = pagedResourcesAssembler.toModel(
+                mediaQueryRepository.findAllByOwnerIdAndPostId(userId, postId, pageable)
+        );
+
+        mediaResponses.forEach(this::addMediaRelations);
+
 
         // Add hateoas relation
         var mediaListRel = linkTo(methodOn(QueryPostMediaController.class).getPostMediaList(
                 userId,
                 postId,
+                null,
+                null,
+                null,
+                null,
                 null
         )).withSelfRel();
 
@@ -105,6 +126,10 @@ class QueryPostMediaController {
         var mediaListRel = linkTo(methodOn(QueryPostMediaController.class).getPostMediaList(
                 mediaQueryDto.getOwnerId(),
                 mediaQueryDto.getPostId(),
+                null,
+                null,
+                null,
+                null,
                 null
         )).withRel("postMediaList");
 

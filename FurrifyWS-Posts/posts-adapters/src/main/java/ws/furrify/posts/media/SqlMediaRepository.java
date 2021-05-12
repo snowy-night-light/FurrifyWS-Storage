@@ -2,12 +2,13 @@ package ws.furrify.posts.media;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ws.furrify.posts.media.dto.query.MediaDetailsQueryDTO;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,8 +30,8 @@ interface SqlMediaQueryRepositoryImpl extends MediaQueryRepository, Repository<M
     Optional<MediaDetailsQueryDTO> findByOwnerIdAndPostIdAndMediaId(UUID ownerId, UUID artistId, UUID mediaId);
 
     @Override
-    @Query("from MediaSnapshot where ownerId = ?1 and postId = ?2 order by priority desc")
-    List<MediaDetailsQueryDTO> findAllByOwnerIdAndPostId(UUID ownerId, UUID postId);
+    @Query("select media from MediaSnapshot media where ownerId = ?1 and postId = ?2 order by priority desc")
+    Page<MediaDetailsQueryDTO> findAllByOwnerIdAndPostId(UUID ownerId, UUID postId, Pageable pageable);
 
     @Override
     @Query("select id from MediaSnapshot where mediaId = ?1")
