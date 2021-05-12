@@ -39,7 +39,7 @@
         "doc": "Media file URL."
       },
       {
-        "name": "fileHash",
+        "name": "md5",
         "type": [
           "null",
           "string"

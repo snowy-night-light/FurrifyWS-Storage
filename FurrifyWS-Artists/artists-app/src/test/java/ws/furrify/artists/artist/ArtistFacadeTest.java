@@ -46,8 +46,10 @@ class ArtistFacadeTest {
     static void beforeAll() {
         artistRepository = mock(ArtistRepository.class);
 
+        var artistQueryRepository = mock(ArtistQueryRepository.class);
+
         var artistFactory = new ArtistFactory();
-        var artistDTOFactory = new ArtistDtoFactory();
+        var artistDTOFactory = new ArtistDtoFactory(artistQueryRepository);
         @SuppressWarnings("unchecked")
         var eventPublisher = (DomainEventPublisher<ArtistEvent>) mock(DomainEventPublisher.class);
 

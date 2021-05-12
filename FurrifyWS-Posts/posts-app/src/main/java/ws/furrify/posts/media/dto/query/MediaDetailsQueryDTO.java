@@ -29,7 +29,7 @@ public interface MediaDetailsQueryDTO extends Serializable {
 
     URL getThumbnailUrl();
 
-    String getFileHash();
+    String getMd5();
 
     MediaStatus getStatus();
 

@@ -32,7 +32,7 @@ public class MediaFile {
     private URL thumbnailUrl;
 
     @NonNull
-    private String fileHash;
+    private String md5;
     @NonNull
     private MediaStatus status;
 
@@ -45,7 +45,7 @@ public class MediaFile {
                       @NonNull final MediaExtension extension,
                       final URL fileUrl,
                       final URL thumbnailUrl,
-                      @NonNull final String fileHash) {
+                      @NonNull final String md5) {
 
         // Validate given values
         String[] filenameWithExt = filename.split(FILENAME_EXTENSION_DIVIDER);
@@ -61,15 +61,15 @@ public class MediaFile {
         }
 
         // Check if MD5 hash is valid
-        if (!fileHash.matches(MD5_HASH_PATTERN)) {
-            throw new IllegalStateException("Media file hash [hash=" + fileHash + "] is not valid MD5 hash.");
+        if (!md5.matches(MD5_HASH_PATTERN)) {
+            throw new IllegalStateException("Media file hash [hash=" + md5 + "] is not valid MD5 hash.");
         }
 
         this.filename = filename;
         this.extension = extension;
         this.fileUrl = fileUrl;
         this.thumbnailUrl = thumbnailUrl;
-        this.fileHash = fileHash;
+        this.md5 = md5;
         this.status = MediaStatus.REQUEST_PENDING;
     }
 }

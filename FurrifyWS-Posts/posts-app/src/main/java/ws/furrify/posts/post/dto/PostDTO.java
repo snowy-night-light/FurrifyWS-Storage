@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.ToString;
 import lombok.Value;
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 
 import java.time.ZonedDateTime;
@@ -29,6 +30,8 @@ public class PostDTO {
     Set<PostTag> tags;
 
     Set<PostArtist> artists;
+
+    Set<PostMedia> mediaSet;
 
     ZonedDateTime createDate;
 }

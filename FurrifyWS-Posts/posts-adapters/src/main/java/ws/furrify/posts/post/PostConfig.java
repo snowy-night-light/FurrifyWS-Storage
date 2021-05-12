@@ -11,6 +11,7 @@ import ws.furrify.posts.post.dto.PostDtoFactory;
 class PostConfig {
 
     private final PostRepositoryImpl postRepository;
+    private final PostQueryRepository postQueryRepository;
     private final KafkaTopicEventPublisher<PostEvent> eventPublisher;
     private final TagServiceImpl tagService;
     private final ArtistServiceImpl artistService;
@@ -18,7 +19,7 @@ class PostConfig {
     @Bean
     PostFacade postFacade() {
         var postFactory = new PostFactory();
-        var postDtoFactory = new PostDtoFactory();
+        var postDtoFactory = new PostDtoFactory(postQueryRepository);
 
         return new PostFacade(
                 new CreatePostAdapter(postFactory, eventPublisher, tagService, artistService),

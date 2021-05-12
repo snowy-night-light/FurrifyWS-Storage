@@ -2,20 +2,23 @@ package ws.furrify.tags.tag;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.hateoas.CollectionModel;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
+import ws.furrify.shared.pageable.PageableRequest;
 import ws.furrify.tags.tag.dto.query.TagDetailsQueryDTO;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.afford;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -26,7 +29,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 class QueryUserTagController {
 
-    private final SqlTagQueryRepository tagQueryRepository;
+    private final SqlTagQueryRepositoryImpl tagQueryRepository;
+    private final PagedResourcesAssembler<TagDetailsQueryDTO> pagedResourcesAssembler;
 
     @GetMapping
     @PreAuthorize(
@@ -34,23 +38,40 @@ class QueryUserTagController {
                     "hasAuthority('admin') or " +
                     "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
     )
-    public CollectionModel<EntityModel<TagDetailsQueryDTO>> getUserTags(
+    public PagedModel<EntityModel<TagDetailsQueryDTO>> getUserTags(
             @PathVariable UUID userId,
+            @RequestParam(required = false) String order,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) Integer page,
             @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
-        // Get tags and add relations
-        CollectionModel<EntityModel<TagDetailsQueryDTO>> tagResponses = tagQueryRepository.findAllByOwnerId(userId).stream()
-                .map(EntityModel::of)
-                .map(this::addTagRelations)
-                .collect(Collectors.collectingAndThen(Collectors.toUnmodifiableList(), CollectionModel::of));
+        // Build page from page information
+        Pageable pageable = PageableRequest.builder()
+                .order(order)
+                .sort(sort)
+                .size(size)
+                .page(page)
+                .build().toPageable();
+
+        PagedModel<EntityModel<TagDetailsQueryDTO>> tagResponses = pagedResourcesAssembler.toModel(
+                tagQueryRepository.findAllByOwnerId(userId, pageable)
+        );
+
+        tagResponses.forEach(this::addTagRelations);
+
 
         // Add hateoas relation
-        var tagsRel = linkTo(methodOn(QueryUserTagController.class).getUserTags(
+        var tagsRelations = linkTo(methodOn(QueryUserTagController.class).getUserTags(
                 userId,
+                null,
+                null,
+                null,
+                null,
                 null
         )).withSelfRel();
 
-        tagResponses.add(tagsRel);
+        tagResponses.add(tagsRelations);
 
         return tagResponses;
     }
@@ -100,6 +121,10 @@ class QueryUserTagController {
 
         var tagsRel = linkTo(methodOn(QueryUserTagController.class).getUserTags(
                 tagQueryDto.getOwnerId(),
+                null,
+                null,
+                null,
+                null,
                 null
         )).withRel("userTags");
 

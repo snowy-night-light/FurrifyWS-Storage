@@ -10,13 +10,14 @@ import ws.furrify.tags.tag.dto.TagDtoFactory;
 @RequiredArgsConstructor
 class TagConfig {
 
+    private final TagQueryRepository tagQueryRepository;
     private final TagRepositoryImpl tagRepository;
     private final KafkaTopicEventPublisher<TagEvent> eventPublisher;
 
     @Bean
     TagFacade tagFacade() {
         var tagFactory = new TagFactory();
-        var tagDtoFactory = new TagDtoFactory();
+        var tagDtoFactory = new TagDtoFactory(tagQueryRepository);
 
         return new TagFacade(
                 new CreateTagAdapter(tagFactory, eventPublisher, tagRepository),

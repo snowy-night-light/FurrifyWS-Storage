@@ -19,7 +19,7 @@ class MediaFactory {
                         (mediaDTO.getPriority() != null) ? mediaDTO.getPriority() : 0
                 )
                 .filename(mediaDTO.getFilename())
-                .fileHash(mediaDTO.getFileHash())
+                .md5(mediaDTO.getMd5())
                 .extension(mediaDTO.getExtension())
                 .fileUrl(mediaDTO.getFileUrl())
                 .thumbnailUrl(mediaDTO.getThumbnailUrl())

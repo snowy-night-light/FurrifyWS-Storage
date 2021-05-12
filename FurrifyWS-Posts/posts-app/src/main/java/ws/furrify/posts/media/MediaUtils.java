@@ -31,14 +31,14 @@ class MediaUtils {
                 .setDataBuilder(
                         MediaData.newBuilder()
                                 .setOwnerId(mediaSnapshot.getOwnerId().toString())
-                                .setPostId(mediaSnapshot.getOwnerId().toString())
+                                .setPostId(mediaSnapshot.getPostId().toString())
                                 .setPriority(mediaSnapshot.getPriority())
                                 .setExtension(mediaSnapshot.getExtension().name())
                                 .setFilename(mediaSnapshot.getFilename())
                                 .setFileUrl(
                                         (mediaSnapshot.getFileUrl() != null) ? mediaSnapshot.getFileUrl().toString() : null
                                 )
-                                .setFileHash(mediaSnapshot.getFileHash())
+                                .setMd5(mediaSnapshot.getMd5())
                                 .setThumbnailUrl(
                                         (mediaSnapshot.getThumbnailUrl() != null) ? mediaSnapshot.getThumbnailUrl().toString() : null
                                 )
@@ -53,11 +53,14 @@ class MediaUtils {
      * @param mediaId MediaId the delete event will regard.
      * @return Created media event.
      */
-    public static MediaEvent deleteMediaEvent(final UUID mediaId) {
+    public static MediaEvent deleteMediaEvent(final UUID postId, final UUID mediaId) {
         return MediaEvent.newBuilder()
                 .setState(DomainEventPublisher.MediaEventType.REMOVED.name())
                 .setMediaId(mediaId.toString())
-                .setDataBuilder(MediaData.newBuilder())
+                .setDataBuilder(
+                        MediaData.newBuilder()
+                                .setPostId(postId.toString())
+                )
                 .setOccurredOn(Instant.now())
                 .build();
     }

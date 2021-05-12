@@ -8,9 +8,11 @@ import lombok.ToString;
 import lombok.extern.java.Log;
 import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostDescription;
+import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.posts.post.vo.PostTitle;
 
+import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,6 +37,8 @@ class Post {
     private Set<PostTag> tags;
     @NonNull
     private Set<PostArtist> artists;
+    @NonNull
+    private Set<PostMedia> mediaSet;
 
     private final ZonedDateTime createDate;
 
@@ -51,6 +55,7 @@ class Post {
                 ),
                 new HashSet<>(postSnapshot.getTags()),
                 new HashSet<>(postSnapshot.getArtists()),
+                new HashSet<>(postSnapshot.getMediaSet()),
                 postSnapshot.getCreateDate()
         );
     }
@@ -64,6 +69,7 @@ class Post {
                 .description(description.getDescription())
                 .tags(tags.stream().collect(Collectors.toUnmodifiableSet()))
                 .artists(artists.stream().collect(Collectors.toUnmodifiableSet()))
+                .mediaSet(mediaSet.stream().collect(Collectors.toUnmodifiableSet()))
                 .createDate(createDate)
                 .build();
     }
@@ -121,7 +127,7 @@ class Post {
                 .orElseThrow(() -> {
                     log.severe("Original artist [artistId=" + artistId + "] was not found.");
 
-                    return new IllegalStateException("Original tag value was not found.");
+                    return new IllegalStateException("Original artistId was not found.");
                 });
 
         // Create artist with new preferred nickname
@@ -139,5 +145,45 @@ class Post {
 
     void replaceArtists(@NonNull final Set<PostArtist> artists) {
         this.artists = new HashSet<>(artists);
+    }
+
+    void removeMedia(final UUID mediaId) {
+        this.mediaSet = mediaSet.stream()
+                .filter(media -> !media.getMediaId().equals(mediaId))
+                .collect(Collectors.toSet());
+    }
+
+    void updateMediaDetailsInMediaSet(@NonNull final UUID mediaId,
+                                      @NonNull final Integer priority,
+                                      final URL thumbnailUrl,
+                                      @NonNull final String extension,
+                                      @NonNull final String status) {
+        // Filter mediaSet to find a if media exists by mediaId.
+        this.mediaSet.stream()
+                .filter(media -> media.getMediaId().equals(mediaId))
+                .findAny()
+                .orElseThrow(() -> {
+                    log.severe("Original media [mediaId=" + mediaId + "] was not found.");
+
+                    return new IllegalStateException("Original mediaId was not found.");
+                });
+
+        // Create post media with new details
+        PostMedia postMedia = new PostMedia(
+                mediaId,
+                priority,
+                thumbnailUrl,
+                extension,
+                status
+        );
+
+        // Filter mediaSet to get all without old media
+        Set<PostMedia> filteredMediaSet = this.mediaSet.stream()
+                .filter(media -> !media.getMediaId().equals(mediaId))
+                .collect(Collectors.toSet());
+        // Add updated media to mediaSet
+        filteredMediaSet.add(postMedia);
+
+        this.mediaSet = filteredMediaSet;
     }
 }

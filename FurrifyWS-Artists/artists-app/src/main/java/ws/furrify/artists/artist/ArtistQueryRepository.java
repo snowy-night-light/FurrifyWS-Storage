@@ -14,4 +14,6 @@ public interface ArtistQueryRepository {
     Optional<ArtistDetailsQueryDTO> findByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
 
     Page<ArtistDetailsQueryDTO> findAllByOwnerId(UUID ownerId, Pageable pageable);
+
+    Long getIdByArtistId(UUID artistId);
 }

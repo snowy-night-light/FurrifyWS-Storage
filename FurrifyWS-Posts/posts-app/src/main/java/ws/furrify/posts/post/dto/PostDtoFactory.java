@@ -1,6 +1,8 @@
 package ws.furrify.posts.post.dto;
 
+import lombok.RequiredArgsConstructor;
 import ws.furrify.posts.post.PostEvent;
+import ws.furrify.posts.post.PostQueryRepository;
 import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
 
@@ -16,7 +18,10 @@ import java.util.stream.Collectors;
  *
  * @author Skyte
  */
+@RequiredArgsConstructor
 public class PostDtoFactory {
+
+    private final PostQueryRepository postQueryRepository;
 
     public PostDTO from(UUID key, PostEvent postEvent) {
         Instant createDateInstant = postEvent.getData().getCreateDate();
@@ -26,8 +31,13 @@ public class PostDtoFactory {
             createDate = createDateInstant.atZone(ZoneId.systemDefault());
         }
 
+        var postId = UUID.fromString(postEvent.getPostId());
+
         return PostDTO.builder()
-                .postId(UUID.fromString(postEvent.getPostId()))
+                .id(
+                        postQueryRepository.getIdByPostId(postId)
+                )
+                .postId(postId)
                 .ownerId(key)
                 .title(postEvent.getData().getTitle())
                 .description(postEvent.getData().getDescription())

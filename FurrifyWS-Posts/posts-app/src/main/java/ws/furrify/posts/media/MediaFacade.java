@@ -2,6 +2,7 @@ package ws.furrify.posts.media;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.media.dto.MediaDTO;
 import ws.furrify.posts.media.dto.MediaDtoFactory;
 import ws.furrify.shared.kafka.DomainEventPublisher;
@@ -28,7 +29,7 @@ public class MediaFacade {
      *
      * @param mediaEvent Media event instance received from kafka.
      */
-    void handleEvent(final UUID key, final MediaEvent mediaEvent) {
+    public void handleEvent(final UUID key, final MediaEvent mediaEvent) {
         MediaDTO mediaDTO = mediaDTOFactory.from(key, mediaEvent);
 
         switch (DomainEventPublisher.MediaEventType.valueOf(mediaEvent.getState())) {
@@ -48,8 +49,11 @@ public class MediaFacade {
      * @param mediaDTO Post to create.
      * @return Created media UUID.
      */
-    public UUID createMedia(final UUID userId, final UUID postId, final MediaDTO mediaDTO) {
-        return createMediaAdapter.createMedia(userId, postId, mediaDTO);
+    public UUID createMedia(final UUID userId,
+                            final UUID postId,
+                            final MediaDTO mediaDTO,
+                            final MultipartFile mediaFile) {
+        return createMediaAdapter.createMedia(userId, postId, mediaDTO, mediaFile);
     }
 
     /**
