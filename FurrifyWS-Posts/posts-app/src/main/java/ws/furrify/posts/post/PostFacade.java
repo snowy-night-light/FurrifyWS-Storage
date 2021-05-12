@@ -62,7 +62,7 @@ public class PostFacade {
             case UPDATED, REPLACED -> updateMediaDetailsInPost(key, UUID.fromString(mediaEvent.getData().getPostId()),
                     UUID.fromString(mediaEvent.getMediaId()),
                     mediaEvent.getData().getPriority(),
-                    new URL(mediaEvent.getData().getThumbnailUrl()),
+                    (mediaEvent.getData().getThumbnailUrl() != null) ? new URL(mediaEvent.getData().getThumbnailUrl()) : null,
                     mediaEvent.getData().getExtension(),
                     mediaEvent.getData().getStatus()
             );

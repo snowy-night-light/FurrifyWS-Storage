@@ -54,22 +54,22 @@ interface SqlPostQueryRepositoryImpl extends PostQueryRepository, Repository<Pos
             "post.ownerId = :#{#ownerId}" +
             " and " +
             // Check if required artists are present or if required artists are size 0 then ignore
-            "(artist.preferredNickname in (:#{#query.withArtists}) or :#{#query.withArtists.size()} = 0)" +
+            "(:#{#query.withArtists.size()} = 0 or artist.preferredNickname in (:#{#query.withArtists}))" +
             " and " +
             // Check if excluded artists are present or if excluded artists are size 0 then ignore
-            "(artist.preferredNickname not in (:#{#query.withoutArtists}) or :#{#query.withoutArtists.size()} = 0)" +
+            "(:#{#query.withoutArtists.size()} = 0 or artist.preferredNickname not in (:#{#query.withoutArtists}))" +
             " and " +
             // Check if required media extensions are present or if required media extensions are size 0 then ignore
-            "(media.extension in (:#{#query.withMediaExtensions}) or :#{#query.withMediaExtensions.size()} = 0)" +
+            "(:#{#query.withMediaExtensions.size()} = 0 or media.extension in (:#{#query.withMediaExtensions}))" +
             " and " +
             // Check if excluded media extensions are present or if excluded media extensions are size 0 then ignore
-            "(media.extension not in (:#{#query.withoutMediaExtensions}) or :#{#query.withoutMediaExtensions.size()} = 0)" +
+            "(:#{#query.withoutMediaExtensions.size()} = 0 or media.extension not in (:#{#query.withoutMediaExtensions}))" +
             " and " +
             // Check if required tags are present or if required tags are size 0 then ignore
-            "(tag.value in (:#{#query.withTags}) or :#{#query.withTags.size()} = 0)" +
+            "(:#{#query.withTags.size()} = 0 or tag.value in (:#{#query.withTags}))" +
             " and " +
             // Check if excluded artists are present or if excluded tags are size 0 then ignore
-            "(tag.value not in (:#{#query.withoutTags}) or :#{#query.withoutTags.size()} = 0)")
+            "(:#{#query.withoutTags.size()} = 0 or tag.value not in (:#{#query.withoutTags}))")
     Page<PostDetailsQueryDTO> findAllByOwnerIdAndQuery(UUID ownerId,
                                                        PostQuerySearchDTO query,
                                                        Pageable pageable);
