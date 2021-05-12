@@ -25,7 +25,7 @@
             <basic name="filename">
                 <column nullable="false"/>
             </basic>
-            <basic name="fileHash">
+            <basic name="md5">
                 <column nullable="false"/>
             </basic>
             <basic name="extension">

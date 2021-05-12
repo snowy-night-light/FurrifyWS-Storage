@@ -40,7 +40,7 @@ class MediaFacadeTest {
                 .priority(0)
                 .extension(MediaExtension.PNG)
                 .filename("yes.png")
-                .fileHash("3c518eeb674c71b30297f072fde7eba5")
+                .md5("3c518eeb674c71b30297f072fde7eba5")
                 .createDate(ZonedDateTime.now())
                 .build();
 

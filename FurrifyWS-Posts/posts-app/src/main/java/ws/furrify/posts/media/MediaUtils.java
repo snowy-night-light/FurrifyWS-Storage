@@ -38,7 +38,7 @@ class MediaUtils {
                                 .setFileUrl(
                                         (mediaSnapshot.getFileUrl() != null) ? mediaSnapshot.getFileUrl().toString() : null
                                 )
-                                .setFileHash(mediaSnapshot.getFileHash())
+                                .setMd5(mediaSnapshot.getMd5())
                                 .setThumbnailUrl(
                                         (mediaSnapshot.getThumbnailUrl() != null) ? mediaSnapshot.getThumbnailUrl().toString() : null
                                 )

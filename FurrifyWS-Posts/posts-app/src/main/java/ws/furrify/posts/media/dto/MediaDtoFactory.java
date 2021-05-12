@@ -54,7 +54,7 @@ public class MediaDtoFactory {
                                 new URL(mediaEvent.getData().getFileUrl()) :
                                 null
                 )
-                .fileHash(mediaEvent.getData().getFileHash())
+                .md5(mediaEvent.getData().getMd5())
                 .thumbnailUrl(
                         (mediaEvent.getData().getThumbnailUrl() != null) ?
                                 new URL(mediaEvent.getData().getThumbnailUrl()) :

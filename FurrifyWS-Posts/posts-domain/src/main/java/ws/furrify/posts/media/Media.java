@@ -42,7 +42,7 @@ class Media {
                         .extension(mediaSnapshot.getExtension())
                         .thumbnailUrl(mediaSnapshot.getThumbnailUrl())
                         .filename(mediaSnapshot.getFilename())
-                        .fileHash(mediaSnapshot.getFileHash())
+                        .md5(mediaSnapshot.getMd5())
                         .fileUrl(mediaSnapshot.getFileUrl())
                         .build(),
                 mediaSnapshot.getCreateDate()
@@ -59,7 +59,7 @@ class Media {
                 .extension(file.getExtension())
                 .thumbnailUrl(file.getThumbnailUrl())
                 .filename(file.getFilename())
-                .fileHash(file.getFileHash())
+                .md5(file.getMd5())
                 .fileUrl(file.getFileUrl())
                 .status(file.getStatus())
                 .createDate(createDate)

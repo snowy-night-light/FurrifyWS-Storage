@@ -39,10 +39,10 @@ class CreateMediaAdapter implements CreateMediaPort {
             throw new FileExtensionIsNotMatchingContentException(Errors.FILE_EXTENSION_IS_NOT_MATCHING_CONTENT.getErrorMessage());
         }
 
-        String fileHash;
+        String md5;
         try {
             // Get file hash
-            fileHash = DigestUtils.md5Hex(mediaFile.getInputStream());
+            md5 = DigestUtils.md5Hex(mediaFile.getInputStream());
         } catch (IOException e) {
             throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
         }
@@ -55,7 +55,7 @@ class CreateMediaAdapter implements CreateMediaPort {
                 .postId(postId)
                 .ownerId(userId)
                 .filename(mediaFile.getOriginalFilename())
-                .fileHash(fileHash)
+                .md5(md5)
                 .priority(mediaDTO.getPriority())
                 .createDate(ZonedDateTime.now())
                 .build();

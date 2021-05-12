@@ -31,7 +31,7 @@ class MediaSnapshot {
     private Integer priority;
 
     private String filename;
-    private String fileHash;
+    private String md5;
 
     private MediaExtension extension;
 

@@ -32,7 +32,7 @@ public class MediaDTO {
     URL fileUrl;
     URL thumbnailUrl;
 
-    String fileHash;
+    String md5;
 
     MediaStatus status;
 
