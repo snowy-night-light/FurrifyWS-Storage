@@ -18,6 +18,6 @@ Requirements:
 
 ## Tests
 Whole project is covered by tests using JUnit 5.
-Note that running tests requires test profile or else there will be thrown exceptions as default profile is production.
+Note that running tests requires dev profile or else there will be thrown exceptions as default profile is production.
 
-To run those you can use Maven command: `mvn clean compile test -Dspring.profiles.active=test`
+To run those you can use Maven command: `mvn clean compile test -Dspring.profiles.active=dev`
