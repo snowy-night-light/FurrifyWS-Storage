@@ -64,7 +64,7 @@ class Tag {
         this.value = value;
     }
 
-    void updateDetails(final TagTitle title,
+    void updateDetails(@NonNull final TagTitle title,
                        final TagDescription description) {
         this.title = title;
         this.description = description;
