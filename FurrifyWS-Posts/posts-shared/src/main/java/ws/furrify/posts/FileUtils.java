@@ -6,6 +6,7 @@ import org.apache.tika.config.TikaConfig;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
+import org.apache.tika.metadata.TikaCoreProperties;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +24,7 @@ public class FileUtils {
         TikaInputStream stream = TikaInputStream.get(inputStream);
 
         Metadata metadata = new Metadata();
-        metadata.add(Metadata.RESOURCE_NAME_KEY, filename);
+        metadata.add(TikaCoreProperties.RESOURCE_NAME_KEY, filename);
 
         return detector.detect(stream, metadata).toString();
     }
