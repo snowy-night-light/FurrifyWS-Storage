@@ -43,7 +43,7 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>3.0.2</version>
+            <version>3.0.3</version>
         </dependency>
         <!-- Tools -->
         <dependency>
@@ -63,7 +63,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.10.0</version>
+            <version>3.11.2</version>
             <scope>test</scope>
         </dependency>
         <!-- Web -->
@@ -81,13 +81,13 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>5.4.6</version>
+            <version>5.4.7</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-security-adapter</artifactId>
-            <version>13.0.0</version>
+            <version>14.0.0</version>
             <scope>compile</scope>
         </dependency>
         <!-- Utils -->
