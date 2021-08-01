@@ -81,13 +81,13 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>5.4.7</version>
+            <version>5.5.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-security-adapter</artifactId>
-            <version>14.0.0</version>
+            <version>15.0.0</version>
             <scope>compile</scope>
         </dependency>
         <!-- Utils -->
