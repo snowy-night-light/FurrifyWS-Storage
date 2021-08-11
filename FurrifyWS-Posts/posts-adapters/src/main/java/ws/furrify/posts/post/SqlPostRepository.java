@@ -33,6 +33,9 @@ interface SqlPostRepository extends Repository<PostSnapshot, Long> {
 
     @Query("from PostSnapshot post join post.mediaSet media where media.mediaId = ?3 and post.postId = ?2 and post.ownerId = ?1")
     Optional<PostSnapshot> findByOwnerIdAndPostIdAndMediaId(UUID ownerId, UUID postId, UUID mediaId);
+
+    @Query("from PostSnapshot post join post.attachments attachment where attachment.attachmentId = ?3 and post.postId = ?2 and post.ownerId = ?1")
+    Optional<PostSnapshot> findByOwnerIdAndPostIdAndAttachmentId(UUID ownerId, UUID postId, UUID attachmentId);
 }
 
 @Transactional(rollbackFor = {})
@@ -124,5 +127,10 @@ class PostRepositoryImpl implements PostRepository {
     @Override
     public Optional<Post> findByOwnerIdAndPostIdAndMediaId(final UUID ownerId, final UUID postId, final UUID mediaId) {
         return sqlPostRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, mediaId).map(Post::restore);
+    }
+
+    @Override
+    public Optional<Post> findByOwnerIdAndPostIdAndAttachmentId(final UUID ownerId, final UUID postId, final UUID attachment) {
+        return sqlPostRepository.findByOwnerIdAndPostIdAndAttachmentId(ownerId, postId, attachment).map(Post::restore);
     }
 }

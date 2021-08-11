@@ -1,6 +1,7 @@
 package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 
+import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Set;
@@ -29,6 +31,7 @@ class PostTest implements CommandLineRunner {
                 .ifPresent((profile) -> createTestingPosts());
     }
 
+    @SneakyThrows
     private void createTestingPosts() {
         var postFactory = new PostFactory();
 
@@ -63,7 +66,7 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .priority(1)
                                                 .extension("PNG")
-                                                .status("REQUEST_PENDING")
+                                                .fileUrl(new URL("https://example.com"))
                                                 .build()
                                 ))
                                 .createDate(ZonedDateTime.now())

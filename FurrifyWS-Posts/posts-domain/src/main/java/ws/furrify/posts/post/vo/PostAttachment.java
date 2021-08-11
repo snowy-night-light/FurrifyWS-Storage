@@ -22,17 +22,15 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor(access = PROTECTED)
-public class PostMedia {
+public class PostAttachment {
     @NonNull
-    private UUID mediaId;
-    @NonNull
-    private Integer priority;
+    private UUID attachmentId;
 
     @NonNull
     private URL fileUrl;
 
     @NonNull
-    private URL thumbnailUrl;
+    private String filename;
 
     @NonNull
     private String extension;

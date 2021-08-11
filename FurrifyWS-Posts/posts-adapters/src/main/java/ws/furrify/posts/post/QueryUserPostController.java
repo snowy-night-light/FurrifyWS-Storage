@@ -7,7 +7,6 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +44,7 @@ class QueryUserPostController {
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) Integer page,
-            @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+            KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
         // Build page from page information
         Pageable pageable = PageableRequest.builder()
@@ -84,7 +83,7 @@ class QueryUserPostController {
     )
     public EntityModel<PostDetailsQueryDTO> getUserPost(@PathVariable UUID userId,
                                                         @PathVariable UUID postId,
-                                                        @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                                        KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
         PostDetailsQueryDTO postQueryDTO = postQueryRepository.findByOwnerIdAndPostId(userId, postId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId)));
@@ -107,7 +106,7 @@ class QueryUserPostController {
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) Integer page,
             @RequestParam String query,
-            @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+            KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
         // Build page from page information
         Pageable pageable = PageableRequest.builder()

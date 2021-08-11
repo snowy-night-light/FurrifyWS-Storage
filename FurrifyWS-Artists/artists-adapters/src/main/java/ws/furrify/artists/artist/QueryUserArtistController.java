@@ -7,7 +7,6 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +43,7 @@ class QueryUserArtistController {
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) Integer page,
-            @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+            KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
         // Build page from page information
         Pageable pageable = PageableRequest.builder()
@@ -83,7 +82,7 @@ class QueryUserArtistController {
     )
     public EntityModel<ArtistDetailsQueryDTO> getUserArtist(@PathVariable UUID userId,
                                                             @PathVariable UUID artistId,
-                                                            @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                                            KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
         ArtistDetailsQueryDTO artistQueryDTO = artistQueryRepository.findByOwnerIdAndArtistId(userId, artistId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(artistId)));

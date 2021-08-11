@@ -1,6 +1,7 @@
 package ws.furrify.posts.post.dto.query;
 
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostAttachment;
 import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 
@@ -27,6 +28,8 @@ public interface PostDetailsQueryDTO extends Serializable {
     Set<PostArtist> getArtists();
 
     Set<PostMedia> getMediaSet();
+
+    Set<PostAttachment> getAttachments();
 
     ZonedDateTime getCreateDate();
 }

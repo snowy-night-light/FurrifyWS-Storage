@@ -19,6 +19,7 @@ public interface DomainEventPublisher<T> {
         /**
          * Represents post_events topic in kafka.
          */
+        ATTACHMENT("attachment_events"),
         MEDIA("media_events"),
         POST("post_events"),
         ARTIST("artist_events"),
@@ -71,6 +72,16 @@ public interface DomainEventPublisher<T> {
     enum MediaEventType {
         /**
          * Events that can occur on Media entity.
+         */
+        CREATED,
+        REMOVED,
+        REPLACED,
+        UPDATED
+    }
+
+    enum AttachmentEventType {
+        /**
+         * Events that can occur on Attachment entity.
          */
         CREATED,
         REMOVED,

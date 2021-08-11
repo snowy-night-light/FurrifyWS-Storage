@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -38,7 +37,7 @@ class CommandUserTagController {
     )
     public ResponseEntity<?> createTag(@PathVariable UUID userId,
                                        @RequestBody @Validated TagCreateCommandDTO tagCreateCommandDTO,
-                                       @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken,
+                                       KeycloakAuthenticationToken keycloakAuthenticationToken,
                                        HttpServletResponse response) {
         TagDTO tagDTO = tagCreateCommandDTO.toDTO();
 
@@ -57,7 +56,7 @@ class CommandUserTagController {
     )
     public ResponseEntity<?> deleteTag(@PathVariable UUID userId,
                                        @PathVariable String value,
-                                       @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                       KeycloakAuthenticationToken keycloakAuthenticationToken) {
         tagFacade.deleteTag(userId, value);
 
         return ResponseEntity.accepted().build();
@@ -72,7 +71,7 @@ class CommandUserTagController {
     public ResponseEntity<?> updateTagDetails(@PathVariable UUID userId,
                                               @PathVariable String value,
                                               @RequestBody @Validated TagUpdateCommandDTO tagUpdateCommandDTO,
-                                              @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                              KeycloakAuthenticationToken keycloakAuthenticationToken) {
         tagFacade.updateTag(userId, value, tagUpdateCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();
@@ -87,7 +86,7 @@ class CommandUserTagController {
     public ResponseEntity<?> replaceTagDetails(@PathVariable UUID userId,
                                                @PathVariable String value,
                                                @RequestBody @Validated TagReplaceCommandDTO tagReplaceCommandDTO,
-                                               @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                               KeycloakAuthenticationToken keycloakAuthenticationToken) {
         tagFacade.replaceTag(userId, value, tagReplaceCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();

@@ -48,6 +48,40 @@
         </attributes>
     </entity>
 
+    <entity class="ws.furrify.posts.attachment.AttachmentSnapshot" access="FIELD">
+        <table name="attachment"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="SEQUENCE"/>
+            </id>
+            <basic name="attachmentId">
+                <column unique="true" updatable="false" nullable="false"/>
+            </basic>
+            <basic name="postId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="ownerId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="filename">
+                <column nullable="false"/>
+            </basic>
+            <basic name="md5">
+                <column nullable="false"/>
+            </basic>
+            <basic name="extension">
+                <column nullable="false"/>
+                <enumerated>STRING</enumerated>
+            </basic>
+            <basic name="fileUrl">
+                <column nullable="true"/>
+            </basic>
+            <basic name="createDate">
+                <column updatable="false" nullable="false"/>
+            </basic>
+        </attributes>
+    </entity>
+
     <entity class="ws.furrify.posts.post.PostSnapshot" access="FIELD">
         <table name="posts"/>
         <attributes>
@@ -71,6 +105,11 @@
             </basic>
             <element-collection fetch="EAGER" name="mediaSet">
                 <collection-table name="post_mediaSet">
+                    <join-column name="postId"/>
+                </collection-table>
+            </element-collection>
+            <element-collection fetch="EAGER" name="attachments">
+                <collection-table name="post_attachments">
                     <join-column name="postId"/>
                 </collection-table>
             </element-collection>
@@ -101,7 +140,23 @@
             <basic name="extension">
                 <column nullable="false"/>
             </basic>
-            <basic name="status">
+            <basic name="fileUrl">
+                <column nullable="false"/>
+            </basic>
+        </attributes>
+    </embeddable>
+    <embeddable class="ws.furrify.posts.post.vo.PostAttachment" access="FIELD">
+        <attributes>
+            <basic name="attachmentId">
+                <column nullable="false"/>
+            </basic>
+            <basic name="filename">
+                <column nullable="true"/>
+            </basic>
+            <basic name="fileUrl">
+                <column nullable="true"/>
+            </basic>
+            <basic name="extension">
                 <column nullable="false"/>
             </basic>
         </attributes>

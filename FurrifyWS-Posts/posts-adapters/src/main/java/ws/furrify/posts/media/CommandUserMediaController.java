@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -42,7 +41,7 @@ class CommandUserMediaController {
                                          @PathVariable UUID postId,
                                          @RequestPart("media") @Validated MediaCreateCommandDTO mediaCreateCommandDTO,
                                          @RequestPart("file") MultipartFile mediaFile,
-                                         @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken,
+                                         KeycloakAuthenticationToken keycloakAuthenticationToken,
                                          HttpServletResponse response) {
         MediaDTO mediaDTO = mediaCreateCommandDTO.toDTO();
 
@@ -62,7 +61,7 @@ class CommandUserMediaController {
     public ResponseEntity<?> deleteMedia(@PathVariable UUID userId,
                                          @PathVariable UUID postId,
                                          @PathVariable UUID mediaId,
-                                         @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                         KeycloakAuthenticationToken keycloakAuthenticationToken) {
         mediaFacade.deleteMedia(userId, postId, mediaId);
 
         return ResponseEntity.accepted().build();
@@ -78,7 +77,7 @@ class CommandUserMediaController {
                                          @PathVariable UUID postId,
                                          @PathVariable UUID mediaId,
                                          @RequestBody @Validated MediaUpdateCommandDTO mediaUpdateCommandDTO,
-                                         @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                         KeycloakAuthenticationToken keycloakAuthenticationToken) {
         mediaFacade.updateMedia(userId, postId, mediaId, mediaUpdateCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();
@@ -94,7 +93,7 @@ class CommandUserMediaController {
                                           @PathVariable UUID postId,
                                           @PathVariable UUID mediaId,
                                           @RequestBody @Validated MediaReplaceCommandDTO mediaReplaceCommandDTO,
-                                          @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
         mediaFacade.replaceMedia(userId, postId, mediaId, mediaReplaceCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();

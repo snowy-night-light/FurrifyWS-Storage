@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -38,7 +37,7 @@ class CommandUserPostController {
     )
     public ResponseEntity<?> createPost(@PathVariable UUID userId,
                                         @RequestBody @Validated PostCreateCommandDTO postCreateCommandDTO,
-                                        @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken,
+                                        KeycloakAuthenticationToken keycloakAuthenticationToken,
                                         HttpServletResponse response) {
         PostDTO postDTO = postCreateCommandDTO.toDTO();
 
@@ -57,7 +56,7 @@ class CommandUserPostController {
     )
     public ResponseEntity<?> deletePost(@PathVariable UUID userId,
                                         @PathVariable UUID postId,
-                                        @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                        KeycloakAuthenticationToken keycloakAuthenticationToken) {
         postFacade.deletePost(userId, postId);
 
         return ResponseEntity.accepted().build();
@@ -72,7 +71,7 @@ class CommandUserPostController {
     public ResponseEntity<?> updatePost(@PathVariable UUID userId,
                                         @PathVariable UUID postId,
                                         @RequestBody @Validated PostUpdateCommandDTO postUpdateCommandDTO,
-                                        @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                        KeycloakAuthenticationToken keycloakAuthenticationToken) {
         postFacade.updatePost(userId, postId, postUpdateCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();
@@ -87,7 +86,7 @@ class CommandUserPostController {
     public ResponseEntity<?> replacePost(@PathVariable UUID userId,
                                          @PathVariable UUID postId,
                                          @RequestBody @Validated PostReplaceCommandDTO postReplaceCommandDTO,
-                                         @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                         KeycloakAuthenticationToken keycloakAuthenticationToken) {
         postFacade.replacePost(userId, postId, postReplaceCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();

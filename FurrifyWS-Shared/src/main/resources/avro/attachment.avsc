@@ -1,0 +1,125 @@
+[
+  {
+    "type": "record",
+    "namespace": "ws.furrify.posts.attachment.vo",
+    "doc": "Attachment data containing required information to perform state change across multiple microservices.",
+    "name": "AttachmentData",
+    "fields": [
+      {
+        "name": "extension",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Attachment file extension enum field name."
+      },
+      {
+        "name": "filename",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Attachment filename enum field name."
+      },
+      {
+        "name": "fileUrl",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Attachment file URL."
+      },
+      {
+        "name": "md5",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Attachment file MD5 hash."
+      },
+      {
+        "name": "thumbnailUrl",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Attachment file thumbnail URL."
+      },
+      {
+        "name": "status",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Attachment file status on processing server."
+      },
+      {
+        "name": "ownerId",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Attachment owner UUID."
+      },
+      {
+        "name": "postId",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Attachment owning post UUID."
+      },
+      {
+        "name": "createDate",
+        "type": [
+          "null",
+          {
+            "type": "long",
+            "logicalType": "timestamp-millis"
+          }
+        ],
+        "default": null,
+        "doc": "Create timestamp."
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "ws.furrify.posts.attachment",
+    "doc": "Attachment state change request.",
+    "name": "AttachmentEvent",
+    "fields": [
+      {
+        "name": "state",
+        "type": "string",
+        "doc": "A event type performed on that record. (Can be acquired using AttachmentEventType enum.)"
+      },
+      {
+        "name": "attachmentId",
+        "type": "string",
+        "doc": "A attachment UUID event is targeted at."
+      },
+      {
+        "name": "data",
+        "type": "ws.furrify.posts.attachment.vo.AttachmentData",
+        "doc": "Attachment data eg. changed fields."
+      },
+      {
+        "name": "occurredOn",
+        "type": {
+          "type": "long",
+          "logicalType": "timestamp-millis"
+        },
+        "doc": "Instant event occurred on."
+      }
+    ]
+  }
+]

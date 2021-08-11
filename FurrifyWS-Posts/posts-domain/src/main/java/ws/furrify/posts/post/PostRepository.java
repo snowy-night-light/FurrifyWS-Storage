@@ -18,4 +18,6 @@ interface PostRepository {
     Set<Post> findAllByOwnerIdAndArtistIdInArtists(UUID ownerId, UUID artistId);
 
     Optional<Post> findByOwnerIdAndPostIdAndMediaId(UUID ownerId, UUID postId, UUID mediaId);
+
+    Optional<Post> findByOwnerIdAndPostIdAndAttachmentId(UUID ownerId, UUID postId, UUID attachment);
 }

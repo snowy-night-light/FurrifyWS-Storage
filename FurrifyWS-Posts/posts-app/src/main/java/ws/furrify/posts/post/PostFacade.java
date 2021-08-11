@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import ws.furrify.artists.artist.ArtistEvent;
+import ws.furrify.posts.attachment.AttachmentEvent;
 import ws.furrify.posts.media.MediaEvent;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
+import ws.furrify.posts.post.vo.PostAttachment;
+import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.tag.TagEvent;
@@ -34,7 +37,7 @@ public class PostFacade {
      *
      * @param postEvent Post event instance received from kafka.
      */
-    void handleEvent(final UUID key, final PostEvent postEvent) {
+    public void handleEvent(final UUID key, final PostEvent postEvent) {
         PostDTO postDTO = postDTOFactory.from(key, postEvent);
 
         switch (DomainEventPublisher.PostEventType.valueOf(postEvent.getState())) {
@@ -52,19 +55,30 @@ public class PostFacade {
      * @param mediaEvent Media event instance received from kafka.
      */
     @SneakyThrows
-    void handleEvent(final UUID key, final MediaEvent mediaEvent) {
+    public void handleEvent(final UUID key, final MediaEvent mediaEvent) {
+        UUID mediaId = UUID.fromString(mediaEvent.getMediaId());
+
         switch (DomainEventPublisher.MediaEventType.valueOf(mediaEvent.getState())) {
             case REMOVED -> deleteMediaFromPost(
                     key,
                     UUID.fromString(mediaEvent.getData().getPostId()),
-                    UUID.fromString(mediaEvent.getMediaId())
+                    mediaId
             );
-            case UPDATED, REPLACED -> updateMediaDetailsInPost(key, UUID.fromString(mediaEvent.getData().getPostId()),
-                    UUID.fromString(mediaEvent.getMediaId()),
-                    mediaEvent.getData().getPriority(),
-                    (mediaEvent.getData().getThumbnailUrl() != null) ? new URL(mediaEvent.getData().getThumbnailUrl()) : null,
-                    mediaEvent.getData().getExtension(),
-                    mediaEvent.getData().getStatus()
+            case UPDATED, REPLACED -> updateMediaDetailsInPost(
+                    key,
+                    UUID.fromString(mediaEvent.getData().getPostId()),
+                    // Build post media from media event
+                    PostMedia.builder()
+                            .mediaId(mediaId)
+                            .fileUrl(
+                                    new URL(mediaEvent.getData().getFileUrl())
+                            )
+                            .extension(mediaEvent.getData().getExtension())
+                            .thumbnailUrl(
+                                    new URL(mediaEvent.getData().getThumbnailUrl())
+                            )
+                            .priority(mediaEvent.getData().getPriority())
+                            .build()
             );
             case CREATED -> {
             }
@@ -74,11 +88,46 @@ public class PostFacade {
     }
 
     /**
+     * Handle incoming attachment events.
+     *
+     * @param attachmentEvent Attachment event instance received from kafka.
+     */
+    @SneakyThrows
+    public void handleEvent(final UUID key, final AttachmentEvent attachmentEvent) {
+        UUID attachmentId = UUID.fromString(attachmentEvent.getAttachmentId());
+
+        switch (DomainEventPublisher.AttachmentEventType.valueOf(attachmentEvent.getState())) {
+            case REMOVED -> deleteAttachmentFromPost(
+                    key,
+                    UUID.fromString(attachmentEvent.getData().getPostId()),
+                    attachmentId
+            );
+            case UPDATED, REPLACED -> updateAttachmentDetailsInPost(
+                    key,
+                    UUID.fromString(attachmentEvent.getData().getPostId()),
+                    // Build post attachment from attachment event
+                    PostAttachment.builder()
+                            .attachmentId(attachmentId)
+                            .fileUrl(
+                                    new URL(attachmentEvent.getData().getFileUrl())
+                            )
+                            .extension(attachmentEvent.getData().getExtension())
+                            .filename(attachmentEvent.getData().getFilename())
+                            .build()
+            );
+            case CREATED -> {
+            }
+            default -> log.warning("State received from kafka is not defined. " +
+                    "State=" + attachmentEvent.getState() + " Topic=media_events");
+        }
+    }
+
+    /**
      * Handle incoming tag events.
      *
      * @param tagEvent Tag event instance received from kafka.
      */
-    void handleEvent(final UUID key, final TagEvent tagEvent) {
+    public void handleEvent(final UUID key, final TagEvent tagEvent) {
         switch (DomainEventPublisher.TagEventType.valueOf(tagEvent.getState())) {
             case REMOVED -> deleteTagFromPosts(key, tagEvent.getTagValue());
             case UPDATED, REPLACED -> updateTagDetailsInPosts(key,
@@ -96,7 +145,7 @@ public class PostFacade {
      *
      * @param artistEvent Artist event instance received from kafka.
      */
-    void handleEvent(final UUID key, final ArtistEvent artistEvent) {
+    public void handleEvent(final UUID key, final ArtistEvent artistEvent) {
         switch (DomainEventPublisher.ArtistEventType.valueOf(artistEvent.getState())) {
             case REMOVED -> deleteArtistFromPosts(key, UUID.fromString(artistEvent.getArtistId()));
             case UPDATED, REPLACED -> updateArtistDetailsInPosts(key,
@@ -208,22 +257,33 @@ public class PostFacade {
         postRepository.save(post);
     }
 
-    private void updateMediaDetailsInPost(final UUID ownerId,
+    private void deleteAttachmentFromPost(final UUID ownerId,
                                           final UUID postId,
-                                          final UUID mediaId,
-                                          final Integer priority,
-                                          final URL thumbnailUrl,
-                                          final String extension,
-                                          final String status) {
-        Post post = postRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, mediaId)
+                                          final UUID attachmentId) {
+        Post post = postRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, attachmentId)
                 .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
-        post.updateMediaDetailsInMediaSet(
-                mediaId,
-                priority,
-                thumbnailUrl,
-                extension,
-                status
-        );
+        post.removeAttachment(attachmentId);
+
+        postRepository.save(post);
+    }
+
+    private void updateMediaDetailsInPost(
+            final UUID ownerId,
+            final UUID postId,
+            final PostMedia postMedia) {
+        Post post = postRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, postMedia.getMediaId())
+                .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
+        post.updateMediaDetailsInMediaSet(postMedia);
+
+        postRepository.save(post);
+    }
+
+    private void updateAttachmentDetailsInPost(final UUID ownerId,
+                                               final UUID postId,
+                                               final PostAttachment postAttachment) {
+        Post post = postRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, postAttachment.getAttachmentId())
+                .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
+        post.updateAttachmentDetailsInAttachments(postAttachment);
 
         postRepository.save(post);
     }
