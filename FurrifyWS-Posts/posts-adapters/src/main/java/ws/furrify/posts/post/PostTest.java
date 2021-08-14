@@ -67,6 +67,7 @@ class PostTest implements CommandLineRunner {
                                                 .priority(1)
                                                 .extension("PNG")
                                                 .fileUrl(new URL("https://example.com"))
+                                                .thumbnailUrl(new URL("https://example.com"))
                                                 .build()
                                 ))
                                 .createDate(ZonedDateTime.now())

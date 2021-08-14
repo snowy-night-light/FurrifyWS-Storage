@@ -1,11 +1,13 @@
 package ws.furrify.posts.attachment;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import ws.furrify.posts.attachment.dto.AttachmentDTO;
 
+import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.UUID;
@@ -25,6 +27,7 @@ class AttachmentTest implements CommandLineRunner {
                 .ifPresent((profile) -> createTestingAttachments());
     }
 
+    @SneakyThrows
     private void createTestingAttachments() {
         var attachmentFactory = new AttachmentFactory();
 
@@ -39,6 +42,7 @@ class AttachmentTest implements CommandLineRunner {
                                 .postId(postId)
                                 .ownerId(userId)
                                 .extension(AttachmentExtension.PSD)
+                                .fileUrl(new URL("https://example.com/"))
                                 .filename("yes.psd")
                                 .md5("3c518eeb674c71b30297f072fde7eba5")
                                 .createDate(ZonedDateTime.now())

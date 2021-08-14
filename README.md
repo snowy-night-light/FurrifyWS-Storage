@@ -13,7 +13,7 @@ Requirements:
 - Need to set env variable REGION (It is any string to make groupId unique and don't loose offset in kafka)
 - Kafka (kafka:9092)
 - Schema Registry (kafka:8081)
-- Keycloak (192.168.0.27:6565)
+- Keycloak (192.168.0.200:6565)
 - Currently no production profile is supported you will need to use "dev" profile.
 
 ## Tests

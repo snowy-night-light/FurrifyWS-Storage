@@ -34,7 +34,7 @@ public class PostDTO {
 
     Set<PostMedia> mediaSet;
 
-    Set<PostAttachment> postAttachments;
+    Set<PostAttachment> attachments;
 
     ZonedDateTime createDate;
 }

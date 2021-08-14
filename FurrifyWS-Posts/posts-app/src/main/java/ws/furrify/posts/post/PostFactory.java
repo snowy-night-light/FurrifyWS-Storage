@@ -26,6 +26,9 @@ class PostFactory {
                 .mediaSet(
                         (postDTO.getMediaSet() != null) ? postDTO.getMediaSet() : new HashSet<>()
                 )
+                .attachments(
+                        (postDTO.getAttachments() != null) ? postDTO.getAttachments() : new HashSet<>()
+                )
                 .createDate(
                         (postDTO.getCreateDate() != null) ? postDTO.getCreateDate() : ZonedDateTime.now()
                 )
