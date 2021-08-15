@@ -118,7 +118,7 @@ public class PostFacade {
             case CREATED -> {
             }
             default -> log.warning("State received from kafka is not defined. " +
-                    "State=" + attachmentEvent.getState() + " Topic=media_events");
+                    "State=" + attachmentEvent.getState() + " Topic=attachments_events");
         }
     }
 
