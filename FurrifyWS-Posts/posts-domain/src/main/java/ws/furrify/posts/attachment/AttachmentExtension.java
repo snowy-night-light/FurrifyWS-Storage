@@ -20,7 +20,8 @@ public enum AttachmentExtension {
     /**
      * File extensions
      */
-    PSD(AttachmentType.PHOTOSHOP_DOCUMENT, "image/vnd.adobe.photoshop");
+    PSD(AttachmentType.PHOTOSHOP_DOCUMENT, "image/vnd.adobe.photoshop"),
+    BLEND(AttachmentType.BLENDER_PROJECT, "application/octet-stream");
 
     /**
      * Mime type of extension.
@@ -56,6 +57,10 @@ public enum AttachmentExtension {
         /**
          * Photoshop Document
          */
-        PHOTOSHOP_DOCUMENT
+        PHOTOSHOP_DOCUMENT,
+        /**
+         * Blender project file
+         */
+        BLENDER_PROJECT
     }
 }

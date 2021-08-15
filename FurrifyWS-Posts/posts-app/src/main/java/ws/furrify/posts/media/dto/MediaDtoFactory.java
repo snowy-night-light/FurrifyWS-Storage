@@ -5,7 +5,6 @@ import lombok.SneakyThrows;
 import ws.furrify.posts.media.MediaEvent;
 import ws.furrify.posts.media.MediaExtension;
 import ws.furrify.posts.media.MediaQueryRepository;
-import ws.furrify.posts.media.MediaStatus;
 
 import java.net.URL;
 import java.time.Instant;
@@ -60,11 +59,6 @@ public class MediaDtoFactory {
                                 new URL(mediaEvent.getData().getThumbnailUrl()) :
                                 null
 
-                )
-                .status(
-                        (mediaEvent.getData().getStatus() != null) ?
-                                MediaStatus.valueOf(mediaEvent.getData().getStatus()) :
-                                null
                 )
                 .createDate(createDate)
                 .build();

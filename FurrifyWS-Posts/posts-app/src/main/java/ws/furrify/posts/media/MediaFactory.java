@@ -23,7 +23,6 @@ class MediaFactory {
                 .extension(mediaDTO.getExtension())
                 .fileUrl(mediaDTO.getFileUrl())
                 .thumbnailUrl(mediaDTO.getThumbnailUrl())
-                .status(mediaDTO.getStatus())
                 .createDate(
                         (mediaDTO.getCreateDate() != null) ? mediaDTO.getCreateDate() : ZonedDateTime.now()
                 )

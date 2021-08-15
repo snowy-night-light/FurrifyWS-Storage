@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import ws.furrify.posts.media.MediaExtension;
-import ws.furrify.posts.media.MediaStatus;
 
 import java.net.URL;
 
@@ -35,8 +34,6 @@ public class MediaFile {
 
     @NonNull
     private String md5;
-    @NonNull
-    private MediaStatus status;
 
     private final static String FILENAME_EXTENSION_DIVIDER = "\\.";
     private final static byte MINIMUM_DIVIDE_COUNT = 2;
@@ -72,6 +69,5 @@ public class MediaFile {
         this.fileUrl = fileUrl;
         this.thumbnailUrl = thumbnailUrl;
         this.md5 = md5;
-        this.status = MediaStatus.REQUEST_PENDING;
     }
 }

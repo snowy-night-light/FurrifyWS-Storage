@@ -1,12 +1,14 @@
 package ws.furrify.posts.post;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ws.furrify.posts.attachment.AttachmentExtension;
 import ws.furrify.posts.media.MediaExtension;
-import ws.furrify.posts.media.MediaStatus;
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostAttachment;
 import ws.furrify.posts.post.vo.PostDescription;
 import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
@@ -32,6 +34,7 @@ class PostTest {
     private PostSnapshot postSnapshot;
     private Post post;
 
+    @SneakyThrows
     @BeforeEach
     void setUp() {
         postSnapshot = PostSnapshot.builder()
@@ -42,7 +45,23 @@ class PostTest {
                 .description("dsa")
                 .tags(Collections.singleton(new PostTag("tag_value", "ACTION")))
                 .artists(Collections.singleton(new PostArtist(UUID.randomUUID(), "example_nickname")))
-                .mediaSet(Collections.singleton(new PostMedia(UUID.randomUUID(), 1, null, MediaExtension.PNG.toString(), MediaStatus.REQUEST_PENDING.name())))
+                .mediaSet(Collections.singleton(
+                        PostMedia.builder()
+                                .mediaId(UUID.randomUUID())
+                                .priority(1)
+                                .fileUrl(new URL("https://example.com/"))
+                                .thumbnailUrl(new URL("https://example.com/"))
+                                .extension(MediaExtension.PNG.name())
+                                .build()
+                ))
+                .attachments(Collections.singleton(
+                        PostAttachment.builder()
+                                .attachmentId(UUID.randomUUID())
+                                .fileUrl(new URL("https://example.com/"))
+                                .filename("yes.psd")
+                                .extension(AttachmentExtension.PSD.name())
+                                .build()
+                ))
                 .createDate(ZonedDateTime.now())
                 .build();
 
@@ -252,27 +271,29 @@ class PostTest {
         UUID mediaId = ((PostMedia) postSnapshot.getMediaSet().toArray()[0]).getMediaId();
         Integer newPriority = 32;
         URL newThumbnailUrl = new URL("https://google.pl/");
+        URL newFileUrl = new URL("https://google.pl/");
         String newExtension = "JPEG";
-        String newStatus = "REQUEST_ACCEPTED";
         // When updateMediaDetailsInMediaSet() method called
         // Then update artist details in artists
         post.updateMediaDetailsInMediaSet(
-                mediaId,
-                newPriority,
-                newThumbnailUrl,
-                newExtension,
-                newStatus
+                PostMedia.builder()
+                        .mediaId(mediaId)
+                        .priority(newPriority)
+                        .fileUrl(newFileUrl)
+                        .thumbnailUrl(newThumbnailUrl)
+                        .extension(newExtension)
+                        .build()
         );
 
         assertEquals(
                 post.getSnapshot().getMediaSet().toArray()[0],
-                new PostMedia(
-                        mediaId,
-                        newPriority,
-                        newThumbnailUrl,
-                        newExtension,
-                        newStatus
-                ),
+                PostMedia.builder()
+                        .mediaId(mediaId)
+                        .priority(newPriority)
+                        .fileUrl(newFileUrl)
+                        .thumbnailUrl(newThumbnailUrl)
+                        .extension(newExtension)
+                        .build(),
                 "Media was not updated."
         );
     }
@@ -284,19 +305,92 @@ class PostTest {
         UUID mediaId = UUID.randomUUID();
         Integer newPriority = 32;
         URL newThumbnailUrl = new URL("https://google.pl/");
+        URL newFileUrl = new URL("https://google.pl/");
         String newExtension = "JPEG";
-        String newStatus = "REQUEST_ACCEPTED";
         // When updateMediaDetailsInMediaSet() method called
+        // Then throw IllegalStateException
+        assertThrows(
+                IllegalStateException.class,
+                () -> post.updateMediaDetailsInMediaSet(
+                        PostMedia.builder()
+                                .mediaId(mediaId)
+                                .priority(newPriority)
+                                .fileUrl(newFileUrl)
+                                .thumbnailUrl(newThumbnailUrl)
+                                .extension(newExtension)
+                                .build()
+                ),
+                "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Remove attachment")
+    void removeAttachment() {
+        // Given attachmentId
+        UUID attachmentId = ((PostAttachment) postSnapshot.getAttachments().toArray()[0]).getAttachmentId();
+        // When removeAttachment() method called
+        // Then remove attachment from attachments
+        post.removeAttachment(attachmentId);
+
+        assertEquals(
+                0,
+                post.getSnapshot().getAttachments().size(),
+                "Attachment was not removed."
+        );
+    }
+
+    @Test
+    @DisplayName("Update attachment details in attachments")
+    void updateAttachmentDetailsInAttachmentSet() throws MalformedURLException {
+        // Given existing attachmentId, new fileUrl and new extension
+        UUID attachmentId = ((PostAttachment) postSnapshot.getAttachments().toArray()[0]).getAttachmentId();
+        URL newFileUrl = new URL("https://example.com/");
+        String newExtension = "PSD";
+        String newFilename = "new.psd";
+        // When updateAttachmentDetailsInAttachments() method called
+        // Then update attachment details in attachments
+        post.updateAttachmentDetailsInAttachments(
+                PostAttachment.builder()
+                        .attachmentId(attachmentId)
+                        .filename(newFilename)
+                        .fileUrl(newFileUrl)
+                        .extension(newExtension)
+                        .build()
+        );
+
+        assertEquals(
+                post.getSnapshot().getAttachments().toArray()[0],
+                PostAttachment.builder()
+                        .attachmentId(attachmentId)
+                        .filename(newFilename)
+                        .fileUrl(newFileUrl)
+                        .extension(newExtension)
+                        .build(),
+                "Attachment was not updated."
+        );
+    }
+
+    @Test
+    @DisplayName("Update attachment details in attachments with non existing attachmentId")
+    void updateAttachmentDetailsInAttachmentSet2() throws MalformedURLException {
+        // Given non existing attachmentId, new thumbnailUrl and new extension
+        UUID attachmentId = UUID.randomUUID();
+        URL newFileUrl = new URL("https://google.pl/");
+        String newExtension = "PSD";
+        String newFilename = "new.psd";
+        // When updateAttachmentDetailsInAttachments() method called
         // Then throw IllegalStateException
 
         assertThrows(
                 IllegalStateException.class,
-                () -> post.updateMediaDetailsInMediaSet(
-                        mediaId,
-                        newPriority,
-                        newThumbnailUrl,
-                        newExtension,
-                        newStatus
+                () -> post.updateAttachmentDetailsInAttachments(
+                        PostAttachment.builder()
+                                .attachmentId(attachmentId)
+                                .filename(newFilename)
+                                .fileUrl(newFileUrl)
+                                .extension(newExtension)
+                                .build()
                 ),
                 "Exception was not thrown."
         );

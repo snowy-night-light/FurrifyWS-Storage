@@ -1,5 +1,6 @@
 package ws.furrify.posts.media;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,7 @@ import ws.furrify.shared.kafka.DomainEventPublisher;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,6 +33,7 @@ class MediaFacadeTest {
     private MediaDTO mediaDTO;
     private Media media;
 
+    @SneakyThrows
     @BeforeEach
     void setUp() {
         mediaDTO = MediaDTO.builder()
@@ -40,6 +43,8 @@ class MediaFacadeTest {
                 .priority(0)
                 .extension(MediaExtension.PNG)
                 .filename("yes.png")
+                .fileUrl(new URL("https://example.com/"))
+                .thumbnailUrl(new URL("https://example.com/"))
                 .md5("3c518eeb674c71b30297f072fde7eba5")
                 .createDate(ZonedDateTime.now())
                 .build();

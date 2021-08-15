@@ -42,7 +42,6 @@ class MediaUtils {
                                 .setThumbnailUrl(
                                         (mediaSnapshot.getThumbnailUrl() != null) ? mediaSnapshot.getThumbnailUrl().toString() : null
                                 )
-                                .setStatus(mediaSnapshot.getStatus().name())
                                 .setCreateDate(mediaSnapshot.getCreateDate().toInstant())
                 ).build();
     }

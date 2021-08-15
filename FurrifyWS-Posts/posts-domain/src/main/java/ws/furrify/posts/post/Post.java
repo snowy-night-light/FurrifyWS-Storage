@@ -186,8 +186,8 @@ class Post {
 
     void updateAttachmentDetailsInAttachments(@NonNull final PostAttachment postAttachment) {
         // Filter attachments to find if attachment exists by attachmentId.
-        this.mediaSet.stream()
-                .filter(media -> media.getMediaId().equals(postAttachment.getAttachmentId()))
+        this.attachments.stream()
+                .filter(attachment -> attachment.getAttachmentId().equals(postAttachment.getAttachmentId()))
                 .findAny()
                 .orElseThrow(() -> {
                     log.severe("Original attachment [attachmentId=" + postAttachment.getAttachmentId() + "] was not found.");

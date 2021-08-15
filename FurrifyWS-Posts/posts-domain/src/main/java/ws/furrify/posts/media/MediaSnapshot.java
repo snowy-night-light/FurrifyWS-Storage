@@ -38,7 +38,5 @@ class MediaSnapshot {
     private URL fileUrl;
     private URL thumbnailUrl;
 
-    private MediaStatus status;
-
     private ZonedDateTime createDate;
 }
