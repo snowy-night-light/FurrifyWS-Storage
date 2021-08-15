@@ -33,8 +33,8 @@ public class ArtistFacade {
         ArtistDTO artistDTO = artistDTOFactory.from(key, artistEvent);
 
         switch (DomainEventPublisher.ArtistEventType.valueOf(artistEvent.getState())) {
-            case CREATED, REPLACED, UPDATED -> saveArtist(artistDTO);
-            case REMOVED -> deleteArtistByArtistId(artistDTO.getArtistId());
+            case CREATED, REPLACED, UPDATED -> saveArtistToDatabase(artistDTO);
+            case REMOVED -> deleteArtistByArtistIdFromDatabase(artistDTO.getArtistId());
 
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + artistEvent.getState() + " Topic=artist_events");
@@ -84,11 +84,11 @@ public class ArtistFacade {
         deleteArtistImpl.deleteArtist(ownerId, artistId);
     }
 
-    private void deleteArtistByArtistId(final UUID artistId) {
+    private void deleteArtistByArtistIdFromDatabase(final UUID artistId) {
         artistRepository.deleteByArtistId(artistId);
     }
 
-    private void saveArtist(final ArtistDTO artistDTO) {
+    private void saveArtistToDatabase(final ArtistDTO artistDTO) {
         artistRepository.save(artistFactory.from(artistDTO));
     }
 

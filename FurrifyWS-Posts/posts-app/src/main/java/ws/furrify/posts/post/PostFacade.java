@@ -41,8 +41,8 @@ public class PostFacade {
         PostDTO postDTO = postDTOFactory.from(key, postEvent);
 
         switch (DomainEventPublisher.PostEventType.valueOf(postEvent.getState())) {
-            case CREATED, REPLACED, UPDATED -> savePost(postDTO);
-            case REMOVED -> deletePostByPostId(postDTO.getPostId());
+            case CREATED, REPLACED, UPDATED -> savePostInDatabase(postDTO);
+            case REMOVED -> deletePostByPostIdFromDatabase(postDTO.getPostId());
 
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + postEvent.getState() + " Topic=post_events");
@@ -200,11 +200,11 @@ public class PostFacade {
         updatePostImpl.updatePost(userId, postId, postDTO);
     }
 
-    private void savePost(final PostDTO postDTO) {
+    private void savePostInDatabase(final PostDTO postDTO) {
         postRepository.save(postFactory.from(postDTO));
     }
 
-    private void deletePostByPostId(final UUID postId) {
+    private void deletePostByPostIdFromDatabase(final UUID postId) {
         postRepository.deleteByPostId(postId);
     }
 

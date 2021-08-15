@@ -32,9 +32,9 @@ public class TagFacade {
         TagDTO tagDTO = tagDtoFactory.from(key, tagEvent);
 
         switch (DomainEventPublisher.TagEventType.valueOf(tagEvent.getState())) {
-            case CREATED, REPLACED, UPDATED -> saveTag(tagDTO);
+            case CREATED, REPLACED, UPDATED -> saveTagInDatabase(tagDTO);
 
-            case REMOVED -> deleteTagByValue(tagDTO.getValue());
+            case REMOVED -> deleteTagByValueFromDatabase(tagDTO.getValue());
 
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + tagEvent.getState() + " Topic=tag_events");
@@ -81,11 +81,11 @@ public class TagFacade {
         updateTagImpl.updateTag(userId, value, tagDTO);
     }
 
-    private void saveTag(final TagDTO tagDTO) {
+    private void saveTagInDatabase(final TagDTO tagDTO) {
         tagRepository.save(tagFactory.from(tagDTO));
     }
 
-    private void deleteTagByValue(final String value) {
+    private void deleteTagByValueFromDatabase(final String value) {
         tagRepository.deleteByValue(value);
     }
 }
