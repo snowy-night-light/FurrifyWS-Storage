@@ -11,6 +11,10 @@ spring:
         prefix: "kafka-test-"
     producer:
       retries: 3
+  servlet:
+    multipart:
+      max-file-size: 10GB
+      max-request-size: 10GB
 
   datasource:
     driverClassName: org.h2.Driver
@@ -41,3 +45,4 @@ keycloak:
   principal-attribute: preferred_username
   bearer-only: true
   use-resource-role-mappings: true
+

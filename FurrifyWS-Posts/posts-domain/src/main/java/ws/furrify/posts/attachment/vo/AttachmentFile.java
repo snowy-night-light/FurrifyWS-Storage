@@ -27,6 +27,7 @@ public class AttachmentFile {
     @NonNull
     private AttachmentExtension extension;
 
+    @NonNull
     private URL fileUrl;
 
     @NonNull
@@ -40,7 +41,7 @@ public class AttachmentFile {
     @Builder
     private AttachmentFile(@NonNull final String filename,
                            @NonNull final AttachmentExtension extension,
-                           final URL fileUrl,
+                           @NonNull final URL fileUrl,
                            @NonNull final String md5) {
 
         // Validate given values

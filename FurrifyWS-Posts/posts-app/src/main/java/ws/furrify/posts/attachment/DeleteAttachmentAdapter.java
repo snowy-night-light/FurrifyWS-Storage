@@ -24,7 +24,7 @@ class DeleteAttachmentAdapter implements DeleteAttachmentPort {
 
         // Publish delete attachment event
         domainEventPublisher.publish(
-                DomainEventPublisher.Topic.MEDIA,
+                DomainEventPublisher.Topic.ATTACHMENT,
                 // Use userId as key
                 userId,
                 AttachmentUtils.deleteAttachmentEvent(postId, attachmentId)

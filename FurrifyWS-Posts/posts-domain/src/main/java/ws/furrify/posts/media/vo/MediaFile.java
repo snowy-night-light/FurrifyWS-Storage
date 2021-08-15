@@ -28,7 +28,9 @@ public class MediaFile {
     @NonNull
     private MediaExtension extension;
 
+    @NonNull
     private URL fileUrl;
+    @NonNull
     private URL thumbnailUrl;
 
     @NonNull
@@ -43,8 +45,8 @@ public class MediaFile {
     @Builder
     private MediaFile(@NonNull final String filename,
                       @NonNull final MediaExtension extension,
-                      final URL fileUrl,
-                      final URL thumbnailUrl,
+                      @NonNull final URL fileUrl,
+                      @NonNull final URL thumbnailUrl,
                       @NonNull final String md5) {
 
         // Validate given values

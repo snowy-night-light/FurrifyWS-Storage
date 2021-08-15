@@ -25,7 +25,7 @@ class UpdateAttachmentAdapter implements UpdateAttachmentPort {
 
         // Publish update attachment event
         domainEventPublisher.publish(
-                DomainEventPublisher.Topic.MEDIA,
+                DomainEventPublisher.Topic.ATTACHMENT,
                 // User userId as key
                 userId,
                 AttachmentUtils.createAttachmentEvent(

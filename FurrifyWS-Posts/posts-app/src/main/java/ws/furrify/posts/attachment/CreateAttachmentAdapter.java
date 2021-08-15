@@ -61,7 +61,7 @@ class CreateAttachmentAdapter implements CreateAttachmentPort {
 
         // Publish create attachment event
         domainEventPublisher.publish(
-                DomainEventPublisher.Topic.MEDIA,
+                DomainEventPublisher.Topic.ATTACHMENT,
                 // User userId as key
                 userId,
                 AttachmentUtils.createAttachmentEvent(

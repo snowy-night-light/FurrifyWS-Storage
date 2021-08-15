@@ -7,6 +7,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostAttachment;
 import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 
@@ -57,6 +58,16 @@ class PostTest implements CommandLineRunner {
                                                         UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00")
                                                 )
                                                 .preferredNickname("example_nickname")
+                                                .build()
+                                ))
+                                .attachments(Set.of(
+                                        PostAttachment.builder()
+                                                .attachmentId(
+                                                        UUID.fromString("566548cf-fb1d-4552-a880-c741a1eb9d0e")
+                                                )
+                                                .filename("test.psd")
+                                                .extension("PSD")
+                                                .fileUrl(new URL("https://example.com"))
                                                 .build()
                                 ))
                                 .mediaSet(Set.of(
