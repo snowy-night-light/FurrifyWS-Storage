@@ -18,6 +18,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -122,6 +123,16 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
 
         apiError.setMessage(String.format("Parameter '%s' of field '%s' couldn't be converted to '%s'", exception.getName(), exception.getValue(), Objects.requireNonNull(exception.getRequiredType()).getSimpleName()));
         apiError.setDebugMessage(exception.getMessage());
+        return responseEntity(apiError);
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    protected ResponseEntity<Object> handleMultipartException(
+            MultipartException exception
+    ) {
+        ApiError apiError = new ApiError(BAD_REQUEST);
+        apiError.setMessage(Errors.BAD_REQUEST.getErrorMessage());
+
         return responseEntity(apiError);
     }
 
