@@ -5,20 +5,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 
 /**
- * Checks for REGION env variable and logs if not present.
+ * Checks for KAFKA_CONSUMER_GROUP_ID env variable and logs if not present.
  *
  * @author sky
  */
 @Slf4j
-public class CheckRegionEnvCommandLineRunner implements CommandLineRunner {
+public class CheckGroupIdEnvCommandLineRunner implements CommandLineRunner {
 
-    @Value("${REGION:}")
+    @Value("${KAFKA_CONSUMER_GROUP_ID:}")
     private String groupIdRegion;
 
     @Override
     public void run(final String... args) throws Exception {
         if (groupIdRegion.isBlank()) {
-            log.error("Env REGION variable is not set! Kafka consumers will load balance.");
+            log.error("Env KAFKA_CONSUMER_GROUP_ID variable is not set! Kafka consumers will load balance.");
         }
     }
 }
