@@ -24,10 +24,10 @@ import java.util.UUID;
 @Log
 public class PostFacade {
 
-    private final CreatePostPort createPostAdapter;
-    private final DeletePostPort deletePostAdapter;
-    private final UpdatePostPort updatePostAdapter;
-    private final ReplacePostPort replacePostAdapter;
+    private final CreatePost createPostImpl;
+    private final DeletePost deletePostImpl;
+    private final UpdatePost updatePostImpl;
+    private final ReplacePost replacePostImpl;
     private final PostRepository postRepository;
     private final PostFactory postFactory;
     private final PostDtoFactory postDTOFactory;
@@ -165,7 +165,7 @@ public class PostFacade {
      * @return Created post UUID.
      */
     public UUID createPost(final UUID userId, final PostDTO postDTO) {
-        return createPostAdapter.createPost(userId, postDTO);
+        return createPostImpl.createPost(userId, postDTO);
     }
 
     /**
@@ -175,7 +175,7 @@ public class PostFacade {
      * @param postId Post UUID.
      */
     public void deletePost(final UUID userId, final UUID postId) {
-        deletePostAdapter.deletePost(userId, postId);
+        deletePostImpl.deletePost(userId, postId);
     }
 
     /**
@@ -186,7 +186,7 @@ public class PostFacade {
      * @param postDTO Replacement post.
      */
     public void replacePost(final UUID userId, final UUID postId, final PostDTO postDTO) {
-        replacePostAdapter.replacePost(userId, postId, postDTO);
+        replacePostImpl.replacePost(userId, postId, postDTO);
     }
 
     /**
@@ -197,7 +197,7 @@ public class PostFacade {
      * @param postDTO Post with updated specific fields.
      */
     public void updatePost(final UUID userId, final UUID postId, final PostDTO postDTO) {
-        updatePostAdapter.updatePost(userId, postId, postDTO);
+        updatePostImpl.updatePost(userId, postId, postDTO);
     }
 
     private void savePost(final PostDTO postDTO) {

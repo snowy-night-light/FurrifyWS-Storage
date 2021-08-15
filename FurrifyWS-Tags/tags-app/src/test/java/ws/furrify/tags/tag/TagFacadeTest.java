@@ -55,10 +55,10 @@ class TagFacadeTest {
         var eventPublisher = (DomainEventPublisher<TagEvent>) mock(DomainEventPublisher.class);
 
         tagFacade = new TagFacade(
-                new CreateTagAdapter(tagFactory, eventPublisher, tagRepository),
-                new DeleteTagAdapter(eventPublisher, tagRepository),
-                new UpdateTagAdapter(eventPublisher, tagRepository),
-                new ReplaceTagAdapter(eventPublisher, tagRepository),
+                new CreateTagImpl(tagFactory, eventPublisher, tagRepository),
+                new DeleteTagImpl(eventPublisher, tagRepository),
+                new UpdateTagImpl(eventPublisher, tagRepository),
+                new ReplaceTagImpl(eventPublisher, tagRepository),
                 tagRepository,
                 tagFactory,
                 tagDtoFactory

@@ -16,10 +16,10 @@ import java.util.UUID;
 @Log
 public class AttachmentFacade {
 
-    private final CreateAttachmentPort createAttachmentAdapter;
-    private final DeleteAttachmentPort deleteAttachmentAdapter;
-    private final UpdateAttachmentPort updateAttachmentAdapter;
-    private final ReplaceAttachmentPort replaceAttachmentAdapter;
+    private final CreateAttachment createAttachmentImpl;
+    private final DeleteAttachment deleteAttachmentImpl;
+    private final UpdateAttachment updateAttachmentImpl;
+    private final ReplaceAttachment replaceAttachmentImpl;
     private final AttachmentRepository attachmentRepository;
     private final AttachmentFactory attachmentFactory;
     private final AttachmentDtoFactory attachmentDTOFactory;
@@ -53,7 +53,7 @@ public class AttachmentFacade {
                                  final UUID postId,
                                  final AttachmentDTO attachmentDTO,
                                  final MultipartFile attachmentFile) {
-        return createAttachmentAdapter.createAttachment(userId, postId, attachmentDTO, attachmentFile);
+        return createAttachmentImpl.createAttachment(userId, postId, attachmentDTO, attachmentFile);
     }
 
     /**
@@ -64,7 +64,7 @@ public class AttachmentFacade {
      * @param attachmentId Attachment UUID.
      */
     public void deleteAttachment(final UUID userId, final UUID postId, final UUID attachmentId) {
-        deleteAttachmentAdapter.deleteAttachment(userId, postId, attachmentId);
+        deleteAttachmentImpl.deleteAttachment(userId, postId, attachmentId);
     }
 
     /**
@@ -76,7 +76,7 @@ public class AttachmentFacade {
      * @param attachmentDTO Replacement attachment.
      */
     public void replaceAttachment(final UUID userId, final UUID postId, final UUID attachmentId, final AttachmentDTO attachmentDTO) {
-        replaceAttachmentAdapter.replaceAttachment(userId, postId, attachmentId, attachmentDTO);
+        replaceAttachmentImpl.replaceAttachment(userId, postId, attachmentId, attachmentDTO);
     }
 
     /**
@@ -88,7 +88,7 @@ public class AttachmentFacade {
      * @param attachmentDTO Attachment with updated specific fields.
      */
     public void updateAttachment(final UUID userId, final UUID postId, final UUID attachmentId, final AttachmentDTO attachmentDTO) {
-        updateAttachmentAdapter.updateAttachment(userId, postId, attachmentId, attachmentDTO);
+        updateAttachmentImpl.updateAttachment(userId, postId, attachmentId, attachmentDTO);
     }
 
     private void saveAttachment(final AttachmentDTO attachmentDTO) {

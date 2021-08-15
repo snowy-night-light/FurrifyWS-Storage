@@ -15,10 +15,10 @@ import java.util.UUID;
 @Log
 public class ArtistFacade {
 
-    private final CreateArtistPort createArtistAdapter;
-    private final DeleteArtistPort deleteArtistAdapter;
-    private final UpdateArtistPort updateArtistAdapter;
-    private final ReplaceArtistPort replaceArtistAdapter;
+    private final CreateArtist createArtistImpl;
+    private final DeleteArtist deleteArtistImpl;
+    private final UpdateArtist updateArtistImpl;
+    private final ReplaceArtistImpl replaceArtistImpl;
     private final ArtistRepository artistRepository;
     private final ArtistFactory artistFactory;
     private final ArtistDtoFactory artistDTOFactory;
@@ -49,7 +49,7 @@ public class ArtistFacade {
      * @return Created record UUID.
      */
     public UUID createArtist(UUID ownerId, ArtistDTO artistDTO) {
-        return createArtistAdapter.createArtist(ownerId, artistDTO);
+        return createArtistImpl.createArtist(ownerId, artistDTO);
     }
 
     /**
@@ -60,7 +60,7 @@ public class ArtistFacade {
      * @param artistDTO ArtistDTO with replace details.
      */
     public void replaceArtist(UUID ownerId, UUID artistId, ArtistDTO artistDTO) {
-        replaceArtistAdapter.replaceArtist(ownerId, artistId, artistDTO);
+        replaceArtistImpl.replaceArtist(ownerId, artistId, artistDTO);
     }
 
     /**
@@ -71,7 +71,7 @@ public class ArtistFacade {
      * @param artistDTO ArtistDTO with some changes.
      */
     public void updateArtist(UUID ownerId, UUID artistId, ArtistDTO artistDTO) {
-        updateArtistAdapter.updateArtist(ownerId, artistId, artistDTO);
+        updateArtistImpl.updateArtist(ownerId, artistId, artistDTO);
     }
 
     /**
@@ -81,7 +81,7 @@ public class ArtistFacade {
      * @param artistId Artist UUID.
      */
     public void deleteArtist(final UUID ownerId, final UUID artistId) {
-        deleteArtistAdapter.deleteArtist(ownerId, artistId);
+        deleteArtistImpl.deleteArtist(ownerId, artistId);
     }
 
     private void deleteArtistByArtistId(final UUID artistId) {

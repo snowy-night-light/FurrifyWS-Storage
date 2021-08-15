@@ -20,10 +20,10 @@ class MediaConfig {
         var mediaDtoFactory = new MediaDtoFactory(mediaQueryRepository);
 
         return new MediaFacade(
-                new CreateMediaAdapter(mediaFactory, eventPublisher),
-                new DeleteMediaAdapter(eventPublisher, mediaRepository),
-                new UpdateMediaAdapter(eventPublisher, mediaRepository),
-                new ReplaceMediaAdapter(eventPublisher, mediaRepository),
+                new CreateMediaImpl(mediaFactory, eventPublisher),
+                new DeleteMediaImpl(eventPublisher, mediaRepository),
+                new UpdateMediaImpl(eventPublisher, mediaRepository),
+                new ReplaceMediaImpl(eventPublisher, mediaRepository),
                 mediaRepository,
                 mediaFactory,
                 mediaDtoFactory

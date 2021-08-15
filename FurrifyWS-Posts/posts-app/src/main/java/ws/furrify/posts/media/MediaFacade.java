@@ -16,10 +16,10 @@ import java.util.UUID;
 @Log
 public class MediaFacade {
 
-    private final CreateMediaPort createMediaAdapter;
-    private final DeleteMediaPort deleteMediaAdapter;
-    private final UpdateMediaPort updateMediaAdapter;
-    private final ReplaceMediaPort replaceMediaAdapter;
+    private final CreateMedia createMediaImpl;
+    private final DeleteMedia deleteMediaImpl;
+    private final UpdateMedia updateMediaImpl;
+    private final ReplaceMedia replaceMediaImpl;
     private final MediaRepository mediaRepository;
     private final MediaFactory mediaFactory;
     private final MediaDtoFactory mediaDTOFactory;
@@ -53,7 +53,7 @@ public class MediaFacade {
                             final UUID postId,
                             final MediaDTO mediaDTO,
                             final MultipartFile mediaFile) {
-        return createMediaAdapter.createMedia(userId, postId, mediaDTO, mediaFile);
+        return createMediaImpl.createMedia(userId, postId, mediaDTO, mediaFile);
     }
 
     /**
@@ -64,7 +64,7 @@ public class MediaFacade {
      * @param mediaId Media UUID.
      */
     public void deleteMedia(final UUID userId, final UUID postId, final UUID mediaId) {
-        deleteMediaAdapter.deleteMedia(userId, postId, mediaId);
+        deleteMediaImpl.deleteMedia(userId, postId, mediaId);
     }
 
     /**
@@ -76,7 +76,7 @@ public class MediaFacade {
      * @param mediaDTO Replacement media.
      */
     public void replaceMedia(final UUID userId, final UUID postId, final UUID mediaId, final MediaDTO mediaDTO) {
-        replaceMediaAdapter.replaceMedia(userId, postId, mediaId, mediaDTO);
+        replaceMediaImpl.replaceMedia(userId, postId, mediaId, mediaDTO);
     }
 
     /**
@@ -88,7 +88,7 @@ public class MediaFacade {
      * @param mediaDTO Media with updated specific fields.
      */
     public void updateMedia(final UUID userId, final UUID postId, final UUID mediaId, final MediaDTO mediaDTO) {
-        updateMediaAdapter.updateMedia(userId, postId, mediaId, mediaDTO);
+        updateMediaImpl.updateMedia(userId, postId, mediaId, mediaDTO);
     }
 
     private void saveMedia(final MediaDTO mediaDTO) {

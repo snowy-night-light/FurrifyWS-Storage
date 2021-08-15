@@ -22,10 +22,10 @@ class PostConfig {
         var postDtoFactory = new PostDtoFactory(postQueryRepository);
 
         return new PostFacade(
-                new CreatePostAdapter(postFactory, eventPublisher, tagService, artistService),
-                new DeletePostAdapter(eventPublisher, postRepository),
-                new UpdatePostAdapter(eventPublisher, postRepository, tagService, artistService),
-                new ReplacePostAdapter(eventPublisher, postRepository, tagService, artistService),
+                new CreatePostImpl(postFactory, eventPublisher, tagService, artistService),
+                new DeletePostImpl(eventPublisher, postRepository),
+                new UpdatePostImpl(eventPublisher, postRepository, tagService, artistService),
+                new ReplacePostImpl(eventPublisher, postRepository, tagService, artistService),
                 postRepository,
                 postFactory,
                 postDtoFactory

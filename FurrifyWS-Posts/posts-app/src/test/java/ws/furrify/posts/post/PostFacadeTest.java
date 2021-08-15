@@ -95,10 +95,10 @@ class PostFacadeTest {
         var eventPublisher = (DomainEventPublisher<PostEvent>) mock(DomainEventPublisher.class);
 
         postFacade = new PostFacade(
-                new CreatePostAdapter(postFactory, eventPublisher, tagServiceClient, artistServiceClient),
-                new DeletePostAdapter(eventPublisher, postRepository),
-                new UpdatePostAdapter(eventPublisher, postRepository, tagServiceClient, artistServiceClient),
-                new ReplacePostAdapter(eventPublisher, postRepository, tagServiceClient, artistServiceClient),
+                new CreatePostImpl(postFactory, eventPublisher, tagServiceClient, artistServiceClient),
+                new DeletePostImpl(eventPublisher, postRepository),
+                new UpdatePostImpl(eventPublisher, postRepository, tagServiceClient, artistServiceClient),
+                new ReplacePostImpl(eventPublisher, postRepository, tagServiceClient, artistServiceClient),
                 postRepository,
                 postFactory,
                 postDTOFactory
