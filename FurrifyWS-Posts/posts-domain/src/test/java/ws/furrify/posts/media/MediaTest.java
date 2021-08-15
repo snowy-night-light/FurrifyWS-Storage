@@ -1,10 +1,12 @@
 package ws.furrify.posts.media;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.posts.media.vo.MediaPriority;
 
+import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -15,6 +17,7 @@ class MediaTest {
     private MediaSnapshot mediaSnapshot;
     private Media media;
 
+    @SneakyThrows
     @BeforeEach
     void setUp() {
         mediaSnapshot = MediaSnapshot.builder()
@@ -25,8 +28,9 @@ class MediaTest {
                 .priority(3)
                 .filename("file.png")
                 .md5("3c518eeb674c71b30297f072fde7eba5")
+                .fileUrl(new URL("https://example.com/"))
+                .thumbnailUrl(new URL("https://example.com/"))
                 .extension(MediaExtension.PNG)
-                .status(MediaStatus.REQUEST_PENDING)
                 .createDate(ZonedDateTime.now())
                 .build();
 

@@ -1,14 +1,17 @@
 package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostAttachment;
 import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 
+import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Set;
@@ -29,6 +32,7 @@ class PostTest implements CommandLineRunner {
                 .ifPresent((profile) -> createTestingPosts());
     }
 
+    @SneakyThrows
     private void createTestingPosts() {
         var postFactory = new PostFactory();
 
@@ -56,6 +60,16 @@ class PostTest implements CommandLineRunner {
                                                 .preferredNickname("example_nickname")
                                                 .build()
                                 ))
+                                .attachments(Set.of(
+                                        PostAttachment.builder()
+                                                .attachmentId(
+                                                        UUID.fromString("566548cf-fb1d-4552-a880-c741a1eb9d0e")
+                                                )
+                                                .filename("test.psd")
+                                                .extension("PSD")
+                                                .fileUrl(new URL("https://example.com"))
+                                                .build()
+                                ))
                                 .mediaSet(Set.of(
                                         PostMedia.builder()
                                                 .mediaId(
@@ -63,7 +77,8 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .priority(1)
                                                 .extension("PNG")
-                                                .status("REQUEST_PENDING")
+                                                .fileUrl(new URL("https://example.com"))
+                                                .thumbnailUrl(new URL("https://example.com"))
                                                 .build()
                                 ))
                                 .createDate(ZonedDateTime.now())

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostAttachment;
 import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 
@@ -38,6 +39,8 @@ class PostSnapshot {
     private Set<PostArtist> artists;
 
     private Set<PostMedia> mediaSet;
+
+    private Set<PostAttachment> attachments;
 
     private ZonedDateTime createDate;
 }

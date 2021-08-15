@@ -61,7 +61,6 @@ class Media {
                 .filename(file.getFilename())
                 .md5(file.getMd5())
                 .fileUrl(file.getFileUrl())
-                .status(file.getStatus())
                 .createDate(createDate)
                 .build();
     }

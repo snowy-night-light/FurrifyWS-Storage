@@ -7,12 +7,12 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.java.Log;
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostAttachment;
 import ws.furrify.posts.post.vo.PostDescription;
 import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.posts.post.vo.PostTitle;
 
-import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,6 +39,8 @@ class Post {
     private Set<PostArtist> artists;
     @NonNull
     private Set<PostMedia> mediaSet;
+    @NonNull
+    private Set<PostAttachment> attachments;
 
     private final ZonedDateTime createDate;
 
@@ -56,6 +58,7 @@ class Post {
                 new HashSet<>(postSnapshot.getTags()),
                 new HashSet<>(postSnapshot.getArtists()),
                 new HashSet<>(postSnapshot.getMediaSet()),
+                new HashSet<>(postSnapshot.getAttachments()),
                 postSnapshot.getCreateDate()
         );
     }
@@ -70,6 +73,7 @@ class Post {
                 .tags(tags.stream().collect(Collectors.toUnmodifiableSet()))
                 .artists(artists.stream().collect(Collectors.toUnmodifiableSet()))
                 .mediaSet(mediaSet.stream().collect(Collectors.toUnmodifiableSet()))
+                .attachments(attachments.stream().collect(Collectors.toUnmodifiableSet()))
                 .createDate(createDate)
                 .build();
     }
@@ -153,37 +157,51 @@ class Post {
                 .collect(Collectors.toSet());
     }
 
-    void updateMediaDetailsInMediaSet(@NonNull final UUID mediaId,
-                                      @NonNull final Integer priority,
-                                      final URL thumbnailUrl,
-                                      @NonNull final String extension,
-                                      @NonNull final String status) {
-        // Filter mediaSet to find a if media exists by mediaId.
+    void removeAttachment(final UUID attachmentId) {
+        this.attachments = attachments.stream()
+                .filter(media -> !media.getAttachmentId().equals(attachmentId))
+                .collect(Collectors.toSet());
+    }
+
+    void updateMediaDetailsInMediaSet(@NonNull final PostMedia postMedia) {
+        // Filter mediaSet to find if media exists by mediaId.
         this.mediaSet.stream()
-                .filter(media -> media.getMediaId().equals(mediaId))
+                .filter(media -> media.getMediaId().equals(postMedia.getMediaId()))
                 .findAny()
                 .orElseThrow(() -> {
-                    log.severe("Original media [mediaId=" + mediaId + "] was not found.");
+                    log.severe("Original media [mediaId=" + postMedia.getMediaId() + "] was not found.");
 
                     return new IllegalStateException("Original mediaId was not found.");
                 });
 
-        // Create post media with new details
-        PostMedia postMedia = new PostMedia(
-                mediaId,
-                priority,
-                thumbnailUrl,
-                extension,
-                status
-        );
-
         // Filter mediaSet to get all without old media
         Set<PostMedia> filteredMediaSet = this.mediaSet.stream()
-                .filter(media -> !media.getMediaId().equals(mediaId))
+                .filter(media -> !media.getMediaId().equals(postMedia.getMediaId()))
                 .collect(Collectors.toSet());
         // Add updated media to mediaSet
         filteredMediaSet.add(postMedia);
 
         this.mediaSet = filteredMediaSet;
+    }
+
+    void updateAttachmentDetailsInAttachments(@NonNull final PostAttachment postAttachment) {
+        // Filter attachments to find if attachment exists by attachmentId.
+        this.attachments.stream()
+                .filter(attachment -> attachment.getAttachmentId().equals(postAttachment.getAttachmentId()))
+                .findAny()
+                .orElseThrow(() -> {
+                    log.severe("Original attachment [attachmentId=" + postAttachment.getAttachmentId() + "] was not found.");
+
+                    return new IllegalStateException("Original attachmentId was not found.");
+                });
+
+        // Filter attachments to get all without old attachment
+        Set<PostAttachment> filteredAttachments = this.attachments.stream()
+                .filter(attachment -> !attachment.getAttachmentId().equals(postAttachment.getAttachmentId()))
+                .collect(Collectors.toSet());
+        // Add updated attachment to attachments
+        filteredAttachments.add(postAttachment);
+
+        this.attachments = filteredAttachments;
     }
 }

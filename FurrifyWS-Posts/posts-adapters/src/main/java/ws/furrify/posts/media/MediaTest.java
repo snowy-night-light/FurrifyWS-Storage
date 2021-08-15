@@ -1,11 +1,13 @@
 package ws.furrify.posts.media;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import ws.furrify.posts.media.dto.MediaDTO;
 
+import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.UUID;
@@ -22,10 +24,11 @@ class MediaTest implements CommandLineRunner {
         Arrays.stream(environment.getActiveProfiles())
                 .filter("dev"::equals)
                 .findAny()
-                .ifPresent((profile) -> createTestingArtists());
+                .ifPresent((profile) -> createTestingMedia());
     }
 
-    private void createTestingArtists() {
+    @SneakyThrows
+    private void createTestingMedia() {
         var mediaFactory = new MediaFactory();
 
         var userId = UUID.fromString("82722f67-ec52-461f-8294-158d8affe7a3");
@@ -41,6 +44,8 @@ class MediaTest implements CommandLineRunner {
                                 .priority(0)
                                 .extension(MediaExtension.PNG)
                                 .filename("yes.png")
+                                .fileUrl(new URL("https://example.com/"))
+                                .thumbnailUrl(new URL("https://example.com/"))
                                 .md5("3c518eeb674c71b30297f072fde7eba5")
                                 .createDate(ZonedDateTime.now())
                                 .build()

@@ -1,7 +1,6 @@
 package ws.furrify.posts.media.dto.query;
 
 import ws.furrify.posts.media.MediaExtension;
-import ws.furrify.posts.media.MediaStatus;
 
 import java.io.Serializable;
 import java.net.URL;
@@ -30,8 +29,6 @@ public interface MediaDetailsQueryDTO extends Serializable {
     URL getThumbnailUrl();
 
     String getMd5();
-
-    MediaStatus getStatus();
 
     ZonedDateTime getCreateDate();
 }

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -38,7 +37,7 @@ class CommandUserArtistController {
     )
     public ResponseEntity<?> createArtist(@PathVariable UUID userId,
                                           @RequestBody @Validated ArtistCreateCommandDTO artistCreateCommandDTO,
-                                          @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken,
+                                          KeycloakAuthenticationToken keycloakAuthenticationToken,
                                           HttpServletResponse response) {
         ArtistDTO artistDTO = artistCreateCommandDTO.toDTO();
 
@@ -57,7 +56,7 @@ class CommandUserArtistController {
     )
     public ResponseEntity<?> deleteArtist(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,
-                                          @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
         artistFacade.deleteArtist(userId, artistId);
 
         return ResponseEntity.accepted().build();
@@ -72,7 +71,7 @@ class CommandUserArtistController {
     public ResponseEntity<?> updateArtist(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,
                                           @RequestBody @Validated ArtistUpdateCommandDTO artistUpdateCommandDTO,
-                                          @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
         artistFacade.updateArtist(userId, artistId, artistUpdateCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();
@@ -87,7 +86,7 @@ class CommandUserArtistController {
     public ResponseEntity<?> replaceArtist(@PathVariable UUID userId,
                                            @PathVariable UUID artistId,
                                            @RequestBody @Validated ArtistReplaceCommandDTO artistReplaceCommandDTO,
-                                           @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                           KeycloakAuthenticationToken keycloakAuthenticationToken) {
         artistFacade.replaceArtist(userId, artistId, artistReplaceCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();

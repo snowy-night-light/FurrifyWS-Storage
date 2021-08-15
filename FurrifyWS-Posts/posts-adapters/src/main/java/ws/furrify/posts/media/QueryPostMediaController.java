@@ -7,7 +7,6 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +44,7 @@ class QueryPostMediaController {
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) Integer page,
-            @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+            KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
         // Build page from page information
         Pageable pageable = PageableRequest.builder()
@@ -87,7 +86,7 @@ class QueryPostMediaController {
     public EntityModel<MediaDetailsQueryDTO> getPostMedia(@PathVariable UUID userId,
                                                           @PathVariable UUID postId,
                                                           @PathVariable UUID mediaId,
-                                                          @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
         MediaDetailsQueryDTO mediaQueryDTO = mediaQueryRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(mediaId)));

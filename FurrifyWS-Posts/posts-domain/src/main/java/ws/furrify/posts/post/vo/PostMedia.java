@@ -28,10 +28,12 @@ public class PostMedia {
     @NonNull
     private Integer priority;
 
+    @NonNull
+    private URL fileUrl;
+
+    @NonNull
     private URL thumbnailUrl;
 
     @NonNull
     private String extension;
-    @NonNull
-    private String status;
 }

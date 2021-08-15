@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import ws.furrify.posts.media.MediaExtension;
-import ws.furrify.posts.media.MediaStatus;
 
 import java.net.URL;
 
@@ -28,13 +27,13 @@ public class MediaFile {
     @NonNull
     private MediaExtension extension;
 
+    @NonNull
     private URL fileUrl;
+    @NonNull
     private URL thumbnailUrl;
 
     @NonNull
     private String md5;
-    @NonNull
-    private MediaStatus status;
 
     private final static String FILENAME_EXTENSION_DIVIDER = "\\.";
     private final static byte MINIMUM_DIVIDE_COUNT = 2;
@@ -43,8 +42,8 @@ public class MediaFile {
     @Builder
     private MediaFile(@NonNull final String filename,
                       @NonNull final MediaExtension extension,
-                      final URL fileUrl,
-                      final URL thumbnailUrl,
+                      @NonNull final URL fileUrl,
+                      @NonNull final URL thumbnailUrl,
                       @NonNull final String md5) {
 
         // Validate given values
@@ -70,6 +69,5 @@ public class MediaFile {
         this.fileUrl = fileUrl;
         this.thumbnailUrl = thumbnailUrl;
         this.md5 = md5;
-        this.status = MediaStatus.REQUEST_PENDING;
     }
 }
