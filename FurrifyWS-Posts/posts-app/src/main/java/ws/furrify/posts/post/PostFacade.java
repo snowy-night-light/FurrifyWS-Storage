@@ -281,7 +281,7 @@ public class PostFacade {
     private void updateAttachmentDetailsInPost(final UUID ownerId,
                                                final UUID postId,
                                                final PostAttachment postAttachment) {
-        Post post = postRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, postAttachment.getAttachmentId())
+        Post post = postRepository.findByOwnerIdAndPostIdAndAttachmentId(ownerId, postId, postAttachment.getAttachmentId())
                 .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
         post.updateAttachmentDetailsInAttachments(postAttachment);
 
