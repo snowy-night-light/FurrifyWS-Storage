@@ -28,7 +28,7 @@ public class ArtistNickname {
      * @param nickname Artist nickname.
      * @return Artist nickname instance.
      */
-    public static ArtistNickname of(@NonNull String nickname) {
+    public static ArtistNickname of(@NonNull final String nickname) {
         if (nickname.isBlank()) {
             throw new IllegalStateException("Nickname [nickname=" + nickname + "] can't be blank.");
         }
@@ -39,5 +39,9 @@ public class ArtistNickname {
         }
 
         return new ArtistNickname(nickname);
+    }
+
+    public static ArtistNickname ofNullable(final String preferredNickname) {
+        return (preferredNickname == null) ? null : of(preferredNickname);
     }
 }

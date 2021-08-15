@@ -8,6 +8,8 @@ import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -25,28 +27,17 @@ final class UpdateArtistImpl implements UpdateArtist {
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(artistId.toString())));
 
         // Update changed fields in artist
-        if (artistDTO.getNicknames() != null && artistDTO.getPreferredNickname() != null) {
-            artist.updateNicknames(
-                    artistDTO.getNicknames().stream()
+        if (artistDTO.getNicknames() != null || artistDTO.getPreferredNickname() != null) {
+            // Convert nicknames to vo objects or get null.
+            Set<ArtistNickname> newNicknames = Optional.ofNullable(artistDTO.getNicknames())
+                    .map(nicknames -> nicknames.stream()
                             .map(ArtistNickname::of)
-                            .collect(Collectors.toSet()),
-                    ArtistNickname.of(artistDTO.getPreferredNickname()),
-                    artistRepository
-            );
-        }
-        if (artistDTO.getNicknames() != null) {
+                            .collect(Collectors.toSet())
+                    ).orElse(null);
+
             artist.updateNicknames(
-                    artistDTO.getNicknames().stream()
-                            .map(ArtistNickname::of)
-                            .collect(Collectors.toSet()),
-                    null,
-                    artistRepository
-            );
-        }
-        if (artistDTO.getPreferredNickname() != null) {
-            artist.updateNicknames(
-                    null,
-                    ArtistNickname.of(artistDTO.getPreferredNickname()),
+                    newNicknames,
+                    ArtistNickname.ofNullable(artistDTO.getPreferredNickname()),
                     artistRepository
             );
         }

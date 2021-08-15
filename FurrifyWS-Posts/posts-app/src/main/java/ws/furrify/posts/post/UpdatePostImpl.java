@@ -33,14 +33,12 @@ final class UpdatePostImpl implements UpdatePost {
 
         // Update changed fields in post
         if (postDTO.getTitle() != null) {
-            post.updateDetails(
-                    PostTitle.of(postDTO.getTitle()),
-                    PostDescription.of(post.getSnapshot().getDescription())
+            post.updateTitle(
+                    PostTitle.of(postDTO.getTitle())
             );
         }
         if (postDTO.getDescription() != null) {
-            post.updateDetails(
-                    PostTitle.of(post.getSnapshot().getTitle()),
+            post.updateDescription(
                     PostDescription.of(postDTO.getDescription())
             );
         }

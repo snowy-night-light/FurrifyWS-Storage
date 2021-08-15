@@ -33,17 +33,17 @@ final class UpdateTagImpl implements UpdateTag {
             );
         }
         if (tagDTO.getType() != null) {
-            tag.updateType(tagDTO.getType());
+            tag.updateType(
+                    tagDTO.getType()
+            );
         }
         if (tagDTO.getTitle() != null) {
-            tag.updateDetails(
-                    TagTitle.of(tagDTO.getTitle()),
-                    TagDescription.of(tag.getSnapshot().getDescription())
+            tag.updateTitle(
+                    TagTitle.of(tagDTO.getTitle())
             );
         }
         if (tagDTO.getDescription() != null) {
-            tag.updateDetails(
-                    TagTitle.of(tag.getSnapshot().getTitle()),
+            tag.updateDescription(
                     TagDescription.of(tagDTO.getDescription())
             );
         }

@@ -13,7 +13,6 @@ import ws.furrify.tags.tag.vo.TagValue;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
@@ -68,22 +67,31 @@ class TagTest {
     }
 
     @Test
-    @DisplayName("Update details")
-    void updateDetails() {
-        // Given title and description
+    @DisplayName("Update title")
+    void updateTitle() {
+        // Given title
         String newTitle = "Title2";
+        // When updateTitle() method called
+        // Then update title
+        tag.updateTitle(
+                TagTitle.of(newTitle)
+        );
+
+        assertEquals(newTitle, tag.getSnapshot().getTitle(), "Title was not updated.");
+    }
+
+    @Test
+    @DisplayName("Update description")
+    void updateDetails() {
+        // Given description
         String newDesc = "dsadasdsa";
-        // When updateDetails() method called
-        // Then update title and description
-        tag.updateDetails(
-                TagTitle.of(newTitle),
+        // When updateDescription() method called
+        // Then update description
+        tag.updateDescription(
                 TagDescription.of(newDesc)
         );
 
-        assertAll(() -> {
-            assertEquals(newTitle, tag.getSnapshot().getTitle(), "Title was not updated.");
-            assertEquals(newDesc, tag.getSnapshot().getDescription(), "Description was not updated.");
-        });
+        assertEquals(newDesc, tag.getSnapshot().getDescription(), "Description was not updated.");
     }
 
     @Test

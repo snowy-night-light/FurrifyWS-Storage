@@ -44,8 +44,10 @@ final class ReplacePostImpl implements ReplacePost {
         post.replaceArtists(artists);
 
         // Update all details in post
-        post.updateDetails(
-                PostTitle.of(postDTO.getTitle()),
+        post.updateTitle(
+                PostTitle.of(postDTO.getTitle())
+        );
+        post.updateDescription(
                 PostDescription.of(postDTO.getDescription())
         );
 

@@ -78,9 +78,11 @@ class Post {
                 .build();
     }
 
-    void updateDetails(@NonNull final PostTitle newTitle,
-                       final PostDescription newDescription) {
+    void updateTitle(@NonNull final PostTitle newTitle) {
         this.title = newTitle;
+    }
+
+    void updateDescription(final PostDescription newDescription) {
         this.description = newDescription;
     }
 
