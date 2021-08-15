@@ -33,9 +33,8 @@ class QueryPostMediaController {
 
     @GetMapping
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "(hasRole('query_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
     public PagedModel<EntityModel<MediaDetailsQueryDTO>> getPostMediaList(
             @PathVariable UUID userId,
@@ -79,9 +78,8 @@ class QueryPostMediaController {
 
     @GetMapping("/{mediaId}")
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "(hasRole('query_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
     public EntityModel<MediaDetailsQueryDTO> getPostMedia(@PathVariable UUID userId,
                                                           @PathVariable UUID postId,

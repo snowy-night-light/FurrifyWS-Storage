@@ -33,9 +33,8 @@ class QueryUserArtistController {
 
     @GetMapping
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "(hasRole('query_user_artists') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
     public PagedModel<EntityModel<ArtistDetailsQueryDTO>> getUserArtists(
             @PathVariable UUID userId,
@@ -76,9 +75,8 @@ class QueryUserArtistController {
 
     @GetMapping("/{artistId}")
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "(hasRole('query_user_artists') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
     public EntityModel<ArtistDetailsQueryDTO> getUserArtist(@PathVariable UUID userId,
                                                             @PathVariable UUID artistId,

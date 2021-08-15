@@ -33,9 +33,8 @@ class QueryPostAttachmentController {
 
     @GetMapping
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "(hasRole('query_post_attachments') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
     public PagedModel<EntityModel<AttachmentDetailsQueryDTO>> getPostAttachments(
             @PathVariable UUID userId,
@@ -79,9 +78,8 @@ class QueryPostAttachmentController {
 
     @GetMapping("/{attachmentId}")
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "(hasRole('query_post_attachments') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
     public EntityModel<AttachmentDetailsQueryDTO> getPostAttachment(@PathVariable UUID userId,
                                                                     @PathVariable UUID postId,
@@ -130,7 +128,7 @@ class QueryPostAttachmentController {
                 null,
                 null,
                 null
-        )).withRel("postMediaList");
+        )).withRel("postAttachments");
 
         attachmentDetailsQueryDtoEntityModel.add(selfRel);
         attachmentDetailsQueryDtoEntityModel.add(mediaListRel);
