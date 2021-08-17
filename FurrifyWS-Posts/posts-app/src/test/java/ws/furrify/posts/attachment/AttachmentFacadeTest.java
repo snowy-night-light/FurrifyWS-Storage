@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.attachment.dto.AttachmentDTO;
 import ws.furrify.posts.attachment.dto.AttachmentDtoFactory;
+import ws.furrify.posts.attachment.strategy.AttachmentUploadStrategy;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
@@ -54,6 +55,7 @@ class AttachmentFacadeTest {
     static void beforeAll() {
         attachmentRepository = mock(AttachmentRepository.class);
         var attachmentQueryRepository = mock(AttachmentQueryRepository.class);
+        var attachmentUploadStrategy = mock(AttachmentUploadStrategy.class);
 
         var attachmentFactory = new AttachmentFactory();
         var attachmentDtoFactory = new AttachmentDtoFactory(attachmentQueryRepository);
@@ -62,7 +64,7 @@ class AttachmentFacadeTest {
         var eventPublisher = (DomainEventPublisher<AttachmentEvent>) mock(DomainEventPublisher.class);
 
         attachmentFacade = new AttachmentFacade(
-                new CreateAttachmentImpl(attachmentFactory, eventPublisher),
+                new CreateAttachmentImpl(attachmentFactory, attachmentUploadStrategy, eventPublisher),
                 new DeleteAttachmentImpl(eventPublisher, attachmentRepository),
                 new UpdateAttachmentImpl(eventPublisher, attachmentRepository),
                 new ReplaceAttachmentImpl(eventPublisher, attachmentRepository),

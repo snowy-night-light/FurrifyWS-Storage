@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import ws.furrify.posts.kafka.KafkaTopicEventPublisher;
 import ws.furrify.posts.media.dto.MediaDtoFactory;
 import ws.furrify.posts.media.strategy.LocalStorageMediaUploadStrategy;
+import ws.furrify.posts.media.strategy.MediaUploadStrategy;
 
 @Configuration
 @RequiredArgsConstructor
@@ -32,7 +33,7 @@ class MediaConfig {
     }
 
     @Bean
-    LocalStorageMediaUploadStrategy mediaUploadStrategy() {
+    MediaUploadStrategy mediaUploadStrategy() {
         return new LocalStorageMediaUploadStrategy();
     }
 }
