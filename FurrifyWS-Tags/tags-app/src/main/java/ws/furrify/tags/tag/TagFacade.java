@@ -13,7 +13,7 @@ import java.util.UUID;
  */
 @RequiredArgsConstructor
 @Log
-public class TagFacade {
+final public class TagFacade {
 
     private final CreateTag createTagImpl;
     private final DeleteTag deleteTagImpl;

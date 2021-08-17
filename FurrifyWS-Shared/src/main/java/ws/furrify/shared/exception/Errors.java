@@ -31,6 +31,8 @@ public enum Errors {
     PREFERRED_NICKNAME_IS_NOT_VALID("Preferred nickname [nickname={0}] is not in nicknames array."),
     PREFERRED_NICKNAME_IS_TAKEN("Preferred nickname [nickname={0}] is already taken."),
     NICKNAMES_CANNOT_BE_EMPTY("Nicknames array must not be empty."),
+    FILE_UPLOAD_FAILED("File upload to remote storage has failed."),
+    FILE_UPLOAD_CANNOT_CREATE_PATH("File upload can't create path to file."),
     FILE_CONTENT_IS_CORRUPTED("File content is corrupted or invalid extension in filename was given."),
     FILE_EXTENSION_IS_NOT_MATCHING_CONTENT("File extension is not matching provided file content."),
     UNIDENTIFIED("Unknown error occurred.");

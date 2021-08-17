@@ -5,7 +5,7 @@ import ws.furrify.posts.media.dto.MediaDTO;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-class MediaFactory {
+final class MediaFactory {
 
     Media from(MediaDTO mediaDTO) {
         MediaSnapshot mediaSnapshot = MediaSnapshot.builder()

@@ -142,7 +142,10 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
             ChainOfRequestsUnauthorizedException.class,
             ChainOfRequestsBrokenException.class,
             InvalidDataGivenException.class,
-            FileContentIsCorruptedException.class
+            FileContentIsCorruptedException.class,
+            FileUploadFailedException.class,
+            FileExtensionIsNotMatchingContentException.class,
+            FileUploadCannotCreatePathException.class
     })
     protected ResponseEntity<Object> handleException(
             RestException exception) {

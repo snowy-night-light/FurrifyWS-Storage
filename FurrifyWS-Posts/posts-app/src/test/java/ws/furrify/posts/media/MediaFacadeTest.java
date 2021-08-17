@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.media.dto.MediaDTO;
 import ws.furrify.posts.media.dto.MediaDtoFactory;
+import ws.furrify.posts.media.strategy.MediaUploadStrategy;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
@@ -56,6 +57,7 @@ class MediaFacadeTest {
     static void beforeAll() {
         mediaRepository = mock(MediaRepository.class);
         var mediaQueryRepository = mock(MediaQueryRepository.class);
+        var mediaUploadStrategy = mock(MediaUploadStrategy.class);
 
         var mediaFactory = new MediaFactory();
         var mediaDtoFactory = new MediaDtoFactory(mediaQueryRepository);
@@ -64,7 +66,7 @@ class MediaFacadeTest {
         var eventPublisher = (DomainEventPublisher<MediaEvent>) mock(DomainEventPublisher.class);
 
         mediaFacade = new MediaFacade(
-                new CreateMediaImpl(mediaFactory, eventPublisher),
+                new CreateMediaImpl(mediaFactory, mediaUploadStrategy, eventPublisher),
                 new DeleteMediaImpl(eventPublisher, mediaRepository),
                 new UpdateMediaImpl(eventPublisher, mediaRepository),
                 new ReplaceMediaImpl(eventPublisher, mediaRepository),

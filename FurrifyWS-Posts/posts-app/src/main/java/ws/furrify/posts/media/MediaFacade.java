@@ -14,7 +14,7 @@ import java.util.UUID;
  */
 @RequiredArgsConstructor
 @Log
-public class MediaFacade {
+final public class MediaFacade {
 
     private final CreateMedia createMediaImpl;
     private final DeleteMedia deleteMediaImpl;
