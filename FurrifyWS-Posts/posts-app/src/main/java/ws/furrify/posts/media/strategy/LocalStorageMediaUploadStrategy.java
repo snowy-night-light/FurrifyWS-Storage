@@ -26,7 +26,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
-    @Value("${LOCAL_STORAGE_PATH:/data/media}")
+    @Value("${LOCAL_STORAGE_MEDIA_PATH:/data/media}")
     private String LOCAL_STORAGE_MEDIA_PATH;
 
     @Value("${THUMBNAIL_WIDTH:600}")
