@@ -10,7 +10,8 @@ REST endpoints: https://documenter.getpostman.com/view/9259933/TzRUBnQm
 ! All ip's can be changed in application-{profile}.yml regarding selected profile.
 
 Requirements:
-- Need to set env variable REGION (It is any string to make groupId unique and don't loose offset in kafka)
+- Need to set env variable KAFKA_CONSUMER_GROUP_ID (It is any string to make groupId unique and don't lose offset in
+  kafka)
 - Kafka (kafka:9092)
 - Schema Registry (kafka:8081)
 - Keycloak (192.168.0.200:6565)

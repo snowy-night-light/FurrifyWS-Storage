@@ -33,9 +33,8 @@ class QueryUserTagController {
 
     @GetMapping
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "(hasRole('query_user_tags') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
     public PagedModel<EntityModel<TagDetailsQueryDTO>> getUserTags(
             @PathVariable UUID userId,
@@ -77,9 +76,8 @@ class QueryUserTagController {
 
     @GetMapping("/{value}")
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "(hasRole('query_user_tags') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
     public EntityModel<TagDetailsQueryDTO> getUserTag(@PathVariable UUID userId,
                                                       @PathVariable String value,

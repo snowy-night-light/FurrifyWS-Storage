@@ -20,10 +20,10 @@ class ArtistConfig {
         var artistDtoFactory = new ArtistDtoFactory(artistQueryRepository);
 
         return new ArtistFacade(
-                new CreateArtistAdapter(artistRepository, artistFactory, eventPublisher),
-                new DeleteArtistAdapter(artistRepository, eventPublisher),
-                new UpdateArtistAdapter(artistRepository, eventPublisher),
-                new ReplaceArtistAdapter(artistRepository, eventPublisher),
+                new CreateArtistImpl(artistRepository, artistFactory, eventPublisher),
+                new DeleteArtistImpl(artistRepository, eventPublisher),
+                new UpdateArtistImpl(artistRepository, eventPublisher),
+                new ReplaceArtistImpl(artistRepository, eventPublisher),
                 artistRepository,
                 artistFactory,
                 artistDtoFactory

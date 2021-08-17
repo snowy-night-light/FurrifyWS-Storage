@@ -20,6 +20,8 @@ class ArtistServiceImpl implements ArtistServiceClient {
 
     private final ArtistServiceClientImpl artistServiceClient;
 
+    private final static String NAME = "artists";
+
     @Bulkhead(name = "getUserArtist", fallbackMethod = "getUserArtistFallback")
     @Override
     public ArtistDetailsQueryDTO getUserArtist(final UUID userId, final UUID artistId) {
@@ -36,9 +38,9 @@ class ArtistServiceImpl implements ArtistServiceClient {
                 return null;
             }
 
-            case FORBIDDEN -> throw new ChainOfRequestsUnauthorizedException(Errors.CHAIN_OF_REQUESTS_UNAUTHORIZED.getErrorMessage());
+            case FORBIDDEN -> throw new ChainOfRequestsUnauthorizedException(Errors.CHAIN_OF_REQUESTS_UNAUTHORIZED.getErrorMessage(NAME));
 
-            default -> throw new ChainOfRequestsBrokenException(Errors.CHAIN_OF_REQUESTS_BROKEN.getErrorMessage());
+            default -> throw new ChainOfRequestsBrokenException(Errors.CHAIN_OF_REQUESTS_BROKEN.getErrorMessage(NAME));
         }
     }
 

@@ -15,10 +15,10 @@ import java.util.UUID;
 @Log
 public class TagFacade {
 
-    private final CreateTagPort createTagAdapter;
-    private final DeleteTagPort deleteTagAdapter;
-    private final UpdateTagPort updateTagAdapter;
-    private final ReplaceTagPort replaceTagAdapter;
+    private final CreateTag createTagImpl;
+    private final DeleteTag deleteTagImpl;
+    private final UpdateTag updateTagImpl;
+    private final ReplaceTag replaceTagImpl;
     private final TagRepository tagRepository;
     private final TagFactory tagFactory;
     private final TagDtoFactory tagDtoFactory;
@@ -28,13 +28,13 @@ public class TagFacade {
      *
      * @param tagEvent Tag event instance received from kafka.
      */
-    void handleEvent(final UUID key, final TagEvent tagEvent) {
+    public void handleEvent(final UUID key, final TagEvent tagEvent) {
         TagDTO tagDTO = tagDtoFactory.from(key, tagEvent);
 
         switch (DomainEventPublisher.TagEventType.valueOf(tagEvent.getState())) {
-            case CREATED, REPLACED, UPDATED -> saveTag(tagDTO);
+            case CREATED, REPLACED, UPDATED -> saveTagInDatabase(tagDTO);
 
-            case REMOVED -> deleteTagByValue(tagDTO.getValue());
+            case REMOVED -> deleteTagByValueFromDatabase(tagDTO.getValue());
 
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + tagEvent.getState() + " Topic=tag_events");
@@ -49,7 +49,7 @@ public class TagFacade {
      * @return Created tag UUID.
      */
     public String createTag(final UUID userId, final TagDTO tagDTO) {
-        return createTagAdapter.createTag(userId, tagDTO);
+        return createTagImpl.createTag(userId, tagDTO);
     }
 
     /**
@@ -58,7 +58,7 @@ public class TagFacade {
      * @param value Tag unique value.
      */
     public void deleteTag(final UUID userId, final String value) {
-        deleteTagAdapter.deleteTag(userId, value);
+        deleteTagImpl.deleteTag(userId, value);
     }
 
     /**
@@ -68,7 +68,7 @@ public class TagFacade {
      * @param tagDTO Replacement tag.
      */
     public void replaceTag(final UUID userId, final String value, final TagDTO tagDTO) {
-        replaceTagAdapter.replaceTag(userId, value, tagDTO);
+        replaceTagImpl.replaceTag(userId, value, tagDTO);
     }
 
     /**
@@ -78,14 +78,14 @@ public class TagFacade {
      * @param tagDTO Tag with updated specific fields.
      */
     public void updateTag(final UUID userId, final String value, final TagDTO tagDTO) {
-        updateTagAdapter.updateTag(userId, value, tagDTO);
+        updateTagImpl.updateTag(userId, value, tagDTO);
     }
 
-    private void saveTag(final TagDTO tagDTO) {
+    private void saveTagInDatabase(final TagDTO tagDTO) {
         tagRepository.save(tagFactory.from(tagDTO));
     }
 
-    private void deleteTagByValue(final String value) {
+    private void deleteTagByValueFromDatabase(final String value) {
         tagRepository.deleteByValue(value);
     }
 }

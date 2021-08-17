@@ -20,6 +20,8 @@ class TagServiceImpl implements TagServiceClient {
 
     private final TagServiceClientImpl tagServiceClient;
 
+    private final static String NAME = "tags";
+
     @Bulkhead(name = "getUserTag", fallbackMethod = "getUserTagFallback")
     @Override
     public TagDetailsQueryDTO getUserTag(final UUID userId, final String value) {
@@ -36,9 +38,9 @@ class TagServiceImpl implements TagServiceClient {
                 return null;
             }
 
-            case FORBIDDEN -> throw new ChainOfRequestsUnauthorizedException(Errors.CHAIN_OF_REQUESTS_UNAUTHORIZED.getErrorMessage());
+            case FORBIDDEN -> throw new ChainOfRequestsUnauthorizedException(Errors.CHAIN_OF_REQUESTS_UNAUTHORIZED.getErrorMessage(NAME));
 
-            default -> throw new ChainOfRequestsBrokenException(Errors.CHAIN_OF_REQUESTS_BROKEN.getErrorMessage());
+            default -> throw new ChainOfRequestsBrokenException(Errors.CHAIN_OF_REQUESTS_BROKEN.getErrorMessage(NAME));
         }
     }
 

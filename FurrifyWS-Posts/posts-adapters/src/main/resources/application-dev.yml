@@ -8,7 +8,7 @@ spring:
     schema-registry-servers: http://kafka:8081
     consumer:
       group-id:
-        prefix: "kafka-test-"
+        prefix: "posts-test-"
     producer:
       retries: 3
   servlet:

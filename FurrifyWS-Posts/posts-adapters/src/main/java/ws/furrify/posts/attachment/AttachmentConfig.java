@@ -20,10 +20,10 @@ class AttachmentConfig {
         var attachmentDtoFactory = new AttachmentDtoFactory(attachmentQueryRepository);
 
         return new AttachmentFacade(
-                new CreateAttachmentAdapter(attachmentFactory, eventPublisher),
-                new DeleteAttachmentAdapter(eventPublisher, attachmentRepository),
-                new UpdateAttachmentAdapter(eventPublisher, attachmentRepository),
-                new ReplaceAttachmentAdapter(eventPublisher, attachmentRepository),
+                new CreateAttachmentImpl(attachmentFactory, eventPublisher),
+                new DeleteAttachmentImpl(eventPublisher, attachmentRepository),
+                new UpdateAttachmentImpl(eventPublisher, attachmentRepository),
+                new ReplaceAttachmentImpl(eventPublisher, attachmentRepository),
                 attachmentRepository,
                 attachmentFactory,
                 attachmentDtoFactory

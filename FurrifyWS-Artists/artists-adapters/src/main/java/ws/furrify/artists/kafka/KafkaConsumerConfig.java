@@ -11,12 +11,14 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.retry.annotation.EnableRetry;
 import ws.furrify.posts.post.PostEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@EnableRetry
 class KafkaConsumerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")

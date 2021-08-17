@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
@@ -94,23 +93,33 @@ class PostTest {
     }
 
     @Test
-    @DisplayName("Update title and description")
-    void updateDetails() {
-        // Given title and description
+    @DisplayName("Update title")
+    void updateTitle() {
+        // Given title
         String newTitle = "Title2";
-        String newDesc = "dsadasdsa";
         // When updateDetails() method called
-        // Then update title and description
-        post.updateDetails(
-                PostTitle.of(newTitle),
+        // Then update title
+        post.updateTitle(
+                PostTitle.of(newTitle)
+        );
+
+        assertEquals(newTitle, post.getSnapshot().getTitle(), "Title was not updated.");
+    }
+
+    @Test
+    @DisplayName("Update description")
+    void updateDescription() {
+        // Given description
+        String newDesc = "dsadasdsa2";
+        // When updateDetails() method called
+        // Then update description
+        post.updateDescription(
                 PostDescription.of(newDesc)
         );
 
-        assertAll(() -> {
-            assertEquals(newTitle, post.getSnapshot().getTitle(), "Title was not updated.");
-            assertEquals(newDesc, post.getSnapshot().getDescription(), "Description was not updated.");
-        });
+        assertEquals(newDesc, post.getSnapshot().getDescription(), "Description was not updated.");
     }
+
 
     @Test
     @DisplayName("Remove tag")

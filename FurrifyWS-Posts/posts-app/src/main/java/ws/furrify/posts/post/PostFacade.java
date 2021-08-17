@@ -24,10 +24,10 @@ import java.util.UUID;
 @Log
 public class PostFacade {
 
-    private final CreatePostPort createPostAdapter;
-    private final DeletePostPort deletePostAdapter;
-    private final UpdatePostPort updatePostAdapter;
-    private final ReplacePostPort replacePostAdapter;
+    private final CreatePost createPostImpl;
+    private final DeletePost deletePostImpl;
+    private final UpdatePost updatePostImpl;
+    private final ReplacePost replacePostImpl;
     private final PostRepository postRepository;
     private final PostFactory postFactory;
     private final PostDtoFactory postDTOFactory;
@@ -41,8 +41,8 @@ public class PostFacade {
         PostDTO postDTO = postDTOFactory.from(key, postEvent);
 
         switch (DomainEventPublisher.PostEventType.valueOf(postEvent.getState())) {
-            case CREATED, REPLACED, UPDATED -> savePost(postDTO);
-            case REMOVED -> deletePostByPostId(postDTO.getPostId());
+            case CREATED, REPLACED, UPDATED -> savePostInDatabase(postDTO);
+            case REMOVED -> deletePostByPostIdFromDatabase(postDTO.getPostId());
 
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + postEvent.getState() + " Topic=post_events");
@@ -118,7 +118,7 @@ public class PostFacade {
             case CREATED -> {
             }
             default -> log.warning("State received from kafka is not defined. " +
-                    "State=" + attachmentEvent.getState() + " Topic=media_events");
+                    "State=" + attachmentEvent.getState() + " Topic=attachments_events");
         }
     }
 
@@ -165,7 +165,7 @@ public class PostFacade {
      * @return Created post UUID.
      */
     public UUID createPost(final UUID userId, final PostDTO postDTO) {
-        return createPostAdapter.createPost(userId, postDTO);
+        return createPostImpl.createPost(userId, postDTO);
     }
 
     /**
@@ -175,7 +175,7 @@ public class PostFacade {
      * @param postId Post UUID.
      */
     public void deletePost(final UUID userId, final UUID postId) {
-        deletePostAdapter.deletePost(userId, postId);
+        deletePostImpl.deletePost(userId, postId);
     }
 
     /**
@@ -186,7 +186,7 @@ public class PostFacade {
      * @param postDTO Replacement post.
      */
     public void replacePost(final UUID userId, final UUID postId, final PostDTO postDTO) {
-        replacePostAdapter.replacePost(userId, postId, postDTO);
+        replacePostImpl.replacePost(userId, postId, postDTO);
     }
 
     /**
@@ -197,14 +197,14 @@ public class PostFacade {
      * @param postDTO Post with updated specific fields.
      */
     public void updatePost(final UUID userId, final UUID postId, final PostDTO postDTO) {
-        updatePostAdapter.updatePost(userId, postId, postDTO);
+        updatePostImpl.updatePost(userId, postId, postDTO);
     }
 
-    private void savePost(final PostDTO postDTO) {
+    private void savePostInDatabase(final PostDTO postDTO) {
         postRepository.save(postFactory.from(postDTO));
     }
 
-    private void deletePostByPostId(final UUID postId) {
+    private void deletePostByPostIdFromDatabase(final UUID postId) {
         postRepository.deleteByPostId(postId);
     }
 
@@ -281,7 +281,7 @@ public class PostFacade {
     private void updateAttachmentDetailsInPost(final UUID ownerId,
                                                final UUID postId,
                                                final PostAttachment postAttachment) {
-        Post post = postRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, postAttachment.getAttachmentId())
+        Post post = postRepository.findByOwnerIdAndPostIdAndAttachmentId(ownerId, postId, postAttachment.getAttachmentId())
                 .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
         post.updateAttachmentDetailsInAttachments(postAttachment);
 

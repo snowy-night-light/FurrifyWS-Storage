@@ -31,9 +31,8 @@ class CommandUserArtistController {
 
     @PostMapping
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "(hasRole('create_artist') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
     public ResponseEntity<?> createArtist(@PathVariable UUID userId,
                                           @RequestBody @Validated ArtistCreateCommandDTO artistCreateCommandDTO,
@@ -50,9 +49,8 @@ class CommandUserArtistController {
 
     @DeleteMapping("/{artistId}")
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "(hasRole('delete_artist') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
     public ResponseEntity<?> deleteArtist(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,
@@ -64,9 +62,8 @@ class CommandUserArtistController {
 
     @PatchMapping("/{artistId}")
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "(hasRole('update_artist') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
     public ResponseEntity<?> updateArtist(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,
@@ -79,9 +76,8 @@ class CommandUserArtistController {
 
     @PutMapping("/{artistId}")
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "(hasRole('update_artist') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
     public ResponseEntity<?> replaceArtist(@PathVariable UUID userId,
                                            @PathVariable UUID artistId,

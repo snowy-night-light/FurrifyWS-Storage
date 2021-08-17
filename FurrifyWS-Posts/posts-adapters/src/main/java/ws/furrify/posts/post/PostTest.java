@@ -57,7 +57,7 @@ class PostTest implements CommandLineRunner {
                                                 .artistId(
                                                         UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00")
                                                 )
-                                                .preferredNickname("example_nickname")
+                                                .preferredNickname("test_nickname")
                                                 .build()
                                 ))
                                 .attachments(Set.of(
