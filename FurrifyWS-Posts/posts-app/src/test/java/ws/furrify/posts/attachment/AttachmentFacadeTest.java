@@ -8,12 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.attachment.dto.AttachmentDTO;
 import ws.furrify.posts.attachment.dto.AttachmentDtoFactory;
+import ws.furrify.posts.attachment.strategy.AttachmentUploadStrategy;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -22,6 +24,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,6 +32,7 @@ class AttachmentFacadeTest {
 
     private static AttachmentRepository attachmentRepository;
     private static AttachmentFacade attachmentFacade;
+    private static AttachmentUploadStrategy attachmentUploadStrategy;
 
     private AttachmentDTO attachmentDTO;
     private Attachment attachment;
@@ -54,6 +58,7 @@ class AttachmentFacadeTest {
     static void beforeAll() {
         attachmentRepository = mock(AttachmentRepository.class);
         var attachmentQueryRepository = mock(AttachmentQueryRepository.class);
+        attachmentUploadStrategy = mock(AttachmentUploadStrategy.class);
 
         var attachmentFactory = new AttachmentFactory();
         var attachmentDtoFactory = new AttachmentDtoFactory(attachmentQueryRepository);
@@ -62,7 +67,7 @@ class AttachmentFacadeTest {
         var eventPublisher = (DomainEventPublisher<AttachmentEvent>) mock(DomainEventPublisher.class);
 
         attachmentFacade = new AttachmentFacade(
-                new CreateAttachmentImpl(attachmentFactory, eventPublisher),
+                new CreateAttachmentImpl(attachmentFactory, attachmentUploadStrategy, eventPublisher),
                 new DeleteAttachmentImpl(eventPublisher, attachmentRepository),
                 new UpdateAttachmentImpl(eventPublisher, attachmentRepository),
                 new ReplaceAttachmentImpl(eventPublisher, attachmentRepository),
@@ -74,7 +79,7 @@ class AttachmentFacadeTest {
 
     @Test
     @DisplayName("Create attachment")
-    void createAttachment() {
+    void createAttachment() throws MalformedURLException {
         // Given ownerId, attachmentDTO and multipart file
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
@@ -121,6 +126,9 @@ class AttachmentFacadeTest {
             }
         };
         // When createAttachment() method called
+        when(attachmentUploadStrategy.uploadAttachment(any(), any())).thenReturn(new AttachmentUploadStrategy.UploadedAttachmentFile(
+                new URL("https://example.com")
+        ));
         // Then return generated uuid
         assertNotNull(attachmentFacade.createAttachment(userId, postId, attachmentDTO, attachmentFile), "AttachmentId was not returned.");
     }

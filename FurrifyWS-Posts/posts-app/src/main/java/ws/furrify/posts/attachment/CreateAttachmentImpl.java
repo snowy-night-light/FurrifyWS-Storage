@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.attachment.dto.AttachmentDTO;
+import ws.furrify.posts.attachment.strategy.AttachmentUploadStrategy;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileExtensionIsNotMatchingContentException;
@@ -18,6 +19,7 @@ import java.util.UUID;
 final class CreateAttachmentImpl implements CreateAttachment {
 
     private final AttachmentFactory attachmentFactory;
+    private final AttachmentUploadStrategy attachmentUploadStrategy;
     private final DomainEventPublisher<AttachmentEvent> domainEventPublisher;
 
     @Override
@@ -47,7 +49,9 @@ final class CreateAttachmentImpl implements CreateAttachment {
             throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
         }
 
-        // TODO Upload file to processing server
+        // Upload file and generate thumbnail
+        AttachmentUploadStrategy.UploadedAttachmentFile uploadedAttachmentFile =
+                attachmentUploadStrategy.uploadAttachment(attachmentId, attachmentFile);
 
         // Edit attachmentDTO with generated attachment uuid
         AttachmentDTO updatedAttachmentToCreateDTO = attachmentDTO.toBuilder()
@@ -55,6 +59,7 @@ final class CreateAttachmentImpl implements CreateAttachment {
                 .postId(postId)
                 .ownerId(userId)
                 .filename(attachmentFile.getOriginalFilename())
+                .fileUrl(uploadedAttachmentFile.getFileUrl())
                 .md5(md5)
                 .createDate(ZonedDateTime.now())
                 .build();

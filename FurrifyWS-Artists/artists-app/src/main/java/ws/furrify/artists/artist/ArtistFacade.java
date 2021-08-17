@@ -13,7 +13,7 @@ import java.util.UUID;
  */
 @RequiredArgsConstructor
 @Log
-public class ArtistFacade {
+final public class ArtistFacade {
 
     private final CreateArtist createArtistImpl;
     private final DeleteArtist deleteArtistImpl;

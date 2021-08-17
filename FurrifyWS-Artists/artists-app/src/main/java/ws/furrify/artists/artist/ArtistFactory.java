@@ -6,7 +6,7 @@ import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.UUID;
 
-class ArtistFactory {
+final class ArtistFactory {
 
     Artist from(ArtistDTO artistDTO) {
         ArtistSnapshot artistSnapshot = ArtistSnapshot.builder()

@@ -8,6 +8,7 @@ import ws.furrify.posts.FileUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 /**
  * Supported attachment extensions by system.
@@ -33,6 +34,8 @@ public enum AttachmentExtension {
      */
     private final AttachmentType type;
 
+    private final static Pattern FILENAME_PATTERN = Pattern.compile("^[\\w,\\s-]+\\.[A-Za-z]{3}$");
+
     AttachmentExtension(final AttachmentType type, final String... mimeTypes) {
         this.mimeTypes = mimeTypes;
         this.type = type;
@@ -42,6 +45,13 @@ public enum AttachmentExtension {
                                       MultipartFile file,
                                       AttachmentExtension attachmentExtension) {
         try {
+            // Check if filename matches regex for filename
+            if (file.getOriginalFilename() == null ||
+                    !FILENAME_PATTERN.matcher(file.getOriginalFilename()).matches()) {
+                return false;
+            }
+
+            // Get file mimetype
             String mimeType = FileUtils.getMimeType(filename, file.getInputStream());
 
             return Arrays.asList(attachmentExtension.getMimeTypes()).contains(mimeType);

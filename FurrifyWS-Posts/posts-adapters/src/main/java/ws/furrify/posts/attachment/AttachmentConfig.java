@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ws.furrify.posts.attachment.dto.AttachmentDtoFactory;
+import ws.furrify.posts.attachment.strategy.AttachmentUploadStrategy;
+import ws.furrify.posts.attachment.strategy.LocalStorageAttachmentUploadStrategy;
 import ws.furrify.posts.kafka.KafkaTopicEventPublisher;
 
 @Configuration
@@ -20,7 +22,7 @@ class AttachmentConfig {
         var attachmentDtoFactory = new AttachmentDtoFactory(attachmentQueryRepository);
 
         return new AttachmentFacade(
-                new CreateAttachmentImpl(attachmentFactory, eventPublisher),
+                new CreateAttachmentImpl(attachmentFactory, attachmentUploadStrategy(), eventPublisher),
                 new DeleteAttachmentImpl(eventPublisher, attachmentRepository),
                 new UpdateAttachmentImpl(eventPublisher, attachmentRepository),
                 new ReplaceAttachmentImpl(eventPublisher, attachmentRepository),
@@ -28,5 +30,10 @@ class AttachmentConfig {
                 attachmentFactory,
                 attachmentDtoFactory
         );
+    }
+
+    @Bean
+    AttachmentUploadStrategy attachmentUploadStrategy() {
+        return new LocalStorageAttachmentUploadStrategy();
     }
 }

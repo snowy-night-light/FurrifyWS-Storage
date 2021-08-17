@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.media.dto.MediaDTO;
+import ws.furrify.posts.media.strategy.MediaUploadStrategy;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileExtensionIsNotMatchingContentException;
@@ -18,6 +19,7 @@ import java.util.UUID;
 final class CreateMediaImpl implements CreateMedia {
 
     private final MediaFactory mediaFactory;
+    private final MediaUploadStrategy mediaUploadStrategy;
     private final DomainEventPublisher<MediaEvent> domainEventPublisher;
 
     @Override
@@ -47,7 +49,9 @@ final class CreateMediaImpl implements CreateMedia {
             throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
         }
 
-        // TODO Upload file to processing server
+        // Upload file and generate thumbnail
+        MediaUploadStrategy.UploadedMediaFile uploadedMediaFile =
+                mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(mediaId, mediaFile);
 
         // Edit mediaDTO with generated media uuid
         MediaDTO updatedMediaToCreateDTO = mediaDTO.toBuilder()
@@ -55,6 +59,8 @@ final class CreateMediaImpl implements CreateMedia {
                 .postId(postId)
                 .ownerId(userId)
                 .filename(mediaFile.getOriginalFilename())
+                .fileUrl(uploadedMediaFile.getFileUrl())
+                .thumbnailUrl(uploadedMediaFile.getThumbnailUrl())
                 .md5(md5)
                 .priority(mediaDTO.getPriority())
                 .createDate(ZonedDateTime.now())

@@ -8,12 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.media.dto.MediaDTO;
 import ws.furrify.posts.media.dto.MediaDtoFactory;
+import ws.furrify.posts.media.strategy.MediaUploadStrategy;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -22,6 +24,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,6 +32,7 @@ class MediaFacadeTest {
 
     private static MediaRepository mediaRepository;
     private static MediaFacade mediaFacade;
+    private static MediaUploadStrategy mediaUploadStrategy;
 
     private MediaDTO mediaDTO;
     private Media media;
@@ -56,6 +60,7 @@ class MediaFacadeTest {
     static void beforeAll() {
         mediaRepository = mock(MediaRepository.class);
         var mediaQueryRepository = mock(MediaQueryRepository.class);
+        mediaUploadStrategy = mock(MediaUploadStrategy.class);
 
         var mediaFactory = new MediaFactory();
         var mediaDtoFactory = new MediaDtoFactory(mediaQueryRepository);
@@ -64,7 +69,7 @@ class MediaFacadeTest {
         var eventPublisher = (DomainEventPublisher<MediaEvent>) mock(DomainEventPublisher.class);
 
         mediaFacade = new MediaFacade(
-                new CreateMediaImpl(mediaFactory, eventPublisher),
+                new CreateMediaImpl(mediaFactory, mediaUploadStrategy, eventPublisher),
                 new DeleteMediaImpl(eventPublisher, mediaRepository),
                 new UpdateMediaImpl(eventPublisher, mediaRepository),
                 new ReplaceMediaImpl(eventPublisher, mediaRepository),
@@ -76,7 +81,7 @@ class MediaFacadeTest {
 
     @Test
     @DisplayName("Create media")
-    void createMedia() {
+    void createMedia() throws MalformedURLException {
         // Given ownerId, mediaDTO and multipart file
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
@@ -123,6 +128,10 @@ class MediaFacadeTest {
             }
         };
         // When createMedia() method called
+        when(mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
+                new URL("https://example.com"),
+                new URL("https://example.com")
+        ));
         // Then return generated uuid
         assertNotNull(mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile), "MediaId was not returned.");
     }
