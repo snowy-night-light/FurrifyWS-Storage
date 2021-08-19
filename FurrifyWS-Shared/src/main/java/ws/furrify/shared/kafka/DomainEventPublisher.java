@@ -17,9 +17,10 @@ public interface DomainEventPublisher<T> {
 
     enum Topic {
         /**
-         * Represents post_events topic in kafka.
+         * Represents ex. post_events topic in kafka.
          */
         ATTACHMENT("attachment_events"),
+        SOURCE("source_events"),
         MEDIA("media_events"),
         POST("post_events"),
         ARTIST("artist_events"),
@@ -37,6 +38,16 @@ public interface DomainEventPublisher<T> {
         public String getTopicName() {
             return topicName;
         }
+    }
+
+    enum SourceEventType {
+        /**
+         * Events that can occur on Artist entity.
+         */
+        CREATED,
+        REMOVED,
+        REPLACED,
+        UPDATED
     }
 
     enum ArtistEventType {

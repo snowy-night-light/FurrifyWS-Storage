@@ -1,4 +1,4 @@
-package ws.furrify.posts.kafka;
+package ws.furrify.sources.kafka;
 
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

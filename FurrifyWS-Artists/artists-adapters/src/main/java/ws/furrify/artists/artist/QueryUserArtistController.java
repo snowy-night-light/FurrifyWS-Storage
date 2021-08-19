@@ -52,11 +52,11 @@ class QueryUserArtistController {
                 .page(page)
                 .build().toPageable();
 
-        PagedModel<EntityModel<ArtistDetailsQueryDTO>> posts = pagedResourcesAssembler.toModel(
+        PagedModel<EntityModel<ArtistDetailsQueryDTO>> artists = pagedResourcesAssembler.toModel(
                 artistQueryRepository.findAllByOwnerId(userId, pageable)
         );
 
-        posts.forEach(this::addArtistRelations);
+        artists.forEach(this::addArtistRelations);
 
         // Add hateoas relation
         var artistsRel = linkTo(methodOn(QueryUserArtistController.class).getUserArtists(
@@ -68,9 +68,9 @@ class QueryUserArtistController {
                 null
         )).withSelfRel();
 
-        posts.add(artistsRel);
+        artists.add(artistsRel);
 
-        return posts;
+        return artists;
     }
 
     @GetMapping("/{artistId}")

@@ -1,0 +1,80 @@
+[
+  {
+    "type": "record",
+    "namespace": "ws.furrify.sources.source.vo",
+    "doc": "Source data containing required information to perform state change across multiple microservices.",
+    "name": "SourceData",
+    "fields": [
+      {
+        "name": "ownerId",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Source owner UUID."
+      },
+      {
+        "name": "nicknames",
+        "type": {
+          "type": "array",
+          "items": "string"
+        },
+        "default": [],
+        "doc": "Source nicknames."
+      },
+      {
+        "name": "preferredNickname",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Source preferred nickname from nicknames array."
+      },
+      {
+        "name": "createDate",
+        "type": [
+          "null",
+          {
+            "type": "long",
+            "logicalType": "timestamp-millis"
+          }
+        ],
+        "default": null,
+        "doc": "Create timestamp."
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "ws.furrify.sources.source",
+    "doc": "Source state change request.",
+    "name": "SourceEvent",
+    "fields": [
+      {
+        "name": "state",
+        "type": "string",
+        "doc": "A event type performed on that record. (Can be acquired using SourceEventType enum.)"
+      },
+      {
+        "name": "sourceId",
+        "type": "string",
+        "doc": "A source UUID event is targeted at."
+      },
+      {
+        "name": "data",
+        "type": "ws.furrify.sources.source.vo.SourceData",
+        "doc": "Source data eg. changed fields."
+      },
+      {
+        "name": "occurredOn",
+        "type": {
+          "type": "long",
+          "logicalType": "timestamp-millis"
+        },
+        "doc": "Instant event occurred on."
+      }
+    ]
+  }
+]

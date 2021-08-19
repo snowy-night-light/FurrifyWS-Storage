@@ -1,4 +1,4 @@
-package ws.furrify.tags.kafka;
+package ws.furrify.sources.kafka;
 
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import ws.furrify.tags.tag.TagEvent;
+import ws.furrify.posts.post.PostEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,12 +42,12 @@ class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, TagEvent> producerFactory() {
+    public ProducerFactory<String, PostEvent> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, TagEvent> kafkaTemplate() {
+    public KafkaTemplate<String, PostEvent> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

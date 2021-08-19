@@ -12,7 +12,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.retry.annotation.EnableRetry;
-import ws.furrify.posts.post.PostEvent;
+import ws.furrify.tags.tag.TagEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +30,7 @@ class KafkaConsumerConfig {
     @Value("${spring.kafka.consumer.group-id.prefix}")
     private String groupIdPrefix;
 
-    @Value("${REGION:}")
+    @Value("${KAFKA_CONSUMER_GROUP_ID:}")
     private String groupIdRegion;
 
     @Bean
@@ -48,13 +48,13 @@ class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, PostEvent> consumerFactory() {
+    public ConsumerFactory<String, TagEvent> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
 
     @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, PostEvent>> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, PostEvent> factory =
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, TagEvent>> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, TagEvent> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
 
