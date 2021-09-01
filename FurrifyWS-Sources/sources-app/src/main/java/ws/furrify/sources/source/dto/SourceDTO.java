@@ -3,8 +3,10 @@ package ws.furrify.sources.source.dto;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.Value;
+import ws.furrify.sources.source.strategy.SourceStrategy;
 
 import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -14,10 +16,14 @@ import java.util.UUID;
 @Value
 @ToString
 public class SourceDTO {
-     Long id;
+    Long id;
 
-     UUID sourceId;
-     UUID ownerId;
+    UUID sourceId;
+    UUID ownerId;
 
-     ZonedDateTime createDate;
+    HashMap<String, String> data;
+
+    SourceStrategy sourceStrategy;
+
+    ZonedDateTime createDate;
 }

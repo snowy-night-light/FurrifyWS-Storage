@@ -5,9 +5,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import ws.furrify.sources.source.dto.SourceDTO;
+import ws.furrify.sources.source.strategy.DefaultSourceStrategy;
 
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Component
@@ -36,6 +38,8 @@ class SourceTest implements CommandLineRunner {
                         SourceDTO.builder()
                                 .sourceId(sourceId)
                                 .ownerId(userId)
+                                .sourceStrategy(new DefaultSourceStrategy())
+                                .data(new HashMap<>())
                                 .createDate(ZonedDateTime.now())
                                 .build()
                 ).getSnapshot()

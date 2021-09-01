@@ -4,8 +4,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ws.furrify.sources.source.strategy.DefaultSourceStrategy;
 
 import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,6 +27,8 @@ class SourceTest {
                 .id(0L)
                 .sourceId(UUID.randomUUID())
                 .ownerId(UUID.randomUUID())
+                .sourceStrategy(new DefaultSourceStrategy())
+                .data(new HashMap<>())
                 .createDate(ZonedDateTime.now())
                 .build();
 

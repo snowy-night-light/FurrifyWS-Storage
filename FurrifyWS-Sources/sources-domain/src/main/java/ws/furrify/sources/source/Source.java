@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
+import ws.furrify.sources.source.strategy.SourceStrategy;
 
 import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.UUID;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -19,6 +21,12 @@ class Source {
     @NonNull
     private final UUID ownerId;
 
+    @NonNull
+    private final HashMap<String, String> data;
+
+    @NonNull
+    private final SourceStrategy sourceStrategy;
+
     private final ZonedDateTime createDate;
 
     static Source restore(SourceSnapshot sourceSnapshot) {
@@ -26,6 +34,8 @@ class Source {
                 sourceSnapshot.getId(),
                 sourceSnapshot.getSourceId(),
                 sourceSnapshot.getOwnerId(),
+                new HashMap<>(sourceSnapshot.getData()),
+                sourceSnapshot.getSourceStrategy(),
                 sourceSnapshot.getCreateDate()
         );
     }
@@ -35,6 +45,8 @@ class Source {
                 .id(id)
                 .sourceId(sourceId)
                 .ownerId(ownerId)
+                .data(new HashMap<>(data))
+                .sourceStrategy(sourceStrategy)
                 .createDate(createDate)
                 .build();
     }

@@ -8,8 +8,10 @@ import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.sources.source.dto.SourceDTO;
 import ws.furrify.sources.source.dto.SourceDtoFactory;
+import ws.furrify.sources.source.strategy.DefaultSourceStrategy;
 
 import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,6 +34,8 @@ class SourceFacadeTest {
     void setUp() {
         sourceDTO = SourceDTO.builder()
                 .ownerId(UUID.randomUUID())
+                .sourceStrategy(new DefaultSourceStrategy())
+                .data(new HashMap<>())
                 .createDate(ZonedDateTime.now())
                 .build();
 

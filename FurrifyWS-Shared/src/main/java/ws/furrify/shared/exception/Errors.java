@@ -35,6 +35,8 @@ public enum Errors {
     FILE_UPLOAD_CANNOT_CREATE_PATH("File upload can't create path to file."),
     FILE_CONTENT_IS_CORRUPTED("File content is corrupted or invalid extension in filename was given."),
     FILE_EXTENSION_IS_NOT_MATCHING_CONTENT("File extension is not matching provided file content or filename is invalid."),
+    MISSING_STRATEGY("Strategy was not found in given package [class={0}]."),
+    VALIDATION_FAILED("Validation failed for [strategy={0}] with [error={1}]."),
     UNIDENTIFIED("Unknown error occurred.");
 
     private final String errorMessage;
