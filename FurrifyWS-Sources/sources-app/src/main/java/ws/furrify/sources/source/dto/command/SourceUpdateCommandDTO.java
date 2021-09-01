@@ -5,6 +5,9 @@ import lombok.ToString;
 import lombok.Value;
 import ws.furrify.shared.dto.CommandDTO;
 import ws.furrify.sources.source.dto.SourceDTO;
+import ws.furrify.sources.source.strategy.SourceStrategy;
+
+import java.util.HashMap;
 
 /**
  * @author Skyte
@@ -12,6 +15,10 @@ import ws.furrify.sources.source.dto.SourceDTO;
 @Value
 @ToString
 public class SourceUpdateCommandDTO implements CommandDTO<SourceDTO> {
+
+    HashMap<String, String> data;
+
+    SourceStrategy strategy;
 
     @Override
     public SourceDTO toDTO() {

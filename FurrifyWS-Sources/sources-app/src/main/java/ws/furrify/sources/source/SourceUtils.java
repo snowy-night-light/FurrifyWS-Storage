@@ -1,6 +1,7 @@
 package ws.furrify.sources.source;
 
 import ws.furrify.shared.kafka.DomainEventPublisher;
+import ws.furrify.sources.source.converter.SourceStrategyAttributeConverter;
 import ws.furrify.sources.source.vo.SourceData;
 
 import java.time.Instant;
@@ -21,7 +22,8 @@ class SourceUtils {
      * @return Created source event.
      */
     public static SourceEvent createSourceEvent(final DomainEventPublisher.SourceEventType eventType,
-                                                final Source source) {
+                                                final Source source,
+                                                final SourceStrategyAttributeConverter sourceStrategyAttributeConverter) {
         SourceSnapshot sourceSnapshot = source.getSnapshot();
 
         return SourceEvent.newBuilder()
@@ -30,6 +32,12 @@ class SourceUtils {
                 .setData(
                         SourceData.newBuilder()
                                 .setOwnerId(sourceSnapshot.getOwnerId().toString())
+                                .setStrategy(
+                                        sourceStrategyAttributeConverter.convertToDatabaseColumn(
+                                                sourceSnapshot.getStrategy()
+                                        )
+                                )
+                                .setDataHashMap(sourceSnapshot.getData())
                                 .setCreateDate(sourceSnapshot.getCreateDate().toInstant())
                                 .build()
                 )

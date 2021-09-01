@@ -15,22 +15,25 @@
         "doc": "Source owner UUID."
       },
       {
-        "name": "nicknames",
-        "type": {
-          "type": "array",
-          "items": "string"
-        },
-        "default": [],
-        "doc": "Source nicknames."
+        "name": "dataHashMap",
+        "type": [
+          "null",
+          {
+            "type": "map",
+            "values": "string"
+          }
+        ],
+        "default": null,
+        "doc": "Source data hash map."
       },
       {
-        "name": "preferredNickname",
+        "name": "strategy",
         "type": [
           "null",
           "string"
         ],
         "default": null,
-        "doc": "Source preferred nickname from nicknames array."
+        "doc": "Source strategy."
       },
       {
         "name": "createDate",

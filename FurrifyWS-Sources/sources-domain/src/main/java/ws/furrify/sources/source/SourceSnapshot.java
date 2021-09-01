@@ -30,7 +30,7 @@ class SourceSnapshot {
 
     private HashMap<String, String> data;
 
-    private SourceStrategy sourceStrategy;
+    private SourceStrategy strategy;
 
     private ZonedDateTime createDate;
 }

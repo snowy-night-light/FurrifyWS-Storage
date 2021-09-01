@@ -11,12 +11,12 @@ final class SourceFactory {
 
     Source from(SourceDTO sourceDTO) {
         // Validation result
-        var validationResult = sourceDTO.getSourceStrategy().validate(sourceDTO.getData());
+        var validationResult = sourceDTO.getStrategy().validate(sourceDTO.getData());
 
         // Was validation successful
         if (!validationResult.isValid()) {
             throw new InvalidDataGivenException(Errors.VALIDATION_FAILED.getErrorMessage(
-                    sourceDTO.getSourceStrategy().getClass().getSimpleName(),
+                    sourceDTO.getStrategy().getClass().getSimpleName(),
                     validationResult.getReason()
             ));
         }
@@ -27,7 +27,7 @@ final class SourceFactory {
                         sourceDTO.getSourceId() != null ? sourceDTO.getSourceId() : UUID.randomUUID()
                 )
                 .ownerId(sourceDTO.getOwnerId())
-                .sourceStrategy(sourceDTO.getSourceStrategy())
+                .strategy(sourceDTO.getStrategy())
                 .data(sourceDTO.getData())
                 .createDate(
                         sourceDTO.getCreateDate() != null ? sourceDTO.getCreateDate() : ZonedDateTime.now()

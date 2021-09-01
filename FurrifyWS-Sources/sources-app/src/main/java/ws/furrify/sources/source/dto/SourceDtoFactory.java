@@ -3,10 +3,12 @@ package ws.furrify.sources.source.dto;
 import lombok.RequiredArgsConstructor;
 import ws.furrify.sources.source.SourceEvent;
 import ws.furrify.sources.source.SourceQueryRepository;
+import ws.furrify.sources.source.converter.SourceStrategyAttributeConverter;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -19,6 +21,7 @@ import java.util.UUID;
 public class SourceDtoFactory {
 
     private final SourceQueryRepository sourceQueryRepository;
+    private final SourceStrategyAttributeConverter sourceStrategyAttributeConverter;
 
     public SourceDTO from(UUID key, SourceEvent sourceEvent) {
         Instant createDateInstant = sourceEvent.getData().getCreateDate();
@@ -36,6 +39,12 @@ public class SourceDtoFactory {
                 )
                 .sourceId(sourceId)
                 .ownerId(key)
+                .strategy(
+                        sourceStrategyAttributeConverter.convertToEntityAttribute(
+                                sourceEvent.getData().getStrategy()
+                        )
+                )
+                .data(new HashMap<>(sourceEvent.getData().getDataHashMap()))
                 .createDate(createDate)
                 .build();
     }

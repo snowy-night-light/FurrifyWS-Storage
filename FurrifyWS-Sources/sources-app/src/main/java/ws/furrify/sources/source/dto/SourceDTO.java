@@ -23,7 +23,7 @@ public class SourceDTO {
 
     HashMap<String, String> data;
 
-    SourceStrategy sourceStrategy;
+    SourceStrategy strategy;
 
     ZonedDateTime createDate;
 }

@@ -25,7 +25,7 @@ class Source {
     private final HashMap<String, String> data;
 
     @NonNull
-    private final SourceStrategy sourceStrategy;
+    private final SourceStrategy strategy;
 
     private final ZonedDateTime createDate;
 
@@ -35,7 +35,7 @@ class Source {
                 sourceSnapshot.getSourceId(),
                 sourceSnapshot.getOwnerId(),
                 new HashMap<>(sourceSnapshot.getData()),
-                sourceSnapshot.getSourceStrategy(),
+                sourceSnapshot.getStrategy(),
                 sourceSnapshot.getCreateDate()
         );
     }
@@ -46,7 +46,7 @@ class Source {
                 .sourceId(sourceId)
                 .ownerId(ownerId)
                 .data(new HashMap<>(data))
-                .sourceStrategy(sourceStrategy)
+                .strategy(strategy)
                 .createDate(createDate)
                 .build();
     }

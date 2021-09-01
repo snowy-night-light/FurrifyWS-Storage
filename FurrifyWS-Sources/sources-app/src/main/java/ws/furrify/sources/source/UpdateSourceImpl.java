@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
+import ws.furrify.sources.source.converter.SourceStrategyAttributeConverter;
 import ws.furrify.sources.source.dto.SourceDTO;
 
 import java.util.UUID;
@@ -14,6 +15,7 @@ final class UpdateSourceImpl implements UpdateSource {
 
     private final SourceRepository sourceRepository;
     private final DomainEventPublisher<SourceEvent> eventPublisher;
+    private final SourceStrategyAttributeConverter sourceStrategyAttributeConverter;
 
     @Override
     public void updateSource(@NonNull final UUID ownerId,
@@ -29,7 +31,8 @@ final class UpdateSourceImpl implements UpdateSource {
                 ownerId,
                 SourceUtils.createSourceEvent(
                         DomainEventPublisher.SourceEventType.UPDATED,
-                        source
+                        source,
+                        sourceStrategyAttributeConverter
                 )
         );
     }

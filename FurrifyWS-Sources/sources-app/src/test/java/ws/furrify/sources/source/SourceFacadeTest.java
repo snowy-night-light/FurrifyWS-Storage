@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
+import ws.furrify.sources.source.converter.SourceStrategyAttributeConverter;
 import ws.furrify.sources.source.dto.SourceDTO;
 import ws.furrify.sources.source.dto.SourceDtoFactory;
 import ws.furrify.sources.source.strategy.DefaultSourceStrategy;
@@ -34,7 +35,7 @@ class SourceFacadeTest {
     void setUp() {
         sourceDTO = SourceDTO.builder()
                 .ownerId(UUID.randomUUID())
-                .sourceStrategy(new DefaultSourceStrategy())
+                .strategy(new DefaultSourceStrategy())
                 .data(new HashMap<>())
                 .createDate(ZonedDateTime.now())
                 .build();
@@ -49,16 +50,18 @@ class SourceFacadeTest {
 
         var sourceQueryRepository = mock(SourceQueryRepository.class);
 
+        var sourceStrategyAttributeConverter = new SourceStrategyAttributeConverter();
+
         var sourceFactory = new SourceFactory();
-        var sourceDTOFactory = new SourceDtoFactory(sourceQueryRepository);
+        var sourceDTOFactory = new SourceDtoFactory(sourceQueryRepository, sourceStrategyAttributeConverter);
         @SuppressWarnings("unchecked")
         var eventPublisher = (DomainEventPublisher<SourceEvent>) mock(DomainEventPublisher.class);
 
         sourceFacade = new SourceFacade(
-                new CreateSourceImpl(sourceRepository, sourceFactory, eventPublisher),
+                new CreateSourceImpl(sourceFactory, eventPublisher, sourceStrategyAttributeConverter),
                 new DeleteSourceImpl(sourceRepository, eventPublisher),
-                new UpdateSourceImpl(sourceRepository, eventPublisher),
-                new ReplaceSourceImpl(sourceRepository, eventPublisher),
+                new UpdateSourceImpl(sourceRepository, eventPublisher, sourceStrategyAttributeConverter),
+                new ReplaceSourceImpl(sourceRepository, eventPublisher, sourceStrategyAttributeConverter),
                 sourceRepository,
                 sourceFactory,
                 sourceDTOFactory

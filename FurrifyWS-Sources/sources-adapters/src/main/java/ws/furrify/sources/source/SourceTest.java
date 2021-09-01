@@ -38,7 +38,7 @@ class SourceTest implements CommandLineRunner {
                         SourceDTO.builder()
                                 .sourceId(sourceId)
                                 .ownerId(userId)
-                                .sourceStrategy(new DefaultSourceStrategy())
+                                .strategy(new DefaultSourceStrategy())
                                 .data(new HashMap<>())
                                 .createDate(ZonedDateTime.now())
                                 .build()
