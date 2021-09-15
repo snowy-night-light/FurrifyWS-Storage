@@ -23,7 +23,7 @@ final class DeleteSourceImpl implements DeleteSource {
 
         // Publish delete source event
         domainEventPublisher.publish(
-                DomainEventPublisher.Topic.ARTIST,
+                DomainEventPublisher.Topic.SOURCE,
                 // Use ownerId as key
                 ownerId,
                 SourceUtils.deleteSourceEvent(sourceId)

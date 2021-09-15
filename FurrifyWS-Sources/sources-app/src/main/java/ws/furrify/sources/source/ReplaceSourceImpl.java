@@ -28,7 +28,7 @@ final class ReplaceSourceImpl implements ReplaceSource {
 
         // Publish create source event
         eventPublisher.publish(
-                DomainEventPublisher.Topic.ARTIST,
+                DomainEventPublisher.Topic.SOURCE,
                 // Use ownerId as key
                 ownerId,
                 SourceUtils.createSourceEvent(
