@@ -21,6 +21,7 @@ public enum Errors {
      */
 
     NO_RECORD_FOUND("Record [uuid={0}] was not found."),
+    STRATEGY_NOT_FOUND("Strategy [strategy={0}] was not found."),
     NO_TAG_FOUND("Tag [value={0}] was not found."),
     RECORD_ALREADY_EXISTS("Record [uuid={0}] already exists."),
     TAG_ALREADY_EXISTS("Tag [value={0}] already exists."),

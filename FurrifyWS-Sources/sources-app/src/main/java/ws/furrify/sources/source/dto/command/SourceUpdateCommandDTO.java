@@ -23,6 +23,8 @@ public class SourceUpdateCommandDTO implements CommandDTO<SourceDTO> {
     @Override
     public SourceDTO toDTO() {
         return SourceDTO.builder()
+                .data(data)
+                .strategy(strategy)
                 .build();
     }
 }

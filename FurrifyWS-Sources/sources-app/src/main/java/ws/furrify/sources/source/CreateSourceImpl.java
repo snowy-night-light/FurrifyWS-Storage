@@ -27,6 +27,8 @@ final class CreateSourceImpl implements CreateSource {
                 sourceDTO.toBuilder()
                         .sourceId(sourceId)
                         .ownerId(ownerId)
+                        .strategy(sourceDTO.getStrategy())
+                        .data(sourceDTO.getData())
                         .createDate(ZonedDateTime.now())
                         .build()
         );

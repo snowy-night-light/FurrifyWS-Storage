@@ -24,6 +24,10 @@ final class UpdateSourceImpl implements UpdateSource {
         Source source = sourceRepository.findByOwnerIdAndSourceId(ownerId, sourceId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(sourceId.toString())));
 
+        if (sourceDTO.getStrategy() != null || sourceDTO.getData() != null) {
+            source.updateData(sourceDTO.getData(), sourceDTO.getStrategy());
+        }
+
         // Publish create source event
         eventPublisher.publish(
                 DomainEventPublisher.Topic.ARTIST,

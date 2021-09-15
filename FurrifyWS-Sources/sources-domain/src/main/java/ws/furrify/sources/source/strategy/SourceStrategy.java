@@ -1,5 +1,7 @@
 package ws.furrify.sources.source.strategy;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
@@ -11,6 +13,8 @@ import java.util.HashMap;
  *
  * @author sky
  */
+@JsonSerialize(using = SourceStrategySerializer.class)
+@JsonDeserialize(using = SourceStrategyDeserializer.class)
 public interface SourceStrategy {
 
     /**

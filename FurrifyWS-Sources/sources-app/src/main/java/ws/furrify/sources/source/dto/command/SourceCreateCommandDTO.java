@@ -26,6 +26,8 @@ public class SourceCreateCommandDTO implements CommandDTO<SourceDTO> {
     @Override
     public SourceDTO toDTO() {
         return SourceDTO.builder()
+                .data(data)
+                .strategy(strategy)
                 .build();
     }
 }

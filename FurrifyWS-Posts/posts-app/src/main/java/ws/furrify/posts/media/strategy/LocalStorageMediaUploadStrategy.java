@@ -38,6 +38,7 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
     @Value("${THUMBNAIL_PREFIX:thumbnail_}")
     private String THUMBNAIL_PREFIX;
 
+    // FIXME Url should update on all records when changed
     @Value("${LOCAL_STORAGE_MEDIA_URL:https://localhost}")
     private String LOCAL_STORAGE_MEDIA_URL;
 
@@ -59,6 +60,7 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
             File mediaFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + fileSource.getOriginalFilename());
 
             // Create thumbnail filename by removing extension from original filename
+            // FIXME May be null
             String thumbnailFileName = fileSource.getOriginalFilename().substring(
                     0,
                     fileSource.getOriginalFilename().lastIndexOf(".")

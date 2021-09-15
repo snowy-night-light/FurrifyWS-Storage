@@ -1,5 +1,7 @@
 package ws.furrify.sources.source.strategy;
 
+import lombok.Data;
+
 import java.util.HashMap;
 
 /**
@@ -7,6 +9,7 @@ import java.util.HashMap;
  *
  * @author sky
  */
+@Data
 public class DefaultSourceStrategy implements SourceStrategy {
     @Override
     public ValidationResult validate(final HashMap<String, String> data) {

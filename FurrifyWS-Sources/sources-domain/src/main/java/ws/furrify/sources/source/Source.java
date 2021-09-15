@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
+import org.springframework.lang.Nullable;
+import ws.furrify.shared.exception.Errors;
+import ws.furrify.shared.exception.InvalidDataGivenException;
 import ws.furrify.sources.source.strategy.SourceStrategy;
 
 import java.time.ZonedDateTime;
@@ -22,10 +25,10 @@ class Source {
     private final UUID ownerId;
 
     @NonNull
-    private final HashMap<String, String> data;
+    private HashMap<String, String> data;
 
     @NonNull
-    private final SourceStrategy strategy;
+    private SourceStrategy strategy;
 
     private final ZonedDateTime createDate;
 
@@ -51,4 +54,32 @@ class Source {
                 .build();
     }
 
+    /**
+     * Update data and strategy.
+     * If any of the values are null the current one will be used.
+     * Nullable annotation used to suppress false warning when using method in update source adapter.
+     *
+     * @param data     Nullable data hashmap.
+     * @param strategy Nullable strategy.
+     */
+    void updateData(@Nullable final HashMap<String, String> data,
+                    @Nullable final SourceStrategy strategy) {
+
+        // Replace with current values if null
+        final HashMap<String, String> finalData = (data != null) ? data : this.data;
+        final SourceStrategy finalStrategy = (strategy != null) ? strategy : this.strategy;
+
+        // Ignore warning
+        var validationResult = strategy.validate(finalData);
+
+        if (!validationResult.isValid()) {
+            throw new InvalidDataGivenException(Errors.VALIDATION_FAILED.getErrorMessage(
+                    strategy.getClass().getSimpleName(),
+                    validationResult.getReason()
+            ));
+        }
+
+        this.strategy = finalStrategy;
+        this.data = finalData;
+    }
 }

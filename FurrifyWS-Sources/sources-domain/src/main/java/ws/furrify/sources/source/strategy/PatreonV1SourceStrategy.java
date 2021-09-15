@@ -3,12 +3,12 @@ package ws.furrify.sources.source.strategy;
 import java.util.HashMap;
 
 /**
- * Version 1 of Deviant Art Strategy.
- * Represents DeviantArt.com website for artists and content.
+ * Version 1 of Patreon Art Strategy.
+ * Represents Patreon.com website for creator posts.
  *
  * @author sky
  */
-public class DeviantArtV1SourceStrategy implements SourceStrategy {
+public class PatreonV1SourceStrategy implements SourceStrategy {
 
     @Override
     public ValidationResult validate(final HashMap<String, String> data) {

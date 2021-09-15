@@ -27,7 +27,7 @@ class SourceTest {
                 .id(0L)
                 .sourceId(UUID.randomUUID())
                 .ownerId(UUID.randomUUID())
-                .sourceStrategy(new DefaultSourceStrategy())
+                .strategy(new DefaultSourceStrategy())
                 .data(new HashMap<>())
                 .createDate(ZonedDateTime.now())
                 .build();

@@ -39,7 +39,9 @@ class SourceTest implements CommandLineRunner {
                                 .sourceId(sourceId)
                                 .ownerId(userId)
                                 .strategy(new DefaultSourceStrategy())
-                                .data(new HashMap<>())
+                                .data(new HashMap<>(1) {{
+                                    put("id", "123");
+                                }})
                                 .createDate(ZonedDateTime.now())
                                 .build()
                 ).getSnapshot()

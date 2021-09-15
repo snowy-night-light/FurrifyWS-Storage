@@ -13,7 +13,6 @@ import java.util.UUID;
 
 /**
  * Creates SourceDTO from SourceEvent.
- * `
  *
  * @author Skyte
  */
