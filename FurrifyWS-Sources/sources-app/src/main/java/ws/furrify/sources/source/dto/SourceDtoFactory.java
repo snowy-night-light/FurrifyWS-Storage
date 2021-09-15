@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ws.furrify.sources.source.SourceEvent;
 import ws.furrify.sources.source.SourceQueryRepository;
 import ws.furrify.sources.source.converter.SourceStrategyAttributeConverter;
+import ws.furrify.sources.source.vo.SourceOriginType;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -31,17 +32,27 @@ public class SourceDtoFactory {
         }
 
         var sourceId = UUID.fromString(sourceEvent.getSourceId());
+        var originId = UUID.fromString(sourceEvent.getData().getOriginId());
+        var postId =
+                (sourceEvent.getData().getPostId() != null) ?
+                        UUID.fromString(sourceEvent.getData().getPostId()) :
+                        null;
 
         return SourceDTO.builder()
                 .id(
                         sourceQueryRepository.getIdBySourceId(sourceId)
                 )
+                .postId(postId)
+                .originId(originId)
                 .sourceId(sourceId)
                 .ownerId(key)
                 .strategy(
                         sourceStrategyAttributeConverter.convertToEntityAttribute(
                                 sourceEvent.getData().getStrategy()
                         )
+                )
+                .originType(
+                        SourceOriginType.valueOf(sourceEvent.getData().getOriginType())
                 )
                 .data(new HashMap<>(sourceEvent.getData().getDataHashMap()))
                 .createDate(createDate)

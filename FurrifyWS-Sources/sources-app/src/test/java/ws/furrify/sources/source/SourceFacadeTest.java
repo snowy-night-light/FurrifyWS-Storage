@@ -6,10 +6,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
+import ws.furrify.sources.artists.ArtistServiceClient;
+import ws.furrify.sources.posts.PostServiceClient;
 import ws.furrify.sources.source.converter.SourceStrategyAttributeConverter;
 import ws.furrify.sources.source.dto.SourceDTO;
 import ws.furrify.sources.source.dto.SourceDtoFactory;
 import ws.furrify.sources.source.strategy.DefaultSourceStrategy;
+import ws.furrify.sources.source.vo.SourceOriginType;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -26,6 +29,8 @@ class SourceFacadeTest {
 
     private static SourceRepository sourceRepository;
     private static SourceFacade sourceFacade;
+    private static PostServiceClient postServiceClient;
+    private static ArtistServiceClient artistServiceClient;
 
     private SourceDTO sourceDTO;
     private Source source;
@@ -35,6 +40,9 @@ class SourceFacadeTest {
     void setUp() {
         sourceDTO = SourceDTO.builder()
                 .ownerId(UUID.randomUUID())
+                .originId(UUID.randomUUID())
+                .postId(UUID.randomUUID())
+                .originType(SourceOriginType.MEDIA)
                 .strategy(new DefaultSourceStrategy())
                 .data(new HashMap<>())
                 .createDate(ZonedDateTime.now())
@@ -46,6 +54,8 @@ class SourceFacadeTest {
 
     @BeforeAll
     static void beforeAll() {
+        postServiceClient = mock(PostServiceClient.class);
+        artistServiceClient = mock(ArtistServiceClient.class);
         sourceRepository = mock(SourceRepository.class);
 
         var sourceQueryRepository = mock(SourceQueryRepository.class);
@@ -58,7 +68,13 @@ class SourceFacadeTest {
         var eventPublisher = (DomainEventPublisher<SourceEvent>) mock(DomainEventPublisher.class);
 
         sourceFacade = new SourceFacade(
-                new CreateSourceImpl(sourceFactory, eventPublisher, sourceStrategyAttributeConverter),
+                new CreateSourceImpl(
+                        sourceFactory,
+                        eventPublisher,
+                        sourceStrategyAttributeConverter,
+                        postServiceClient,
+                        artistServiceClient
+                ),
                 new DeleteSourceImpl(sourceRepository, eventPublisher),
                 new UpdateSourceImpl(sourceRepository, eventPublisher, sourceStrategyAttributeConverter),
                 new ReplaceSourceImpl(sourceRepository, eventPublisher, sourceStrategyAttributeConverter),

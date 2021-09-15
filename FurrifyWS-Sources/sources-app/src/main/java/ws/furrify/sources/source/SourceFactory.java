@@ -23,12 +23,15 @@ final class SourceFactory {
 
         SourceSnapshot sourceSnapshot = SourceSnapshot.builder()
                 .id(sourceDTO.getId())
+                .postId(sourceDTO.getPostId())
+                .originId(sourceDTO.getOriginId())
                 .sourceId(
                         sourceDTO.getSourceId() != null ? sourceDTO.getSourceId() : UUID.randomUUID()
                 )
                 .ownerId(sourceDTO.getOwnerId())
                 .strategy(sourceDTO.getStrategy())
                 .data(sourceDTO.getData())
+                .originType(sourceDTO.getOriginType())
                 .createDate(
                         sourceDTO.getCreateDate() != null ? sourceDTO.getCreateDate() : ZonedDateTime.now()
                 )

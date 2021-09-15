@@ -32,12 +32,17 @@ class SourceUtils {
                 .setData(
                         SourceData.newBuilder()
                                 .setOwnerId(sourceSnapshot.getOwnerId().toString())
+                                .setOriginId(sourceSnapshot.getOriginId().toString())
+                                .setPostId(
+                                        (sourceSnapshot.getPostId() != null) ? sourceSnapshot.getPostId().toString() : null
+                                )
                                 .setStrategy(
                                         sourceStrategyAttributeConverter.convertToDatabaseColumn(
                                                 sourceSnapshot.getStrategy()
                                         )
                                 )
                                 .setDataHashMap(sourceSnapshot.getData())
+                                .setOriginType(sourceSnapshot.getOriginType().name())
                                 .setCreateDate(sourceSnapshot.getCreateDate().toInstant())
                                 .build()
                 )

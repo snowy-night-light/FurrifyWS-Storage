@@ -16,6 +16,16 @@
             <basic name="ownerId">
                 <column updatable="false" nullable="false"/>
             </basic>
+            <basic name="originId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="postId">
+                <column updatable="false" nullable="true"/>
+            </basic>
+            <basic name="originType">
+                <column nullable="false"/>
+                <enumerated>STRING</enumerated>
+            </basic>
             <basic name="createDate">
                 <column updatable="false" nullable="false"/>
             </basic>

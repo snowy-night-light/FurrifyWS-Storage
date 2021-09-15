@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import ws.furrify.sources.source.strategy.SourceStrategy;
+import ws.furrify.sources.source.vo.SourceOriginType;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -25,12 +26,16 @@ import static lombok.AccessLevel.PROTECTED;
 class SourceSnapshot {
     private Long id;
 
+    private UUID originId;
+    private UUID postId;
     private UUID sourceId;
     private UUID ownerId;
 
     private HashMap<String, String> data;
 
     private SourceStrategy strategy;
+
+    private SourceOriginType originType;
 
     private ZonedDateTime createDate;
 }

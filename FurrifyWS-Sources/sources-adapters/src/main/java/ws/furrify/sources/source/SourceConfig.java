@@ -15,6 +15,8 @@ class SourceConfig {
     private final SourceQueryRepository sourceQueryRepository;
     private final KafkaTopicEventPublisher<SourceEvent> eventPublisher;
     private final SourceStrategyAttributeConverter sourceStrategyAttributeConverter;
+    private final ArtistServiceImpl artistService;
+    private final PostServiceImpl postService;
 
     @Bean
     SourceFacade sourceFacade() {
@@ -22,7 +24,13 @@ class SourceConfig {
         var sourceDtoFactory = new SourceDtoFactory(sourceQueryRepository, sourceStrategyAttributeConverter);
 
         return new SourceFacade(
-                new CreateSourceImpl(sourceFactory, eventPublisher, sourceStrategyAttributeConverter),
+                new CreateSourceImpl(
+                        sourceFactory,
+                        eventPublisher,
+                        sourceStrategyAttributeConverter,
+                        postService,
+                        artistService
+                ),
                 new DeleteSourceImpl(sourceRepository, eventPublisher),
                 new UpdateSourceImpl(sourceRepository, eventPublisher, sourceStrategyAttributeConverter),
                 new ReplaceSourceImpl(sourceRepository, eventPublisher, sourceStrategyAttributeConverter),
@@ -31,4 +39,5 @@ class SourceConfig {
                 sourceDtoFactory
         );
     }
+
 }

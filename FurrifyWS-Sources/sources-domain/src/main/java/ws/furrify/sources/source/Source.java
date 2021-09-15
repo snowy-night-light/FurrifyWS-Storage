@@ -9,6 +9,7 @@ import org.springframework.lang.Nullable;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.InvalidDataGivenException;
 import ws.furrify.sources.source.strategy.SourceStrategy;
+import ws.furrify.sources.source.vo.SourceOriginType;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -21,6 +22,12 @@ class Source {
     private final Long id;
     @NonNull
     private final UUID sourceId;
+
+    @NonNull
+    private final UUID originId;
+
+    private final UUID postId;
+
     @NonNull
     private final UUID ownerId;
 
@@ -30,15 +37,21 @@ class Source {
     @NonNull
     private SourceStrategy strategy;
 
+    @NonNull
+    private final SourceOriginType originType;
+
     private final ZonedDateTime createDate;
 
     static Source restore(SourceSnapshot sourceSnapshot) {
         return new Source(
                 sourceSnapshot.getId(),
                 sourceSnapshot.getSourceId(),
+                sourceSnapshot.getOriginId(),
+                sourceSnapshot.getPostId(),
                 sourceSnapshot.getOwnerId(),
                 new HashMap<>(sourceSnapshot.getData()),
                 sourceSnapshot.getStrategy(),
+                sourceSnapshot.getOriginType(),
                 sourceSnapshot.getCreateDate()
         );
     }
@@ -46,10 +59,13 @@ class Source {
     SourceSnapshot getSnapshot() {
         return SourceSnapshot.builder()
                 .id(id)
+                .originId(originId)
+                .postId(postId)
                 .sourceId(sourceId)
                 .ownerId(ownerId)
                 .data(new HashMap<>(data))
                 .strategy(strategy)
+                .originType(originType)
                 .createDate(createDate)
                 .build();
     }
@@ -69,7 +85,7 @@ class Source {
         final HashMap<String, String> finalData = (data != null) ? data : this.data;
         final SourceStrategy finalStrategy = (strategy != null) ? strategy : this.strategy;
 
-        // Ignore warning
+        // Ignore warning, false positive
         var validationResult = strategy.validate(finalData);
 
         if (!validationResult.isValid()) {
