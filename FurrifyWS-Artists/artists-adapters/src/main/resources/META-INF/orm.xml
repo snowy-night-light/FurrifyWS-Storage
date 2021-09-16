@@ -22,8 +22,35 @@
             <basic name="createDate">
                 <column updatable="false" nullable="false"/>
             </basic>
+            <one-to-many fetch="EAGER" name="sources" target-entity="ws.furrify.artists.artist.vo.ArtistSource">
+                <cascade>
+                    <cascade-all/>
+                </cascade>
+            </one-to-many>
             <element-collection fetch="EAGER" name="nicknames">
                 <column nullable="false"/>
+            </element-collection>
+        </attributes>
+    </entity>
+
+    <entity class="ws.furrify.artists.artist.vo.ArtistSource" access="FIELD">
+        <table name="sources"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="SEQUENCE"/>
+            </id>
+            <basic name="sourceId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="strategy">
+                <column nullable="false"/>
+            </basic>
+            <element-collection fetch="EAGER" name="data">
+                <map-key-column name="key_data"/>
+                <column name="data"/>
+                <collection-table name="sources_data">
+                    <join-column name="source_id"/>
+                </collection-table>
             </element-collection>
         </attributes>
     </entity>

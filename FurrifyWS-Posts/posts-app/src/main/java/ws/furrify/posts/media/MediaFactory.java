@@ -3,6 +3,7 @@ package ws.furrify.posts.media;
 import ws.furrify.posts.media.dto.MediaDTO;
 
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.UUID;
 
 final class MediaFactory {
@@ -23,6 +24,9 @@ final class MediaFactory {
                 .extension(mediaDTO.getExtension())
                 .fileUrl(mediaDTO.getFileUrl())
                 .thumbnailUrl(mediaDTO.getThumbnailUrl())
+                .sources(
+                        (mediaDTO.getSources() != null) ? mediaDTO.getSources() : new HashSet<>()
+                )
                 .createDate(
                         (mediaDTO.getCreateDate() != null) ? mediaDTO.getCreateDate() : ZonedDateTime.now()
                 )

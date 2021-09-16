@@ -5,12 +5,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.posts.media.vo.MediaPriority;
+import ws.furrify.posts.media.vo.MediaSource;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.ZonedDateTime;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MediaTest {
 
@@ -31,6 +36,13 @@ class MediaTest {
                 .fileUrl(new URL("https://example.com/"))
                 .thumbnailUrl(new URL("https://example.com/"))
                 .extension(MediaExtension.PNG)
+                .sources(Collections.singleton(
+                        new MediaSource(
+                                UUID.randomUUID(),
+                                "DeviantArtV1SourceStrategy",
+                                new HashMap<>()
+                        )
+                ))
                 .createDate(ZonedDateTime.now())
                 .build();
 
@@ -69,5 +81,63 @@ class MediaTest {
         );
 
         assertEquals(newPriority, media.getSnapshot().getPriority(), "Priority was not updated");
+    }
+
+    @Test
+    @DisplayName("Remove source")
+    void removeSource() {
+        // Given sourceId
+        UUID sourceId = ((MediaSource) mediaSnapshot.getSources().toArray()[0]).getSourceId();
+        // When removeSource() method called
+        // Then remove source from sources
+        media.deleteSource(sourceId);
+
+        assertEquals(
+                0,
+                media.getSnapshot().getSources().size(),
+                "Source was not removed."
+        );
+    }
+
+    @Test
+    @DisplayName("Update source details in sources")
+    void updateSourceDataInSources() {
+        // Given new MediaSource
+        MediaSource mediaSource = new MediaSource(
+                ((MediaSource) mediaSnapshot.getSources().toArray()[0]).getSourceId(),
+                "PatreonV1SourceStrategy",
+                new HashMap<>() {{
+                    put("asd", "ds");
+                }}
+        );
+        // When updateSourceDataInSources() method called
+        // Then update source data in media
+        media.updateSourceDataInSources(mediaSource);
+
+        assertEquals(
+                mediaSource,
+                media.getSnapshot().getSources().toArray()[0],
+                "Source was not updated."
+        );
+    }
+
+    @Test
+    @DisplayName("Update source data in sources with non existing sourceId")
+    void updateSourceDataInSources2() throws MalformedURLException {
+        // Given new MediaSource with non-existing
+        MediaSource mediaSource = new MediaSource(
+                UUID.randomUUID(),
+                "PatreonV1SourceStrategy",
+                new HashMap<>() {{
+                    put("asd", "ds");
+                }}
+        );
+        // When updateSourceDataInSources() method called
+        // Then throw IllegalStateException
+        assertThrows(
+                IllegalStateException.class,
+                () -> media.updateSourceDataInSources(mediaSource),
+                "Exception was not thrown."
+        );
     }
 }

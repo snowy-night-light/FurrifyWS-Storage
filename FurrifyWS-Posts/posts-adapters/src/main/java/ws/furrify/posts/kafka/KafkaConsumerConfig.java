@@ -30,7 +30,7 @@ class KafkaConsumerConfig {
     @Value("${spring.kafka.consumer.group-id.prefix}")
     private String groupIdPrefix;
 
-    @Value("${REGION:}")
+    @Value("${KAFKA_CONSUMER_GROUP_ID:}")
     private String groupIdRegion;
 
     @Bean

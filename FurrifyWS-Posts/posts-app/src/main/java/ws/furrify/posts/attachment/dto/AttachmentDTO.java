@@ -4,9 +4,11 @@ import lombok.Builder;
 import lombok.ToString;
 import lombok.Value;
 import ws.furrify.posts.attachment.AttachmentExtension;
+import ws.furrify.posts.attachment.vo.AttachmentSource;
 
 import java.net.URL;
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -29,6 +31,8 @@ public class AttachmentDTO {
     URL fileUrl;
 
     String md5;
+
+    Set<AttachmentSource> sources;
 
     ZonedDateTime createDate;
 }

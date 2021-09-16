@@ -46,8 +46,8 @@ class ArtistRepositoryImpl implements ArtistRepository {
     private final SqlArtistRepository sqlArtistRepository;
 
     @Override
-    public Artist save(final Artist post) {
-        return Artist.restore(sqlArtistRepository.save(post.getSnapshot()));
+    public Artist save(final Artist artist) {
+        return Artist.restore(sqlArtistRepository.save(artist.getSnapshot()));
     }
 
     @Override

@@ -1,11 +1,16 @@
 package ws.furrify.posts.media;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.media.dto.MediaDTO;
 import ws.furrify.posts.media.dto.MediaDtoFactory;
+import ws.furrify.posts.media.vo.MediaSource;
+import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.kafka.DomainEventPublisher;
+import ws.furrify.shared.vo.SourceOriginType;
+import ws.furrify.sources.source.SourceEvent;
 
 import java.util.UUID;
 
@@ -38,6 +43,54 @@ final public class MediaFacade {
 
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + mediaEvent.getState() + " Topic=media_events");
+        }
+    }
+
+    /**
+     * Handle incoming source events.
+     *
+     * @param sourceEvent Source event instance received from kafka.
+     */
+    @SneakyThrows
+    public void handleEvent(final UUID key, final SourceEvent sourceEvent) {
+        UUID sourceId = UUID.fromString(sourceEvent.getSourceId());
+
+        // Check if this source event origins from Media
+        if (!SourceOriginType.MEDIA.name().equals(sourceEvent.getData().getOriginType())) {
+            return;
+        }
+
+        switch (DomainEventPublisher.SourceEventType.valueOf(sourceEvent.getState())) {
+            case REMOVED -> deleteSourceFromMedia(
+                    key,
+                    UUID.fromString(sourceEvent.getData().getPostId()),
+                    UUID.fromString(sourceEvent.getData().getOriginId()),
+                    sourceId
+            );
+            case UPDATED, REPLACED -> updateSourceDataInMedia(
+                    key,
+                    UUID.fromString(sourceEvent.getData().getPostId()),
+                    UUID.fromString(sourceEvent.getData().getOriginId()),
+                    // Build post source from source event
+                    MediaSource.builder()
+                            .sourceId(sourceId)
+                            .strategy(sourceEvent.getData().getStrategy())
+                            .data(sourceEvent.getData().getDataHashMap())
+                            .build()
+            );
+            case CREATED -> addSourceToMedia(
+                    key,
+                    UUID.fromString(sourceEvent.getData().getPostId()),
+                    UUID.fromString(sourceEvent.getData().getOriginId()),
+                    // Build post source from source event
+                    MediaSource.builder()
+                            .sourceId(sourceId)
+                            .strategy(sourceEvent.getData().getStrategy())
+                            .data(sourceEvent.getData().getDataHashMap())
+                            .build()
+            );
+            default -> log.warning("State received from kafka is not defined. " +
+                    "State=" + sourceEvent.getState() + " Topic=source_events");
         }
     }
 
@@ -98,4 +151,38 @@ final public class MediaFacade {
     private void deleteMediaByMediaIdFromDatabase(final UUID mediaId) {
         mediaRepository.deleteByMediaId(mediaId);
     }
+
+    private void deleteSourceFromMedia(final UUID ownerId,
+                                       final UUID postId,
+                                       final UUID mediaId,
+                                       final UUID sourceId) {
+        Media media = mediaRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, mediaId)
+                .orElseThrow(() -> new IllegalStateException(Errors.NO_RECORD_FOUND.getErrorMessage(mediaId)));
+        media.deleteSource(sourceId);
+
+        mediaRepository.save(media);
+    }
+
+    private void updateSourceDataInMedia(final UUID ownerId,
+                                         final UUID postId,
+                                         final UUID mediaId,
+                                         final MediaSource mediaSource) {
+        Media media = mediaRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, mediaId)
+                .orElseThrow(() -> new IllegalStateException(Errors.NO_RECORD_FOUND.getErrorMessage(mediaId)));
+        media.updateSourceDataInSources(mediaSource);
+
+        mediaRepository.save(media);
+    }
+
+    private void addSourceToMedia(final UUID ownerId,
+                                  final UUID postId,
+                                  final UUID mediaId,
+                                  final MediaSource mediaSource) {
+        Media media = mediaRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, mediaId)
+                .orElseThrow(() -> new IllegalStateException(Errors.NO_RECORD_FOUND.getErrorMessage(mediaId)));
+        media.addSource(mediaSource);
+
+        mediaRepository.save(media);
+    }
+
 }

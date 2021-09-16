@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import ws.furrify.posts.post.PostEvent;
+import ws.furrify.tags.tag.TagEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,12 +42,12 @@ class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, PostEvent> producerFactory() {
+    public ProducerFactory<String, TagEvent> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, PostEvent> kafkaTemplate() {
+    public KafkaTemplate<String, TagEvent> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

@@ -3,6 +3,7 @@ package ws.furrify.artists.artist.dto;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.Value;
+import ws.furrify.artists.artist.vo.ArtistSource;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -15,14 +16,16 @@ import java.util.UUID;
 @Value
 @ToString
 public class ArtistDTO {
-     Long id;
+    Long id;
 
-     UUID artistId;
-     UUID ownerId;
+    UUID artistId;
+    UUID ownerId;
 
-     Set<String> nicknames;
+    Set<String> nicknames;
 
-     String preferredNickname;
+    String preferredNickname;
 
-     ZonedDateTime createDate;
+    Set<ArtistSource> sources;
+
+    ZonedDateTime createDate;
 }

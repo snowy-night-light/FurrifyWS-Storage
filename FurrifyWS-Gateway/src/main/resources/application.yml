@@ -21,6 +21,10 @@ spring:
           uri: lb://ARTISTS-SERVICE
           predicates:
             - Path=/users/*/artists/**
+        - id: sourcesService
+          uri: lb://SOURCES-SERVICE
+          predicates:
+            - Path=/users/*/sources/**, /users/*/posts/*/media/*/sources, /users/*/posts/*/attachment/*/sources, , /users/*/artists/*/sources
 
 server:
   port: 8080

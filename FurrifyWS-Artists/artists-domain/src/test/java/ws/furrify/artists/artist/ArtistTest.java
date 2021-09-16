@@ -5,12 +5,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.artists.artist.vo.ArtistNickname;
+import ws.furrify.artists.artist.vo.ArtistSource;
 import ws.furrify.shared.exception.InvalidDataGivenException;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
 
+import java.net.MalformedURLException;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -37,6 +40,13 @@ class ArtistTest {
                 .ownerId(UUID.randomUUID())
                 .preferredNickname("Test")
                 .nicknames(new HashSet<>(Arrays.asList("Test", "Test2")))
+                .sources(Collections.singleton(
+                        new ArtistSource(
+                                UUID.randomUUID(),
+                                "DeviantArtV1SourceStrategy",
+                                new HashMap<>()
+                        )
+                ))
                 .createDate(ZonedDateTime.now())
                 .build();
 
@@ -171,6 +181,64 @@ class ArtistTest {
         assertThrows(
                 InvalidDataGivenException.class,
                 () -> artist.updateNicknames(newNicknames, null, artistRepository),
+                "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Remove source")
+    void removeSource() {
+        // Given sourceId
+        UUID sourceId = ((ArtistSource) artistSnapshot.getSources().toArray()[0]).getSourceId();
+        // When removeSource() method called
+        // Then remove source from sources
+        artist.deleteSource(sourceId);
+
+        assertEquals(
+                0,
+                artist.getSnapshot().getSources().size(),
+                "Source was not removed."
+        );
+    }
+
+    @Test
+    @DisplayName("Update source details in sources")
+    void updateSourceDataInSources() {
+        // Given new ArtistSource
+        ArtistSource artistSource = new ArtistSource(
+                ((ArtistSource) artistSnapshot.getSources().toArray()[0]).getSourceId(),
+                "PatreonV1SourceStrategy",
+                new HashMap<>() {{
+                    put("asd", "ds");
+                }}
+        );
+        // When updateSourceDataInSources() method called
+        // Then update source data in artist
+        artist.updateSourceDataInSources(artistSource);
+
+        assertEquals(
+                artistSource,
+                artist.getSnapshot().getSources().toArray()[0],
+                "Source was not updated."
+        );
+    }
+
+    @Test
+    @DisplayName("Update source data in sources with non existing sourceId")
+    void updateSourceDataInSources2() throws MalformedURLException {
+        // Given new ArtistSource with non-existing
+        ArtistSource artistSource = new ArtistSource(
+                UUID.randomUUID(),
+                "PatreonV1SourceStrategy",
+                new HashMap<>() {{
+                    put("asd", "ds");
+                }}
+        );
+        // When updateSourceDataInSources() method called
+        // Then throw IllegalStateException
+        assertThrows(
+                IllegalStateException.class,
+                () -> artist.updateSourceDataInSources(artistSource),
                 "Exception was not thrown."
         );
     }

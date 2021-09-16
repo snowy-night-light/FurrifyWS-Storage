@@ -2,6 +2,35 @@
   {
     "type": "record",
     "namespace": "ws.furrify.artists.artist.vo",
+    "doc": "Artist source containing required information to perform state change across multiple microservices.",
+    "name": "ArtistSource",
+    "fields": [
+      {
+        "name": "sourceId",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Source UUID."
+      },
+      {
+        "name": "dataHashMap",
+        "type": [
+          "null",
+          {
+            "type": "map",
+            "values": "string"
+          }
+        ],
+        "default": null,
+        "doc": "Source data hash map."
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "ws.furrify.artists.artist.vo",
     "doc": "Artist data containing required information to perform state change across multiple microservices.",
     "name": "ArtistData",
     "fields": [
@@ -31,6 +60,15 @@
         ],
         "default": null,
         "doc": "Artist preferred nickname from nicknames array."
+      },
+      {
+        "name": "sources",
+        "type": {
+          "type": "array",
+          "items": "ws.furrify.artists.artist.vo.ArtistSource"
+        },
+        "default": [],
+        "doc": "Artist sources."
       },
       {
         "name": "createDate",

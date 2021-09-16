@@ -3,6 +3,7 @@ package ws.furrify.posts.attachment;
 import ws.furrify.posts.attachment.dto.AttachmentDTO;
 
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.UUID;
 
 class AttachmentFactory {
@@ -19,6 +20,9 @@ class AttachmentFactory {
                 .md5(attachmentDTO.getMd5())
                 .extension(attachmentDTO.getExtension())
                 .fileUrl(attachmentDTO.getFileUrl())
+                .sources(
+                        (attachmentDTO.getSources() != null) ? attachmentDTO.getSources() : new HashSet<>()
+                )
                 .createDate(
                         (attachmentDTO.getCreateDate() != null) ? attachmentDTO.getCreateDate() : ZonedDateTime.now()
                 )

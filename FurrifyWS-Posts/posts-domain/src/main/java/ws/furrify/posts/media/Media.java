@@ -8,9 +8,13 @@ import lombok.ToString;
 import lombok.extern.java.Log;
 import ws.furrify.posts.media.vo.MediaFile;
 import ws.furrify.posts.media.vo.MediaPriority;
+import ws.furrify.posts.media.vo.MediaSource;
 
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode
@@ -28,6 +32,8 @@ class Media {
     private MediaPriority priority;
     @NonNull
     private final MediaFile file;
+    @NonNull
+    private Set<MediaSource> sources;
 
     private final ZonedDateTime createDate;
 
@@ -45,6 +51,7 @@ class Media {
                         .md5(mediaSnapshot.getMd5())
                         .fileUrl(mediaSnapshot.getFileUrl())
                         .build(),
+                new HashSet<>(mediaSnapshot.getSources()),
                 mediaSnapshot.getCreateDate()
         );
     }
@@ -61,11 +68,43 @@ class Media {
                 .filename(file.getFilename())
                 .md5(file.getMd5())
                 .fileUrl(file.getFileUrl())
+                .sources(sources.stream().collect(Collectors.toUnmodifiableSet()))
                 .createDate(createDate)
                 .build();
     }
 
-    void replacePriority(MediaPriority mediaPriority) {
+    void replacePriority(@NonNull final MediaPriority mediaPriority) {
         this.priority = mediaPriority;
+    }
+
+    void addSource(@NonNull final MediaSource artistSource) {
+        this.sources.add(artistSource);
+    }
+
+    void deleteSource(final UUID sourceId) {
+        this.sources = sources.stream()
+                .filter(source -> !source.getSourceId().equals(sourceId))
+                .collect(Collectors.toSet());
+    }
+
+    void updateSourceDataInSources(@NonNull final MediaSource artistSource) {
+        // Filter sourceSet to find if source exists by sourceId.
+        this.sources.stream()
+                .filter(source -> source.getSourceId().equals(artistSource.getSourceId()))
+                .findAny()
+                .orElseThrow(() -> {
+                    log.severe("Original source [sourceId=" + artistSource.getSourceId() + "] was not found.");
+
+                    return new IllegalStateException("Original sourceId was not found.");
+                });
+
+        // Filter sourceSet to get all without old source
+        Set<MediaSource> filteredSourceSet = this.sources.stream()
+                .filter(source -> !source.getSourceId().equals(artistSource.getSourceId()))
+                .collect(Collectors.toSet());
+        // Add updated source to sourceSet
+        filteredSourceSet.add(artistSource);
+
+        this.sources = filteredSourceSet;
     }
 }

@@ -6,9 +6,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import ws.furrify.posts.media.vo.MediaSource;
 
 import java.net.URL;
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 import static lombok.AccessLevel.PACKAGE;
@@ -37,6 +39,8 @@ class MediaSnapshot {
 
     private URL fileUrl;
     private URL thumbnailUrl;
+
+    private Set<MediaSource> sources;
 
     private ZonedDateTime createDate;
 }

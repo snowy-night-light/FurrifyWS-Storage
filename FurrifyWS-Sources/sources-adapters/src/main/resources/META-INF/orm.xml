@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings version="2.1"
+                 xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm">
+
+    <description>XML Mapping file</description>
+
+    <entity class="ws.furrify.sources.source.SourceSnapshot" access="FIELD">
+        <table name="sources"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="SEQUENCE"/>
+            </id>
+            <basic name="sourceId">
+                <column unique="true" updatable="false" nullable="false"/>
+            </basic>
+            <basic name="ownerId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="originId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="postId">
+                <column updatable="false" nullable="true"/>
+            </basic>
+            <basic name="originType">
+                <column nullable="false"/>
+                <enumerated>STRING</enumerated>
+            </basic>
+            <basic name="createDate">
+                <column updatable="false" nullable="false"/>
+            </basic>
+
+            <element-collection fetch="EAGER" name="data">
+                <map-key-column name="key_data"/>
+                <column name="data"/>
+                <collection-table name="sources_data">
+                    <join-column name="source_id"/>
+                </collection-table>
+            </element-collection>
+        </attributes>
+    </entity>
+</entity-mappings>

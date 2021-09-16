@@ -5,10 +5,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import ws.furrify.artists.artist.dto.ArtistDTO;
+import ws.furrify.artists.artist.vo.ArtistSource;
 
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Component
@@ -31,6 +33,7 @@ class ArtistTest implements CommandLineRunner {
 
         var userId = UUID.fromString("82722f67-ec52-461f-8294-158d8affe7a3");
         var artistId = UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00");
+        var sourceId = UUID.fromString("02038a77-9717-4de8-a21b-3a722f158be2");
 
         sqlArtistRepository.save(
                 artistFactory.from(
@@ -39,6 +42,15 @@ class ArtistTest implements CommandLineRunner {
                                 .ownerId(userId)
                                 .nicknames(Collections.singleton("test_nickname"))
                                 .preferredNickname("test_nickname")
+                                .sources(Collections.singleton(
+                                        new ArtistSource(
+                                                sourceId,
+                                                "DeviantArtV1SourceStrategy",
+                                                new HashMap<>(1) {{
+                                                    put("id", "123");
+                                                }}
+                                        )
+                                ))
                                 .createDate(ZonedDateTime.now())
                                 .build()
                 ).getSnapshot()

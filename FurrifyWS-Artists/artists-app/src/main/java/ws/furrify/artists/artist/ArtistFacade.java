@@ -1,10 +1,15 @@
 package ws.furrify.artists.artist;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import ws.furrify.artists.artist.dto.ArtistDTO;
 import ws.furrify.artists.artist.dto.ArtistDtoFactory;
+import ws.furrify.artists.artist.vo.ArtistSource;
+import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.kafka.DomainEventPublisher;
+import ws.furrify.shared.vo.SourceOriginType;
+import ws.furrify.sources.source.SourceEvent;
 
 import java.util.UUID;
 
@@ -38,6 +43,51 @@ final public class ArtistFacade {
 
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + artistEvent.getState() + " Topic=artist_events");
+        }
+    }
+
+    /**
+     * Handle incoming source events.
+     *
+     * @param sourceEvent Source event instance received from kafka.
+     */
+    @SneakyThrows
+    public void handleEvent(final UUID key, final SourceEvent sourceEvent) {
+        UUID sourceId = UUID.fromString(sourceEvent.getSourceId());
+
+        // Check if this source event origins from Artist
+        if (!SourceOriginType.ARTIST.name().equals(sourceEvent.getData().getOriginType())) {
+            return;
+        }
+
+        switch (DomainEventPublisher.SourceEventType.valueOf(sourceEvent.getState())) {
+            case REMOVED -> deleteSourceFromArtist(
+                    key,
+                    UUID.fromString(sourceEvent.getData().getOriginId()),
+                    sourceId
+            );
+            case UPDATED, REPLACED -> updateSourceDataInArtist(
+                    key,
+                    UUID.fromString(sourceEvent.getData().getOriginId()),
+                    // Build post source from source event
+                    ArtistSource.builder()
+                            .sourceId(sourceId)
+                            .strategy(sourceEvent.getData().getStrategy())
+                            .data(sourceEvent.getData().getDataHashMap())
+                            .build()
+            );
+            case CREATED -> addSourceToArtist(
+                    key,
+                    UUID.fromString(sourceEvent.getData().getOriginId()),
+                    // Build post source from source event
+                    ArtistSource.builder()
+                            .sourceId(sourceId)
+                            .strategy(sourceEvent.getData().getStrategy())
+                            .data(sourceEvent.getData().getDataHashMap())
+                            .build()
+            );
+            default -> log.warning("State received from kafka is not defined. " +
+                    "State=" + sourceEvent.getState() + " Topic=source_events");
         }
     }
 
@@ -90,6 +140,36 @@ final public class ArtistFacade {
 
     private void saveArtistToDatabase(final ArtistDTO artistDTO) {
         artistRepository.save(artistFactory.from(artistDTO));
+    }
+
+    private void deleteSourceFromArtist(final UUID ownerId,
+                                        final UUID artistId,
+                                        final UUID sourceId) {
+        Artist artist = artistRepository.findByOwnerIdAndArtistId(ownerId, artistId)
+                .orElseThrow(() -> new IllegalStateException(Errors.NO_RECORD_FOUND.getErrorMessage(artistId)));
+        artist.deleteSource(sourceId);
+
+        artistRepository.save(artist);
+    }
+
+    private void updateSourceDataInArtist(final UUID ownerId,
+                                          final UUID artistId,
+                                          final ArtistSource artistSource) {
+        Artist artist = artistRepository.findByOwnerIdAndArtistId(ownerId, artistId)
+                .orElseThrow(() -> new IllegalStateException(Errors.NO_RECORD_FOUND.getErrorMessage(artistId)));
+        artist.updateSourceDataInSources(artistSource);
+
+        artistRepository.save(artist);
+    }
+
+    private void addSourceToArtist(final UUID ownerId,
+                                   final UUID artistId,
+                                   final ArtistSource artistSource) {
+        Artist artist = artistRepository.findByOwnerIdAndArtistId(ownerId, artistId)
+                .orElseThrow(() -> new IllegalStateException(Errors.NO_RECORD_FOUND.getErrorMessage(artistId)));
+        artist.addSource(artistSource);
+
+        artistRepository.save(artist);
     }
 
 }
