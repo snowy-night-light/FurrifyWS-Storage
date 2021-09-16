@@ -29,6 +29,14 @@
             <basic name="createDate">
                 <column updatable="false" nullable="false"/>
             </basic>
+
+            <element-collection fetch="EAGER" name="data">
+                <map-key-column name="key_data"/>
+                <column name="data"/>
+                <collection-table name="sources_data">
+                    <join-column name="source_id"/>
+                </collection-table>
+            </element-collection>
         </attributes>
     </entity>
 </entity-mappings>

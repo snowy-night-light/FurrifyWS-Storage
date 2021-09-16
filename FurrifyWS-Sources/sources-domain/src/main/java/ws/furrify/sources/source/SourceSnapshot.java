@@ -10,7 +10,7 @@ import ws.furrify.sources.source.strategy.SourceStrategy;
 import ws.furrify.sources.source.vo.SourceOriginType;
 
 import java.time.ZonedDateTime;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static lombok.AccessLevel.PACKAGE;
@@ -31,7 +31,7 @@ class SourceSnapshot {
     private UUID sourceId;
     private UUID ownerId;
 
-    private HashMap<String, String> data;
+    private Map<String, String> data;
 
     private SourceStrategy strategy;
 

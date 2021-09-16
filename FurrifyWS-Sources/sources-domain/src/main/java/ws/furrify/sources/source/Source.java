@@ -13,6 +13,7 @@ import ws.furrify.sources.source.vo.SourceOriginType;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -32,7 +33,7 @@ class Source {
     private final UUID ownerId;
 
     @NonNull
-    private HashMap<String, String> data;
+    private Map<String, String> data;
 
     @NonNull
     private SourceStrategy strategy;
@@ -82,7 +83,7 @@ class Source {
                     @Nullable final SourceStrategy strategy) {
 
         // Replace with current values if null
-        final HashMap<String, String> finalData = (data != null) ? data : this.data;
+        final HashMap<String, String> finalData = (data != null) ? data : new HashMap<>(this.data);
         final SourceStrategy finalStrategy = (strategy != null) ? strategy : this.strategy;
 
         // Ignore warning, false positive
