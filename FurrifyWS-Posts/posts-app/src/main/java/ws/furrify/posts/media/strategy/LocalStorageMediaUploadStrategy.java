@@ -59,8 +59,12 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
             // Create files
             File mediaFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + fileSource.getOriginalFilename());
 
+            // Check if filename is not null
+            if (fileSource.getOriginalFilename() == null) {
+                throw new IllegalStateException("Filename cannot be empty.");
+            }
+
             // Create thumbnail filename by removing extension from original filename
-            // FIXME May be null
             String thumbnailFileName = fileSource.getOriginalFilename().substring(
                     0,
                     fileSource.getOriginalFilename().lastIndexOf(".")
