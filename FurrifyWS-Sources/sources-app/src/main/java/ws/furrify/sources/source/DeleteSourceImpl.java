@@ -17,16 +17,15 @@ final class DeleteSourceImpl implements DeleteSource {
     @Override
     public void deleteSource(@NonNull final UUID ownerId,
                              @NonNull final UUID sourceId) {
-        if (!sourceRepository.existsByOwnerIdAndSourceId(ownerId, sourceId)) {
-            throw new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(sourceId.toString()));
-        }
+        Source source = sourceRepository.findByOwnerIdAndSourceId(ownerId, sourceId)
+                .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(sourceId.toString())));
 
         // Publish delete source event
         domainEventPublisher.publish(
                 DomainEventPublisher.Topic.SOURCE,
                 // Use ownerId as key
                 ownerId,
-                SourceUtils.deleteSourceEvent(sourceId)
+                SourceUtils.deleteSourceEvent(source)
         );
     }
 }

@@ -86,12 +86,11 @@ class Source {
         final HashMap<String, String> finalData = (data != null) ? data : new HashMap<>(this.data);
         final SourceStrategy finalStrategy = (strategy != null) ? strategy : this.strategy;
 
-        // Ignore warning, false positive
-        var validationResult = strategy.validate(finalData);
+        var validationResult = finalStrategy.validate(finalData);
 
         if (!validationResult.isValid()) {
             throw new InvalidDataGivenException(Errors.VALIDATION_FAILED.getErrorMessage(
-                    strategy.getClass().getSimpleName(),
+                    finalStrategy.getClass().getSimpleName(),
                     validationResult.getReason()
             ));
         }

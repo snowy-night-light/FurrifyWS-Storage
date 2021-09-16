@@ -3,7 +3,7 @@
     {
       "name": "spring.kafka.consumer.group-id.prefix",
       "type": "java.lang.String",
-      "description": "Group id prefix before random UUID."
+      "description": "Group id prefix."
     },
     {
       "name": "spring.kafka.schema-registry-servers",

@@ -33,6 +33,7 @@ public class SourceDtoFactory {
 
         var sourceId = UUID.fromString(sourceEvent.getSourceId());
         var originId = UUID.fromString(sourceEvent.getData().getOriginId());
+        // Post id can be null for artist origin id
         var postId =
                 (sourceEvent.getData().getPostId() != null) ?
                         UUID.fromString(sourceEvent.getData().getPostId()) :
@@ -54,7 +55,11 @@ public class SourceDtoFactory {
                 .originType(
                         SourceOriginType.valueOf(sourceEvent.getData().getOriginType())
                 )
-                .data(new HashMap<>(sourceEvent.getData().getDataHashMap()))
+                .data(
+                        (sourceEvent.getData().getDataHashMap() != null) ?
+                                new HashMap<>(sourceEvent.getData().getDataHashMap()) :
+                                null
+                )
                 .createDate(createDate)
                 .build();
     }

@@ -5,7 +5,6 @@ import ws.furrify.sources.source.converter.SourceStrategyAttributeConverter;
 import ws.furrify.sources.source.vo.SourceData;
 
 import java.time.Instant;
-import java.util.UUID;
 
 /**
  * Utils class regarding Source entity.
@@ -53,14 +52,21 @@ class SourceUtils {
     /**
      * Create SourceEvent with REMOVE state.
      *
-     * @param sourceId SourceId the delete event will regard.
+     * @param source Source aggregate to source values from.
      * @return Created source event.
      */
-    public static SourceEvent deleteSourceEvent(final UUID sourceId) {
+    public static SourceEvent deleteSourceEvent(final Source source) {
+        var snapshot = source.getSnapshot();
+
         return SourceEvent.newBuilder()
                 .setState(DomainEventPublisher.SourceEventType.REMOVED.name())
-                .setSourceId(sourceId.toString())
-                .setDataBuilder(SourceData.newBuilder())
+                .setSourceId(snapshot.getSourceId().toString())
+                .setData(SourceData.newBuilder()
+                        .setOriginId(snapshot.getOriginId().toString())
+                        .setOriginType(snapshot.getOriginType().name())
+                        .setPostId(snapshot.getPostId().toString())
+                        .build()
+                )
                 .setOccurredOn(Instant.now())
                 .build();
     }
