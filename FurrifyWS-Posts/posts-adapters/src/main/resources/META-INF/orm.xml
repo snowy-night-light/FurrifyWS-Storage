@@ -38,13 +38,14 @@
             <basic name="thumbnailUrl">
                 <column nullable="true"/>
             </basic>
-            <basic name="status">
-                <column nullable="false"/>
-                <enumerated>STRING</enumerated>
-            </basic>
             <basic name="createDate">
                 <column updatable="false" nullable="false"/>
             </basic>
+            <one-to-many fetch="EAGER" name="sources" target-entity="ws.furrify.posts.media.vo.MediaSource">
+                <cascade>
+                    <cascade-all/>
+                </cascade>
+            </one-to-many>
         </attributes>
     </entity>
 
@@ -126,6 +127,27 @@
         </attributes>
     </entity>
 
+    <entity class="ws.furrify.posts.media.vo.MediaSource" access="FIELD">
+        <attributes>
+            <id name="id">
+                <generated-value strategy="SEQUENCE"/>
+            </id>
+            <basic name="sourceId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="strategy">
+                <column nullable="false"/>
+            </basic>
+            <element-collection fetch="EAGER" name="data">
+                <map-key-column name="key_data"/>
+                <column name="data"/>
+                <collection-table name="sources_data">
+                    <join-column name="source_id"/>
+                </collection-table>
+            </element-collection>
+        </attributes>
+    </entity>
+
     <embeddable class="ws.furrify.posts.post.vo.PostMedia" access="FIELD">
         <attributes>
             <basic name="mediaId">
@@ -181,4 +203,5 @@
             </basic>
         </attributes>
     </embeddable>
+
 </entity-mappings>

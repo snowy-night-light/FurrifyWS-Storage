@@ -4,9 +4,11 @@ import lombok.Builder;
 import lombok.ToString;
 import lombok.Value;
 import ws.furrify.posts.media.MediaExtension;
+import ws.furrify.posts.media.vo.MediaSource;
 
 import java.net.URL;
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -32,6 +34,8 @@ public class MediaDTO {
     URL thumbnailUrl;
 
     String md5;
+
+    Set<MediaSource> sources;
 
     ZonedDateTime createDate;
 }

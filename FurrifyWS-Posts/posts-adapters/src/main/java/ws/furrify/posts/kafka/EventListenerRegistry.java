@@ -16,6 +16,7 @@ import ws.furrify.posts.media.MediaEvent;
 import ws.furrify.posts.media.MediaFacade;
 import ws.furrify.posts.post.PostEvent;
 import ws.furrify.posts.post.PostFacade;
+import ws.furrify.sources.source.SourceEvent;
 import ws.furrify.tags.tag.TagEvent;
 
 import java.util.UUID;
@@ -107,5 +108,20 @@ class EventListenerRegistry {
 
         attachmentFacade.handleEvent(keyId, attachmentEvent);
         postFacade.handleEvent(keyId, attachmentEvent);
+    }
+
+    @KafkaListener(topics = "source_events")
+    @Retryable(
+            value = {Exception.class},
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 10_000)
+    )
+    public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+                   @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                   @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+                   @Payload SourceEvent sourceEvent) {
+        log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
+
+        mediaFacade.handleEvent(UUID.fromString(key), sourceEvent);
     }
 }

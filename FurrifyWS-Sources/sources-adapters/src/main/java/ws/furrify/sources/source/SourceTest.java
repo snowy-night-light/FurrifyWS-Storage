@@ -33,15 +33,19 @@ class SourceTest implements CommandLineRunner {
 
         var userId = UUID.fromString("82722f67-ec52-461f-8294-158d8affe7a3");
         var postId = UUID.fromString("7c2c35f3-20e9-4b7e-a455-253b7b78e2fa");
-        var sourceId = UUID.fromString("02038a77-9717-4de8-a21b-3a722f158be2");
-        var originId = UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00");
+
+        var artistSourceId = UUID.fromString("02038a77-9717-4de8-a21b-3a722f158be2");
+        var artistOriginId = UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00");
+
+        var mediaSourceId = UUID.fromString("482b628f-4ca9-4c96-a199-bf25e21b5bca");
+        var mediaOriginId = UUID.fromString("19c02f53-486e-4205-b1b7-74977ae13941");
 
         sqlSourceRepository.save(
                 sourceFactory.from(
                         SourceDTO.builder()
-                                .originId(originId)
-                                .postId(postId)
-                                .sourceId(sourceId)
+                                .originId(artistOriginId)
+                                .postId(null)
+                                .sourceId(artistSourceId)
                                 .ownerId(userId)
                                 .strategy(new DeviantArtV1SourceStrategy())
                                 .data(new HashMap<>(1) {{
@@ -53,7 +57,26 @@ class SourceTest implements CommandLineRunner {
                 ).getSnapshot()
         );
 
-        System.out.println("SourceId: " + sourceId);
+        sqlSourceRepository.save(
+                sourceFactory.from(
+                        SourceDTO.builder()
+                                .originId(mediaOriginId)
+                                .postId(postId)
+                                .sourceId(mediaSourceId)
+                                .ownerId(userId)
+                                .strategy(new DeviantArtV1SourceStrategy())
+                                .data(new HashMap<>(1) {{
+                                    put("id", "525");
+                                }})
+                                .originType(SourceOriginType.MEDIA)
+                                .createDate(ZonedDateTime.now())
+                                .build()
+                ).getSnapshot()
+        );
+
+
+        System.out.println("ArtistSourceId: " + artistSourceId);
+        System.out.println("MediaSourceId: " + mediaSourceId);
     }
 
 }
