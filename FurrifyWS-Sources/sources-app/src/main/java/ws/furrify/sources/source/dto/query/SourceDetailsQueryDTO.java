@@ -1,7 +1,7 @@
 package ws.furrify.sources.source.dto.query;
 
+import ws.furrify.shared.vo.SourceOriginType;
 import ws.furrify.sources.source.strategy.SourceStrategy;
-import ws.furrify.sources.source.vo.SourceOriginType;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;

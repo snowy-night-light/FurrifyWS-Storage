@@ -3,8 +3,8 @@ package ws.furrify.sources.source.dto;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.Value;
+import ws.furrify.shared.vo.SourceOriginType;
 import ws.furrify.sources.source.strategy.SourceStrategy;
-import ws.furrify.sources.source.vo.SourceOriginType;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;

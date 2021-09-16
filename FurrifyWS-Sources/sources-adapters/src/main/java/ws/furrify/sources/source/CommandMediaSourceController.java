@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ws.furrify.shared.vo.SourceOriginType;
 import ws.furrify.sources.source.dto.SourceDTO;
 import ws.furrify.sources.source.dto.command.SourceCreateCommandDTO;
-import ws.furrify.sources.source.vo.SourceOriginType;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;

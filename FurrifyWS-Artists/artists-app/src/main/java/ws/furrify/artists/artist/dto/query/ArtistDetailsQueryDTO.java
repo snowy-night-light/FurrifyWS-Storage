@@ -1,5 +1,7 @@
 package ws.furrify.artists.artist.dto.query;
 
+import ws.furrify.artists.artist.vo.ArtistSource;
+
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -17,6 +19,8 @@ public interface ArtistDetailsQueryDTO extends Serializable {
     Set<String> getNicknames();
 
     String getPreferredNickname();
+
+    Set<ArtistSource> getSources();
 
     ZonedDateTime getCreateDate();
 

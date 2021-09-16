@@ -1,4 +1,4 @@
-package ws.furrify.sources.source.vo;
+package ws.furrify.shared.vo;
 
 /**
  * Defines what file source origin is.

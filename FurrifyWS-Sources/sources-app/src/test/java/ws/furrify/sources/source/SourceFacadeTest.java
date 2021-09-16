@@ -6,13 +6,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
+import ws.furrify.shared.vo.SourceOriginType;
 import ws.furrify.sources.artists.ArtistServiceClient;
 import ws.furrify.sources.posts.PostServiceClient;
 import ws.furrify.sources.source.converter.SourceStrategyAttributeConverter;
 import ws.furrify.sources.source.dto.SourceDTO;
 import ws.furrify.sources.source.dto.SourceDtoFactory;
-import ws.furrify.sources.source.strategy.DefaultSourceStrategy;
-import ws.furrify.sources.source.vo.SourceOriginType;
+import ws.furrify.sources.source.strategy.DeviantArtV1SourceStrategy;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -43,7 +43,7 @@ class SourceFacadeTest {
                 .originId(UUID.randomUUID())
                 .postId(UUID.randomUUID())
                 .originType(SourceOriginType.MEDIA)
-                .strategy(new DefaultSourceStrategy())
+                .strategy(new DeviantArtV1SourceStrategy())
                 .data(new HashMap<>())
                 .createDate(ZonedDateTime.now())
                 .build();

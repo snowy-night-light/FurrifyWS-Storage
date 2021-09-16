@@ -8,8 +8,8 @@ import lombok.ToString;
 import org.springframework.lang.Nullable;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.InvalidDataGivenException;
+import ws.furrify.shared.vo.SourceOriginType;
 import ws.furrify.sources.source.strategy.SourceStrategy;
-import ws.furrify.sources.source.vo.SourceOriginType;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;

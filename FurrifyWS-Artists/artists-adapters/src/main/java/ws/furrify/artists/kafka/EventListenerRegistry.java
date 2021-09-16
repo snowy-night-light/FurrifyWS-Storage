@@ -11,6 +11,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import ws.furrify.artists.artist.ArtistEvent;
 import ws.furrify.artists.artist.ArtistFacade;
+import ws.furrify.sources.source.SourceEvent;
 
 import java.util.UUID;
 
@@ -33,5 +34,20 @@ class EventListenerRegistry {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
         artistFacade.handleEvent(UUID.fromString(key), artistEvent);
+    }
+
+    @KafkaListener(topics = "source_events")
+    @Retryable(
+            value = {Exception.class},
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 10_000)
+    )
+    public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+                   @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                   @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+                   @Payload SourceEvent sourceEvent) {
+        log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
+
+        artistFacade.handleEvent(UUID.fromString(key), sourceEvent);
     }
 }

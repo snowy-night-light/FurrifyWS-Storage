@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
+import lombok.extern.java.Log;
 import ws.furrify.artists.artist.vo.ArtistNickname;
+import ws.furrify.artists.artist.vo.ArtistSource;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.InvalidDataGivenException;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode
 @ToString
+@Log
 class Artist {
     private final Long id;
     @NonNull
@@ -29,6 +32,8 @@ class Artist {
     private Set<ArtistNickname> nicknames;
     @NonNull
     private ArtistNickname preferredNickname;
+    @NonNull
+    private Set<ArtistSource> sources;
 
     private final ZonedDateTime createDate;
 
@@ -45,6 +50,7 @@ class Artist {
                 ArtistNickname.of(
                         artistSnapshot.getPreferredNickname()
                 ),
+                new HashSet<>(artistSnapshot.getSources()),
                 artistSnapshot.getCreateDate()
         );
     }
@@ -59,6 +65,7 @@ class Artist {
                         .collect(Collectors.toUnmodifiableSet())
                 )
                 .preferredNickname(preferredNickname.getNickname())
+                .sources(sources.stream().collect(Collectors.toUnmodifiableSet()))
                 .createDate(createDate)
                 .build();
     }
@@ -112,4 +119,34 @@ class Artist {
         this.preferredNickname = preferredNickname;
     }
 
+    void addSource(@NonNull final ArtistSource artistSource) {
+        this.sources.add(artistSource);
+    }
+
+    void deleteSource(final UUID sourceId) {
+        this.sources = sources.stream()
+                .filter(source -> !source.getSourceId().equals(sourceId))
+                .collect(Collectors.toSet());
+    }
+
+    void updateSourceDataInSources(@NonNull final ArtistSource artistSource) {
+        // Filter sourceSet to find if source exists by sourceId.
+        this.sources.stream()
+                .filter(source -> source.getSourceId().equals(artistSource.getSourceId()))
+                .findAny()
+                .orElseThrow(() -> {
+                    log.severe("Original source [sourceId=" + artistSource.getSourceId() + "] was not found.");
+
+                    return new IllegalStateException("Original sourceId was not found.");
+                });
+
+        // Filter sourceSet to get all without old source
+        Set<ArtistSource> filteredSourceSet = this.sources.stream()
+                .filter(source -> !source.getSourceId().equals(artistSource.getSourceId()))
+                .collect(Collectors.toSet());
+        // Add updated source to sourceSet
+        filteredSourceSet.add(artistSource);
+
+        this.sources = filteredSourceSet;
+    }
 }

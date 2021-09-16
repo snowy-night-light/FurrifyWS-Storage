@@ -22,6 +22,9 @@ final class ArtistFactory {
                         artistDTO.getCreateDate() != null ? artistDTO.getCreateDate() : ZonedDateTime.now()
                 )
                 .preferredNickname(artistDTO.getPreferredNickname())
+                .sources(
+                        artistDTO.getSources() != null ? artistDTO.getSources() : new HashSet<>()
+                )
                 .build();
 
         return Artist.restore(artistSnapshot);

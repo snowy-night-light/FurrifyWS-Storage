@@ -64,7 +64,9 @@ class SourceUtils {
                 .setData(SourceData.newBuilder()
                         .setOriginId(snapshot.getOriginId().toString())
                         .setOriginType(snapshot.getOriginType().name())
-                        .setPostId(snapshot.getPostId().toString())
+                        .setPostId(
+                                (snapshot.getPostId() != null) ? snapshot.getPostId().toString() : null
+                        )
                         .build()
                 )
                 .setOccurredOn(Instant.now())

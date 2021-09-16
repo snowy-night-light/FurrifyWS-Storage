@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ws.furrify.sources.source.strategy.DefaultSourceStrategy;
+import ws.furrify.sources.source.strategy.DeviantArtV1SourceStrategy;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -27,7 +27,7 @@ class SourceTest {
                 .id(0L)
                 .sourceId(UUID.randomUUID())
                 .ownerId(UUID.randomUUID())
-                .strategy(new DefaultSourceStrategy())
+                .strategy(new DeviantArtV1SourceStrategy())
                 .data(new HashMap<>())
                 .createDate(ZonedDateTime.now())
                 .build();

@@ -10,12 +10,13 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  * Converts source strategy to database table.
+ *
+ * @author sky
  */
 @Log
 public class SourceStrategyAttributeConverter implements AttributeConverter<SourceStrategy, String> {
 
     private final static String STRATEGY_PACKAGE = "ws.furrify.sources.source.strategy";
-    private final static String DEFAULT_STRATEGY_PATH = "ws.furrify.sources.source.strategy.DefaultSourceStrategy";
 
     @Override
     public String convertToDatabaseColumn(final SourceStrategy sourceStrategy) {
@@ -30,7 +31,7 @@ public class SourceStrategyAttributeConverter implements AttributeConverter<Sour
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             log.severe(Errors.MISSING_STRATEGY.getErrorMessage(className));
 
-            return (SourceStrategy) Class.forName(DEFAULT_STRATEGY_PATH).getConstructor().newInstance();
+            throw new IllegalStateException(Errors.MISSING_STRATEGY.getErrorMessage(className));
         }
     }
 }

@@ -1,10 +1,10 @@
 package ws.furrify.sources.source.dto;
 
 import lombok.RequiredArgsConstructor;
+import ws.furrify.shared.vo.SourceOriginType;
 import ws.furrify.sources.source.SourceEvent;
 import ws.furrify.sources.source.SourceQueryRepository;
 import ws.furrify.sources.source.converter.SourceStrategyAttributeConverter;
-import ws.furrify.sources.source.vo.SourceOriginType;
 
 import java.time.Instant;
 import java.time.ZoneId;
