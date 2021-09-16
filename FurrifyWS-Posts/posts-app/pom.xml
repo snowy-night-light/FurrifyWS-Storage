@@ -57,13 +57,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.7.2</version>
+            <version>5.8.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.12.1</version>
+            <version>3.12.4</version>
             <scope>test</scope>
         </dependency>
         <!-- Web -->
@@ -87,7 +87,7 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-security-adapter</artifactId>
-            <version>15.0.1</version>
+            <version>15.0.2</version>
             <scope>compile</scope>
         </dependency>
         <!-- Utils -->
