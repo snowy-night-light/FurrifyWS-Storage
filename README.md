@@ -1,4 +1,4 @@
-![furrify title](https://user-images.githubusercontent.com/33985207/133671928-fda712d7-bba3-469f-a8ae-e2cb862523f1.png)
+![furrify title](https://user-images.githubusercontent.com/33985207/133672173-2d7ff06e-6f94-4742-a201-c54a85c5839a.png)
 
 Microservices infrastructure for content management.
 
