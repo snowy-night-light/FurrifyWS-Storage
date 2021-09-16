@@ -81,7 +81,6 @@ class Source {
      */
     void updateData(@Nullable final HashMap<String, String> data,
                     @Nullable final SourceStrategy strategy) {
-
         // Replace with current values if null
         final HashMap<String, String> finalData = (data != null) ? data : new HashMap<>(this.data);
         final SourceStrategy finalStrategy = (strategy != null) ? strategy : this.strategy;

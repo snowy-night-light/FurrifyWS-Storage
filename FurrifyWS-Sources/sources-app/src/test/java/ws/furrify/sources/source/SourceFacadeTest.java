@@ -8,7 +8,10 @@ import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.shared.vo.SourceOriginType;
 import ws.furrify.sources.artists.ArtistServiceClient;
+import ws.furrify.sources.artists.dto.query.ArtistDetailsQueryDTO;
 import ws.furrify.sources.posts.PostServiceClient;
+import ws.furrify.sources.posts.dto.query.AttachmentDetailsQueryDTO;
+import ws.furrify.sources.posts.dto.query.MediaDetailsQueryDTO;
 import ws.furrify.sources.source.converter.SourceStrategyAttributeConverter;
 import ws.furrify.sources.source.dto.SourceDTO;
 import ws.furrify.sources.source.dto.SourceDtoFactory;
@@ -85,13 +88,99 @@ class SourceFacadeTest {
     }
 
     @Test
-    @DisplayName("Create source")
-    void createSource() {
-        // Given userId and sourceDTO
+    @DisplayName("Create source for artist")
+    void createArtistSource() {
+        // Given userId, originId, originType and sourceDTO
         UUID userId = sourceSnapshot.getOwnerId();
+        sourceDTO = sourceDTO.toBuilder()
+                .originType(SourceOriginType.ARTIST)
+                .build();
         // When createSource() method called
+        ArtistDetailsQueryDTO artistDetailsQueryDTO = new ArtistDetailsQueryDTO(sourceDTO.getOriginId());
+
+        when(artistServiceClient.getUserArtist(userId, sourceSnapshot.getOriginId())).thenReturn(artistDetailsQueryDTO);
         // Then create source and return generated uuid
         assertNotNull(sourceFacade.createSource(userId, sourceDTO), "SourceId was not returned.");
+    }
+
+    @Test
+    @DisplayName("Create source for non existing artist")
+    void createArtistSource2() {
+        // Given userId, non-existing originId, originType and sourceDTO
+        UUID userId = sourceSnapshot.getOwnerId();
+        sourceDTO = sourceDTO.toBuilder()
+                .originType(SourceOriginType.ARTIST)
+                .build();
+        // When createSource() method called
+        when(artistServiceClient.getUserArtist(userId, sourceSnapshot.getOriginId())).thenReturn(null);
+        // Then throw exception
+        assertThrows(RecordNotFoundException.class,
+                () -> sourceFacade.replaceSource(userId, sourceSnapshot.getSourceId(), sourceDTO),
+                "Exception was not thrown.");
+    }
+
+    @Test
+    @DisplayName("Create source for media")
+    void createMediaSource() {
+        // Given userId, originId, originType and sourceDTO
+        UUID userId = sourceSnapshot.getOwnerId();
+        sourceDTO = sourceDTO.toBuilder()
+                .originType(SourceOriginType.MEDIA)
+                .build();
+        // When createSource() method called
+        MediaDetailsQueryDTO mediaDetailsQueryDTO = new MediaDetailsQueryDTO(sourceDTO.getOriginId());
+
+        when(postServiceClient.getPostMedia(userId, sourceSnapshot.getPostId(), sourceSnapshot.getOriginId())).thenReturn(mediaDetailsQueryDTO);
+        // Then create source and return generated uuid
+        assertNotNull(sourceFacade.createSource(userId, sourceDTO), "SourceId was not returned.");
+    }
+
+    @Test
+    @DisplayName("Create source for non existing media")
+    void createMediaSource2() {
+        // Given userId, non-existing originId, originType and sourceDTO
+        UUID userId = sourceSnapshot.getOwnerId();
+        sourceDTO = sourceDTO.toBuilder()
+                .originType(SourceOriginType.MEDIA)
+                .build();
+        // When createSource() method called
+        when(postServiceClient.getPostMedia(userId, sourceSnapshot.getPostId(), sourceSnapshot.getOriginId())).thenReturn(null);
+        // Then throw exception
+        assertThrows(RecordNotFoundException.class,
+                () -> sourceFacade.replaceSource(userId, sourceSnapshot.getSourceId(), sourceDTO),
+                "Exception was not thrown.");
+    }
+
+    @Test
+    @DisplayName("Create source for attachment")
+    void createAttachmentSource() {
+        // Given userId, originId, originType and sourceDTO
+        UUID userId = sourceSnapshot.getOwnerId();
+        sourceDTO = sourceDTO.toBuilder()
+                .originType(SourceOriginType.ATTACHMENT)
+                .build();
+        // When createSource() method called
+        AttachmentDetailsQueryDTO attachmentDetailsQueryDTO = new AttachmentDetailsQueryDTO(sourceDTO.getOriginId());
+
+        when(postServiceClient.getPostAttachment(userId, sourceSnapshot.getPostId(), sourceSnapshot.getOriginId())).thenReturn(attachmentDetailsQueryDTO);
+        // Then create source and return generated uuid
+        assertNotNull(sourceFacade.createSource(userId, sourceDTO), "SourceId was not returned.");
+    }
+
+    @Test
+    @DisplayName("Create source for non existing attachment")
+    void createAttachmentSource2() {
+        // Given userId, non-existing originId, originType and sourceDTO
+        UUID userId = sourceSnapshot.getOwnerId();
+        sourceDTO = sourceDTO.toBuilder()
+                .originType(SourceOriginType.ATTACHMENT)
+                .build();
+        // When createSource() method called
+        when(postServiceClient.getPostAttachment(userId, sourceSnapshot.getPostId(), sourceSnapshot.getOriginId())).thenReturn(null);
+        // Then throw exception
+        assertThrows(RecordNotFoundException.class,
+                () -> sourceFacade.replaceSource(userId, sourceSnapshot.getSourceId(), sourceDTO),
+                "Exception was not thrown.");
     }
 
     @Test
@@ -151,7 +240,7 @@ class SourceFacadeTest {
         // Given sourceId
         UUID userId = sourceSnapshot.getOwnerId();
         // When deleteSource() method called
-        when(sourceRepository.existsByOwnerIdAndSourceId(userId, sourceSnapshot.getSourceId())).thenReturn(true);
+        when(sourceRepository.findByOwnerIdAndSourceId(userId, sourceSnapshot.getSourceId())).thenReturn(Optional.of(source));
         // Then
         assertDoesNotThrow(() -> sourceFacade.deleteSource(userId, sourceSnapshot.getSourceId()),
                 "Exception was thrown.");
@@ -163,7 +252,7 @@ class SourceFacadeTest {
         // Given sourceId
         UUID userId = sourceSnapshot.getOwnerId();
         // When deleteSource() method called
-        when(sourceRepository.existsByOwnerIdAndSourceId(userId, sourceSnapshot.getSourceId())).thenReturn(false);
+        when(sourceRepository.findByOwnerIdAndSourceId(userId, sourceSnapshot.getSourceId())).thenReturn(Optional.empty());
         // Then
         assertThrows(RecordNotFoundException.class,
                 () -> sourceFacade.deleteSource(userId, sourceSnapshot.getSourceId()),
