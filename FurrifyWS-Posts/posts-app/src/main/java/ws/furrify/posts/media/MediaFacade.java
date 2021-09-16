@@ -55,7 +55,7 @@ final public class MediaFacade {
     public void handleEvent(final UUID key, final SourceEvent sourceEvent) {
         UUID sourceId = UUID.fromString(sourceEvent.getSourceId());
 
-        // Check if this source event origins from Artist
+        // Check if this source event origins from Media
         if (!SourceOriginType.MEDIA.name().equals(sourceEvent.getData().getOriginType())) {
             return;
         }

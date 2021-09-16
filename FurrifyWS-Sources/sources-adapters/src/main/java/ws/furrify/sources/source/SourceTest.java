@@ -40,6 +40,9 @@ class SourceTest implements CommandLineRunner {
         var mediaSourceId = UUID.fromString("482b628f-4ca9-4c96-a199-bf25e21b5bca");
         var mediaOriginId = UUID.fromString("19c02f53-486e-4205-b1b7-74977ae13941");
 
+        var attachmentSourceId = UUID.fromString("87a5d0b2-bba8-4e94-b7d3-c9ad51431dd5");
+        var attachmentOriginId = UUID.fromString("566548cf-fb1d-4552-a880-c741a1eb9d0e");
+
         sqlSourceRepository.save(
                 sourceFactory.from(
                         SourceDTO.builder()
@@ -74,9 +77,26 @@ class SourceTest implements CommandLineRunner {
                 ).getSnapshot()
         );
 
+        sqlSourceRepository.save(
+                sourceFactory.from(
+                        SourceDTO.builder()
+                                .originId(attachmentOriginId)
+                                .postId(postId)
+                                .sourceId(attachmentSourceId)
+                                .ownerId(userId)
+                                .strategy(new DeviantArtV1SourceStrategy())
+                                .data(new HashMap<>(1) {{
+                                    put("id", "2662");
+                                }})
+                                .originType(SourceOriginType.ATTACHMENT)
+                                .createDate(ZonedDateTime.now())
+                                .build()
+                ).getSnapshot()
+        );
 
         System.out.println("ArtistSourceId: " + artistSourceId);
         System.out.println("MediaSourceId: " + mediaSourceId);
+        System.out.println("AttachmentSourceId: " + attachmentSourceId);
     }
 
 }

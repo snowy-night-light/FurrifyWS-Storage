@@ -6,9 +6,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import ws.furrify.posts.attachment.vo.AttachmentSource;
 
 import java.net.URL;
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 import static lombok.AccessLevel.PACKAGE;
@@ -34,6 +36,8 @@ class AttachmentSnapshot {
     private AttachmentExtension extension;
 
     private URL fileUrl;
+
+    private Set<AttachmentSource> sources;
 
     private ZonedDateTime createDate;
 }

@@ -48,9 +48,11 @@ public class SourceDtoFactory {
                 .sourceId(sourceId)
                 .ownerId(key)
                 .strategy(
-                        sourceStrategyAttributeConverter.convertToEntityAttribute(
-                                sourceEvent.getData().getStrategy()
-                        )
+                        (sourceEvent.getData().getStrategy() != null) ?
+                                sourceStrategyAttributeConverter.convertToEntityAttribute(
+                                        sourceEvent.getData().getStrategy()
+                                )
+                                : null
                 )
                 .originType(
                         SourceOriginType.valueOf(sourceEvent.getData().getOriginType())

@@ -123,5 +123,6 @@ class EventListenerRegistry {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
         mediaFacade.handleEvent(UUID.fromString(key), sourceEvent);
+        attachmentFacade.handleEvent(UUID.fromString(key), sourceEvent);
     }
 }

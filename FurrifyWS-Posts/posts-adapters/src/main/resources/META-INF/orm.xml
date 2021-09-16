@@ -80,6 +80,11 @@
             <basic name="createDate">
                 <column updatable="false" nullable="false"/>
             </basic>
+            <one-to-many fetch="EAGER" name="sources" target-entity="ws.furrify.posts.attachment.vo.AttachmentSource">
+                <cascade>
+                    <cascade-all/>
+                </cascade>
+            </one-to-many>
         </attributes>
     </entity>
 
@@ -141,7 +146,28 @@
             <element-collection fetch="EAGER" name="data">
                 <map-key-column name="key_data"/>
                 <column name="data"/>
-                <collection-table name="sources_data">
+                <collection-table name="media_sources_data">
+                    <join-column name="source_id"/>
+                </collection-table>
+            </element-collection>
+        </attributes>
+    </entity>
+
+    <entity class="ws.furrify.posts.attachment.vo.AttachmentSource" access="FIELD">
+        <attributes>
+            <id name="id">
+                <generated-value strategy="SEQUENCE"/>
+            </id>
+            <basic name="sourceId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="strategy">
+                <column nullable="false"/>
+            </basic>
+            <element-collection fetch="EAGER" name="data">
+                <map-key-column name="key_data"/>
+                <column name="data"/>
+                <collection-table name="attachment_sources_data">
                     <join-column name="source_id"/>
                 </collection-table>
             </element-collection>
