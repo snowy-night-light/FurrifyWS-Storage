@@ -29,6 +29,9 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
     @Value("${LOCAL_STORAGE_MEDIA_PATH:/data/media}")
     private String LOCAL_STORAGE_MEDIA_PATH;
 
+    @Value("${REMOTE_STORAGE_MEDIA_PATH:/media}")
+    private String REMOTE_STORAGE_MEDIA_PATH;
+
     @Value("${THUMBNAIL_WIDTH:600}")
     private int THUMBNAIL_WIDTH;
 
@@ -85,8 +88,8 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
             // Return created urls
             return new UploadedMediaFile(
-                    new URL(LOCAL_STORAGE_MEDIA_URL + mediaFile.getPath()),
-                    new URL(LOCAL_STORAGE_MEDIA_URL + thumbnailFile.getPath())
+                    new URL(REMOTE_STORAGE_MEDIA_PATH + mediaFile.getPath()),
+                    new URL(REMOTE_STORAGE_MEDIA_PATH + thumbnailFile.getPath())
             );
 
         } catch (IOException e) {

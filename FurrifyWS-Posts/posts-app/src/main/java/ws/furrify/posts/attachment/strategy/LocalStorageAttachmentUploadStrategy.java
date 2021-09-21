@@ -29,6 +29,9 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
     @Value("${LOCAL_STORAGE_ATTACHMENT_PATH:/data/attachment}")
     private String LOCAL_STORAGE_ATTACHMENT_PATH;
 
+    @Value("${REMOTE_STORAGE_ATTACHMENT_PATH:/attachment}")
+    private String REMOTE_STORAGE_ATTACHMENT_PATH;
+
     @Value("${LOCAL_STORAGE_ATTACHMENT_URL:https://localhost}")
     private String LOCAL_STORAGE_ATTACHMENT_URL;
 
@@ -53,7 +56,7 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
 
             // Return created urls
             return new UploadedAttachmentFile(
-                    new URL(LOCAL_STORAGE_ATTACHMENT_URL + attachmentFile.getPath())
+                    new URL(REMOTE_STORAGE_ATTACHMENT_PATH + attachmentFile.getPath())
             );
 
         } catch (IOException e) {
