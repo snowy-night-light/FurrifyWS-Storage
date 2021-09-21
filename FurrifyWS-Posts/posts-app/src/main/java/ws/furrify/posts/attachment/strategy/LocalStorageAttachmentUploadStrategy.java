@@ -56,7 +56,7 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
 
             // Return created urls
             return new UploadedAttachmentFile(
-                    new URL(REMOTE_STORAGE_ATTACHMENT_URL + REMOTE_STORAGE_ATTACHMENT_PATH + fileSource.getOriginalFilename())
+                    new URL(REMOTE_STORAGE_ATTACHMENT_URL + REMOTE_STORAGE_ATTACHMENT_PATH + "/" + fileSource.getOriginalFilename())
             );
 
         } catch (IOException e) {

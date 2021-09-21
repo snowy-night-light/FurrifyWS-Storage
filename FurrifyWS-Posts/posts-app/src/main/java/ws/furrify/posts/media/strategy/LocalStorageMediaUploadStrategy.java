@@ -90,9 +90,9 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
             // Return created urls
             return new UploadedMediaFile(
                     // Original
-                    new URL(REMOTE_STORAGE_MEDIA_URL + REMOTE_STORAGE_MEDIA_PATH + fileSource.getOriginalFilename()),
+                    new URL(REMOTE_STORAGE_MEDIA_URL + REMOTE_STORAGE_MEDIA_PATH + "/" + fileSource.getOriginalFilename()),
                     // Thumbnail
-                    new URL(REMOTE_STORAGE_MEDIA_URL + REMOTE_STORAGE_MEDIA_PATH + thumbnailFileName)
+                    new URL(REMOTE_STORAGE_MEDIA_URL + REMOTE_STORAGE_MEDIA_PATH + "/" + thumbnailFileName)
             );
 
         } catch (IOException e) {
