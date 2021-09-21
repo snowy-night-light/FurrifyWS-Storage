@@ -68,12 +68,13 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
             }
 
             // Create thumbnail filename by removing extension from original filename
-            String thumbnailFileName = fileSource.getOriginalFilename().substring(
-                    0,
-                    fileSource.getOriginalFilename().lastIndexOf(".")
-            ) + THUMBNAIL_EXTENSION;
+            String thumbnailFileName = THUMBNAIL_PREFIX +
+                    fileSource.getOriginalFilename().substring(
+                            0,
+                            fileSource.getOriginalFilename().lastIndexOf(".")
+                    ) + THUMBNAIL_EXTENSION;
 
-            File thumbnailFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + THUMBNAIL_PREFIX + thumbnailFileName);
+            File thumbnailFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName);
             // Create directories where files need to be located
             boolean wasMediaFileFolderCreated = mediaFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
             boolean wasMediaThumbnailFolderCreated = thumbnailFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
@@ -88,8 +89,10 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
             // Return created urls
             return new UploadedMediaFile(
-                    new URL(REMOTE_STORAGE_MEDIA_URL + REMOTE_STORAGE_MEDIA_PATH + mediaFile.getPath()),
-                    new URL(REMOTE_STORAGE_MEDIA_URL + REMOTE_STORAGE_MEDIA_PATH + thumbnailFile.getPath())
+                    // Original
+                    new URL(REMOTE_STORAGE_MEDIA_URL + REMOTE_STORAGE_MEDIA_PATH + fileSource.getOriginalFilename()),
+                    // Thumbnail
+                    new URL(REMOTE_STORAGE_MEDIA_URL + REMOTE_STORAGE_MEDIA_PATH + thumbnailFileName)
             );
 
         } catch (IOException e) {
