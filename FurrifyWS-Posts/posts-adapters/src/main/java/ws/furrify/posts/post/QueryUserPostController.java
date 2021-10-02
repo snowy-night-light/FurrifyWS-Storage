@@ -116,10 +116,12 @@ class QueryUserPostController {
                 .page(page)
                 .build().toPageable();
 
+
+        // TODO Implement sql search with query
         PostQuerySearchDTO postQuerySearchDTO = PostQuerySearchDTO.from(query);
 
         PagedModel<EntityModel<PostDetailsQueryDTO>> posts = pagedResourcesAssembler.toModel(
-                postQueryRepository.findAllByOwnerIdAndQuery(userId, postQuerySearchDTO, pageable)
+                postQueryRepository.findAllByOwnerId(userId, pageable)
         );
 
         posts.forEach(this::addPostRelations);

@@ -12,10 +12,10 @@
     <description>Shared module for all microservices.</description>
 
     <properties>
-        <java.version>16</java.version>
+        <java.version>17</java.version>
         <avro.version>1.10.2</avro.version>
-        <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
-            <version>2.5.4</version>
+            <version>2.5.5</version>
             <scope>compile</scope>
         </dependency>
         <!-- Schema -->
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.12.5</version>
+            <version>2.13.0</version>
         </dependency>
         <!-- Validation -->
         <dependency>
@@ -161,8 +161,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>16</source>
-                    <target>16</target>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
         </plugins>

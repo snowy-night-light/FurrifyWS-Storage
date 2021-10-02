@@ -29,6 +29,9 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
     @Value("${LOCAL_STORAGE_MEDIA_PATH:/data/media}")
     private String LOCAL_STORAGE_MEDIA_PATH;
 
+    @Value("${REMOTE_STORAGE_MEDIA_PATH:/media}")
+    private String REMOTE_STORAGE_MEDIA_PATH;
+
     @Value("${THUMBNAIL_WIDTH:600}")
     private int THUMBNAIL_WIDTH;
 
@@ -39,8 +42,8 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
     private String THUMBNAIL_PREFIX;
 
     // FIXME Url should update on all records when changed
-    @Value("${LOCAL_STORAGE_MEDIA_URL:https://localhost}")
-    private String LOCAL_STORAGE_MEDIA_URL;
+    @Value("${REMOTE_STORAGE_MEDIA_URL:http://localhost}")
+    private String REMOTE_STORAGE_MEDIA_URL;
 
     private final static String THUMBNAIL_EXTENSION = ".jpg";
 
@@ -65,12 +68,13 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
             }
 
             // Create thumbnail filename by removing extension from original filename
-            String thumbnailFileName = fileSource.getOriginalFilename().substring(
-                    0,
-                    fileSource.getOriginalFilename().lastIndexOf(".")
-            ) + THUMBNAIL_EXTENSION;
+            String thumbnailFileName = THUMBNAIL_PREFIX +
+                    fileSource.getOriginalFilename().substring(
+                            0,
+                            fileSource.getOriginalFilename().lastIndexOf(".")
+                    ) + THUMBNAIL_EXTENSION;
 
-            File thumbnailFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + THUMBNAIL_PREFIX + thumbnailFileName);
+            File thumbnailFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName);
             // Create directories where files need to be located
             boolean wasMediaFileFolderCreated = mediaFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
             boolean wasMediaThumbnailFolderCreated = thumbnailFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
@@ -85,8 +89,10 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
             // Return created urls
             return new UploadedMediaFile(
-                    new URL(LOCAL_STORAGE_MEDIA_URL + mediaFile.getPath()),
-                    new URL(LOCAL_STORAGE_MEDIA_URL + thumbnailFile.getPath())
+                    // Original
+                    new URL(REMOTE_STORAGE_MEDIA_URL + REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + fileSource.getOriginalFilename()),
+                    // Thumbnail
+                    new URL(REMOTE_STORAGE_MEDIA_URL + REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName)
             );
 
         } catch (IOException e) {

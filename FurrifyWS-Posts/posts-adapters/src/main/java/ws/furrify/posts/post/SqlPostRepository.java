@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ws.furrify.posts.post.dto.query.PostDetailsQueryDTO;
-import ws.furrify.posts.post.dto.vo.PostQuerySearchDTO;
 
 import java.util.Optional;
 import java.util.Set;
@@ -50,32 +49,6 @@ interface SqlPostQueryRepositoryImpl extends PostQueryRepository, Repository<Pos
     @Override
     @Query("select post from PostSnapshot post join post.artists artist where artist.artistId = ?2 and post.ownerId = ?1")
     Page<PostDetailsQueryDTO> findAllByOwnerIdAndArtistId(UUID ownerId, UUID artistId, Pageable pageable);
-
-    @Override
-    @Query("select post from PostSnapshot post join post.artists artist join post.tags tag join post.mediaSet media where " +
-            // Check if user if matches
-            "post.ownerId = :#{#ownerId}" +
-            " and " +
-            // Check if required artists are present or if required artists are size 0 then ignore
-            "(:#{#query.withArtists.size()} = 0 or artist.preferredNickname in (:#{#query.withArtists}))" +
-            " and " +
-            // Check if excluded artists are present or if excluded artists are size 0 then ignore
-            "(:#{#query.withoutArtists.size()} = 0 or artist.preferredNickname not in (:#{#query.withoutArtists}))" +
-            " and " +
-            // Check if required media extensions are present or if required media extensions are size 0 then ignore
-            "(:#{#query.withMediaExtensions.size()} = 0 or media.extension in (:#{#query.withMediaExtensions}))" +
-            " and " +
-            // Check if excluded media extensions are present or if excluded media extensions are size 0 then ignore
-            "(:#{#query.withoutMediaExtensions.size()} = 0 or media.extension not in (:#{#query.withoutMediaExtensions}))" +
-            " and " +
-            // Check if required tags are present or if required tags are size 0 then ignore
-            "(:#{#query.withTags.size()} = 0 or tag.value in (:#{#query.withTags}))" +
-            " and " +
-            // Check if excluded artists are present or if excluded tags are size 0 then ignore
-            "(:#{#query.withoutTags.size()} = 0 or tag.value not in (:#{#query.withoutTags}))")
-    Page<PostDetailsQueryDTO> findAllByOwnerIdAndQuery(UUID ownerId,
-                                                       PostQuerySearchDTO query,
-                                                       Pageable pageable);
 
     @Override
     @Query("select id from PostSnapshot where postId = ?1")
