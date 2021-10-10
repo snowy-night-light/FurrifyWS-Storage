@@ -36,7 +36,7 @@ class PostTest implements CommandLineRunner {
     private void createTestingPosts() {
         var postFactory = new PostFactory();
 
-        var userId = UUID.fromString("82722f67-ec52-461f-8294-158d8affe7a3");
+        var userId = UUID.fromString("f08e6027-b997-452d-85a6-0cf2d5a1741e");
         var postId = UUID.fromString("7c2c35f3-20e9-4b7e-a455-253b7b78e2fa");
 
         sqlPostRepository.save(
@@ -63,11 +63,11 @@ class PostTest implements CommandLineRunner {
                                 .attachments(Set.of(
                                         PostAttachment.builder()
                                                 .attachmentId(
-                                                        UUID.fromString("566548cf-fb1d-4552-a880-c741a1eb9d0e")
+                                                        UUID.fromString("14925445-f5dc-43b9-a1a0-230cb0f10e51")
                                                 )
                                                 .filename("test.psd")
                                                 .extension("PSD")
-                                                .fileUrl(new URL("https://example.com"))
+                                                .fileUrl(new URL("http://localhost/attachment/14925445-f5dc-43b9-a1a0-230cb0f10e51/furrify-horizontal.png"))
                                                 .build()
                                 ))
                                 .mediaSet(Set.of(
@@ -77,8 +77,17 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .priority(1)
                                                 .extension("PNG")
-                                                .fileUrl(new URL("https://example.com"))
-                                                .thumbnailUrl(new URL("https://example.com"))
+                                                .fileUrl(new URL("http://localhost/media/19c02f53-486e-4205-b1b7-74977ae13941/2620245.png"))
+                                                .thumbnailUrl(new URL("http://localhost/media/19c02f53-486e-4205-b1b7-74977ae13941/thumbnail_2620245.png"))
+                                                .build(),
+                                        PostMedia.builder()
+                                                .mediaId(
+                                                        UUID.fromString("29c02f53-486e-4205-b1b7-74977ae13941")
+                                                )
+                                                .priority(1)
+                                                .extension("PNG")
+                                                .fileUrl(new URL("http://localhost/media/29c02f53-486e-4205-b1b7-74977ae13941/123.png"))
+                                                .thumbnailUrl(new URL("http://localhost/media/29c02f53-486e-4205-b1b7-74977ae13941/thumbnail_123.png"))
                                                 .build()
                                 ))
                                 .createDate(ZonedDateTime.now())
