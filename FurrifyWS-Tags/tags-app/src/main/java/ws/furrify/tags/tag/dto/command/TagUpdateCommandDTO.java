@@ -23,7 +23,7 @@ public class TagUpdateCommandDTO implements CommandDTO<TagDTO> {
     String description;
 
     @Size(min = 1, max = 32)
-    @Pattern(regexp = "^[a-zA-Z0-9_-]*$")
+    @Pattern(regexp = "^[a-z_-]*$")
     String value;
 
     TagType type;
