@@ -42,6 +42,7 @@ class QueryUserArtistController {
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) String preferredNickname,
             KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
         // Build page from page information
@@ -53,7 +54,7 @@ class QueryUserArtistController {
                 .build().toPageable();
 
         PagedModel<EntityModel<ArtistDetailsQueryDTO>> artists = pagedResourcesAssembler.toModel(
-                artistQueryRepository.findAllByOwnerId(userId, pageable)
+                artistQueryRepository.findAllByOwnerIdAndPreferredNickname(userId, preferredNickname, pageable)
         );
 
         artists.forEach(this::addArtistRelations);
@@ -61,6 +62,7 @@ class QueryUserArtistController {
         // Add hateoas relation
         var artistsRel = linkTo(methodOn(QueryUserArtistController.class).getUserArtists(
                 userId,
+                null,
                 null,
                 null,
                 null,
@@ -117,6 +119,7 @@ class QueryUserArtistController {
 
         var artistsRel = linkTo(methodOn(QueryUserArtistController.class).getUserArtists(
                 artistQueryDto.getOwnerId(),
+                null,
                 null,
                 null,
                 null,

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 import ws.furrify.artists.artist.dto.query.ArtistDetailsQueryDTO;
 
@@ -32,7 +33,7 @@ interface SqlArtistQueryRepositoryImpl extends ArtistQueryRepository, Repository
     Optional<ArtistDetailsQueryDTO> findByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
 
     @Override
-    Page<ArtistDetailsQueryDTO> findAllByOwnerId(UUID ownerId, Pageable pageable);
+    Page<ArtistDetailsQueryDTO> findAllByOwnerIdAndPreferredNickname(UUID ownerId, @Nullable String preferredNickname, Pageable pageable);
 
     @Override
     @Query("select id from ArtistSnapshot where artistId = ?1")
