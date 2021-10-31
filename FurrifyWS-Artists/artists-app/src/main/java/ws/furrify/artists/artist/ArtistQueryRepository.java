@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface ArtistQueryRepository {
     Optional<ArtistDetailsQueryDTO> findByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
 
-    Page<ArtistDetailsQueryDTO> findAllByOwnerId(UUID ownerId, Pageable pageable);
+    Page<ArtistDetailsQueryDTO> findAllByOwnerIdAndPreferredNickname(UUID ownerId, String preferredNickname, Pageable pageable);
 
     Long getIdByArtistId(UUID artistId);
 }

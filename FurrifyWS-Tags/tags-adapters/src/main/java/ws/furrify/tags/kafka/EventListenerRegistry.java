@@ -30,6 +30,7 @@ class EventListenerRegistry {
                    @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                    @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
                    @Payload TagEvent tagEvent) {
+
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
         tagFacade.handleEvent(UUID.fromString(key), tagEvent);
