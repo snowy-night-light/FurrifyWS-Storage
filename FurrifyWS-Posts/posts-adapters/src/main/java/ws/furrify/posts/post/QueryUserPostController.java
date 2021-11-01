@@ -116,12 +116,24 @@ class QueryUserPostController {
                 .page(page)
                 .build().toPageable();
 
-
-        // TODO Implement sql search with query
         PostQuerySearchDTO postQuerySearchDTO = PostQuerySearchDTO.from(query);
 
+        // TODO Fix naming of _embedded in hal+json somehow
         PagedModel<EntityModel<PostDetailsQueryDTO>> posts = pagedResourcesAssembler.toModel(
-                postQueryRepository.findAllByOwnerId(userId, pageable)
+                postQueryRepository.findAllByOwnerIdAndQuery(userId, postQuerySearchDTO, pageable)
+                        .map(postSnapshot ->
+                                PostDetailsQueryDTO.of(
+                                        postSnapshot.getPostId(),
+                                        postSnapshot.getOwnerId(),
+                                        postSnapshot.getTitle(),
+                                        postSnapshot.getDescription(),
+                                        postSnapshot.getTags(),
+                                        postSnapshot.getArtists(),
+                                        postSnapshot.getMediaSet(),
+                                        postSnapshot.getAttachments(),
+                                        postSnapshot.getCreateDate()
+                                )
+                        )
         );
 
         posts.forEach(this::addPostRelations);

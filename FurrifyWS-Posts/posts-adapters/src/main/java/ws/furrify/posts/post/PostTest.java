@@ -44,11 +44,15 @@ class PostTest implements CommandLineRunner {
                         PostDTO.builder()
                                 .postId(postId)
                                 .ownerId(userId)
-                                .title("title")
+                                .title("title1")
                                 .description("desc")
                                 .tags(Set.of(
                                         PostTag.builder()
-                                                .value("walking")
+                                                .value("walking1")
+                                                .type("ACTION")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking2")
                                                 .type("ACTION")
                                                 .build()
                                 ))
@@ -76,6 +80,66 @@ class PostTest implements CommandLineRunner {
                                                         UUID.fromString("19c02f53-486e-4205-b1b7-74977ae13941")
                                                 )
                                                 .priority(1)
+                                                .extension("PNG")
+                                                .fileUrl(new URL("http://localhost/media/19c02f53-486e-4205-b1b7-74977ae13941/2620245.png"))
+                                                .thumbnailUrl(new URL("http://localhost/media/19c02f53-486e-4205-b1b7-74977ae13941/thumbnail_2620245.png"))
+                                                .build(),
+                                        PostMedia.builder()
+                                                .mediaId(
+                                                        UUID.fromString("29c02f53-486e-4205-b1b7-74977ae13941")
+                                                )
+                                                .priority(2)
+                                                .extension("PNG")
+                                                .fileUrl(new URL("http://localhost/media/29c02f53-486e-4205-b1b7-74977ae13941/123.png"))
+                                                .thumbnailUrl(new URL("http://localhost/media/29c02f53-486e-4205-b1b7-74977ae13941/thumbnail_123.png"))
+                                                .build()
+                                ))
+                                .createDate(ZonedDateTime.now())
+                                .build()
+                ).getSnapshot()
+        );
+
+        sqlPostRepository.save(
+                postFactory.from(
+                        PostDTO.builder()
+                                .postId(UUID.randomUUID())
+                                .ownerId(userId)
+                                .title("title2")
+                                .description("desc")
+                                .tags(Set.of(
+                                        PostTag.builder()
+                                                .value("walking2")
+                                                .type("ACTION")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking3")
+                                                .type("ACTION")
+                                                .build()
+                                ))
+                                .artists(Set.of(
+                                        PostArtist.builder()
+                                                .artistId(
+                                                        UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00")
+                                                )
+                                                .preferredNickname("test_nickname")
+                                                .build()
+                                ))
+                                .attachments(Set.of(
+                                        PostAttachment.builder()
+                                                .attachmentId(
+                                                        UUID.fromString("14925445-f5dc-43b9-a1a0-230cb0f10e51")
+                                                )
+                                                .filename("test.psd")
+                                                .extension("PSD")
+                                                .fileUrl(new URL("http://localhost/attachment/14925445-f5dc-43b9-a1a0-230cb0f10e51/furrify-horizontal.png"))
+                                                .build()
+                                ))
+                                .mediaSet(Set.of(
+                                        PostMedia.builder()
+                                                .mediaId(
+                                                        UUID.fromString("19c02f53-486e-4205-b1b7-74977ae13941")
+                                                )
+                                                .priority(2)
                                                 .extension("PNG")
                                                 .fileUrl(new URL("http://localhost/media/19c02f53-486e-4205-b1b7-74977ae13941/2620245.png"))
                                                 .thumbnailUrl(new URL("http://localhost/media/19c02f53-486e-4205-b1b7-74977ae13941/thumbnail_2620245.png"))
