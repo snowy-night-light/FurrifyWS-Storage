@@ -49,17 +49,32 @@ interface SqlPostQueryRepositoryImpl extends PostQueryRepository, Repository<Pos
     Page<PostDetailsQueryDTO> findAllByOwnerId(UUID ownerId, Pageable pageable);
 
     @Override
-    @Query("select p from PostSnapshot p where p.id in (" +
+    @Query("select p from PostSnapshot p where " +
+            // Tags
+            "(:#{#query.withTags.size()} = 0 or p.id in (" +
             "select post.id from PostSnapshot post inner join post.tags tag " +
             "where tag.value in (:#{#query.withTags}) " +
             "group by post.id " +
             "having count(distinct tag.value) = :#{#query.withTags.size() * 1L}" +
-            ") and p.id not in (" +
+            ")) and (:#{#query.withoutTags.size()} = 0 or p.id not in (" +
             "select post.id from PostSnapshot post inner join post.tags tag " +
             "where tag.value in (:#{#query.withoutTags}) " +
             "group by post.id " +
             "having count(distinct tag.value) = :#{#query.withoutTags.size() * 1L}" +
-            ") and p.ownerId = :ownerId")
+            ")) " +
+            // Artists
+            "and (:#{#query.withArtists.size()} = 0 or p.id in (" +
+            "select post.id from PostSnapshot post inner join post.artists artist " +
+            "where artist.preferredNickname in (:#{#query.withArtists}) " +
+            "group by post.id " +
+            "having count(distinct artist.preferredNickname) = :#{#query.withArtists.size() * 1L}" +
+            ")) and (:#{#query.withoutArtists.size()} = 0 or p.id not in (" +
+            "select post.id from PostSnapshot post inner join post.artists artist " +
+            "where artist.preferredNickname in (:#{#query.withoutArtists}) " +
+            "group by post.id " +
+            "having count(distinct artist.preferredNickname) = :#{#query.withoutArtists.size() * 1L}" +
+            ")) " +
+            "and p.ownerId = :ownerId")
     Page<PostSnapshot> findAllByOwnerIdAndQuery(@Param("ownerId") UUID ownerId, @Param("query") PostQuerySearchDTO query, Pageable pageable);
 
     @Override
