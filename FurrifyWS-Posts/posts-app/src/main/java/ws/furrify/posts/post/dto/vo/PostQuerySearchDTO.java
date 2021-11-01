@@ -28,17 +28,11 @@ public class PostQuerySearchDTO implements Serializable {
     private final static String WITH_TAG_SYMBOL = "#";
     private final static String WITHOUT_TAG_SYMBOL = "-#";
 
-    private final static String WITH_MEDIA_EXTENSION_SYMBOL = "!";
-    private final static String WITHOUT_MEDIA_EXTENSION_SYMBOL = "-!";
-
     Set<String> withArtists;
     Set<String> withoutArtists;
 
     Set<String> withTags;
     Set<String> withoutTags;
-
-    Set<String> withMediaExtensions;
-    Set<String> withoutMediaExtensions;
 
     public static PostQuerySearchDTO from(final String query) {
         String[] queryParams = query.split("\\s+");
@@ -51,11 +45,7 @@ public class PostQuerySearchDTO implements Serializable {
                 // With tags
                 extractValuesFromQueryParams(queryParams, WITH_TAG_SYMBOL),
                 // Without tags
-                extractValuesFromQueryParams(queryParams, WITHOUT_TAG_SYMBOL),
-                // With media extensions
-                extractValuesFromQueryParams(queryParams, WITH_MEDIA_EXTENSION_SYMBOL),
-                // Without media extensions
-                extractValuesFromQueryParams(queryParams, WITHOUT_MEDIA_EXTENSION_SYMBOL)
+                extractValuesFromQueryParams(queryParams, WITHOUT_TAG_SYMBOL)
         );
     }
 

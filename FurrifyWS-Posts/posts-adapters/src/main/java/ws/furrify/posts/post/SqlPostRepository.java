@@ -6,8 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ws.furrify.posts.post.dto.query.PostDetailsQueryDTO;
+import ws.furrify.posts.post.dto.vo.PostQuerySearchDTO;
 
 import java.util.Optional;
 import java.util.Set;
@@ -45,6 +47,35 @@ interface SqlPostQueryRepositoryImpl extends PostQueryRepository, Repository<Pos
 
     @Override
     Page<PostDetailsQueryDTO> findAllByOwnerId(UUID ownerId, Pageable pageable);
+
+    @Override
+    @Query("select p from PostSnapshot p where " +
+            // Tags
+            "(:#{#query.withTags.size()} = 0 or p.id in (" +
+            "select post.id from PostSnapshot post inner join post.tags tag " +
+            "where tag.value in (:#{#query.withTags}) " +
+            "group by post.id " +
+            "having count(distinct tag.value) = :#{#query.withTags.size() * 1L}" +
+            ")) and (:#{#query.withoutTags.size()} = 0 or p.id not in (" +
+            "select post.id from PostSnapshot post inner join post.tags tag " +
+            "where tag.value in (:#{#query.withoutTags}) " +
+            "group by post.id " +
+            "having count(distinct tag.value) = :#{#query.withoutTags.size() * 1L}" +
+            ")) " +
+            // Artists
+            "and (:#{#query.withArtists.size()} = 0 or p.id in (" +
+            "select post.id from PostSnapshot post inner join post.artists artist " +
+            "where artist.preferredNickname in (:#{#query.withArtists}) " +
+            "group by post.id " +
+            "having count(distinct artist.preferredNickname) = :#{#query.withArtists.size() * 1L}" +
+            ")) and (:#{#query.withoutArtists.size()} = 0 or p.id not in (" +
+            "select post.id from PostSnapshot post inner join post.artists artist " +
+            "where artist.preferredNickname in (:#{#query.withoutArtists}) " +
+            "group by post.id " +
+            "having count(distinct artist.preferredNickname) = :#{#query.withoutArtists.size() * 1L}" +
+            ")) " +
+            "and p.ownerId = :ownerId")
+    Page<PostSnapshot> findAllByOwnerIdAndQuery(@Param("ownerId") UUID ownerId, @Param("query") PostQuerySearchDTO query, Pageable pageable);
 
     @Override
     @Query("select post from PostSnapshot post join post.artists artist where artist.artistId = ?2 and post.ownerId = ?1")
