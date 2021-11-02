@@ -29,7 +29,7 @@ public class PostCreateCommandDTO implements CommandDTO<PostDTO> {
     String description;
 
     @NotNull
-    @Size(max = 256)
+    @Size(min = 1, max = 256)
     Set<@Valid PostTagCreateCommandDTO> tags;
 
     @NotNull
