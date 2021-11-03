@@ -27,7 +27,7 @@ public class ArtistUpdateCommandDTO implements CommandDTO<ArtistDTO> {
     public ArtistDTO toDTO() {
         return ArtistDTO.builder()
                 .nicknames(nicknames)
-                .preferredNickname(preferredNickname)
+                .preferredNickname(preferredNickname.strip())
                 .build();
     }
 }

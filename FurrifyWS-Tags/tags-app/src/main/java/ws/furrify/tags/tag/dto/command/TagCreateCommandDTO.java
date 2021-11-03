@@ -26,7 +26,7 @@ public class TagCreateCommandDTO implements CommandDTO<TagDTO> {
     String description;
 
     @NotBlank
-    @Size(min = 1, max = 32)
+    @Size(min = 1, max = 256)
     @Pattern(regexp = "^[a-z_-]*$")
     String value;
 
