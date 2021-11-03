@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.media.dto.MediaDTO;
 import ws.furrify.posts.media.dto.MediaDtoFactory;
 import ws.furrify.posts.media.strategy.MediaUploadStrategy;
+import ws.furrify.posts.post.dto.PostServiceClient;
+import ws.furrify.posts.post.dto.query.PostDetailsDTO;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
@@ -33,6 +35,7 @@ class MediaFacadeTest {
     private static MediaRepository mediaRepository;
     private static MediaFacade mediaFacade;
     private static MediaUploadStrategy mediaUploadStrategy;
+    private static PostServiceClient postServiceClient;
 
     private MediaDTO mediaDTO;
     private Media media;
@@ -61,6 +64,7 @@ class MediaFacadeTest {
         mediaRepository = mock(MediaRepository.class);
         var mediaQueryRepository = mock(MediaQueryRepository.class);
         mediaUploadStrategy = mock(MediaUploadStrategy.class);
+        postServiceClient = mock(PostServiceClient.class);
 
         var mediaFactory = new MediaFactory();
         var mediaDtoFactory = new MediaDtoFactory(mediaQueryRepository);
@@ -69,7 +73,7 @@ class MediaFacadeTest {
         var eventPublisher = (DomainEventPublisher<MediaEvent>) mock(DomainEventPublisher.class);
 
         mediaFacade = new MediaFacade(
-                new CreateMediaImpl(mediaFactory, mediaUploadStrategy, eventPublisher),
+                new CreateMediaImpl(postServiceClient, mediaFactory, mediaUploadStrategy, eventPublisher),
                 new DeleteMediaImpl(eventPublisher, mediaRepository),
                 new UpdateMediaImpl(eventPublisher, mediaRepository),
                 new ReplaceMediaImpl(eventPublisher, mediaRepository),
@@ -85,6 +89,8 @@ class MediaFacadeTest {
         // Given ownerId, mediaDTO and multipart file
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
+
+        PostDetailsDTO postDetailsDTO = new PostDetailsDTO(null, null, null, null, null, null, null, null, null);
 
         MultipartFile mediaFile = new MultipartFile() {
             @Override
@@ -128,6 +134,7 @@ class MediaFacadeTest {
             }
         };
         // When createMedia() method called
+        when(postServiceClient.getUserPost(any(), any())).thenReturn(postDetailsDTO);
         when(mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
                 new URL("https://example.com"),
                 new URL("https://example.com")
@@ -135,6 +142,66 @@ class MediaFacadeTest {
         // Then return generated uuid
         assertNotNull(mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile), "MediaId was not returned.");
     }
+
+
+    @Test
+    @DisplayName("Create media with non existing postId")
+    void createMedia2() {
+        // Given ownerId, non-existing postId, mediaDTO and multipart file
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+
+        MultipartFile mediaFile = new MultipartFile() {
+            @Override
+            public String getName() {
+                return "test";
+            }
+
+            @Override
+            public String getOriginalFilename() {
+                return "example.psd";
+            }
+
+            @Override
+            public String getContentType() {
+                return null;
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
+
+            @Override
+            public long getSize() {
+                return 0;
+            }
+
+            @Override
+            public byte[] getBytes() throws IOException {
+                return new byte[0];
+            }
+
+            @Override
+            public InputStream getInputStream() throws IOException {
+                return getClass().getClassLoader().getResourceAsStream("example.psd");
+            }
+
+            @Override
+            public void transferTo(final File file) throws IOException, IllegalStateException {
+
+            }
+        };
+        // When createMedia() method called
+        when(postServiceClient.getUserPost(any(), any())).thenReturn(null);
+        // Then throw exception
+        assertThrows(
+                RecordNotFoundException.class,
+                () -> mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile),
+                "Exception was not thrown."
+        );
+    }
+
 
     @Test
     @DisplayName("Replace media")

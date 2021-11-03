@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.attachment.dto.AttachmentDTO;
 import ws.furrify.posts.attachment.dto.AttachmentDtoFactory;
 import ws.furrify.posts.attachment.strategy.AttachmentUploadStrategy;
+import ws.furrify.posts.post.dto.PostServiceClient;
+import ws.furrify.posts.post.dto.query.PostDetailsDTO;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
@@ -33,6 +35,7 @@ class AttachmentFacadeTest {
     private static AttachmentRepository attachmentRepository;
     private static AttachmentFacade attachmentFacade;
     private static AttachmentUploadStrategy attachmentUploadStrategy;
+    private static PostServiceClient postServiceClient;
 
     private AttachmentDTO attachmentDTO;
     private Attachment attachment;
@@ -58,6 +61,7 @@ class AttachmentFacadeTest {
     static void beforeAll() {
         attachmentRepository = mock(AttachmentRepository.class);
         var attachmentQueryRepository = mock(AttachmentQueryRepository.class);
+        postServiceClient = mock(PostServiceClient.class);
         attachmentUploadStrategy = mock(AttachmentUploadStrategy.class);
 
         var attachmentFactory = new AttachmentFactory();
@@ -67,7 +71,7 @@ class AttachmentFacadeTest {
         var eventPublisher = (DomainEventPublisher<AttachmentEvent>) mock(DomainEventPublisher.class);
 
         attachmentFacade = new AttachmentFacade(
-                new CreateAttachmentImpl(attachmentFactory, attachmentUploadStrategy, eventPublisher),
+                new CreateAttachmentImpl(postServiceClient, attachmentFactory, attachmentUploadStrategy, eventPublisher),
                 new DeleteAttachmentImpl(eventPublisher, attachmentRepository),
                 new UpdateAttachmentImpl(eventPublisher, attachmentRepository),
                 new ReplaceAttachmentImpl(eventPublisher, attachmentRepository),
@@ -80,7 +84,66 @@ class AttachmentFacadeTest {
     @Test
     @DisplayName("Create attachment")
     void createAttachment() throws MalformedURLException {
-        // Given ownerId, attachmentDTO and multipart file
+        // Given ownerId, postId, attachmentDTO and multipart file
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+
+        PostDetailsDTO postDetailsDTO = new PostDetailsDTO(null, null, null, null, null, null, null, null, null);
+
+        MultipartFile attachmentFile = new MultipartFile() {
+            @Override
+            public String getName() {
+                return "test";
+            }
+
+            @Override
+            public String getOriginalFilename() {
+                return "example.psd";
+            }
+
+            @Override
+            public String getContentType() {
+                return null;
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
+
+            @Override
+            public long getSize() {
+                return 0;
+            }
+
+            @Override
+            public byte[] getBytes() throws IOException {
+                return new byte[0];
+            }
+
+            @Override
+            public InputStream getInputStream() throws IOException {
+                return getClass().getClassLoader().getResourceAsStream("example.psd");
+            }
+
+            @Override
+            public void transferTo(final File file) throws IOException, IllegalStateException {
+
+            }
+        };
+        // When createAttachment() method called
+        when(postServiceClient.getUserPost(any(), any())).thenReturn(postDetailsDTO);
+        when(attachmentUploadStrategy.uploadAttachment(any(), any())).thenReturn(new AttachmentUploadStrategy.UploadedAttachmentFile(
+                new URL("https://example.com")
+        ));
+        // Then return generated uuid
+        assertNotNull(attachmentFacade.createAttachment(userId, postId, attachmentDTO, attachmentFile), "AttachmentId was not returned.");
+    }
+
+    @Test
+    @DisplayName("Create attachment with non existing postId")
+    void createAttachment2() {
+        // Given ownerId, non-existing postId, attachmentDTO and multipart file
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
 
@@ -126,11 +189,13 @@ class AttachmentFacadeTest {
             }
         };
         // When createAttachment() method called
-        when(attachmentUploadStrategy.uploadAttachment(any(), any())).thenReturn(new AttachmentUploadStrategy.UploadedAttachmentFile(
-                new URL("https://example.com")
-        ));
-        // Then return generated uuid
-        assertNotNull(attachmentFacade.createAttachment(userId, postId, attachmentDTO, attachmentFile), "AttachmentId was not returned.");
+        when(postServiceClient.getUserPost(any(), any())).thenReturn(null);
+        // Then throw exception
+        assertThrows(
+                RecordNotFoundException.class,
+                () -> attachmentFacade.createAttachment(userId, postId, attachmentDTO, attachmentFile),
+                "Exception was not thrown."
+        );
     }
 
     @Test

@@ -7,6 +7,7 @@ import ws.furrify.posts.attachment.dto.AttachmentDtoFactory;
 import ws.furrify.posts.attachment.strategy.AttachmentUploadStrategy;
 import ws.furrify.posts.attachment.strategy.LocalStorageAttachmentUploadStrategy;
 import ws.furrify.posts.kafka.KafkaTopicEventPublisher;
+import ws.furrify.posts.post.PostServiceImpl;
 
 @Configuration
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ class AttachmentConfig {
     private final AttachmentRepositoryImpl attachmentRepository;
     private final AttachmentQueryRepository attachmentQueryRepository;
     private final KafkaTopicEventPublisher<AttachmentEvent> eventPublisher;
+    private final PostServiceImpl postServiceClient;
 
     @Bean
     AttachmentFacade attachmentFacade() {
@@ -22,7 +24,7 @@ class AttachmentConfig {
         var attachmentDtoFactory = new AttachmentDtoFactory(attachmentQueryRepository);
 
         return new AttachmentFacade(
-                new CreateAttachmentImpl(attachmentFactory, attachmentUploadStrategy(), eventPublisher),
+                new CreateAttachmentImpl(postServiceClient, attachmentFactory, attachmentUploadStrategy(), eventPublisher),
                 new DeleteAttachmentImpl(eventPublisher, attachmentRepository),
                 new UpdateAttachmentImpl(eventPublisher, attachmentRepository),
                 new ReplaceAttachmentImpl(eventPublisher, attachmentRepository),

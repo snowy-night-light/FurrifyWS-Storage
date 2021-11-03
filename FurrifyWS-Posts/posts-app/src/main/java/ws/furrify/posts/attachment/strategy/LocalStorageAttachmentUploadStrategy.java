@@ -26,7 +26,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStrategy {
 
-    @Value("${LOCAL_STORAGE_ATTACHMENT_PATH:/data/attachment}")
+    @Value("${LOCAL_STORAGE_ATTACHMENT_PATH:/usr/share/nginx/html/attachment}")
     private String LOCAL_STORAGE_ATTACHMENT_PATH;
 
     @Value("${REMOTE_STORAGE_ATTACHMENT_PATH:/attachment}")

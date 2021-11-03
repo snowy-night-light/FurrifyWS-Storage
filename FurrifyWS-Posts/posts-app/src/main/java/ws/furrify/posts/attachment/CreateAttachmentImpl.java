@@ -6,9 +6,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.attachment.dto.AttachmentDTO;
 import ws.furrify.posts.attachment.strategy.AttachmentUploadStrategy;
+import ws.furrify.posts.post.dto.PostServiceClient;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileExtensionIsNotMatchingContentException;
+import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.io.IOException;
@@ -18,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 final class CreateAttachmentImpl implements CreateAttachment {
 
+    private final PostServiceClient postService;
     private final AttachmentFactory attachmentFactory;
     private final AttachmentUploadStrategy attachmentUploadStrategy;
     private final DomainEventPublisher<AttachmentEvent> domainEventPublisher;
@@ -27,6 +30,10 @@ final class CreateAttachmentImpl implements CreateAttachment {
                                  @NonNull final UUID postId,
                                  @NonNull final AttachmentDTO attachmentDTO,
                                  @NonNull final MultipartFile attachmentFile) {
+        if (postService.getUserPost(userId, postId) == null) {
+            throw new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId.toString()));
+        }
+
         // Generate attachment uuid
         UUID attachmentId = UUID.randomUUID();
 
