@@ -30,8 +30,9 @@ interface SqlTagQueryRepositoryImpl extends TagQueryRepository, Repository<TagSn
     Optional<TagDetailsQueryDTO> findByOwnerIdAndValue(UUID userId, String value);
 
     @Override
-    @Query("select tag from TagSnapshot tag where tag.ownerId = ?1 order by tag.value desc")
-    Page<TagDetailsQueryDTO> findAllByOwnerId(UUID userId, Pageable pageable);
+    @Query("select tag from TagSnapshot tag where tag.ownerId = ?1 and " +
+            "(?2 is null or tag.value like %?2%) order by tag.value desc")
+    Page<TagDetailsQueryDTO> findAllByOwnerIdAndLikeMatch(UUID userId, String match, Pageable pageable);
 
     @Override
     @Query("select id from TagSnapshot where value = ?1")

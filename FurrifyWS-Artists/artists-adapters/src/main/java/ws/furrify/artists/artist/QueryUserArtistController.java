@@ -2,6 +2,7 @@ package ws.furrify.artists.artist;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
@@ -38,6 +39,7 @@ class QueryUserArtistController {
     )
     public PagedModel<EntityModel<ArtistDetailsQueryDTO>> getUserArtists(
             @PathVariable UUID userId,
+            @RequestParam(required = false) String match,
             @RequestParam(required = false) String order,
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer size,
@@ -53,8 +55,16 @@ class QueryUserArtistController {
                 .page(page)
                 .build().toPageable();
 
+        Page<ArtistDetailsQueryDTO> artistsPage;
+
+        if (match != null) {
+            artistsPage = artistQueryRepository.findAllByOwnerIdAndPreferredNicknameLike(userId, match, pageable);
+        } else {
+            artistsPage = artistQueryRepository.findAllByOwnerIdAndOptionalPreferredNickname(userId, preferredNickname, pageable);
+        }
+
         PagedModel<EntityModel<ArtistDetailsQueryDTO>> artists = pagedResourcesAssembler.toModel(
-                artistQueryRepository.findAllByOwnerIdAndPreferredNickname(userId, preferredNickname, pageable)
+                artistsPage
         );
 
         artists.forEach(this::addArtistRelations);
@@ -62,6 +72,7 @@ class QueryUserArtistController {
         // Add hateoas relation
         var artistsRel = linkTo(methodOn(QueryUserArtistController.class).getUserArtists(
                 userId,
+                null,
                 null,
                 null,
                 null,
@@ -119,6 +130,7 @@ class QueryUserArtistController {
 
         var artistsRel = linkTo(methodOn(QueryUserArtistController.class).getUserArtists(
                 artistQueryDto.getOwnerId(),
+                null,
                 null,
                 null,
                 null,
