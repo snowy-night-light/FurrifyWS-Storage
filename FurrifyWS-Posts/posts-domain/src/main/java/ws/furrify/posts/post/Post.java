@@ -159,10 +159,18 @@ class Post {
                 .collect(Collectors.toSet());
     }
 
-    void removeAttachment(final UUID attachmentId) {
+    void removeAttachment(@NonNull final UUID attachmentId) {
         this.attachments = attachments.stream()
                 .filter(media -> !media.getAttachmentId().equals(attachmentId))
                 .collect(Collectors.toSet());
+    }
+
+    void addMedia(@NonNull final PostMedia postMedia) {
+        this.mediaSet.add(postMedia);
+    }
+
+    void addAttachment(@NonNull final PostAttachment postAttachment) {
+        this.attachments.add(postAttachment);
     }
 
     void updateMediaDetailsInMediaSet(@NonNull final PostMedia postMedia) {

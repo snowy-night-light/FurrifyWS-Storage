@@ -274,6 +274,52 @@ class PostTest {
     }
 
     @Test
+    @DisplayName("Add media")
+    void addMedia() throws MalformedURLException {
+        // Given post media
+        PostMedia postMedia = PostMedia.builder()
+                .mediaId(UUID.randomUUID())
+                .extension("PNG")
+                .priority(3)
+                .thumbnailUrl(new URL("https://google.pl/"))
+                .fileUrl(new URL("https://google.pl/"))
+                .build();
+        // When addMedia() method called
+        // Then add media to set
+        post.addMedia(
+                postMedia
+        );
+
+        assertEquals(
+                post.getSnapshot().getMediaSet().toArray()[1],
+                postMedia,
+                "Media was not added."
+        );
+    }
+
+    @Test
+    @DisplayName("Add attachment")
+    void addAttachment() throws MalformedURLException {
+        // Given post attachment
+        PostAttachment postAttachment = PostAttachment.builder()
+                .attachmentId(UUID.randomUUID())
+                .extension("PSD")
+                .fileUrl(new URL("https://google.pl/"))
+                .build();
+        // When addAttachment() method called
+        // Then add attachment to set
+        post.addAttachment(
+                postAttachment
+        );
+
+        assertEquals(
+                post.getSnapshot().getAttachments().toArray()[1],
+                postAttachment,
+                "Attachment was not added."
+        );
+    }
+
+    @Test
     @DisplayName("Update media details in mediaSet")
     void updateMediaDetailsInMediaSet() throws MalformedURLException {
         // Given existing mediaId, new priority, new thumbnailUrl, new extension and new status
