@@ -26,7 +26,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
-    @Value("${LOCAL_STORAGE_MEDIA_PATH:/usr/share/nginx/html/media}")
+    @Value("${LOCAL_STORAGE_MEDIA_PATH:/data/media}")
     private String LOCAL_STORAGE_MEDIA_PATH;
 
     @Value("${REMOTE_STORAGE_MEDIA_PATH:/media}")
