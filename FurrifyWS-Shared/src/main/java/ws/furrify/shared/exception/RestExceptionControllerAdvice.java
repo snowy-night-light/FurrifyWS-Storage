@@ -107,6 +107,11 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
         return responseEntity(new ApiError(HttpStatus.NOT_FOUND, exception));
     }
 
+    @ExceptionHandler(java.lang.IllegalArgumentException.class)
+    protected ResponseEntity<Object> handleIllegalArgumentException(java.lang.IllegalArgumentException exception) {
+        return responseEntity(new ApiError(BAD_REQUEST, exception));
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     protected ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException exception,
                                                                   WebRequest request) {
