@@ -13,8 +13,7 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 /**
- * Creates PostDTO from PostEvent.
- * `
+ * Creates AttachmentDTO from AttachmentEvent.
  *
  * @author Skyte
  */

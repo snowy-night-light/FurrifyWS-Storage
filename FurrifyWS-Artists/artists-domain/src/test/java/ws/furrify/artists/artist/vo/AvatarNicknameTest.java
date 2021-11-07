@@ -6,15 +6,15 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class ArtistNicknameTest {
+class AvatarNicknameTest {
 
     @Test
-    @DisplayName("Create ArtistNickname from string")
+    @DisplayName("Create AvatarNickname from string")
     void of() {
         // Given nickname string
         String nickname = "Test_nickname";
         // When of()
-        // Then return created ArtistNickname
+        // Then return created AvatarNickname
         assertEquals(
                 nickname,
                 ArtistNickname.of(nickname).getNickname(),
@@ -23,7 +23,7 @@ class ArtistNicknameTest {
     }
 
     @Test
-    @DisplayName("Create ArtistNickname from blank string")
+    @DisplayName("Create AvatarNickname from blank string")
     void of2() {
         // Given blank nickname string
         String nickname = "  ";
@@ -37,7 +37,7 @@ class ArtistNicknameTest {
     }
 
     @Test
-    @DisplayName("Create ArtistNickname from too long string")
+    @DisplayName("Create AvatarNickname from too long string")
     void of3() {
         // Given too long nickname string
         String nickname = "0Kj8qXbjplzQJvBdte0Wdic5ybtkdu0w9VRlTgabpQX0d3xPa5HKnme5xAYpO4uarSE6GtUfAmvePxHUdjilAIFc7cR4ZxCjzEWKNy2fiLcfj7LCFf1dSwrfNodxwdg7GyJvKRf4QMaA9f2Otps7I6LTn3fi6sbFPrlWOjdarMfFXVJG0nJWUkYFsbl1RMaPqnN9xTv24l3cdTaykxkfp2K9Cv1LfkKxmAAXPJT12OGLJ66B1X7Dxc2om2Z4nzlGdn2";
@@ -51,7 +51,7 @@ class ArtistNicknameTest {
     }
 
     @Test
-    @DisplayName("Create ArtistNickname from too short string")
+    @DisplayName("Create AvatarNickname from too short string")
     void of4() {
         // Given too short nickname string
         String nickname = "";

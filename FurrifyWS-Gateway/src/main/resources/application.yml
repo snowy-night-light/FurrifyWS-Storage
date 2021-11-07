@@ -15,7 +15,7 @@ spring:
         - id: artistsService
           uri: lb://ARTISTS-SERVICE
           predicates:
-            - Path=/users/*/artists/**
+            - Path=/users/*/artists/**, /users/*/artists/*/avatar/**
         - id: sourcesService
           uri: lb://SOURCES-SERVICE
           predicates:

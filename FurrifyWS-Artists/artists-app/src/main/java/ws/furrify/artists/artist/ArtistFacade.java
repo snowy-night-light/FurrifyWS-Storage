@@ -5,12 +5,15 @@ import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import ws.furrify.artists.artist.dto.ArtistDTO;
 import ws.furrify.artists.artist.dto.ArtistDtoFactory;
+import ws.furrify.artists.artist.vo.ArtistAvatar;
 import ws.furrify.artists.artist.vo.ArtistSource;
+import ws.furrify.posts.avatar.AvatarEvent;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.shared.vo.SourceOriginType;
 import ws.furrify.sources.source.SourceEvent;
 
+import java.net.URL;
 import java.util.UUID;
 
 /**
@@ -43,6 +46,39 @@ final public class ArtistFacade {
 
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + artistEvent.getState() + " Topic=artist_events");
+        }
+    }
+
+    /**
+     * Handle incoming avatar events.
+     *
+     * @param avatarEvent Avatar event instance received from kafka.
+     */
+    @SneakyThrows
+    public void handleEvent(final UUID key, final AvatarEvent avatarEvent) {
+        switch (DomainEventPublisher.AvatarEventType.valueOf(avatarEvent.getState())) {
+            case CREATED -> addAvatarToArtist(
+                    key,
+                    UUID.fromString(avatarEvent.getData().getArtistId()),
+                    ArtistAvatar.builder()
+                            .avatarId(UUID.fromString(avatarEvent.getAvatarId()))
+                            .fileUrl(
+                                    new URL(avatarEvent.getData().getFileUrl())
+                            )
+                            .extension(avatarEvent.getData().getExtension())
+                            .thumbnailUrl(
+                                    new URL(avatarEvent.getData().getThumbnailUrl())
+                            )
+                            .build()
+            );
+            case REMOVED -> deleteAvatarFromArtist(
+                    key,
+                    UUID.fromString(avatarEvent.getData().getArtistId()),
+                    UUID.fromString(avatarEvent.getAvatarId())
+            );
+
+            default -> log.warning("State received from kafka is not defined. " +
+                    "State=" + avatarEvent.getState() + " Topic=artist_events");
         }
     }
 
@@ -168,6 +204,26 @@ final public class ArtistFacade {
         Artist artist = artistRepository.findByOwnerIdAndArtistId(ownerId, artistId)
                 .orElseThrow(() -> new IllegalStateException(Errors.NO_RECORD_FOUND.getErrorMessage(artistId)));
         artist.addSource(artistSource);
+
+        artistRepository.save(artist);
+    }
+
+    private void addAvatarToArtist(final UUID ownerId,
+                                   final UUID artistId,
+                                   final ArtistAvatar artistAvatar) {
+        Artist artist = artistRepository.findByOwnerIdAndArtistId(ownerId, artistId)
+                .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
+        artist.addAvatar(artistAvatar);
+
+        artistRepository.save(artist);
+    }
+
+    private void deleteAvatarFromArtist(final UUID ownerId,
+                                        final UUID artistId,
+                                        final UUID avatarId) {
+        Artist artist = artistRepository.findByOwnerIdAndArtistId(ownerId, artistId)
+                .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
+        artist.removeAvatar(avatarId);
 
         artistRepository.save(artist);
     }

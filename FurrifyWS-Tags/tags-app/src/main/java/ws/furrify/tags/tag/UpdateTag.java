@@ -6,6 +6,6 @@ import java.util.UUID;
 
 interface UpdateTag {
 
-    void updateTag(UUID userId, String value, TagDTO tagDTO);
+    void updateTag(final UUID userId, final String value, final TagDTO tagDTO);
 
 }

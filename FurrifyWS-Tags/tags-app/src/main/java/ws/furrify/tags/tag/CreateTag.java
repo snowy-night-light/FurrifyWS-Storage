@@ -6,5 +6,5 @@ import java.util.UUID;
 
 interface CreateTag {
 
-    String createTag(UUID userId, TagDTO tagDTO);
+    String createTag(final UUID userId, final TagDTO tagDTO);
 }

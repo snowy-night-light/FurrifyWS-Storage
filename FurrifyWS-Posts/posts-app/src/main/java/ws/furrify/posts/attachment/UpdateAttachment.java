@@ -6,6 +6,6 @@ import java.util.UUID;
 
 interface UpdateAttachment {
 
-    void updateAttachment(UUID userId, UUID postId, UUID attachmentId, AttachmentDTO attachmentDTO);
+    void updateAttachment(final UUID userId, final UUID postId, final UUID attachmentId, final AttachmentDTO attachmentDTO);
 
 }

@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.java.Log;
+import ws.furrify.artists.artist.vo.ArtistAvatar;
 import ws.furrify.artists.artist.vo.ArtistNickname;
 import ws.furrify.artists.artist.vo.ArtistSource;
 import ws.furrify.shared.exception.Errors;
@@ -35,6 +36,8 @@ class Artist {
     @NonNull
     private Set<ArtistSource> sources;
 
+    private ArtistAvatar avatar;
+
     private final ZonedDateTime createDate;
 
     static Artist restore(ArtistSnapshot artistSnapshot) {
@@ -51,6 +54,7 @@ class Artist {
                         artistSnapshot.getPreferredNickname()
                 ),
                 new HashSet<>(artistSnapshot.getSources()),
+                artistSnapshot.getAvatar(),
                 artistSnapshot.getCreateDate()
         );
     }
@@ -66,6 +70,7 @@ class Artist {
                 )
                 .preferredNickname(preferredNickname.getNickname())
                 .sources(sources.stream().collect(Collectors.toUnmodifiableSet()))
+                .avatar(avatar)
                 .createDate(createDate)
                 .build();
     }
@@ -148,5 +153,17 @@ class Artist {
         filteredSourceSet.add(artistSource);
 
         this.sources = filteredSourceSet;
+    }
+
+    void addAvatar(@NonNull final ArtistAvatar artistAvatar) {
+        this.avatar = artistAvatar;
+    }
+
+    void removeAvatar(@NonNull final UUID avatarId) {
+        if (!this.avatar.getAvatarId().equals(avatarId)) {
+            throw new IllegalStateException("Trying to delete artist avatar with invalid avatar uuid.");
+        }
+
+        this.avatar = null;
     }
 }

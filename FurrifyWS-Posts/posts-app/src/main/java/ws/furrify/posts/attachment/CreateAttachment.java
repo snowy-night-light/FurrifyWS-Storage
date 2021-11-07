@@ -7,5 +7,5 @@ import java.util.UUID;
 
 interface CreateAttachment {
 
-    UUID createAttachment(UUID userId, UUID postId, AttachmentDTO attachmentDTO, MultipartFile attachmentFile);
+    UUID createAttachment(final UUID userId, final UUID postId, final AttachmentDTO attachmentDTO, final MultipartFile attachmentFile);
 }

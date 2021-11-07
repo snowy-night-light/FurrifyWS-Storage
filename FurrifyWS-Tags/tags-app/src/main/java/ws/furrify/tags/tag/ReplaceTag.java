@@ -6,6 +6,6 @@ import java.util.UUID;
 
 interface ReplaceTag {
 
-    void replaceTag(UUID userId, String value, TagDTO tagDTO);
+    void replaceTag(final UUID userId, final String value, final TagDTO tagDTO);
 
 }

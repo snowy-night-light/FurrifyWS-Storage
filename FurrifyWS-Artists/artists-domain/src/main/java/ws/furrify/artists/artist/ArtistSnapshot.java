@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import ws.furrify.artists.artist.vo.ArtistAvatar;
 import ws.furrify.artists.artist.vo.ArtistSource;
 
 import java.time.ZonedDateTime;
@@ -33,6 +34,8 @@ class ArtistSnapshot {
     private String preferredNickname;
 
     private Set<ArtistSource> sources;
+
+    private ArtistAvatar avatar;
 
     private ZonedDateTime createDate;
 }

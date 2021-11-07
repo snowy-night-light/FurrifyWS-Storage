@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ArtistTest {
+class AvatarTest {
 
     // Mocked in beforeAll()
     private static ArtistRepository artistRepository;
@@ -204,7 +204,7 @@ class ArtistTest {
     @Test
     @DisplayName("Update source details in sources")
     void updateSourceDataInSources() {
-        // Given new ArtistSource
+        // Given new AvatarSource
         ArtistSource artistSource = new ArtistSource(
                 ((ArtistSource) artistSnapshot.getSources().toArray()[0]).getSourceId(),
                 "PatreonV1SourceStrategy",
@@ -226,7 +226,7 @@ class ArtistTest {
     @Test
     @DisplayName("Update source data in sources with non existing sourceId")
     void updateSourceDataInSources2() throws MalformedURLException {
-        // Given new ArtistSource with non-existing
+        // Given new AvatarSource with non-existing
         ArtistSource artistSource = new ArtistSource(
                 UUID.randomUUID(),
                 "PatreonV1SourceStrategy",
