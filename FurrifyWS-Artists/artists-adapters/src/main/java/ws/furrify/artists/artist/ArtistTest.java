@@ -1,12 +1,15 @@
 package ws.furrify.artists.artist;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import ws.furrify.artists.artist.dto.ArtistDTO;
+import ws.furrify.artists.artist.vo.ArtistAvatar;
 import ws.furrify.artists.artist.vo.ArtistSource;
 
+import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,11 +31,13 @@ class ArtistTest implements CommandLineRunner {
                 .ifPresent((profile) -> createTestingArtists());
     }
 
+    @SneakyThrows
     private void createTestingArtists() {
         var artistFactory = new ArtistFactory();
 
         var userId = UUID.fromString("f08e6027-b997-452d-85a6-0cf2d5a1741e");
         var artistId = UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00");
+        var avatarId = UUID.fromString("4d482df8-7380-4164-96ef-58f3796d8f27");
         var sourceId = UUID.fromString("02038a77-9717-4de8-a21b-3a722f158be2");
 
         sqlArtistRepository.save(
@@ -51,6 +56,14 @@ class ArtistTest implements CommandLineRunner {
                                                 }}
                                         )
                                 ))
+                                .avatar(
+                                        ArtistAvatar.builder()
+                                                .avatarId(avatarId)
+                                                .extension("PNG")
+                                                .fileUrl(new URL("https://example.com/"))
+                                                .thumbnailUrl(new URL("https://example.com/"))
+                                                .build()
+                                )
                                 .createDate(ZonedDateTime.now())
                                 .build()
                 ).getSnapshot()

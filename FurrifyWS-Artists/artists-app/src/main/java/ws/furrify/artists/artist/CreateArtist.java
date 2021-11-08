@@ -5,5 +5,5 @@ import ws.furrify.artists.artist.dto.ArtistDTO;
 import java.util.UUID;
 
 interface CreateArtist {
-    UUID createArtist(UUID ownerId, ArtistDTO artistDTO);
+    UUID createArtist(final UUID ownerId, final ArtistDTO artistDTO);
 }

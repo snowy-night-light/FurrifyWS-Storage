@@ -7,5 +7,5 @@ import java.util.UUID;
 
 interface CreateMedia {
 
-    UUID createMedia(UUID userId, UUID postId, MediaDTO mediaDTO, MultipartFile mediaFile);
+    UUID createMedia(final UUID userId, final UUID postId, final MediaDTO mediaDTO, final MultipartFile mediaFile);
 }

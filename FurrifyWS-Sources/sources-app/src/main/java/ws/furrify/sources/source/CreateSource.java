@@ -5,5 +5,5 @@ import ws.furrify.sources.source.dto.SourceDTO;
 import java.util.UUID;
 
 interface CreateSource {
-    UUID createSource(UUID ownerId, SourceDTO sourceDTO);
+    UUID createSource(final UUID ownerId, final SourceDTO sourceDTO);
 }

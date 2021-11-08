@@ -38,6 +38,7 @@ class QueryUserTagController {
     )
     public PagedModel<EntityModel<TagDetailsQueryDTO>> getUserTags(
             @PathVariable UUID userId,
+            @RequestParam(required = false) String match,
             @RequestParam(required = false) String order,
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer size,
@@ -53,7 +54,7 @@ class QueryUserTagController {
                 .build().toPageable();
 
         PagedModel<EntityModel<TagDetailsQueryDTO>> tagResponses = pagedResourcesAssembler.toModel(
-                tagQueryRepository.findAllByOwnerId(userId, pageable)
+                tagQueryRepository.findAllByOwnerIdAndLikeMatch(userId, match, pageable)
         );
 
         tagResponses.forEach(this::addTagRelations);
@@ -62,6 +63,7 @@ class QueryUserTagController {
         // Add hateoas relation
         var tagsRelations = linkTo(methodOn(QueryUserTagController.class).getUserTags(
                 userId,
+                null,
                 null,
                 null,
                 null,
@@ -118,6 +120,7 @@ class QueryUserTagController {
 
         var tagsRel = linkTo(methodOn(QueryUserTagController.class).getUserTags(
                 tagQueryDto.getOwnerId(),
+                null,
                 null,
                 null,
                 null,

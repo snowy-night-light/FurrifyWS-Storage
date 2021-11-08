@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface TagQueryRepository {
     Optional<TagDetailsQueryDTO> findByOwnerIdAndValue(UUID userId, String value);
 
-    Page<TagDetailsQueryDTO> findAllByOwnerId(UUID userId, Pageable pageable);
+    Page<TagDetailsQueryDTO> findAllByOwnerIdAndLikeMatch(UUID userId, String match, Pageable pageable);
 
     Long getIdByValue(String value);
 }

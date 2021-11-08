@@ -24,6 +24,7 @@ public interface DomainEventPublisher<T> {
         MEDIA("media_events"),
         POST("post_events"),
         ARTIST("artist_events"),
+        AVATAR("avatar_events"),
         TAG("tag_events");
 
         /**
@@ -58,6 +59,14 @@ public interface DomainEventPublisher<T> {
         REMOVED,
         REPLACED,
         UPDATED
+    }
+
+    enum AvatarEventType {
+        /**
+         * Events that can occur on Avatar entity.
+         */
+        CREATED,
+        REMOVED
     }
 
     enum PostEventType {

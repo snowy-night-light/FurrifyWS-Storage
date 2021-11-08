@@ -6,9 +6,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.media.dto.MediaDTO;
 import ws.furrify.posts.media.strategy.MediaUploadStrategy;
+import ws.furrify.posts.post.dto.PostServiceClient;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileExtensionIsNotMatchingContentException;
+import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.io.IOException;
@@ -18,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 final class CreateMediaImpl implements CreateMedia {
 
+    private final PostServiceClient postService;
     private final MediaFactory mediaFactory;
     private final MediaUploadStrategy mediaUploadStrategy;
     private final DomainEventPublisher<MediaEvent> domainEventPublisher;
@@ -27,6 +30,10 @@ final class CreateMediaImpl implements CreateMedia {
                             @NonNull final UUID postId,
                             @NonNull final MediaDTO mediaDTO,
                             @NonNull final MultipartFile mediaFile) {
+        if (postService.getUserPost(userId, postId) == null) {
+            throw new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId.toString()));
+        }
+
         // Generate media uuid
         UUID mediaId = UUID.randomUUID();
 

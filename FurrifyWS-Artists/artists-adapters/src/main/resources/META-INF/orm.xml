@@ -4,6 +4,43 @@
 
     <description>XML Mapping file</description>
 
+    <entity class="ws.furrify.artists.avatar.AvatarSnapshot" access="FIELD">
+        <table name="avatars"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="SEQUENCE"/>
+            </id>
+            <basic name="avatarId">
+                <column unique="true" updatable="false" nullable="false"/>
+            </basic>
+            <basic name="artistId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="ownerId">
+                <column updatable="false" nullable="false"/>
+            </basic>
+            <basic name="filename">
+                <column nullable="false"/>
+            </basic>
+            <basic name="md5">
+                <column nullable="false"/>
+            </basic>
+            <basic name="extension">
+                <column nullable="false"/>
+                <enumerated>STRING</enumerated>
+            </basic>
+            <basic name="fileUrl">
+                <column nullable="true"/>
+            </basic>
+            <basic name="thumbnailUrl">
+                <column nullable="true"/>
+            </basic>
+            <basic name="createDate">
+                <column updatable="false" nullable="false"/>
+            </basic>
+        </attributes>
+    </entity>
+
     <entity class="ws.furrify.artists.artist.ArtistSnapshot" access="FIELD">
         <table name="artists"/>
         <attributes>
@@ -27,6 +64,11 @@
                     <cascade-all/>
                 </cascade>
             </one-to-many>
+            <one-to-one fetch="EAGER" name="avatar" target-entity="ws.furrify.artists.artist.vo.ArtistAvatar">
+                <cascade>
+                    <cascade-all/>
+                </cascade>
+            </one-to-one>
             <element-collection fetch="EAGER" name="nicknames">
                 <column nullable="false"/>
             </element-collection>
@@ -52,6 +94,27 @@
                     <join-column name="source_id"/>
                 </collection-table>
             </element-collection>
+        </attributes>
+    </entity>
+
+    <entity class="ws.furrify.artists.artist.vo.ArtistAvatar" access="FIELD">
+        <table name="artist_avatars"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="SEQUENCE"/>
+            </id>
+            <basic name="avatarId">
+                <column nullable="false"/>
+            </basic>
+            <basic name="thumbnailUrl">
+                <column nullable="false"/>
+            </basic>
+            <basic name="extension">
+                <column nullable="false"/>
+            </basic>
+            <basic name="fileUrl">
+                <column nullable="false"/>
+            </basic>
         </attributes>
     </entity>
 </entity-mappings>

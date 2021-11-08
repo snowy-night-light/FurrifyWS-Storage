@@ -13,7 +13,9 @@ import java.util.UUID;
 public interface ArtistQueryRepository {
     Optional<ArtistDetailsQueryDTO> findByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
 
-    Page<ArtistDetailsQueryDTO> findAllByOwnerIdAndPreferredNickname(UUID ownerId, String preferredNickname, Pageable pageable);
+    Page<ArtistDetailsQueryDTO> findAllByOwnerIdAndOptionalPreferredNickname(UUID ownerId, String preferredNickname, Pageable pageable);
+
+    Page<ArtistDetailsQueryDTO> findAllByOwnerIdAndPreferredNicknameLike(UUID ownerId, String preferredNickname, Pageable pageable);
 
     Long getIdByArtistId(UUID artistId);
 }

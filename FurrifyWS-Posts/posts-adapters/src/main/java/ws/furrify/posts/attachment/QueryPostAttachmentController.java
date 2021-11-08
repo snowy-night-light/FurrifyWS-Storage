@@ -108,7 +108,7 @@ class QueryPostAttachmentController {
                 null
         )).withSelfRel().andAffordance(
                 afford(methodOn(CommandUserAttachmentController.class).deleteAttachment(
-                        attachmentQueryDto.getOwnerId(), attachmentQueryDto.getOwnerId(), attachmentQueryDto.getAttachmentId(), null
+                        attachmentQueryDto.getOwnerId(), attachmentQueryDto.getPostId(), attachmentQueryDto.getAttachmentId(), null
                 ))
         ).andAffordance(
                 afford(methodOn(CommandUserAttachmentController.class).replaceAttachment(

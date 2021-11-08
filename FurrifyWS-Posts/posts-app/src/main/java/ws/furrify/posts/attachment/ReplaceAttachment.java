@@ -6,6 +6,6 @@ import java.util.UUID;
 
 interface ReplaceAttachment {
 
-    void replaceAttachment(UUID userId, UUID postId, UUID attachmentId, AttachmentDTO attachmentDTO);
+    void replaceAttachment(final UUID userId, final UUID postId, final UUID attachmentId, final AttachmentDTO attachmentDTO);
 
 }

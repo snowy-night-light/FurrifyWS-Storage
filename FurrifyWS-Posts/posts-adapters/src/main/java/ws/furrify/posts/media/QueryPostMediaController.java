@@ -108,7 +108,7 @@ class QueryPostMediaController {
                 null
         )).withSelfRel().andAffordance(
                 afford(methodOn(CommandUserMediaController.class).deleteMedia(
-                        mediaQueryDto.getOwnerId(), mediaQueryDto.getOwnerId(), mediaQueryDto.getMediaId(), null
+                        mediaQueryDto.getOwnerId(), mediaQueryDto.getPostId(), mediaQueryDto.getMediaId(), null
                 ))
         ).andAffordance(
                 afford(methodOn(CommandUserMediaController.class).replaceMedia(

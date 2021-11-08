@@ -5,5 +5,5 @@ import ws.furrify.sources.source.dto.SourceDTO;
 import java.util.UUID;
 
 interface ReplaceSource {
-    void replaceSource(UUID ownerId, UUID sourceId, SourceDTO sourceDTO);
+    void replaceSource(final UUID ownerId, final UUID sourceId, final SourceDTO sourceDTO);
 }

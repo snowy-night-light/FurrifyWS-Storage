@@ -80,8 +80,22 @@ public class PostFacade {
                             .priority(mediaEvent.getData().getPriority())
                             .build()
             );
-            case CREATED -> {
-            }
+            case CREATED -> addMediaToPost(
+                    key,
+                    UUID.fromString(mediaEvent.getData().getPostId()),
+                    // Build post media from media event
+                    PostMedia.builder()
+                            .mediaId(mediaId)
+                            .fileUrl(
+                                    new URL(mediaEvent.getData().getFileUrl())
+                            )
+                            .extension(mediaEvent.getData().getExtension())
+                            .thumbnailUrl(
+                                    new URL(mediaEvent.getData().getThumbnailUrl())
+                            )
+                            .priority(mediaEvent.getData().getPriority())
+                            .build()
+            );
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + mediaEvent.getState() + " Topic=media_events");
         }
@@ -115,8 +129,19 @@ public class PostFacade {
                             .filename(attachmentEvent.getData().getFilename())
                             .build()
             );
-            case CREATED -> {
-            }
+            case CREATED -> addAttachmentToPost(
+                    key,
+                    UUID.fromString(attachmentEvent.getData().getPostId()),
+                    // Build post attachment from attachment event
+                    PostAttachment.builder()
+                            .attachmentId(attachmentId)
+                            .fileUrl(
+                                    new URL(attachmentEvent.getData().getFileUrl())
+                            )
+                            .extension(attachmentEvent.getData().getExtension())
+                            .filename(attachmentEvent.getData().getFilename())
+                            .build()
+            );
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + attachmentEvent.getState() + " Topic=attachments_events");
         }
@@ -245,6 +270,26 @@ public class PostFacade {
         postRepository.findAllByOwnerIdAndArtistIdInArtists(ownerId, artistId).stream()
                 .peek(post -> post.updateArtistDetailsInArtists(artistId, preferredNickname))
                 .forEach(postRepository::save);
+    }
+
+    private void addMediaToPost(final UUID ownerId,
+                                final UUID postId,
+                                final PostMedia postMedia) {
+        Post post = postRepository.findByOwnerIdAndPostId(ownerId, postId)
+                .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
+        post.addMedia(postMedia);
+
+        postRepository.save(post);
+    }
+
+    private void addAttachmentToPost(final UUID ownerId,
+                                     final UUID postId,
+                                     final PostAttachment postAttachment) {
+        Post post = postRepository.findByOwnerIdAndPostId(ownerId, postId)
+                .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
+        post.addAttachment(postAttachment);
+
+        postRepository.save(post);
     }
 
     private void deleteMediaFromPost(final UUID ownerId,

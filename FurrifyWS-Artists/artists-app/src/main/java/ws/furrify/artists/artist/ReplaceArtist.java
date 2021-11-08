@@ -5,5 +5,5 @@ import ws.furrify.artists.artist.dto.ArtistDTO;
 import java.util.UUID;
 
 interface ReplaceArtist {
-    void replaceArtist(UUID ownerId, UUID artistId, ArtistDTO artistDTO);
+    void replaceArtist(final UUID ownerId, final UUID artistId, final ArtistDTO artistDTO);
 }

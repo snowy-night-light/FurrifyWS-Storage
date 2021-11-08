@@ -6,6 +6,6 @@ import java.util.UUID;
 
 interface UpdateMedia {
 
-    void updateMedia(UUID userId, UUID postId, UUID mediaId, MediaDTO mediaDTO);
+    void updateMedia(final UUID userId, final UUID postId, final UUID mediaId, final MediaDTO mediaDTO);
 
 }
