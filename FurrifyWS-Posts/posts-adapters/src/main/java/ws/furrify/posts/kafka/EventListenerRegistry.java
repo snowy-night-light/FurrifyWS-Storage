@@ -80,15 +80,31 @@ class EventListenerRegistry {
             maxAttempts = 3,
             backoff = @Backoff(delay = 10_000)
     )
-    public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
-                   @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
-                   @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                   @Payload MediaEvent mediaEvent) {
+    public void onMediaEvent(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+                             @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                             @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+                             @Payload MediaEvent mediaEvent) {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
         UUID keyId = UUID.fromString(key);
 
         mediaFacade.handleEvent(keyId, mediaEvent);
+    }
+
+    @KafkaListener(topics = "media_events")
+    @Retryable(
+            value = {Exception.class},
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 10_000)
+    )
+    public void onMediaEvent2(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+                              @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                              @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+                              @Payload MediaEvent mediaEvent) {
+        log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
+
+        UUID keyId = UUID.fromString(key);
+
         postFacade.handleEvent(keyId, mediaEvent);
     }
 
@@ -98,15 +114,31 @@ class EventListenerRegistry {
             maxAttempts = 3,
             backoff = @Backoff(delay = 10_000)
     )
-    public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
-                   @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
-                   @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                   @Payload AttachmentEvent attachmentEvent) {
+    public void onAttachmentEvent(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+                                  @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                                  @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+                                  @Payload AttachmentEvent attachmentEvent) {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
         UUID keyId = UUID.fromString(key);
 
         attachmentFacade.handleEvent(keyId, attachmentEvent);
+    }
+
+    @KafkaListener(topics = "attachment_events")
+    @Retryable(
+            value = {Exception.class},
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 10_000)
+    )
+    public void onAttachmentEvent2(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+                                   @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                                   @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+                                   @Payload AttachmentEvent attachmentEvent) {
+        log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
+
+        UUID keyId = UUID.fromString(key);
+
         postFacade.handleEvent(keyId, attachmentEvent);
     }
 
@@ -116,13 +148,27 @@ class EventListenerRegistry {
             maxAttempts = 3,
             backoff = @Backoff(delay = 10_000)
     )
-    public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
-                   @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
-                   @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                   @Payload SourceEvent sourceEvent) {
+    public void onSourceEvent(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+                              @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                              @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+                              @Payload SourceEvent sourceEvent) {
+        log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
+
+        attachmentFacade.handleEvent(UUID.fromString(key), sourceEvent);
+    }
+
+    @KafkaListener(topics = "source_events")
+    @Retryable(
+            value = {Exception.class},
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 10_000)
+    )
+    public void onSourceEvent2(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+                               @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                               @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+                               @Payload SourceEvent sourceEvent) {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
         mediaFacade.handleEvent(UUID.fromString(key), sourceEvent);
-        attachmentFacade.handleEvent(UUID.fromString(key), sourceEvent);
     }
 }
