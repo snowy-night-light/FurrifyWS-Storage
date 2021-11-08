@@ -23,8 +23,6 @@ public class AttachmentFacade {
 
     private final CreateAttachment createAttachmentImpl;
     private final DeleteAttachment deleteAttachmentImpl;
-    private final UpdateAttachment updateAttachmentImpl;
-    private final ReplaceAttachment replaceAttachmentImpl;
     private final AttachmentRepository attachmentRepository;
     private final AttachmentFactory attachmentFactory;
     private final AttachmentDtoFactory attachmentDTOFactory;
@@ -118,30 +116,6 @@ public class AttachmentFacade {
      */
     public void deleteAttachment(final UUID userId, final UUID postId, final UUID attachmentId) {
         deleteAttachmentImpl.deleteAttachment(userId, postId, attachmentId);
-    }
-
-    /**
-     * Replaces all fields in attachment.
-     *
-     * @param userId        Attachment owner UUID.
-     * @param postId        Post UUID
-     * @param attachmentId  Attachment UUID
-     * @param attachmentDTO Replacement attachment.
-     */
-    public void replaceAttachment(final UUID userId, final UUID postId, final UUID attachmentId, final AttachmentDTO attachmentDTO) {
-        replaceAttachmentImpl.replaceAttachment(userId, postId, attachmentId, attachmentDTO);
-    }
-
-    /**
-     * Updates specified fields in attachment.
-     *
-     * @param userId        Attachment owner UUID.
-     * @param postId        Post UUID.
-     * @param attachmentId  Attachment UUID.
-     * @param attachmentDTO Attachment with updated specific fields.
-     */
-    public void updateAttachment(final UUID userId, final UUID postId, final UUID attachmentId, final AttachmentDTO attachmentDTO) {
-        updateAttachmentImpl.updateAttachment(userId, postId, attachmentId, attachmentDTO);
     }
 
     private void saveAttachmentInDatabase(final AttachmentDTO attachmentDTO) {

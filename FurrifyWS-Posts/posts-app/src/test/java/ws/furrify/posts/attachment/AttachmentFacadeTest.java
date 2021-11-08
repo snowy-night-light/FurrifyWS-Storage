@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.ZonedDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -73,8 +72,6 @@ class AttachmentFacadeTest {
         attachmentFacade = new AttachmentFacade(
                 new CreateAttachmentImpl(postServiceClient, attachmentFactory, attachmentUploadStrategy, eventPublisher),
                 new DeleteAttachmentImpl(eventPublisher, attachmentRepository),
-                new UpdateAttachmentImpl(eventPublisher, attachmentRepository),
-                new ReplaceAttachmentImpl(eventPublisher, attachmentRepository),
                 attachmentRepository,
                 attachmentFactory,
                 attachmentDtoFactory
@@ -194,69 +191,6 @@ class AttachmentFacadeTest {
         assertThrows(
                 RecordNotFoundException.class,
                 () -> attachmentFacade.createAttachment(userId, postId, attachmentDTO, attachmentFile),
-                "Exception was not thrown."
-        );
-    }
-
-    @Test
-    @DisplayName("Replace attachment")
-    void replaceAttachment() {
-        // Given attachmentDto, userId and postId and attachmentId
-        UUID userId = UUID.randomUUID();
-        UUID postId = UUID.randomUUID();
-        UUID attachmentId = UUID.randomUUID();
-        // When replaceAttachment() method called
-        when(attachmentRepository.findByOwnerIdAndPostIdAndAttachmentId(userId, postId, attachmentId))
-                .thenReturn(Optional.of(attachment));
-        // Then run successfully
-        assertDoesNotThrow(() -> attachmentFacade.replaceAttachment(userId, postId, attachmentId, attachmentDTO), "Exception was thrown");
-    }
-
-    @Test
-    @DisplayName("Replace attachment with non existing attachmentId")
-    void replaceAttachment2() {
-        // Given attachmentDTO, userId, postId and non existing attachmentId
-        UUID userId = UUID.randomUUID();
-        UUID postId = UUID.randomUUID();
-        UUID attachmentId = UUID.randomUUID();
-        // When replaceAttachment() method called
-        when(attachmentRepository.findByOwnerIdAndPostIdAndAttachmentId(userId, postId, attachmentId)).thenReturn(Optional.empty());
-        // Then throw no record found exception
-        assertThrows(
-                RecordNotFoundException.class,
-                () -> attachmentFacade.replaceAttachment(userId, postId, attachmentId, attachmentDTO),
-                "Exception was not thrown."
-        );
-    }
-
-    @Test
-    @DisplayName("Update attachment")
-    void updateAttachment() {
-        // Given attachmentDTO, userId, postId and attachmentId
-        UUID userId = UUID.randomUUID();
-        UUID postId = UUID.randomUUID();
-        UUID attachmentId = UUID.randomUUID();
-        // When updateAttachment() method called
-        when(attachmentRepository.findByOwnerIdAndPostIdAndAttachmentId(userId, postId, attachmentId))
-                .thenReturn(Optional.of(attachment));
-        // Then run successfully
-        assertDoesNotThrow(() -> attachmentFacade.updateAttachment(userId, postId, attachmentId, attachmentDTO), "Exception was thrown");
-    }
-
-    @Test
-    @DisplayName("Update attachment with non existing attachmentId")
-    void updateAttachment2() {
-        // Given attachmentDTO, userId, postId and non existing attachmentId
-        UUID userId = UUID.randomUUID();
-        UUID postId = UUID.randomUUID();
-        UUID attachmentId = UUID.randomUUID();
-        // When updateAttachment() method called
-        when(attachmentRepository.findByOwnerIdAndPostIdAndAttachmentId(userId, postId, attachmentId))
-                .thenReturn(Optional.empty());
-        // Then throw no record found exception
-        assertThrows(
-                RecordNotFoundException.class,
-                () -> attachmentFacade.updateAttachment(userId, postId, attachmentId, attachmentDTO),
                 "Exception was not thrown."
         );
     }

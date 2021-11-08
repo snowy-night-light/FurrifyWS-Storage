@@ -110,14 +110,6 @@ class QueryPostAttachmentController {
                 afford(methodOn(CommandUserAttachmentController.class).deleteAttachment(
                         attachmentQueryDto.getOwnerId(), attachmentQueryDto.getPostId(), attachmentQueryDto.getAttachmentId(), null
                 ))
-        ).andAffordance(
-                afford(methodOn(CommandUserAttachmentController.class).replaceAttachment(
-                        attachmentQueryDto.getOwnerId(), attachmentQueryDto.getPostId(), attachmentQueryDto.getAttachmentId(), null, null
-                ))
-        ).andAffordance(
-                afford(methodOn(CommandUserAttachmentController.class).updateAttachment(
-                        attachmentQueryDto.getOwnerId(), attachmentQueryDto.getPostId(), attachmentQueryDto.getAttachmentId(), null, null
-                ))
         );
 
         var mediaListRel = linkTo(methodOn(QueryPostAttachmentController.class).getPostAttachments(
