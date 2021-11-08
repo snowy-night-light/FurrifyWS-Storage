@@ -73,8 +73,7 @@ final public class ArtistFacade {
             );
             case REMOVED -> deleteAvatarFromArtist(
                     key,
-                    UUID.fromString(avatarEvent.getData().getArtistId()),
-                    UUID.fromString(avatarEvent.getAvatarId())
+                    UUID.fromString(avatarEvent.getData().getArtistId())
             );
 
             default -> log.warning("State received from kafka is not defined. " +
@@ -219,11 +218,10 @@ final public class ArtistFacade {
     }
 
     private void deleteAvatarFromArtist(final UUID ownerId,
-                                        final UUID artistId,
-                                        final UUID avatarId) {
+                                        final UUID artistId) {
         Artist artist = artistRepository.findByOwnerIdAndArtistId(ownerId, artistId)
                 .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
-        artist.removeAvatar(avatarId);
+        artist.deleteAvatar();
 
         artistRepository.save(artist);
     }

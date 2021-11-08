@@ -25,6 +25,9 @@ final class ArtistFactory {
                 .sources(
                         artistDTO.getSources() != null ? artistDTO.getSources() : new HashSet<>()
                 )
+                .avatar(
+                        artistDTO.getAvatar() != null ? artistDTO.getAvatar() : null
+                )
                 .build();
 
         return Artist.restore(artistSnapshot);

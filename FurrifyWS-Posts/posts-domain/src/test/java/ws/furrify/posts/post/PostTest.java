@@ -304,6 +304,7 @@ class PostTest {
         PostAttachment postAttachment = PostAttachment.builder()
                 .attachmentId(UUID.randomUUID())
                 .extension("PSD")
+                .filename("sad.psd")
                 .fileUrl(new URL("https://google.pl/"))
                 .build();
         // When addAttachment() method called

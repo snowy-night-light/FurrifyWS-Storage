@@ -1,15 +1,18 @@
 package ws.furrify.artists.artist;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ws.furrify.artists.artist.vo.ArtistAvatar;
 import ws.furrify.artists.artist.vo.ArtistNickname;
 import ws.furrify.artists.artist.vo.ArtistSource;
 import ws.furrify.shared.exception.InvalidDataGivenException;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
 
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,11 +23,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class AvatarTest {
+class ArtistTest {
 
     // Mocked in beforeAll()
     private static ArtistRepository artistRepository;
@@ -33,6 +37,7 @@ class AvatarTest {
     private Artist artist;
 
     @BeforeEach
+    @SneakyThrows
     void setUp() {
         artistSnapshot = ArtistSnapshot.builder()
                 .id(0L)
@@ -47,6 +52,14 @@ class AvatarTest {
                                 new HashMap<>()
                         )
                 ))
+                .avatar(
+                        ArtistAvatar.builder()
+                                .avatarId(UUID.randomUUID())
+                                .extension("PNG")
+                                .fileUrl(new URL("https://example.com/"))
+                                .thumbnailUrl(new URL("https://example.com/"))
+                                .build()
+                )
                 .createDate(ZonedDateTime.now())
                 .build();
 
@@ -186,6 +199,26 @@ class AvatarTest {
     }
 
     @Test
+    @DisplayName("Add source")
+    void addSource() {
+        // Given artist source
+        ArtistSource artistSource = new ArtistSource(
+                UUID.randomUUID(),
+                "DeviantArtV1SourceStrategy",
+                new HashMap<>()
+        );
+        // When addSource() method called
+        // Then add source to artist
+        artist.addSource(artistSource);
+
+        assertEquals(
+                artistSource,
+                artist.getSnapshot().getSources().toArray()[0],
+                "Avatar was added."
+        );
+    }
+
+    @Test
     @DisplayName("Remove source")
     void removeSource() {
         // Given sourceId
@@ -240,6 +273,43 @@ class AvatarTest {
                 IllegalStateException.class,
                 () -> artist.updateSourceDataInSources(artistSource),
                 "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Add avatar")
+    @SneakyThrows
+    void addAvatar() {
+        // Given artist avatar
+        ArtistAvatar artistAvatar = ArtistAvatar.builder()
+                .avatarId(UUID.randomUUID())
+                .extension("PNG")
+                .fileUrl(new URL("https://example.com/"))
+                .thumbnailUrl(new URL("https://example.com/"))
+                .build();
+        // When addAvatar() method called
+        // Then add avatar to artist
+
+        artist.addAvatar(artistAvatar);
+
+        assertEquals(
+                artistAvatar,
+                artist.getSnapshot().getAvatar(),
+                "Avatar was added."
+        );
+    }
+
+    @Test
+    @DisplayName("Delete avatar")
+    void deleteAvatar() {
+        // Given
+        // When deleteAvatar() method called
+        // Then delete avatar from artist
+        artist.deleteAvatar();
+
+        assertNull(
+                artist.getSnapshot().getAvatar(),
+                "Avatar was not removed."
         );
     }
 }

@@ -1,10 +1,10 @@
 package ws.furrify.artists.avatar;
 
-import java.util.Optional;
 import java.util.UUID;
 
 interface AvatarRepository {
-    Optional<Avatar> findByOwnerIdAndArtistIdAndAvatarId(UUID ownerId, UUID artistId, UUID avatarId);
+
+    boolean existsByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
 
     void deleteByOwnerIdAndAvatarId(UUID ownerId, UUID avatarId);
 

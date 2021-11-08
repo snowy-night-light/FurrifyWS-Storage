@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class AvatarFacadeTest {
+class ArtistFacadeTest {
 
     private static ArtistRepository artistRepository;
     private static ArtistFacade artistFacade;

@@ -12,8 +12,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 final class DeleteAvatarImpl implements DeleteAvatar {
 
-    private final DomainEventPublisher<AvatarEvent> domainEventPublisher;
     private final AvatarRepository avatarRepository;
+    private final DomainEventPublisher<AvatarEvent> domainEventPublisher;
 
     @Override
     public void deleteAvatar(@NonNull final UUID userId,

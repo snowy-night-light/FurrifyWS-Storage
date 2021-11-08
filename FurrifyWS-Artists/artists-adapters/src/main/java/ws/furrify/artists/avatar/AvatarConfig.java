@@ -24,8 +24,8 @@ class AvatarConfig {
         var avatarDtoFactory = new AvatarDtoFactory(avatarQueryRepository);
 
         return new AvatarFacade(
-                new CreateAvatarImpl(artistServiceClient, avatarFactory, avatarUploadStrategy(), eventPublisher),
-                new DeleteAvatarImpl(eventPublisher, avatarRepository),
+                new CreateAvatarImpl(artistServiceClient, avatarRepository, avatarFactory, avatarUploadStrategy(), eventPublisher),
+                new DeleteAvatarImpl(avatarRepository, eventPublisher),
                 avatarRepository,
                 avatarFactory,
                 avatarDtoFactory

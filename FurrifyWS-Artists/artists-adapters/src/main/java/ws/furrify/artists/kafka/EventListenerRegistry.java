@@ -52,8 +52,8 @@ class EventListenerRegistry {
                    @Payload AvatarEvent avatarEvent) {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
-        artistFacade.handleEvent(UUID.fromString(key), avatarEvent);
         avatarFacade.handleEvent(UUID.fromString(key), avatarEvent);
+        artistFacade.handleEvent(UUID.fromString(key), avatarEvent);
     }
 
     @KafkaListener(topics = "source_events")

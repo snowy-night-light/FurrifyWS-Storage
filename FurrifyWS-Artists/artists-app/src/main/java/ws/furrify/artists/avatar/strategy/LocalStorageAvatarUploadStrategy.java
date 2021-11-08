@@ -29,7 +29,7 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
     @Value("${LOCAL_STORAGE_AVATAR_PATH:/data/artist}")
     private String LOCAL_STORAGE_AVATAR_PATH;
 
-    @Value("${REMOTE_STORAGE_AVATAR_PATH:/artist/}")
+    @Value("${REMOTE_STORAGE_AVATAR_PATH:/artist}")
     private String REMOTE_STORAGE_AVATAR_PATH;
 
     @Value("${THUMBNAIL_WIDTH:600}")

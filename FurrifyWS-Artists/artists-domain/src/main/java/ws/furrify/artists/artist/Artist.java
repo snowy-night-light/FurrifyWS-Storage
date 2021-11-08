@@ -159,11 +159,7 @@ class Artist {
         this.avatar = artistAvatar;
     }
 
-    void removeAvatar(@NonNull final UUID avatarId) {
-        if (!this.avatar.getAvatarId().equals(avatarId)) {
-            throw new IllegalStateException("Trying to delete artist avatar with invalid avatar uuid.");
-        }
-
+    void deleteAvatar() {
         this.avatar = null;
     }
 }

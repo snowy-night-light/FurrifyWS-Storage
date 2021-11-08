@@ -18,6 +18,8 @@ interface SqlAvatarRepository extends Repository<AvatarSnapshot, Long> {
 
     void deleteByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
 
+    boolean existsByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
+
     boolean existsByOwnerIdAndArtistIdAndAvatarId(UUID ownerId, UUID artistId, UUID avatarId);
 
     Optional<AvatarSnapshot> findByOwnerIdAndArtistIdAndAvatarId(UUID ownerId, UUID artistId, UUID avatarId);
@@ -46,8 +48,8 @@ class AvatarRepositoryImpl implements AvatarRepository {
     }
 
     @Override
-    public Optional<Avatar> findByOwnerIdAndArtistIdAndAvatarId(final UUID ownerId, final UUID artistId, final UUID avatarId) {
-        return sqlAvatarRepository.findByOwnerIdAndArtistIdAndAvatarId(ownerId, artistId, avatarId).map(Avatar::restore);
+    public boolean existsByOwnerIdAndArtistId(final UUID ownerId, final UUID artistId) {
+        return sqlAvatarRepository.existsByOwnerIdAndArtistId(ownerId, artistId);
     }
 
     @Override

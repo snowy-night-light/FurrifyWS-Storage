@@ -11,6 +11,7 @@ import ws.furrify.posts.avatar.AvatarEvent;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileExtensionIsNotMatchingContentException;
+import ws.furrify.shared.exception.RecordAlreadyExistsException;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
@@ -22,6 +23,7 @@ import java.util.UUID;
 final class CreateAvatarImpl implements CreateAvatar {
 
     private final ArtistServiceClient artistService;
+    private final AvatarRepository avatarRepository;
     private final AvatarFactory avatarFactory;
     private final AvatarUploadStrategy avatarUploadStrategy;
     private final DomainEventPublisher<AvatarEvent> domainEventPublisher;
@@ -33,6 +35,11 @@ final class CreateAvatarImpl implements CreateAvatar {
                              @NonNull final MultipartFile avatarFile) {
         if (artistService.getUserArtist(userId, artistId) == null) {
             throw new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(artistId.toString()));
+        }
+
+        // If avatar already exists
+        if (avatarRepository.existsByOwnerIdAndArtistId(userId, artistId)) {
+            throw new RecordAlreadyExistsException(Errors.RECORD_ALREADY_EXISTS.getErrorMessage(artistId.toString()));
         }
 
         // Generate avatar uuid

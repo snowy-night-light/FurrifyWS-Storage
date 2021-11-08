@@ -34,7 +34,10 @@ final public class AvatarFacade {
 
         switch (DomainEventPublisher.AvatarEventType.valueOf(avatarEvent.getState())) {
             case CREATED -> saveAvatarInDatabase(avatarDTO);
-            case REMOVED -> deleteAvatarByOwnerIdAndAvatarIdFromDatabase(key, avatarDTO.getAvatarId());
+            case REMOVED -> deleteAvatarByOwnerIdAndAvatarIdFromDatabase(
+                    key,
+                    avatarDTO.getAvatarId()
+            );
 
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + avatarEvent.getState() + " Topic=avatar_events");

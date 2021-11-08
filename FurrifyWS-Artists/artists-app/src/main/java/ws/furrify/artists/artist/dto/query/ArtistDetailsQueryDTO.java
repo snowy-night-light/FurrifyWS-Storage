@@ -22,6 +22,8 @@ public interface ArtistDetailsQueryDTO extends Serializable {
 
     Set<ArtistSource> getSources();
 
+    ArtistAvatarQueryDTO getAvatar();
+
     ZonedDateTime getCreateDate();
 
 }

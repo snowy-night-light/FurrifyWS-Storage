@@ -3,6 +3,7 @@ package ws.furrify.artists.artist.dto;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.Value;
+import ws.furrify.artists.artist.vo.ArtistAvatar;
 import ws.furrify.artists.artist.vo.ArtistSource;
 
 import java.time.ZonedDateTime;
@@ -26,6 +27,8 @@ public class ArtistDTO {
     String preferredNickname;
 
     Set<ArtistSource> sources;
+
+    ArtistAvatar avatar;
 
     ZonedDateTime createDate;
 }
