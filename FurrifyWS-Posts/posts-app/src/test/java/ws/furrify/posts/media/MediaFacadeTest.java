@@ -135,7 +135,7 @@ class MediaFacadeTest {
         };
         // When createMedia() method called
         when(postServiceClient.getUserPost(any(), any())).thenReturn(postDetailsDTO);
-        when(mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
+        when(mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(any(), any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
                 new URL("https://example.com"),
                 new URL("https://example.com")
         ));

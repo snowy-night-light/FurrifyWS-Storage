@@ -10,6 +10,7 @@ import ws.furrify.posts.post.dto.PostServiceClient;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileExtensionIsNotMatchingContentException;
+import ws.furrify.shared.exception.FilenameIsInvalidException;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
@@ -38,14 +39,21 @@ final class CreateMediaImpl implements CreateMedia {
         UUID mediaId = UUID.randomUUID();
 
         // Check if file is matching declared extension
-        boolean isFileValid = MediaExtension.isValidFile(
+        boolean isFileContentValid = MediaExtension.isFileContentValid(
                 mediaFile.getOriginalFilename(),
                 mediaFile,
                 mediaDTO.getExtension()
         );
-
-        if (!isFileValid) {
+        if (!isFileContentValid) {
             throw new FileExtensionIsNotMatchingContentException(Errors.FILE_EXTENSION_IS_NOT_MATCHING_CONTENT.getErrorMessage());
+        }
+
+        // Check if filename is valid
+        boolean isFilenameValid = MediaExtension.isFilenameValid(
+                mediaFile.getOriginalFilename()
+        );
+        if (!isFilenameValid) {
+            throw new FilenameIsInvalidException(Errors.FILENAME_IS_INVALID.getErrorMessage(mediaFile.getOriginalFilename()));
         }
 
         String md5;
@@ -58,7 +66,11 @@ final class CreateMediaImpl implements CreateMedia {
 
         // Upload file and generate thumbnail
         MediaUploadStrategy.UploadedMediaFile uploadedMediaFile =
-                mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(mediaId, mediaFile);
+                mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(
+                        mediaId,
+                        mediaDTO.getExtension().getType(),
+                        mediaFile
+                );
 
         // Edit mediaDTO with generated media uuid
         MediaDTO updatedMediaToCreateDTO = mediaDTO.toBuilder()

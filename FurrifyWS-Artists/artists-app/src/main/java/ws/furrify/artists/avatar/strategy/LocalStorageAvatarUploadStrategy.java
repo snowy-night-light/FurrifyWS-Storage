@@ -76,10 +76,10 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
 
             File thumbnailFile = new File(LOCAL_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + thumbnailFileName);
             // Create directories where files need to be located
-            boolean wasAvatarFileFolderCreated = avatarFile.getParentFile().mkdirs() || avatarFile.getParentFile().exists();
-            boolean wasAvatarThumbnailFolderCreated = thumbnailFile.getParentFile().mkdirs() || avatarFile.getParentFile().exists();
+            boolean wasAvatarFileCreated = avatarFile.getParentFile().mkdirs() || avatarFile.getParentFile().exists();
+            boolean wasAvatarThumbnailFileCreated = thumbnailFile.getParentFile().mkdirs() || avatarFile.getParentFile().exists();
 
-            if (!wasAvatarFileFolderCreated || !wasAvatarThumbnailFolderCreated) {
+            if (!wasAvatarFileCreated || !wasAvatarThumbnailFileCreated) {
                 throw new FileUploadCannotCreatePathException(Errors.FILE_UPLOAD_CANNOT_CREATE_PATH.getErrorMessage());
             }
 

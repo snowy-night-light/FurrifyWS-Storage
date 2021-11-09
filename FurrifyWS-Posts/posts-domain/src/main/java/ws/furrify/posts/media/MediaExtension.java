@@ -21,6 +21,8 @@ public enum MediaExtension {
     /**
      * File extensions
      */
+    WEBM(MediaType.VIDEO, "video/webm"),
+    MP4(MediaType.VIDEO, "video/mp4"),
     JPEG(MediaType.IMAGE, "image/jpeg"),
     PNG(MediaType.IMAGE, "image/png"),
     JPG(MediaType.IMAGE, "image/jpeg");
@@ -35,23 +37,17 @@ public enum MediaExtension {
      */
     private final MediaType type;
 
-    private final static Pattern FILENAME_PATTERN = Pattern.compile("^[\\w,\\s-]+\\.[A-Za-z]{3}$");
+    private final static Pattern FILENAME_PATTERN = Pattern.compile("^[\\w,\\s-]+\\.[A-Za-z1-9]{3,4}$");
 
     MediaExtension(final MediaType type, final String... mimeTypes) {
         this.mimeTypes = mimeTypes;
         this.type = type;
     }
 
-    public static boolean isValidFile(String filename,
-                                      MultipartFile file,
-                                      MediaExtension mediaExtension) {
+    public static boolean isFileContentValid(String filename,
+                                             MultipartFile file,
+                                             MediaExtension mediaExtension) {
         try {
-            // Check if filename matches regex for filename
-            if (file.getOriginalFilename() == null ||
-                    !FILENAME_PATTERN.matcher(file.getOriginalFilename()).matches()) {
-                return false;
-            }
-
             // Get file mimetype
             String mimeType = FileUtils.getMimeType(filename, file.getInputStream());
 
@@ -61,13 +57,21 @@ public enum MediaExtension {
         }
     }
 
+    public static boolean isFilenameValid(String filename) {
+        return filename != null && FILENAME_PATTERN.matcher(filename).matches();
+    }
+
     /**
      * Media type file represents.
      */
-    private enum MediaType {
+    public enum MediaType {
         /**
          * Image file type.
          */
-        IMAGE
+        IMAGE,
+        /**
+         * Video file type.
+         */
+        VIDEO
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
+import ws.furrify.posts.media.MediaExtension;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileUploadCannotCreatePathException;
@@ -48,14 +49,16 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
     private final static String THUMBNAIL_EXTENSION = ".jpg";
 
     @Override
-    public UploadedMediaFile uploadMediaWithGeneratedThumbnail(final UUID mediaId, final MultipartFile fileSource) {
+    public UploadedMediaFile uploadMediaWithGeneratedThumbnail(final UUID mediaId, final MediaExtension.MediaType mediaType, final MultipartFile fileSource) {
         try (
                 // Generate thumbnail
                 InputStream thumbnailInputStream = MediaUploadStrategyUtils.generateThumbnail(
+                        mediaType,
                         THUMBNAIL_WIDTH,
                         THUMBNAIL_QUALITY,
                         fileSource.getInputStream()
                 );
+
                 InputStream mediaInputStream = fileSource.getInputStream()
         ) {
 
@@ -76,10 +79,10 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
             File thumbnailFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName);
             // Create directories where files need to be located
-            boolean wasMediaFileFolderCreated = mediaFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
-            boolean wasMediaThumbnailFolderCreated = thumbnailFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
+            boolean wasMediaFileCreated = mediaFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
+            boolean wasMediaThumbnailFileCreated = thumbnailFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
 
-            if (!wasMediaFileFolderCreated || !wasMediaThumbnailFolderCreated) {
+            if (!wasMediaFileCreated || !wasMediaThumbnailFileCreated) {
                 throw new FileUploadCannotCreatePathException(Errors.FILE_UPLOAD_CANNOT_CREATE_PATH.getErrorMessage());
             }
 

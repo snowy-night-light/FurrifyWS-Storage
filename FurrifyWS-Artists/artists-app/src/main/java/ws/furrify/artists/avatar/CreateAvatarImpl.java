@@ -11,6 +11,7 @@ import ws.furrify.posts.avatar.AvatarEvent;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileExtensionIsNotMatchingContentException;
+import ws.furrify.shared.exception.FilenameIsInvalidException;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
@@ -46,14 +47,21 @@ final class CreateAvatarImpl implements CreateAvatar {
         UUID avatarId = UUID.randomUUID();
 
         // Check if file is matching declared extension
-        boolean isFileValid = AvatarExtension.isValidFile(
+        boolean isFileContentValid = AvatarExtension.isFileContentValid(
                 avatarFile.getOriginalFilename(),
                 avatarFile,
                 avatarDTO.getExtension()
         );
-
-        if (!isFileValid) {
+        if (!isFileContentValid) {
             throw new FileExtensionIsNotMatchingContentException(Errors.FILE_EXTENSION_IS_NOT_MATCHING_CONTENT.getErrorMessage());
+        }
+
+        // Check if filename is valid
+        boolean isFilenameValid = AvatarExtension.isFilenameValid(
+                avatarFile.getOriginalFilename()
+        );
+        if (!isFilenameValid) {
+            throw new FilenameIsInvalidException(Errors.FILENAME_IS_INVALID.getErrorMessage(avatarFile.getOriginalFilename()));
         }
 
         String md5;

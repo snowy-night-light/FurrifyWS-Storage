@@ -101,6 +101,11 @@
             <artifactId>thumbnailator</artifactId>
             <version>0.4.14</version>
         </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv-platform</artifactId>
+            <version>1.5.6</version>
+        </dependency>
     </dependencies>
 
 </project>

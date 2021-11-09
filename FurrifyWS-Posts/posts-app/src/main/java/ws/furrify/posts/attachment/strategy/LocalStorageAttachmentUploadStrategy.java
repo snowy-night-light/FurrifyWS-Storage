@@ -45,9 +45,9 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
             File attachmentFile = new File(LOCAL_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + fileSource.getOriginalFilename());
 
             // Create directories where files need to be located
-            boolean wasAttachmentFileFolderCreated = attachmentFile.getParentFile().mkdirs() || attachmentFile.getParentFile().exists();
+            boolean wasAttachmentFileCreated = attachmentFile.getParentFile().mkdirs() || attachmentFile.getParentFile().exists();
 
-            if (!wasAttachmentFileFolderCreated) {
+            if (!wasAttachmentFileCreated) {
                 throw new FileUploadCannotCreatePathException(Errors.FILE_UPLOAD_CANNOT_CREATE_PATH.getErrorMessage());
             }
 

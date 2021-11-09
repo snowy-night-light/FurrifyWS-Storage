@@ -34,23 +34,17 @@ public enum AttachmentExtension {
      */
     private final AttachmentType type;
 
-    private final static Pattern FILENAME_PATTERN = Pattern.compile("^[\\w,\\s-]+\\.[A-Za-z]{3}$");
+    private final static Pattern FILENAME_PATTERN = Pattern.compile("^[\\w,\\s-]+\\.[A-Za-z1-9]{3,4}$");
 
     AttachmentExtension(final AttachmentType type, final String... mimeTypes) {
         this.mimeTypes = mimeTypes;
         this.type = type;
     }
 
-    public static boolean isValidFile(String filename,
-                                      MultipartFile file,
-                                      AttachmentExtension attachmentExtension) {
+    public static boolean isFileContentValid(String filename,
+                                             MultipartFile file,
+                                             AttachmentExtension attachmentExtension) {
         try {
-            // Check if filename matches regex for filename
-            if (file.getOriginalFilename() == null ||
-                    !FILENAME_PATTERN.matcher(file.getOriginalFilename()).matches()) {
-                return false;
-            }
-
             // Get file mimetype
             String mimeType = FileUtils.getMimeType(filename, file.getInputStream());
 
@@ -58,6 +52,10 @@ public enum AttachmentExtension {
         } catch (IOException e) {
             return false;
         }
+    }
+
+    public static boolean isFilenameValid(String filename) {
+        return !(filename == null || !FILENAME_PATTERN.matcher(filename).matches());
     }
 
     /**
