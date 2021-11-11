@@ -38,7 +38,13 @@ public class MediaUploadStrategyUtils {
                                                 final float quality,
                                                 final InputStream source) throws IOException {
         return switch (extension.getType()) {
-            case IMAGE -> {
+            case IMAGE -> generateThumbnailForImage(width, quality, source);
+            case VIDEO -> generateThumbnailForImage(
+                    width,
+                    quality,
+                    extractFrameForVideo(source)
+            );
+            case ANIMATION -> {
                 // Workaround for gif
                 if (extension == GIF) {
                     InputStream frame = extractFirstFrameFromGif(source);
@@ -46,19 +52,14 @@ public class MediaUploadStrategyUtils {
                     yield generateThumbnailForImage(width, quality, frame);
                 }
 
-                yield generateThumbnailForImage(width, quality, source);
+                yield null;
             }
-            case VIDEO -> generateThumbnailForImage(
-                    width,
-                    quality,
-                    extractFrameForVideo(source)
-            );
-            case ANIMATION -> null;
         };
     }
 
     private static InputStream extractFirstFrameFromGif(final InputStream source) throws IOException {
         /*
+            TODO Fix gif when JDK is fixed
             Current JDK Gif decoder is broken. It only allows 4000 ish frames. Included workaround below.
          */
         GifDecoder.GifImage gifImage = GifDecoder.read(source);

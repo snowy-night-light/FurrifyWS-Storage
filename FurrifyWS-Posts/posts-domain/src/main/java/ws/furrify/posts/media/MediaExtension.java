@@ -21,10 +21,10 @@ public enum MediaExtension {
     /**
      * File extensions
      */
+    GIF(MediaType.ANIMATION, "image/gif"),
     MKV(MediaType.VIDEO, "video/x-matroska"),
     WEBM(MediaType.VIDEO, "video/webm"),
     MP4(MediaType.VIDEO, "video/mp4"),
-    GIF(MediaType.IMAGE, "image/gif"),
     JPEG(MediaType.IMAGE, "image/jpeg"),
     PNG(MediaType.IMAGE, "image/png"),
     JPG(MediaType.IMAGE, "image/jpeg");

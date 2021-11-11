@@ -21,6 +21,7 @@ public enum AttachmentExtension {
     /**
      * File extensions
      */
+    SWF(AttachmentType.ADOBE_FLASH, "application/x-shockwave-flash"),
     PSD(AttachmentType.PHOTOSHOP_DOCUMENT, "image/vnd.adobe.photoshop"),
     BLEND(AttachmentType.BLENDER_PROJECT, "application/octet-stream");
 
@@ -69,6 +70,10 @@ public enum AttachmentExtension {
         /**
          * Blender project file
          */
-        BLENDER_PROJECT
+        BLENDER_PROJECT,
+        /**
+         * Adobe flash file
+         */
+        ADOBE_FLASH
     }
 }

@@ -37,20 +37,6 @@ class EventListenerRegistry {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
         artistFacade.handleEvent(UUID.fromString(key), artistEvent);
-    }
-
-    @KafkaListener(topics = "artist_events")
-    @Retryable(
-            value = {Exception.class},
-            maxAttempts = 3,
-            backoff = @Backoff(delay = 10_000)
-    )
-    public void onArtistEvent2(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
-                               @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
-                               @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                               @Payload ArtistEvent artistEvent) {
-        log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
-
         avatarFacade.handleEvent(UUID.fromString(key), artistEvent);
     }
 
@@ -67,20 +53,6 @@ class EventListenerRegistry {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
         artistFacade.handleEvent(UUID.fromString(key), avatarEvent);
-    }
-
-    @KafkaListener(topics = "avatar_events")
-    @Retryable(
-            value = {Exception.class},
-            maxAttempts = 3,
-            backoff = @Backoff(delay = 10_000)
-    )
-    public void onAvatarEvent2(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
-                               @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
-                               @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                               @Payload AvatarEvent avatarEvent) {
-        log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
-
         avatarFacade.handleEvent(UUID.fromString(key), avatarEvent);
     }
 
