@@ -42,10 +42,6 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
     @Value("${THUMBNAIL_PREFIX:thumbnail_}")
     private String THUMBNAIL_PREFIX;
 
-    // FIXME Url should update on all records when changed
-    @Value("${REMOTE_STORAGE_MEDIA_URL:http://localhost}")
-    private String REMOTE_STORAGE_MEDIA_URL;
-
     private final static String THUMBNAIL_EXTENSION = ".jpg";
 
     @Override
@@ -93,9 +89,10 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
             // Return created urls
             return new UploadedMediaFile(
                     // Original
-                    new URL(REMOTE_STORAGE_MEDIA_URL + REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + fileSource.getOriginalFilename()),
+                    // TODO REPLACE ALL URL WITH URI EVERYWHERE
+                    new URL(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + fileSource.getOriginalFilename()),
                     // Thumbnail
-                    new URL(REMOTE_STORAGE_MEDIA_URL + REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName)
+                    new URL(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName)
             );
 
         } catch (IOException e) {

@@ -39,6 +39,7 @@ public enum Errors {
     MISSING_STRATEGY("Strategy was not found in given package [class={0}]."),
     VALIDATION_FAILED("Validation failed for [strategy={0}] with [error={1}]."),
     FILENAME_IS_INVALID("Given filename [filename={0}] is invalid."),
+    VIDEO_FRAME_EXTRACTION_FAILED("Video frame extraction for thumbnail has failed."),
     UNIDENTIFIED("Unknown error occurred.");
 
     private final String errorMessage;

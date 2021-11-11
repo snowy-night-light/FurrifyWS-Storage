@@ -32,9 +32,6 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
     @Value("${REMOTE_STORAGE_ATTACHMENT_PATH:/attachment}")
     private String REMOTE_STORAGE_ATTACHMENT_PATH;
 
-    @Value("${REMOTE_STORAGE_ATTACHMENT_URL:http://localhost}")
-    private String REMOTE_STORAGE_ATTACHMENT_URL;
-
     @Override
     public UploadedAttachmentFile uploadAttachment(final UUID attachmentId, final MultipartFile fileSource) {
         try (
@@ -56,7 +53,7 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
 
             // Return created urls
             return new UploadedAttachmentFile(
-                    new URL(REMOTE_STORAGE_ATTACHMENT_URL + REMOTE_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + fileSource.getOriginalFilename())
+                    new URL(REMOTE_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + fileSource.getOriginalFilename())
             );
 
         } catch (IOException e) {

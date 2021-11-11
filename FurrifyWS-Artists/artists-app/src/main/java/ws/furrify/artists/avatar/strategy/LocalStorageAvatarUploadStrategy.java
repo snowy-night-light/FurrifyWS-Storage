@@ -41,10 +41,6 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
     @Value("${THUMBNAIL_PREFIX:thumbnail_}")
     private String THUMBNAIL_PREFIX;
 
-    // FIXME Url should update on all records when changed
-    @Value("${REMOTE_STORAGE_AVATAR_URL:http://localhost}")
-    private String REMOTE_STORAGE_AVATAR_URL;
-
     private final static String THUMBNAIL_EXTENSION = ".jpg";
 
     @Override
@@ -90,9 +86,9 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
             // Return created urls
             return new UploadedAvatarFile(
                     // Original
-                    new URL(REMOTE_STORAGE_AVATAR_URL + REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + fileSource.getOriginalFilename()),
+                    new URL(REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + fileSource.getOriginalFilename()),
                     // Thumbnail
-                    new URL(REMOTE_STORAGE_AVATAR_URL + REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + thumbnailFileName)
+                    new URL(REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + thumbnailFileName)
             );
 
         } catch (IOException e) {

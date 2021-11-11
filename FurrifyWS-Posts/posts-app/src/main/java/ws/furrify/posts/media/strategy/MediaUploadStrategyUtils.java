@@ -7,6 +7,7 @@ import org.bytedeco.javacv.Java2DFrameConverter;
 import ws.furrify.posts.media.MediaExtension;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
+import ws.furrify.shared.exception.VideoFrameExtractionFailedException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -14,6 +15,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Utils class for media upload strategy.
@@ -23,6 +28,7 @@ import java.io.InputStream;
 public class MediaUploadStrategyUtils {
 
     private final static int PART_OF_VIDEO_TO_THUMBNAIL = 3;
+    private final static int TIMOUT_FRAME_EXTRACTION_SECONDS = 30;
 
     public static InputStream generateThumbnail(final MediaExtension.MediaType mediaType,
                                                 final int width,
@@ -55,23 +61,37 @@ public class MediaUploadStrategyUtils {
 
     private static InputStream extractFrameForVideo(final InputStream source) {
 
-        try (FFmpegFrameGrabber frameGrabber = new FFmpegFrameGrabber(source)) {
-            frameGrabber.start();
-            frameGrabber.setFrameNumber(frameGrabber.getLengthInFrames() / PART_OF_VIDEO_TO_THUMBNAIL);
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(1, 1, TIMOUT_FRAME_EXTRACTION_SECONDS, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
-            Java2DFrameConverter converter = new Java2DFrameConverter();
+        Future<InputStream> inputStreamFuture = threadPool.submit(() -> {
 
-            Frame f = frameGrabber.grabImage();
-            BufferedImage image = converter.convert(f);
+            try (FFmpegFrameGrabber frameGrabber = new FFmpegFrameGrabber(source)) {
+                frameGrabber.start();
 
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-            ImageIO.write(image, "png", output);
+                Java2DFrameConverter converter = new Java2DFrameConverter();
+                frameGrabber.setFrameNumber(frameGrabber.getLengthInFrames() / PART_OF_VIDEO_TO_THUMBNAIL);
 
-            frameGrabber.stop();
+                Frame frame = frameGrabber.grabImage();
+                BufferedImage image = converter.convert(frame);
 
-            return new ByteArrayInputStream(output.toByteArray());
-        } catch (IOException e) {
-            throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                ImageIO.write(image, "png", output);
+
+                frameGrabber.stop();
+
+                return new ByteArrayInputStream(output.toByteArray());
+            } catch (IOException e) {
+                throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
+            }
+        });
+
+        try {
+            return inputStreamFuture.get(TIMOUT_FRAME_EXTRACTION_SECONDS, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            // Interrupt task
+            inputStreamFuture.cancel(true);
+
+            throw new VideoFrameExtractionFailedException(Errors.VIDEO_FRAME_EXTRACTION_FAILED.getErrorMessage());
         }
     }
 
