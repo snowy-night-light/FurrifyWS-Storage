@@ -21,6 +21,7 @@ public enum MediaExtension {
     /**
      * File extensions
      */
+    MKV(MediaType.VIDEO, "video/x-matroska"),
     WEBM(MediaType.VIDEO, "video/webm"),
     MP4(MediaType.VIDEO, "video/mp4"),
     JPEG(MediaType.IMAGE, "image/jpeg"),
