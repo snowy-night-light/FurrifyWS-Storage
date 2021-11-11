@@ -5,6 +5,8 @@ import java.util.UUID;
 
 /**
  * Prevents MySQL from having issues with storing UUID.
+ *
+ * @author sky
  */
 public class UUIDAttributeConverter implements AttributeConverter<UUID, String> {
     /**

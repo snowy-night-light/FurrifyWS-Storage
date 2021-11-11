@@ -7,6 +7,11 @@ import ws.furrify.posts.media.MediaExtension;
 import java.net.URI;
 import java.util.UUID;
 
+/**
+ * Strategy should implement way to upload the file to remote location.
+ *
+ * @author sky
+ */
 public interface MediaUploadStrategy {
 
     UploadedMediaFile uploadMediaWithGeneratedThumbnail(final UUID mediaId, final MediaExtension extension, final MultipartFile fileSource);

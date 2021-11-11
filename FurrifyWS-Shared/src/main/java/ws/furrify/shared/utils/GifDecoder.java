@@ -547,7 +547,7 @@ public final class GifDecoder {
             throw new IOException("Image is truncated.");
         }
         img.header = new String(in, 0, 6);
-        if (!img.header.equals("GIF87a") && !img.header.equals("GIF89a")) {
+        if (!"GIF87a".equals(img.header) && !"GIF89a".equals(img.header)) {
             throw new IOException("Invalid GIF header.");
         }
         return 6;

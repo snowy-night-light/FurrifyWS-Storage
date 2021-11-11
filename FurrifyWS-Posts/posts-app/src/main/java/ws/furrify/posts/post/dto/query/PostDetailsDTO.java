@@ -1,6 +1,7 @@
 package ws.furrify.posts.post.dto.query;
 
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 import lombok.Value;
 import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostAttachment;
@@ -18,6 +19,7 @@ import java.util.UUID;
  * @author Skyte
  */
 @Value
+@ToString
 @AllArgsConstructor
 public class PostDetailsDTO implements Serializable {
 

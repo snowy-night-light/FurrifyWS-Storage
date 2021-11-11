@@ -9,6 +9,9 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ * @author sky
+ */
 @Configuration
 public class SecurityConfig {
 
