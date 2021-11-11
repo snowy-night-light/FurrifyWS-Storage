@@ -6,7 +6,7 @@ import ws.furrify.posts.attachment.AttachmentEvent;
 import ws.furrify.posts.attachment.AttachmentExtension;
 import ws.furrify.posts.attachment.AttachmentQueryRepository;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -48,7 +48,7 @@ public class AttachmentDtoFactory {
                 .filename(attachmentEvent.getData().getFilename())
                 .fileUrl(
                         (attachmentEvent.getData().getFileUrl() != null) ?
-                                new URL(attachmentEvent.getData().getFileUrl()) :
+                                new URI(attachmentEvent.getData().getFileUrl()) :
                                 null
                 )
                 .md5(attachmentEvent.getData().getMd5())

@@ -8,7 +8,7 @@ import ws.furrify.posts.media.vo.MediaPriority;
 import ws.furrify.posts.media.vo.MediaSource;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,8 +33,8 @@ class MediaTest {
                 .priority(3)
                 .filename("file.png")
                 .md5("3c518eeb674c71b30297f072fde7eba5")
-                .fileUrl(new URL("https://example.com/"))
-                .thumbnailUrl(new URL("https://example.com/"))
+                .fileUrl(new URI("/test"))
+                .thumbnailUrl(new URI("/test"))
                 .extension(MediaExtension.PNG)
                 .sources(Collections.singleton(
                         new MediaSource(

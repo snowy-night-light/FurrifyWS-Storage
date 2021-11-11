@@ -1,7 +1,7 @@
 package ws.furrify.artists.artist.dto.query;
 
 import java.io.Serializable;
-import java.net.URL;
+import java.net.URI;
 import java.util.UUID;
 
 /**
@@ -11,7 +11,7 @@ public interface ArtistAvatarQueryDTO extends Serializable {
 
     UUID getAvatarId();
 
-    URL getFileUrl();
+    URI getFileUrl();
 
     String getThumbnailUrl();
 

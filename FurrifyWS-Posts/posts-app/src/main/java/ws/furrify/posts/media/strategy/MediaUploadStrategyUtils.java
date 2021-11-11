@@ -8,6 +8,7 @@ import ws.furrify.posts.media.MediaExtension;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.VideoFrameExtractionFailedException;
+import ws.furrify.shared.utils.GifDecoder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -20,6 +21,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static ws.furrify.posts.media.MediaExtension.GIF;
+
 /**
  * Utils class for media upload strategy.
  *
@@ -30,23 +33,46 @@ public class MediaUploadStrategyUtils {
     private final static int PART_OF_VIDEO_TO_THUMBNAIL = 3;
     private final static int TIMOUT_FRAME_EXTRACTION_SECONDS = 30;
 
-    public static InputStream generateThumbnail(final MediaExtension.MediaType mediaType,
+    public static InputStream generateThumbnail(final MediaExtension extension,
                                                 final int width,
                                                 final float quality,
                                                 final InputStream source) throws IOException {
-        return switch (mediaType) {
-            case IMAGE -> generateThumbnailForImage(width, quality, source);
+        return switch (extension.getType()) {
+            case IMAGE -> {
+                // Workaround for gif
+                if (extension == GIF) {
+                    InputStream frame = extractFirstFrameFromGif(source);
+
+                    yield generateThumbnailForImage(width, quality, frame);
+                }
+
+                yield generateThumbnailForImage(width, quality, source);
+            }
             case VIDEO -> generateThumbnailForImage(
                     width,
                     quality,
                     extractFrameForVideo(source)
             );
+            case ANIMATION -> null;
         };
+    }
+
+    private static InputStream extractFirstFrameFromGif(final InputStream source) throws IOException {
+        /*
+            Current JDK Gif decoder is broken. It only allows 4000 ish frames. Included workaround below.
+         */
+        GifDecoder.GifImage gifImage = GifDecoder.read(source);
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ImageIO.write(gifImage.getFrame(0), "png", output);
+
+        return new ByteArrayInputStream(output.toByteArray());
     }
 
     private static InputStream generateThumbnailForImage(final int width,
                                                          final float quality,
                                                          final InputStream source) throws IOException {
+
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             Thumbnails.of(source)
                     .width(width)
@@ -69,6 +95,8 @@ public class MediaUploadStrategyUtils {
                 frameGrabber.start();
 
                 Java2DFrameConverter converter = new Java2DFrameConverter();
+                /* TODO Following code is broken, it will not work for videos with broken index.
+                  Currently no fix is available until JavaCv fix is out. https://github.com/bytedeco/javacv/issues/1689 */
                 frameGrabber.setFrameNumber(frameGrabber.getLengthInFrames() / PART_OF_VIDEO_TO_THUMBNAIL);
 
                 Frame frame = frameGrabber.grabImage();

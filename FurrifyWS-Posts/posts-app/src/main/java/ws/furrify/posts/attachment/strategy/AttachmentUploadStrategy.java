@@ -3,7 +3,7 @@ package ws.furrify.posts.attachment.strategy;
 import lombok.Value;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.UUID;
 
 public interface AttachmentUploadStrategy {
@@ -12,7 +12,7 @@ public interface AttachmentUploadStrategy {
 
     @Value
     class UploadedAttachmentFile {
-        URL fileUrl;
+        URI fileUrl;
     }
 
 }

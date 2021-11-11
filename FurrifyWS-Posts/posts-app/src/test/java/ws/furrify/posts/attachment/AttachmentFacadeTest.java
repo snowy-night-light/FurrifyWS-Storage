@@ -18,7 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -48,7 +49,7 @@ class AttachmentFacadeTest {
                 .attachmentId(UUID.randomUUID())
                 .extension(AttachmentExtension.PSD)
                 .filename("example.psd")
-                .fileUrl(new URL("https://example.com/"))
+                .fileUrl(new URI("/test"))
                 .md5("3c518eeb674c71b30297f072fde7eba5")
                 .createDate(ZonedDateTime.now())
                 .build();
@@ -80,7 +81,7 @@ class AttachmentFacadeTest {
 
     @Test
     @DisplayName("Create attachment")
-    void createAttachment() throws MalformedURLException {
+    void createAttachment() throws MalformedURLException, URISyntaxException {
         // Given ownerId, postId, attachmentDTO and multipart file
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
@@ -131,7 +132,7 @@ class AttachmentFacadeTest {
         // When createAttachment() method called
         when(postServiceClient.getUserPost(any(), any())).thenReturn(postDetailsDTO);
         when(attachmentUploadStrategy.uploadAttachment(any(), any())).thenReturn(new AttachmentUploadStrategy.UploadedAttachmentFile(
-                new URL("https://example.com")
+                new URI("/test")
         ));
         // Then return generated uuid
         assertNotNull(attachmentFacade.createAttachment(userId, postId, attachmentDTO, attachmentFile), "AttachmentId was not returned.");

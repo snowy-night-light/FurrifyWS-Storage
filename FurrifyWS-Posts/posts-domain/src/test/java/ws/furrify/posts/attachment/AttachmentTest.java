@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import ws.furrify.posts.attachment.vo.AttachmentSource;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,7 +30,7 @@ class AttachmentTest {
                 .postId(UUID.randomUUID())
                 .ownerId(UUID.randomUUID())
                 .filename("file.psd")
-                .fileUrl(new URL("https://example.com//"))
+                .fileUrl(new URI("/test"))
                 .md5("3c518eeb674c71b30297f072fde7eba5")
                 .extension(AttachmentExtension.PSD)
                 .sources(Collections.singleton(

@@ -7,7 +7,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import ws.furrify.posts.attachment.AttachmentExtension;
 
-import java.net.URL;
+import java.net.URI;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -28,7 +28,7 @@ public class AttachmentFile {
     private AttachmentExtension extension;
 
     @NonNull
-    private URL fileUrl;
+    private URI fileUrl;
 
     @NonNull
     private String md5;
@@ -41,7 +41,7 @@ public class AttachmentFile {
     @Builder
     private AttachmentFile(@NonNull final String filename,
                            @NonNull final AttachmentExtension extension,
-                           @NonNull final URL fileUrl,
+                           @NonNull final URI fileUrl,
                            @NonNull final String md5) {
 
         // Validate given values

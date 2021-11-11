@@ -6,7 +6,7 @@ import ws.furrify.posts.media.MediaEvent;
 import ws.furrify.posts.media.MediaExtension;
 import ws.furrify.posts.media.MediaQueryRepository;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -49,13 +49,13 @@ public class MediaDtoFactory {
                 .filename(mediaEvent.getData().getFilename())
                 .fileUrl(
                         (mediaEvent.getData().getFileUrl() != null) ?
-                                new URL(mediaEvent.getData().getFileUrl()) :
+                                new URI(mediaEvent.getData().getFileUrl()) :
                                 null
                 )
                 .md5(mediaEvent.getData().getMd5())
                 .thumbnailUrl(
                         (mediaEvent.getData().getThumbnailUrl() != null) ?
-                                new URL(mediaEvent.getData().getThumbnailUrl()) :
+                                new URI(mediaEvent.getData().getThumbnailUrl()) :
                                 null
 
                 )

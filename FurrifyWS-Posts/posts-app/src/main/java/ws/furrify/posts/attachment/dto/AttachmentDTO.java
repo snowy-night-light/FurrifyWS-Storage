@@ -6,7 +6,7 @@ import lombok.Value;
 import ws.furrify.posts.attachment.AttachmentExtension;
 import ws.furrify.posts.attachment.vo.AttachmentSource;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -28,7 +28,7 @@ public class AttachmentDTO {
 
     AttachmentExtension extension;
 
-    URL fileUrl;
+    URI fileUrl;
 
     String md5;
 

@@ -3,7 +3,7 @@ package ws.furrify.artists.avatar.strategy;
 import lombok.Value;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.UUID;
 
 public interface AvatarUploadStrategy {
@@ -12,8 +12,8 @@ public interface AvatarUploadStrategy {
 
     @Value
     class UploadedAvatarFile {
-        URL fileUrl;
-        URL thumbnailUrl;
+        URI fileUrl;
+        URI thumbnailUrl;
     }
 
 }

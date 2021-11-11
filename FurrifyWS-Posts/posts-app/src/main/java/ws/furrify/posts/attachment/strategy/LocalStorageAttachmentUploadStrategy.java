@@ -14,7 +14,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
 /**
@@ -53,10 +54,10 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
 
             // Return created urls
             return new UploadedAttachmentFile(
-                    new URL(REMOTE_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + fileSource.getOriginalFilename())
+                    new URI(REMOTE_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + fileSource.getOriginalFilename())
             );
 
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
         }
     }

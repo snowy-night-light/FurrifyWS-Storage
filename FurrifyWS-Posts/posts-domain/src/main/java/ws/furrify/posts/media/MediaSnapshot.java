@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import ws.furrify.posts.media.vo.MediaSource;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -37,8 +37,8 @@ class MediaSnapshot {
 
     private MediaExtension extension;
 
-    private URL fileUrl;
-    private URL thumbnailUrl;
+    private URI fileUrl;
+    private URI thumbnailUrl;
 
     private Set<MediaSource> sources;
 

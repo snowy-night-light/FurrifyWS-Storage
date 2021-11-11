@@ -5,7 +5,7 @@ import lombok.ToString;
 import lombok.Value;
 import ws.furrify.artists.avatar.AvatarExtension;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -26,8 +26,8 @@ public class AvatarDTO {
 
     AvatarExtension extension;
 
-    URL fileUrl;
-    URL thumbnailUrl;
+    URI fileUrl;
+    URI thumbnailUrl;
 
     String md5;
 

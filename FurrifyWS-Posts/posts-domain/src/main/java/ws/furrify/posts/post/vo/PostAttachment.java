@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.UUID;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -27,7 +27,7 @@ public class PostAttachment {
     private UUID attachmentId;
 
     @NonNull
-    private URL fileUrl;
+    private URI fileUrl;
 
     @NonNull
     private String filename;

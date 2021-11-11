@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import ws.furrify.posts.attachment.AttachmentExtension;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,14 +17,14 @@ class AttachmentFileTest {
 
     private static String filename;
     private static AttachmentExtension extension;
-    private static URL fileUrl;
+    private static URI fileUrl;
     private static String md5;
 
     @BeforeAll
-    static void setUp() throws MalformedURLException {
+    static void setUp() throws MalformedURLException, URISyntaxException {
         filename = "test.psd";
         extension = AttachmentExtension.PSD;
-        fileUrl = new URL("https://google.pl");
+        fileUrl = new URI("/test");
         md5 = "3c518eeb674c71b30297f072fde7eba5";
     }
 

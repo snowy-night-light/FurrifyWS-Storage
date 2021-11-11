@@ -14,7 +14,7 @@ import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.tag.TagEvent;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.UUID;
 
 /**
@@ -71,11 +71,11 @@ public class PostFacade {
                     PostMedia.builder()
                             .mediaId(mediaId)
                             .fileUrl(
-                                    new URL(mediaEvent.getData().getFileUrl())
+                                    new URI(mediaEvent.getData().getFileUrl())
                             )
                             .extension(mediaEvent.getData().getExtension())
                             .thumbnailUrl(
-                                    new URL(mediaEvent.getData().getThumbnailUrl())
+                                    new URI(mediaEvent.getData().getThumbnailUrl())
                             )
                             .priority(mediaEvent.getData().getPriority())
                             .build()
@@ -87,11 +87,11 @@ public class PostFacade {
                     PostMedia.builder()
                             .mediaId(mediaId)
                             .fileUrl(
-                                    new URL(mediaEvent.getData().getFileUrl())
+                                    new URI(mediaEvent.getData().getFileUrl())
                             )
                             .extension(mediaEvent.getData().getExtension())
                             .thumbnailUrl(
-                                    new URL(mediaEvent.getData().getThumbnailUrl())
+                                    new URI(mediaEvent.getData().getThumbnailUrl())
                             )
                             .priority(mediaEvent.getData().getPriority())
                             .build()
@@ -123,7 +123,7 @@ public class PostFacade {
                     PostAttachment.builder()
                             .attachmentId(attachmentId)
                             .fileUrl(
-                                    new URL(attachmentEvent.getData().getFileUrl())
+                                    new URI(attachmentEvent.getData().getFileUrl())
                             )
                             .extension(attachmentEvent.getData().getExtension())
                             .filename(attachmentEvent.getData().getFilename())
@@ -136,7 +136,7 @@ public class PostFacade {
                     PostAttachment.builder()
                             .attachmentId(attachmentId)
                             .fileUrl(
-                                    new URL(attachmentEvent.getData().getFileUrl())
+                                    new URI(attachmentEvent.getData().getFileUrl())
                             )
                             .extension(attachmentEvent.getData().getExtension())
                             .filename(attachmentEvent.getData().getFilename())

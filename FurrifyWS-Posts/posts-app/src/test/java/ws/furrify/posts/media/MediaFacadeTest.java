@@ -18,7 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -50,8 +51,8 @@ class MediaFacadeTest {
                 .priority(0)
                 .extension(MediaExtension.PNG)
                 .filename("yes.png")
-                .fileUrl(new URL("https://example.com/"))
-                .thumbnailUrl(new URL("https://example.com/"))
+                .fileUrl(new URI("/media"))
+                .thumbnailUrl(new URI("/media"))
                 .md5("3c518eeb674c71b30297f072fde7eba5")
                 .createDate(ZonedDateTime.now())
                 .build();
@@ -85,7 +86,7 @@ class MediaFacadeTest {
 
     @Test
     @DisplayName("Create media")
-    void createMedia() throws MalformedURLException {
+    void createMedia() throws MalformedURLException, URISyntaxException {
         // Given ownerId, mediaDTO and multipart file
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
@@ -136,8 +137,8 @@ class MediaFacadeTest {
         // When createMedia() method called
         when(postServiceClient.getUserPost(any(), any())).thenReturn(postDetailsDTO);
         when(mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(any(), any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
-                new URL("https://example.com"),
-                new URL("https://example.com")
+                new URI("/test"),
+                new URI("/test")
         ));
         // Then return generated uuid
         assertNotNull(mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile), "MediaId was not returned.");

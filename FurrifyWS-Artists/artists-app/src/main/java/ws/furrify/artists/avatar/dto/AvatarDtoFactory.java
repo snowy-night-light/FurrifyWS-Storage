@@ -6,7 +6,7 @@ import ws.furrify.artists.avatar.AvatarExtension;
 import ws.furrify.artists.avatar.AvatarQueryRepository;
 import ws.furrify.posts.avatar.AvatarEvent;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -48,13 +48,13 @@ public class AvatarDtoFactory {
                 .filename(avatarEvent.getData().getFilename())
                 .fileUrl(
                         (avatarEvent.getData().getFileUrl() != null) ?
-                                new URL(avatarEvent.getData().getFileUrl()) :
+                                new URI(avatarEvent.getData().getFileUrl()) :
                                 null
                 )
                 .md5(avatarEvent.getData().getMd5())
                 .thumbnailUrl(
                         (avatarEvent.getData().getThumbnailUrl() != null) ?
-                                new URL(avatarEvent.getData().getThumbnailUrl()) :
+                                new URI(avatarEvent.getData().getThumbnailUrl()) :
                                 null
 
                 )

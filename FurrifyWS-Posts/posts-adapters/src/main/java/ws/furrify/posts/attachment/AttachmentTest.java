@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import ws.furrify.posts.attachment.dto.AttachmentDTO;
 import ws.furrify.posts.attachment.vo.AttachmentSource;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -46,7 +46,7 @@ class AttachmentTest implements CommandLineRunner {
                                 .postId(postId)
                                 .ownerId(userId)
                                 .extension(AttachmentExtension.PSD)
-                                .fileUrl(new URL("https://example.com/"))
+                                .fileUrl(new URI("/test"))
                                 .filename("yes.psd")
                                 .md5("3c518eeb674c71b30297f072fde7eba5")
                                 .sources(Collections.singleton(

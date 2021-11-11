@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import ws.furrify.posts.media.dto.MediaDTO;
 import ws.furrify.posts.media.vo.MediaSource;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -48,8 +48,8 @@ class MediaTest implements CommandLineRunner {
                                 .priority(0)
                                 .extension(MediaExtension.PNG)
                                 .filename("yes.png")
-                                .fileUrl(new URL("https://example.com/"))
-                                .thumbnailUrl(new URL("https://example.com/"))
+                                .fileUrl(new URI("/test"))
+                                .thumbnailUrl(new URI("/test"))
                                 .md5("3c518eeb674c71b30297f072fde7eba5")
                                 .sources(Collections.singleton(
                                         new MediaSource(

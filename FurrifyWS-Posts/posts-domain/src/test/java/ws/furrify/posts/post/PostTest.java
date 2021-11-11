@@ -15,7 +15,8 @@ import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.posts.post.vo.PostTitle;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Set;
@@ -48,15 +49,15 @@ class PostTest {
                         PostMedia.builder()
                                 .mediaId(UUID.randomUUID())
                                 .priority(1)
-                                .fileUrl(new URL("https://example.com/"))
-                                .thumbnailUrl(new URL("https://example.com/"))
+                                .fileUrl(new URI("/test"))
+                                .thumbnailUrl(new URI("/test"))
                                 .extension(MediaExtension.PNG.name())
                                 .build()
                 ))
                 .attachments(Collections.singleton(
                         PostAttachment.builder()
                                 .attachmentId(UUID.randomUUID())
-                                .fileUrl(new URL("https://example.com/"))
+                                .fileUrl(new URI("/test"))
                                 .filename("yes.psd")
                                 .extension(AttachmentExtension.PSD.name())
                                 .build()
@@ -275,14 +276,14 @@ class PostTest {
 
     @Test
     @DisplayName("Add media")
-    void addMedia() throws MalformedURLException {
+    void addMedia() throws URISyntaxException {
         // Given post media
         PostMedia postMedia = PostMedia.builder()
                 .mediaId(UUID.randomUUID())
                 .extension("PNG")
                 .priority(3)
-                .thumbnailUrl(new URL("https://google.pl/"))
-                .fileUrl(new URL("https://google.pl/"))
+                .thumbnailUrl(new URI("/test"))
+                .fileUrl(new URI("/test"))
                 .build();
         // When addMedia() method called
         // Then add media to set
@@ -299,13 +300,13 @@ class PostTest {
 
     @Test
     @DisplayName("Add attachment")
-    void addAttachment() throws MalformedURLException {
+    void addAttachment() throws URISyntaxException {
         // Given post attachment
         PostAttachment postAttachment = PostAttachment.builder()
                 .attachmentId(UUID.randomUUID())
                 .extension("PSD")
                 .filename("sad.psd")
-                .fileUrl(new URL("https://google.pl/"))
+                .fileUrl(new URI("/test"))
                 .build();
         // When addAttachment() method called
         // Then add attachment to set
@@ -322,12 +323,12 @@ class PostTest {
 
     @Test
     @DisplayName("Update media details in mediaSet")
-    void updateMediaDetailsInMediaSet() throws MalformedURLException {
+    void updateMediaDetailsInMediaSet() throws URISyntaxException {
         // Given existing mediaId, new priority, new thumbnailUrl, new extension and new status
         UUID mediaId = ((PostMedia) postSnapshot.getMediaSet().toArray()[0]).getMediaId();
         Integer newPriority = 32;
-        URL newThumbnailUrl = new URL("https://google.pl/");
-        URL newFileUrl = new URL("https://google.pl/");
+        URI newThumbnailUrl = new URI("/test");
+        URI newFileUrl = new URI("/test");
         String newExtension = "JPEG";
         // When updateMediaDetailsInMediaSet() method called
         // Then update artist details in artists
@@ -356,12 +357,12 @@ class PostTest {
 
     @Test
     @DisplayName("Update media details in mediaSet with non existing mediaID")
-    void updateMediaDetailsInMediaSet2() throws MalformedURLException {
+    void updateMediaDetailsInMediaSet2() throws URISyntaxException {
         // Given non existing mediaId, new priority, new thumbnailUrl, new extension and new status
         UUID mediaId = UUID.randomUUID();
         Integer newPriority = 32;
-        URL newThumbnailUrl = new URL("https://google.pl/");
-        URL newFileUrl = new URL("https://google.pl/");
+        URI newThumbnailUrl = new URI("/test");
+        URI newFileUrl = new URI("/test");
         String newExtension = "JPEG";
         // When updateMediaDetailsInMediaSet() method called
         // Then throw IllegalStateException
@@ -398,10 +399,10 @@ class PostTest {
 
     @Test
     @DisplayName("Update attachment details in attachments")
-    void updateAttachmentDetailsInAttachmentSet() throws MalformedURLException {
+    void updateAttachmentDetailsInAttachmentSet() throws MalformedURLException, URISyntaxException {
         // Given existing attachmentId, new fileUrl and new extension
         UUID attachmentId = ((PostAttachment) postSnapshot.getAttachments().toArray()[0]).getAttachmentId();
-        URL newFileUrl = new URL("https://example.com/");
+        URI newFileUrl = new URI("/test");
         String newExtension = "PSD";
         String newFilename = "new.psd";
         // When updateAttachmentDetailsInAttachments() method called
@@ -429,10 +430,10 @@ class PostTest {
 
     @Test
     @DisplayName("Update attachment details in attachments with non existing attachmentId")
-    void updateAttachmentDetailsInAttachmentSet2() throws MalformedURLException {
+    void updateAttachmentDetailsInAttachmentSet2() throws URISyntaxException {
         // Given non existing attachmentId, new thumbnailUrl and new extension
         UUID attachmentId = UUID.randomUUID();
-        URL newFileUrl = new URL("https://google.pl/");
+        URI newFileUrl = new URI("/test");
         String newExtension = "PSD";
         String newFilename = "new.psd";
         // When updateAttachmentDetailsInAttachments() method called

@@ -7,7 +7,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import ws.furrify.artists.avatar.AvatarExtension;
 
-import java.net.URL;
+import java.net.URI;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -28,9 +28,9 @@ public class AvatarFile {
     private AvatarExtension extension;
 
     @NonNull
-    private URL fileUrl;
+    private URI fileUrl;
     @NonNull
-    private URL thumbnailUrl;
+    private URI thumbnailUrl;
 
     @NonNull
     private String md5;
@@ -42,8 +42,8 @@ public class AvatarFile {
     @Builder
     private AvatarFile(@NonNull final String filename,
                        @NonNull final AvatarExtension extension,
-                       @NonNull final URL fileUrl,
-                       @NonNull final URL thumbnailUrl,
+                       @NonNull final URI fileUrl,
+                       @NonNull final URI thumbnailUrl,
                        @NonNull final String md5) {
 
         // Validate given values

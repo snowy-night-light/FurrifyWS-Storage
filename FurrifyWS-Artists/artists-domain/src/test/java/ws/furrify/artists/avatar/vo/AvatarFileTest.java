@@ -5,8 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.artists.avatar.AvatarExtension;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,16 +16,16 @@ class AvatarFileTest {
 
     private static String filename;
     private static AvatarExtension extension;
-    private static URL fileUrl;
-    private static URL thumbnailUrl;
+    private static URI fileUrl;
+    private static URI thumbnailUrl;
     private static String md5;
 
     @BeforeAll
-    static void setUp() throws MalformedURLException {
+    static void setUp() throws URISyntaxException {
         filename = "test.png";
         extension = AvatarExtension.PNG;
-        fileUrl = new URL("https://google.pl");
-        thumbnailUrl = new URL("https://google2.pl");
+        fileUrl = new URI("/test");
+        thumbnailUrl = new URI("/test");
         md5 = "3c518eeb674c71b30297f072fde7eba5";
     }
 

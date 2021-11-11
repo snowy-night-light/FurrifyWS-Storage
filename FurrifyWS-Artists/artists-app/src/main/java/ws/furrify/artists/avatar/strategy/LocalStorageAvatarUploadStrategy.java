@@ -14,7 +14,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
 /**
@@ -86,12 +87,12 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
             // Return created urls
             return new UploadedAvatarFile(
                     // Original
-                    new URL(REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + fileSource.getOriginalFilename()),
+                    new URI(REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + fileSource.getOriginalFilename()),
                     // Thumbnail
-                    new URL(REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + thumbnailFileName)
+                    new URI(REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + thumbnailFileName)
             );
 
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
         }
     }

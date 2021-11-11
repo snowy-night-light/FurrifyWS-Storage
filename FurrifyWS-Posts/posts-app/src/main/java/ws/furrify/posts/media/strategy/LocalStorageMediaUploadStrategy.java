@@ -15,7 +15,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
 /**
@@ -45,11 +46,11 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
     private final static String THUMBNAIL_EXTENSION = ".jpg";
 
     @Override
-    public UploadedMediaFile uploadMediaWithGeneratedThumbnail(final UUID mediaId, final MediaExtension.MediaType mediaType, final MultipartFile fileSource) {
+    public UploadedMediaFile uploadMediaWithGeneratedThumbnail(final UUID mediaId, final MediaExtension extension, final MultipartFile fileSource) {
         try (
                 // Generate thumbnail
                 InputStream thumbnailInputStream = MediaUploadStrategyUtils.generateThumbnail(
-                        mediaType,
+                        extension,
                         THUMBNAIL_WIDTH,
                         THUMBNAIL_QUALITY,
                         fileSource.getInputStream()
@@ -89,13 +90,12 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
             // Return created urls
             return new UploadedMediaFile(
                     // Original
-                    // TODO REPLACE ALL URL WITH URI EVERYWHERE
-                    new URL(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + fileSource.getOriginalFilename()),
+                    new URI(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + fileSource.getOriginalFilename()),
                     // Thumbnail
-                    new URL(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName)
+                    new URI(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName)
             );
 
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
         }
     }

@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -33,8 +33,8 @@ class AvatarSnapshot {
 
     private AvatarExtension extension;
 
-    private URL fileUrl;
-    private URL thumbnailUrl;
+    private URI fileUrl;
+    private URI thumbnailUrl;
 
     private ZonedDateTime createDate;
 }

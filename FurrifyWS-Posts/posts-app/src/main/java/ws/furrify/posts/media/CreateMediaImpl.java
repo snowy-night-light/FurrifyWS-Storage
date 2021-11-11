@@ -68,7 +68,7 @@ final class CreateMediaImpl implements CreateMedia {
         MediaUploadStrategy.UploadedMediaFile uploadedMediaFile =
                 mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(
                         mediaId,
-                        mediaDTO.getExtension().getType(),
+                        mediaDTO.getExtension(),
                         mediaFile
                 );
 
