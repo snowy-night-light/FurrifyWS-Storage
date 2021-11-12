@@ -23,12 +23,30 @@ public enum MediaExtension {
     /**
      * File extensions
      */
+    OGG(MediaType.AUDIO, "application/ogg", "audio/ogg"),
+    FLAC(MediaType.AUDIO, "audio/x-flac", "audio/flac"),
+    MP3(MediaType.AUDIO, "audio/mpeg"),
+    WAV(MediaType.AUDIO, "audio/wav"),
+
     GIF(MediaType.ANIMATION, "image/gif"),
+
+    TS(MediaType.VIDEO, "video/MP2T"),
+    MOV(MediaType.VIDEO, "video/quicktime"),
+    FLV(MediaType.VIDEO, "video/x-flv"),
+    AVI(MediaType.VIDEO, "video/x-msvideo"),
+    WMV(MediaType.VIDEO, "video/x-ms-wmv"),
     MKV(MediaType.VIDEO, "video/x-matroska"),
     WEBM(MediaType.VIDEO, "video/webm"),
     MP4(MediaType.VIDEO, "video/mp4"),
-    JPEG(MediaType.IMAGE, "image/jpeg"),
+
+    SVG(MediaType.IMAGE, "image/svg+xml"),
+    TIF(MediaType.IMAGE, "image/tiff"),
+    TIFF(MediaType.IMAGE, "image/tiff"),
+    WBMP(MediaType.IMAGE, "image/vnd.wap.wbmp"),
+    BMP(MediaType.IMAGE, "image/bmp"),
+    BM(MediaType.IMAGE, "image/bmp"),
     PNG(MediaType.IMAGE, "image/png"),
+    JPEG(MediaType.IMAGE, "image/jpeg"),
     JPG(MediaType.IMAGE, "image/jpeg");
 
     /**
@@ -67,9 +85,8 @@ public enum MediaExtension {
             // Get file mimetype
             String mimeType = FileUtils.getMimeType(filename, file.getInputStream());
 
-            // Add both jpg and jpeg mime types to set
+            // Add allowed mime types to set
             Set<String> allowedMimetypes = new HashSet<>(Arrays.asList(MediaExtension.JPG.getMimeTypes()));
-            allowedMimetypes.addAll(Arrays.asList(MediaExtension.JPEG.getMimeTypes()));
 
             return allowedMimetypes.contains(mimeType);
         } catch (IOException e) {
@@ -97,6 +114,10 @@ public enum MediaExtension {
         /**
          * Animation file type.
          */
-        ANIMATION
+        ANIMATION,
+        /**
+         * Audio file type.
+         */
+        AUDIO
     }
 }

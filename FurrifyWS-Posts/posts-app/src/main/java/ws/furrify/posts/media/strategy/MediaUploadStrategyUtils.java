@@ -54,6 +54,7 @@ public class MediaUploadStrategyUtils {
 
                 yield null;
             }
+            case AUDIO -> null;
         };
     }
 
