@@ -13,7 +13,7 @@ import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.shared.vo.SourceOriginType;
 import ws.furrify.sources.source.SourceEvent;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.UUID;
 
 /**
@@ -63,11 +63,11 @@ final public class ArtistFacade {
                     ArtistAvatar.builder()
                             .avatarId(UUID.fromString(avatarEvent.getAvatarId()))
                             .fileUri(
-                                    new URL(avatarEvent.getData().getFileUri())
+                                    new URI(avatarEvent.getData().getFileUri())
                             )
                             .extension(avatarEvent.getData().getExtension())
                             .thumbnailUri(
-                                    new URL(avatarEvent.getData().getThumbnailUri())
+                                    new URI(avatarEvent.getData().getThumbnailUri())
                             )
                             .build()
             );

@@ -9,7 +9,7 @@ import ws.furrify.artists.artist.dto.ArtistDTO;
 import ws.furrify.artists.artist.vo.ArtistAvatar;
 import ws.furrify.artists.artist.vo.ArtistSource;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -60,8 +60,8 @@ class ArtistTest implements CommandLineRunner {
                                         ArtistAvatar.builder()
                                                 .avatarId(avatarId)
                                                 .extension("PNG")
-                                                .fileUri(new URL("https://example.com/"))
-                                                .thumbnailUri(new URL("https://example.com/"))
+                                                .fileUri(new URI("https://example.com/"))
+                                                .thumbnailUri(new URI("https://example.com/"))
                                                 .build()
                                 )
                                 .createDate(ZonedDateTime.now())

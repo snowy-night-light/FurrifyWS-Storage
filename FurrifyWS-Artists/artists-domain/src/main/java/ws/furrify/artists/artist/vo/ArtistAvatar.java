@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.UUID;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -29,10 +29,10 @@ public class ArtistAvatar {
     private UUID avatarId;
 
     @NonNull
-    private URL fileUri;
+    private URI fileUri;
 
     @NonNull
-    private URL thumbnailUri;
+    private URI thumbnailUri;
 
     @NonNull
     private String extension;
