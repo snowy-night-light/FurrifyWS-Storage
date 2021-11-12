@@ -49,15 +49,6 @@ final class CreateMediaImpl implements CreateMedia {
             throw new FileExtensionIsNotMatchingContentException(Errors.FILE_EXTENSION_IS_NOT_MATCHING_CONTENT.getErrorMessage());
         }
 
-        // Check if thumbnail meets the requirements
-        boolean isThumbnailFileValid = MediaExtension.isThumbnailValid(
-                thumbnailFile.getOriginalFilename(),
-                thumbnailFile
-        );
-        if (!isThumbnailFileValid) {
-            throw new FileExtensionIsNotMatchingContentException(Errors.THUMBNAIL_CONTENT_IS_INVALID.getErrorMessage());
-        }
-
         // Check if filename is valid
         boolean isFilenameValid = MediaExtension.isFilenameValid(
                 mediaFile.getOriginalFilename()
@@ -74,21 +65,34 @@ final class CreateMediaImpl implements CreateMedia {
             throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
         }
 
-        // Upload file and generate thumbnail
-        MediaUploadStrategy.UploadedMediaFile uploadedMediaFile =
-                // If thumbnail was included in request
-                (thumbnailFile != null) ?
-                        mediaUploadStrategy.uploadMedia(
-                                mediaId,
-                                mediaDTO.getExtension(),
-                                mediaFile,
-                                thumbnailFile
-                        ) :
-                        mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(
-                                mediaId,
-                                mediaDTO.getExtension(),
-                                mediaFile
-                        );
+        MediaUploadStrategy.UploadedMediaFile uploadedMediaFile;
+
+        // If thumbnail is present
+        if (thumbnailFile != null && thumbnailFile.getSize() != 0) {
+            // Check if thumbnail meets the requirements
+            boolean isThumbnailFileValid = MediaExtension.isThumbnailValid(
+                    thumbnailFile.getOriginalFilename(),
+                    thumbnailFile
+            );
+            if (!isThumbnailFileValid) {
+                throw new FileExtensionIsNotMatchingContentException(Errors.THUMBNAIL_CONTENT_IS_INVALID.getErrorMessage());
+            }
+
+            // Upload media with thumbnail
+            uploadedMediaFile = mediaUploadStrategy.uploadMedia(
+                    mediaId,
+                    mediaDTO.getExtension(),
+                    mediaFile,
+                    thumbnailFile
+            );
+        } else {
+            // Generate thumbnail and upload media and thumbnail
+            uploadedMediaFile = mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(
+                    mediaId,
+                    mediaDTO.getExtension(),
+                    mediaFile
+            );
+        }
 
         // Edit mediaDTO with generated media uuid
         MediaDTO updatedMediaToCreateDTO = mediaDTO.toBuilder()
