@@ -90,7 +90,7 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .priority(2)
                                                 .extension("PNG")
-                                                .fileUri(new URI("/29c02f53-486e-4205-b1b7-74977ae13941/123.png"))
+                                                .fileUri(new URI("/media/29c02f53-486e-4205-b1b7-74977ae13941/123.png"))
                                                 .thumbnailUri(new URI("/media/29c02f53-486e-4205-b1b7-74977ae13941/thumbnail_123.png"))
                                                 .build()
                                 ))
