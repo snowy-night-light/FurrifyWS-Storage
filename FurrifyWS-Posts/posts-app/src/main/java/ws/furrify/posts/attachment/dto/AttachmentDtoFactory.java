@@ -46,9 +46,9 @@ public class AttachmentDtoFactory {
                                 null
                 )
                 .filename(attachmentEvent.getData().getFilename())
-                .fileUrl(
-                        (attachmentEvent.getData().getFileUrl() != null) ?
-                                new URI(attachmentEvent.getData().getFileUrl()) :
+                .fileUri(
+                        (attachmentEvent.getData().getFileUri() != null) ?
+                                new URI(attachmentEvent.getData().getFileUri()) :
                                 null
                 )
                 .md5(attachmentEvent.getData().getMd5())

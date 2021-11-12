@@ -29,10 +29,10 @@
                 <column nullable="false"/>
                 <enumerated>STRING</enumerated>
             </basic>
-            <basic name="fileUrl">
+            <basic name="fileUri">
                 <column nullable="true"/>
             </basic>
-            <basic name="thumbnailUrl">
+            <basic name="thumbnailUri">
                 <column nullable="true"/>
             </basic>
             <basic name="createDate">
@@ -106,13 +106,13 @@
             <basic name="avatarId">
                 <column nullable="false"/>
             </basic>
-            <basic name="thumbnailUrl">
+            <basic name="thumbnailUri">
                 <column nullable="false"/>
             </basic>
             <basic name="extension">
                 <column nullable="false"/>
             </basic>
-            <basic name="fileUrl">
+            <basic name="fileUri">
                 <column nullable="false"/>
             </basic>
         </attributes>

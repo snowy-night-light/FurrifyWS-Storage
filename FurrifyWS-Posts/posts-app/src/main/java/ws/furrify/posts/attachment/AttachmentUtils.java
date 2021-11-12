@@ -34,8 +34,8 @@ class AttachmentUtils {
                                 .setPostId(attachmentSnapshot.getPostId().toString())
                                 .setExtension(attachmentSnapshot.getExtension().name())
                                 .setFilename(attachmentSnapshot.getFilename())
-                                .setFileUrl(
-                                        (attachmentSnapshot.getFileUrl() != null) ? attachmentSnapshot.getFileUrl().toString() : null
+                                .setFileUri(
+                                        (attachmentSnapshot.getFileUri() != null) ? attachmentSnapshot.getFileUri().toString() : null
                                 )
                                 .setMd5(attachmentSnapshot.getMd5())
                                 .setCreateDate(attachmentSnapshot.getCreateDate().toInstant())

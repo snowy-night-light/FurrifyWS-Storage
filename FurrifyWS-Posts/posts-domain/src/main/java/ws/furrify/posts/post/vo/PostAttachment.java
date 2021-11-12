@@ -27,7 +27,7 @@ public class PostAttachment {
     private UUID attachmentId;
 
     @NonNull
-    private URI fileUrl;
+    private URI fileUri;
 
     @NonNull
     private String filename;

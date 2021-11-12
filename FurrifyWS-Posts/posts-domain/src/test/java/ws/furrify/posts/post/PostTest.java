@@ -49,15 +49,15 @@ class PostTest {
                         PostMedia.builder()
                                 .mediaId(UUID.randomUUID())
                                 .priority(1)
-                                .fileUrl(new URI("/test"))
-                                .thumbnailUrl(new URI("/test"))
+                                .fileUri(new URI("/test"))
+                                .thumbnailUri(new URI("/test"))
                                 .extension(MediaExtension.PNG.name())
                                 .build()
                 ))
                 .attachments(Collections.singleton(
                         PostAttachment.builder()
                                 .attachmentId(UUID.randomUUID())
-                                .fileUrl(new URI("/test"))
+                                .fileUri(new URI("/test"))
                                 .filename("yes.psd")
                                 .extension(AttachmentExtension.PSD.name())
                                 .build()
@@ -282,8 +282,8 @@ class PostTest {
                 .mediaId(UUID.randomUUID())
                 .extension("PNG")
                 .priority(3)
-                .thumbnailUrl(new URI("/test"))
-                .fileUrl(new URI("/test"))
+                .thumbnailUri(new URI("/test"))
+                .fileUri(new URI("/test"))
                 .build();
         // When addMedia() method called
         // Then add media to set
@@ -306,7 +306,7 @@ class PostTest {
                 .attachmentId(UUID.randomUUID())
                 .extension("PSD")
                 .filename("sad.psd")
-                .fileUrl(new URI("/test"))
+                .fileUri(new URI("/test"))
                 .build();
         // When addAttachment() method called
         // Then add attachment to set
@@ -324,11 +324,11 @@ class PostTest {
     @Test
     @DisplayName("Update media details in mediaSet")
     void updateMediaDetailsInMediaSet() throws URISyntaxException {
-        // Given existing mediaId, new priority, new thumbnailUrl, new extension and new status
+        // Given existing mediaId, new priority, new thumbnailUri, new extension and new status
         UUID mediaId = ((PostMedia) postSnapshot.getMediaSet().toArray()[0]).getMediaId();
         Integer newPriority = 32;
-        URI newThumbnailUrl = new URI("/test");
-        URI newFileUrl = new URI("/test");
+        URI newThumbnailUri = new URI("/test");
+        URI newFileUri = new URI("/test");
         String newExtension = "JPEG";
         // When updateMediaDetailsInMediaSet() method called
         // Then update artist details in artists
@@ -336,8 +336,8 @@ class PostTest {
                 PostMedia.builder()
                         .mediaId(mediaId)
                         .priority(newPriority)
-                        .fileUrl(newFileUrl)
-                        .thumbnailUrl(newThumbnailUrl)
+                        .fileUri(newFileUri)
+                        .thumbnailUri(newThumbnailUri)
                         .extension(newExtension)
                         .build()
         );
@@ -347,8 +347,8 @@ class PostTest {
                 PostMedia.builder()
                         .mediaId(mediaId)
                         .priority(newPriority)
-                        .fileUrl(newFileUrl)
-                        .thumbnailUrl(newThumbnailUrl)
+                        .fileUri(newFileUri)
+                        .thumbnailUri(newThumbnailUri)
                         .extension(newExtension)
                         .build(),
                 "Media was not updated."
@@ -358,11 +358,11 @@ class PostTest {
     @Test
     @DisplayName("Update media details in mediaSet with non existing mediaID")
     void updateMediaDetailsInMediaSet2() throws URISyntaxException {
-        // Given non existing mediaId, new priority, new thumbnailUrl, new extension and new status
+        // Given non existing mediaId, new priority, new thumbnailUri, new extension and new status
         UUID mediaId = UUID.randomUUID();
         Integer newPriority = 32;
-        URI newThumbnailUrl = new URI("/test");
-        URI newFileUrl = new URI("/test");
+        URI newThumbnailUri = new URI("/test");
+        URI newFileUri = new URI("/test");
         String newExtension = "JPEG";
         // When updateMediaDetailsInMediaSet() method called
         // Then throw IllegalStateException
@@ -372,8 +372,8 @@ class PostTest {
                         PostMedia.builder()
                                 .mediaId(mediaId)
                                 .priority(newPriority)
-                                .fileUrl(newFileUrl)
-                                .thumbnailUrl(newThumbnailUrl)
+                                .fileUri(newFileUri)
+                                .thumbnailUri(newThumbnailUri)
                                 .extension(newExtension)
                                 .build()
                 ),
@@ -400,9 +400,9 @@ class PostTest {
     @Test
     @DisplayName("Update attachment details in attachments")
     void updateAttachmentDetailsInAttachmentSet() throws MalformedURLException, URISyntaxException {
-        // Given existing attachmentId, new fileUrl and new extension
+        // Given existing attachmentId, new fileUri and new extension
         UUID attachmentId = ((PostAttachment) postSnapshot.getAttachments().toArray()[0]).getAttachmentId();
-        URI newFileUrl = new URI("/test");
+        URI newFileUri = new URI("/test");
         String newExtension = "PSD";
         String newFilename = "new.psd";
         // When updateAttachmentDetailsInAttachments() method called
@@ -411,7 +411,7 @@ class PostTest {
                 PostAttachment.builder()
                         .attachmentId(attachmentId)
                         .filename(newFilename)
-                        .fileUrl(newFileUrl)
+                        .fileUri(newFileUri)
                         .extension(newExtension)
                         .build()
         );
@@ -421,7 +421,7 @@ class PostTest {
                 PostAttachment.builder()
                         .attachmentId(attachmentId)
                         .filename(newFilename)
-                        .fileUrl(newFileUrl)
+                        .fileUri(newFileUri)
                         .extension(newExtension)
                         .build(),
                 "Attachment was not updated."
@@ -431,9 +431,9 @@ class PostTest {
     @Test
     @DisplayName("Update attachment details in attachments with non existing attachmentId")
     void updateAttachmentDetailsInAttachmentSet2() throws URISyntaxException {
-        // Given non existing attachmentId, new thumbnailUrl and new extension
+        // Given non existing attachmentId, new thumbnailUri and new extension
         UUID attachmentId = UUID.randomUUID();
-        URI newFileUrl = new URI("/test");
+        URI newFileUri = new URI("/test");
         String newExtension = "PSD";
         String newFilename = "new.psd";
         // When updateAttachmentDetailsInAttachments() method called
@@ -445,7 +445,7 @@ class PostTest {
                         PostAttachment.builder()
                                 .attachmentId(attachmentId)
                                 .filename(newFilename)
-                                .fileUrl(newFileUrl)
+                                .fileUri(newFileUri)
                                 .extension(newExtension)
                                 .build()
                 ),

@@ -26,8 +26,8 @@ public class AvatarDTO {
 
     AvatarExtension extension;
 
-    URI fileUrl;
-    URI thumbnailUrl;
+    URI fileUri;
+    URI thumbnailUri;
 
     String md5;
 

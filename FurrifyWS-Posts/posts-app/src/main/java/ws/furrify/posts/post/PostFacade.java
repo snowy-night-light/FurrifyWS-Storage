@@ -70,12 +70,12 @@ public class PostFacade {
                     // Build post media from media event
                     PostMedia.builder()
                             .mediaId(mediaId)
-                            .fileUrl(
-                                    new URI(mediaEvent.getData().getFileUrl())
+                            .fileUri(
+                                    new URI(mediaEvent.getData().getFileUri())
                             )
                             .extension(mediaEvent.getData().getExtension())
-                            .thumbnailUrl(
-                                    new URI(mediaEvent.getData().getThumbnailUrl())
+                            .thumbnailUri(
+                                    new URI(mediaEvent.getData().getThumbnailUri())
                             )
                             .priority(mediaEvent.getData().getPriority())
                             .build()
@@ -86,12 +86,12 @@ public class PostFacade {
                     // Build post media from media event
                     PostMedia.builder()
                             .mediaId(mediaId)
-                            .fileUrl(
-                                    new URI(mediaEvent.getData().getFileUrl())
+                            .fileUri(
+                                    new URI(mediaEvent.getData().getFileUri())
                             )
                             .extension(mediaEvent.getData().getExtension())
-                            .thumbnailUrl(
-                                    new URI(mediaEvent.getData().getThumbnailUrl())
+                            .thumbnailUri(
+                                    new URI(mediaEvent.getData().getThumbnailUri())
                             )
                             .priority(mediaEvent.getData().getPriority())
                             .build()
@@ -122,8 +122,8 @@ public class PostFacade {
                     // Build post attachment from attachment event
                     PostAttachment.builder()
                             .attachmentId(attachmentId)
-                            .fileUrl(
-                                    new URI(attachmentEvent.getData().getFileUrl())
+                            .fileUri(
+                                    new URI(attachmentEvent.getData().getFileUri())
                             )
                             .extension(attachmentEvent.getData().getExtension())
                             .filename(attachmentEvent.getData().getFilename())
@@ -135,8 +135,8 @@ public class PostFacade {
                     // Build post attachment from attachment event
                     PostAttachment.builder()
                             .attachmentId(attachmentId)
-                            .fileUrl(
-                                    new URI(attachmentEvent.getData().getFileUrl())
+                            .fileUri(
+                                    new URI(attachmentEvent.getData().getFileUri())
                             )
                             .extension(attachmentEvent.getData().getExtension())
                             .filename(attachmentEvent.getData().getFilename())

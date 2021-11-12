@@ -28,7 +28,7 @@ public class AttachmentDTO {
 
     AttachmentExtension extension;
 
-    URI fileUrl;
+    URI fileUri;
 
     String md5;
 

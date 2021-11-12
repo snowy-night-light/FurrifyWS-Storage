@@ -46,15 +46,15 @@ public class AvatarDtoFactory {
                                 null
                 )
                 .filename(avatarEvent.getData().getFilename())
-                .fileUrl(
-                        (avatarEvent.getData().getFileUrl() != null) ?
-                                new URI(avatarEvent.getData().getFileUrl()) :
+                .fileUri(
+                        (avatarEvent.getData().getFileUri() != null) ?
+                                new URI(avatarEvent.getData().getFileUri()) :
                                 null
                 )
                 .md5(avatarEvent.getData().getMd5())
-                .thumbnailUrl(
-                        (avatarEvent.getData().getThumbnailUrl() != null) ?
-                                new URI(avatarEvent.getData().getThumbnailUrl()) :
+                .thumbnailUri(
+                        (avatarEvent.getData().getThumbnailUri() != null) ?
+                                new URI(avatarEvent.getData().getThumbnailUri()) :
                                 null
 
                 )

@@ -26,9 +26,9 @@ public interface MediaDetailsQueryDTO extends Serializable {
 
     MediaExtension getExtension();
 
-    URI getFileUrl();
+    URI getFileUri();
 
-    URI getThumbnailUrl();
+    URI getThumbnailUri();
 
     String getMd5();
 

@@ -62,12 +62,12 @@ final public class ArtistFacade {
                     UUID.fromString(avatarEvent.getData().getArtistId()),
                     ArtistAvatar.builder()
                             .avatarId(UUID.fromString(avatarEvent.getAvatarId()))
-                            .fileUrl(
-                                    new URL(avatarEvent.getData().getFileUrl())
+                            .fileUri(
+                                    new URL(avatarEvent.getData().getFileUri())
                             )
                             .extension(avatarEvent.getData().getExtension())
-                            .thumbnailUrl(
-                                    new URL(avatarEvent.getData().getThumbnailUrl())
+                            .thumbnailUri(
+                                    new URL(avatarEvent.getData().getThumbnailUri())
                             )
                             .build()
             );

@@ -33,8 +33,8 @@ class AvatarSnapshot {
 
     private AvatarExtension extension;
 
-    private URI fileUrl;
-    private URI thumbnailUrl;
+    private URI fileUri;
+    private URI thumbnailUri;
 
     private ZonedDateTime createDate;
 }

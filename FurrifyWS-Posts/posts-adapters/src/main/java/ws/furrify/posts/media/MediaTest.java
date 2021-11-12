@@ -34,7 +34,7 @@ class MediaTest implements CommandLineRunner {
     private void createTestingMedia() {
         var mediaFactory = new MediaFactory();
 
-        var userId = UUID.fromString("f08e6027-b997-452d-85a6-0cf2d5a1741e");
+        var userId = UUID.fromString("e440a70e-d9af-42c4-a4f1-38677c0c950d");
         var postId = UUID.fromString("7c2c35f3-20e9-4b7e-a455-253b7b78e2fa");
         var mediaId = UUID.fromString("19c02f53-486e-4205-b1b7-74977ae13941");
         var mediaSourceId = UUID.fromString("482b628f-4ca9-4c96-a199-bf25e21b5bca");
@@ -48,8 +48,8 @@ class MediaTest implements CommandLineRunner {
                                 .priority(0)
                                 .extension(MediaExtension.PNG)
                                 .filename("yes.png")
-                                .fileUrl(new URI("/test"))
-                                .thumbnailUrl(new URI("/test"))
+                                .fileUri(new URI("/test"))
+                                .thumbnailUri(new URI("/test"))
                                 .md5("3c518eeb674c71b30297f072fde7eba5")
                                 .sources(Collections.singleton(
                                         new MediaSource(

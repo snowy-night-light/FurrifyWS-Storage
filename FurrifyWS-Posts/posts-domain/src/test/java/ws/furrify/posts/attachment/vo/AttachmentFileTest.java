@@ -17,26 +17,26 @@ class AttachmentFileTest {
 
     private static String filename;
     private static AttachmentExtension extension;
-    private static URI fileUrl;
+    private static URI fileUri;
     private static String md5;
 
     @BeforeAll
     static void setUp() throws MalformedURLException, URISyntaxException {
         filename = "test.psd";
         extension = AttachmentExtension.PSD;
-        fileUrl = new URI("/test");
+        fileUri = new URI("/test");
         md5 = "3c518eeb674c71b30297f072fde7eba5";
     }
 
     @Test
     @DisplayName("Create AttachmentFile")
     void of() {
-        // Given filename, extension, fileUrl and md5
+        // Given filename, extension, fileUri and md5
         // When builder build
         var attachmentFile = AttachmentFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
+                .fileUri(fileUri)
                 .md5(md5)
                 .build();
         // Then return created AttachmentFile
@@ -52,9 +52,9 @@ class AttachmentFileTest {
                         "Created extension is not the same."
                 ),
                 () -> assertEquals(
-                        fileUrl,
-                        attachmentFile.getFileUrl(),
-                        "Created fileUrl is not the same."
+                        fileUri,
+                        attachmentFile.getFileUri(),
+                        "Created fileUri is not the same."
                 ),
                 () -> assertEquals(
                         md5,
@@ -73,7 +73,7 @@ class AttachmentFileTest {
         var attachmentFileBuilder = AttachmentFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
+                .fileUri(fileUri)
                 .md5(md5);
         // Then throw IllegalStateException
         assertThrows(
@@ -92,7 +92,7 @@ class AttachmentFileTest {
         var attachmentFileBuilder = AttachmentFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
+                .fileUri(fileUri)
                 .md5(md5);
         // Then throw IllegalStateException
         assertThrows(
@@ -111,7 +111,7 @@ class AttachmentFileTest {
         var attachmentFileBuilder = AttachmentFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
+                .fileUri(fileUri)
                 .md5(md5);
         // Then throw IllegalStateException
         assertThrows(

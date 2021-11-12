@@ -36,7 +36,7 @@ class PostTest implements CommandLineRunner {
     private void createTestingPosts() {
         var postFactory = new PostFactory();
 
-        var userId = UUID.fromString("f08e6027-b997-452d-85a6-0cf2d5a1741e");
+        var userId = UUID.fromString("e440a70e-d9af-42c4-a4f1-38677c0c950d");
         var postId = UUID.fromString("7c2c35f3-20e9-4b7e-a455-253b7b78e2fa");
 
         sqlPostRepository.save(
@@ -71,7 +71,7 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .filename("test.psd")
                                                 .extension("PSD")
-                                                .fileUrl(new URI("/attachment/14925445-f5dc-43b9-a1a0-230cb0f10e51/furrify-horizontal.png"))
+                                                .fileUri(new URI("/attachment/14925445-f5dc-43b9-a1a0-230cb0f10e51/furrify-horizontal.png"))
                                                 .build()
                                 ))
                                 .mediaSet(Set.of(
@@ -81,8 +81,8 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .priority(1)
                                                 .extension("PNG")
-                                                .fileUrl(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/2620245.png"))
-                                                .thumbnailUrl(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/thumbnail_2620245.png"))
+                                                .fileUri(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/2620245.png"))
+                                                .thumbnailUri(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/thumbnail_2620245.png"))
                                                 .build(),
                                         PostMedia.builder()
                                                 .mediaId(
@@ -90,8 +90,8 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .priority(2)
                                                 .extension("PNG")
-                                                .fileUrl(new URI("http://localhost/media/29c02f53-486e-4205-b1b7-74977ae13941/123.png"))
-                                                .thumbnailUrl(new URI("http://localhost/media/29c02f53-486e-4205-b1b7-74977ae13941/thumbnail_123.png"))
+                                                .fileUri(new URI("/29c02f53-486e-4205-b1b7-74977ae13941/123.png"))
+                                                .thumbnailUri(new URI("/media/29c02f53-486e-4205-b1b7-74977ae13941/thumbnail_123.png"))
                                                 .build()
                                 ))
                                 .createDate(ZonedDateTime.now())
@@ -131,7 +131,7 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .filename("test.psd")
                                                 .extension("PSD")
-                                                .fileUrl(new URI("/attachment/14925445-f5dc-43b9-a1a0-230cb0f10e51/furrify-horizontal.png"))
+                                                .fileUri(new URI("/attachment/14925445-f5dc-43b9-a1a0-230cb0f10e51/furrify-horizontal.png"))
                                                 .build()
                                 ))
                                 .mediaSet(Set.of(
@@ -141,8 +141,8 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .priority(2)
                                                 .extension("PNG")
-                                                .fileUrl(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/2620245.png"))
-                                                .thumbnailUrl(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/thumbnail_2620245.png"))
+                                                .fileUri(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/2620245.png"))
+                                                .thumbnailUri(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/thumbnail_2620245.png"))
                                                 .build(),
                                         PostMedia.builder()
                                                 .mediaId(
@@ -150,8 +150,8 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .priority(1)
                                                 .extension("PNG")
-                                                .fileUrl(new URI("/media/29c02f53-486e-4205-b1b7-74977ae13941/123.png"))
-                                                .thumbnailUrl(new URI("/media/29c02f53-486e-4205-b1b7-74977ae13941/thumbnail_123.png"))
+                                                .fileUri(new URI("/media/29c02f53-486e-4205-b1b7-74977ae13941/123.png"))
+                                                .thumbnailUri(new URI("/media/29c02f53-486e-4205-b1b7-74977ae13941/thumbnail_123.png"))
                                                 .build()
                                 ))
                                 .createDate(ZonedDateTime.now())

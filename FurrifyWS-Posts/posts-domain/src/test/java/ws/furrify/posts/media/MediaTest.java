@@ -33,8 +33,8 @@ class MediaTest {
                 .priority(3)
                 .filename("file.png")
                 .md5("3c518eeb674c71b30297f072fde7eba5")
-                .fileUrl(new URI("/test"))
-                .thumbnailUrl(new URI("/test"))
+                .fileUri(new URI("/test"))
+                .thumbnailUri(new URI("/test"))
                 .extension(MediaExtension.PNG)
                 .sources(Collections.singleton(
                         new MediaSource(

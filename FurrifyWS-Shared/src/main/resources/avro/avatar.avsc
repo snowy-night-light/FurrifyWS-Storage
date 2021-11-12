@@ -24,13 +24,13 @@
         "doc": "Avatar filename enum field name."
       },
       {
-        "name": "fileUrl",
+        "name": "fileUri",
         "type": [
           "null",
           "string"
         ],
         "default": null,
-        "doc": "Avatar file URL."
+        "doc": "Avatar file URI."
       },
       {
         "name": "md5",
@@ -42,7 +42,7 @@
         "doc": "Avatar file MD5 hash."
       },
       {
-        "name": "thumbnailUrl",
+        "name": "thumbnailUri",
         "type": [
           "null",
           "string"

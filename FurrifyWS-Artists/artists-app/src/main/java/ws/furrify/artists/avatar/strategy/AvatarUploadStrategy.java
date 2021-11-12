@@ -17,8 +17,8 @@ public interface AvatarUploadStrategy {
 
     @Value
     class UploadedAvatarFile {
-        URI fileUrl;
-        URI thumbnailUrl;
+        URI fileUri;
+        URI thumbnailUri;
     }
 
 }

@@ -24,7 +24,7 @@ public interface AttachmentDetailsQueryDTO extends Serializable {
 
     AttachmentExtension getExtension();
 
-    URI getFileUrl();
+    URI getFileUri();
 
     String getMd5();
 

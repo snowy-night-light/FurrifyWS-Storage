@@ -49,7 +49,7 @@ class AttachmentFacadeTest {
                 .attachmentId(UUID.randomUUID())
                 .extension(AttachmentExtension.PSD)
                 .filename("example.psd")
-                .fileUrl(new URI("/test"))
+                .fileUri(new URI("/test"))
                 .md5("3c518eeb674c71b30297f072fde7eba5")
                 .createDate(ZonedDateTime.now())
                 .build();

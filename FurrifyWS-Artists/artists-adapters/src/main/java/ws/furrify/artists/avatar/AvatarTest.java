@@ -31,7 +31,7 @@ class AvatarTest implements CommandLineRunner {
     private void createTestingArtists() {
         var avatarFactory = new AvatarFactory();
 
-        var userId = UUID.fromString("f08e6027-b997-452d-85a6-0cf2d5a1741e");
+        var userId = UUID.fromString("e440a70e-d9af-42c4-a4f1-38677c0c950d");
         var artistId = UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00");
         var avatarId = UUID.fromString("4d482df8-7380-4164-96ef-58f3796d8f27");
 
@@ -43,8 +43,8 @@ class AvatarTest implements CommandLineRunner {
                                 .ownerId(userId)
                                 .extension(AvatarExtension.PNG)
                                 .filename("test.png")
-                                .fileUrl(new URI("/test"))
-                                .thumbnailUrl(new URI("/test"))
+                                .fileUri(new URI("/test"))
+                                .thumbnailUri(new URI("/test"))
                                 .md5("3c518eeb674c71b30297f072fde7eba5")
                                 .createDate(ZonedDateTime.now())
                                 .build()

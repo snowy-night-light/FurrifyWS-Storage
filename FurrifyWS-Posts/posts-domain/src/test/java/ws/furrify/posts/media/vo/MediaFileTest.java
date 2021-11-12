@@ -16,29 +16,29 @@ class MediaFileTest {
 
     private static String filename;
     private static MediaExtension extension;
-    private static URI fileUrl;
-    private static URI thumbnailUrl;
+    private static URI fileUri;
+    private static URI thumbnailUri;
     private static String md5;
 
     @BeforeAll
     static void setUp() throws URISyntaxException {
         filename = "test.png";
         extension = MediaExtension.PNG;
-        fileUrl = new URI("/test");
-        thumbnailUrl = new URI("/test");
+        fileUri = new URI("/test");
+        thumbnailUri = new URI("/test");
         md5 = "3c518eeb674c71b30297f072fde7eba5";
     }
 
     @Test
     @DisplayName("Create MediaFile")
     void of() {
-        // Given filename, extension, fileUrl, thumbnailUrl and md5
+        // Given filename, extension, fileUri, thumbnailUri and md5
         // When builder build
         var mediaFile = MediaFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
-                .thumbnailUrl(thumbnailUrl)
+                .fileUri(fileUri)
+                .thumbnailUri(thumbnailUri)
                 .md5(md5)
                 .build();
         // Then return created MediaFile
@@ -54,14 +54,14 @@ class MediaFileTest {
                         "Created extension is not the same."
                 ),
                 () -> assertEquals(
-                        fileUrl,
-                        mediaFile.getFileUrl(),
-                        "Created fileUrl is not the same."
+                        fileUri,
+                        mediaFile.getFileUri(),
+                        "Created fileUri is not the same."
                 ),
                 () -> assertEquals(
-                        thumbnailUrl,
-                        mediaFile.getThumbnailUrl(),
-                        "Created thumbnailUrl is not the same."
+                        thumbnailUri,
+                        mediaFile.getThumbnailUri(),
+                        "Created thumbnailUri is not the same."
                 ),
                 () -> assertEquals(
                         md5,
@@ -80,8 +80,8 @@ class MediaFileTest {
         var mediaFileBuilder = MediaFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
-                .thumbnailUrl(thumbnailUrl)
+                .fileUri(fileUri)
+                .thumbnailUri(thumbnailUri)
                 .md5(md5);
         // Then throw IllegalStateException
         assertThrows(
@@ -100,8 +100,8 @@ class MediaFileTest {
         var mediaFileBuilder = MediaFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
-                .thumbnailUrl(thumbnailUrl)
+                .fileUri(fileUri)
+                .thumbnailUri(thumbnailUri)
                 .md5(md5);
         // Then throw IllegalStateException
         assertThrows(
@@ -120,8 +120,8 @@ class MediaFileTest {
         var mediaFileBuilder = MediaFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
-                .thumbnailUrl(thumbnailUrl)
+                .fileUri(fileUri)
+                .thumbnailUri(thumbnailUri)
                 .md5(md5);
         // Then throw IllegalStateException
         assertThrows(

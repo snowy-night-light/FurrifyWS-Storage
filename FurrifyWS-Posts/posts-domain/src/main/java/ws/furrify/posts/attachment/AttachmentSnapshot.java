@@ -35,7 +35,7 @@ class AttachmentSnapshot {
 
     private AttachmentExtension extension;
 
-    private URI fileUrl;
+    private URI fileUri;
 
     private Set<AttachmentSource> sources;
 

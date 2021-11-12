@@ -18,8 +18,8 @@ final class AvatarFactory {
                 .filename(avatarDTO.getFilename())
                 .md5(avatarDTO.getMd5())
                 .extension(avatarDTO.getExtension())
-                .fileUrl(avatarDTO.getFileUrl())
-                .thumbnailUrl(avatarDTO.getThumbnailUrl())
+                .fileUri(avatarDTO.getFileUri())
+                .thumbnailUri(avatarDTO.getThumbnailUri())
                 .createDate(
                         (avatarDTO.getCreateDate() != null) ? avatarDTO.getCreateDate() : ZonedDateTime.now()
                 )

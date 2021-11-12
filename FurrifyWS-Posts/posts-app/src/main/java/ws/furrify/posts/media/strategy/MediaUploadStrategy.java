@@ -20,8 +20,8 @@ public interface MediaUploadStrategy {
 
     @Value
     class UploadedMediaFile {
-        URI fileUrl;
-        URI thumbnailUrl;
+        URI fileUri;
+        URI thumbnailUri;
     }
 
 }

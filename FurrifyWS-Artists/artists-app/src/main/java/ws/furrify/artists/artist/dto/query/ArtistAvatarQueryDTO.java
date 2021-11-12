@@ -11,9 +11,9 @@ public interface ArtistAvatarQueryDTO extends Serializable {
 
     UUID getAvatarId();
 
-    URI getFileUrl();
+    URI getFileUri();
 
-    String getThumbnailUrl();
+    String getThumbnailUri();
 
     String getExtension();
 }

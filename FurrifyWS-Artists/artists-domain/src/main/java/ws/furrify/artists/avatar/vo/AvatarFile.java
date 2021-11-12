@@ -28,9 +28,9 @@ public class AvatarFile {
     private AvatarExtension extension;
 
     @NonNull
-    private URI fileUrl;
+    private URI fileUri;
     @NonNull
-    private URI thumbnailUrl;
+    private URI thumbnailUri;
 
     @NonNull
     private String md5;
@@ -42,8 +42,8 @@ public class AvatarFile {
     @Builder
     private AvatarFile(@NonNull final String filename,
                        @NonNull final AvatarExtension extension,
-                       @NonNull final URI fileUrl,
-                       @NonNull final URI thumbnailUrl,
+                       @NonNull final URI fileUri,
+                       @NonNull final URI thumbnailUri,
                        @NonNull final String md5) {
 
         // Validate given values
@@ -66,8 +66,8 @@ public class AvatarFile {
 
         this.filename = filename;
         this.extension = extension;
-        this.fileUrl = fileUrl;
-        this.thumbnailUrl = thumbnailUrl;
+        this.fileUri = fileUri;
+        this.thumbnailUri = thumbnailUri;
         this.md5 = md5;
     }
 }

@@ -51,8 +51,8 @@ class AvatarFacadeTest {
                 .artistId(UUID.randomUUID())
                 .extension(AvatarExtension.PNG)
                 .filename("yes.png")
-                .fileUrl(new URI("/test"))
-                .thumbnailUrl(new URI("/test"))
+                .fileUri(new URI("/test"))
+                .thumbnailUri(new URI("/test"))
                 .md5("3c518eeb674c71b30297f072fde7eba5")
                 .createDate(ZonedDateTime.now())
                 .build();

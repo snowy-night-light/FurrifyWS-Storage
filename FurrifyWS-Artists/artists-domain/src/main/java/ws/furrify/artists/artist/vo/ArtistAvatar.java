@@ -29,10 +29,10 @@ public class ArtistAvatar {
     private UUID avatarId;
 
     @NonNull
-    private URL fileUrl;
+    private URL fileUri;
 
     @NonNull
-    private URL thumbnailUrl;
+    private URL thumbnailUri;
 
     @NonNull
     private String extension;

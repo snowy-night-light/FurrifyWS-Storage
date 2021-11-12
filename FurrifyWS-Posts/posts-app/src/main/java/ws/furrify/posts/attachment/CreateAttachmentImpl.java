@@ -74,7 +74,7 @@ final class CreateAttachmentImpl implements CreateAttachment {
                 .postId(postId)
                 .ownerId(userId)
                 .filename(attachmentFile.getOriginalFilename())
-                .fileUrl(uploadedAttachmentFile.getFileUrl())
+                .fileUri(uploadedAttachmentFile.getFileUri())
                 .md5(md5)
                 .createDate(ZonedDateTime.now())
                 .build();

@@ -46,10 +46,10 @@ class Media {
                 MediaPriority.of(mediaSnapshot.getPriority()),
                 MediaFile.builder()
                         .extension(mediaSnapshot.getExtension())
-                        .thumbnailUrl(mediaSnapshot.getThumbnailUrl())
+                        .thumbnailUri(mediaSnapshot.getThumbnailUri())
                         .filename(mediaSnapshot.getFilename())
                         .md5(mediaSnapshot.getMd5())
-                        .fileUrl(mediaSnapshot.getFileUrl())
+                        .fileUri(mediaSnapshot.getFileUri())
                         .build(),
                 new HashSet<>(mediaSnapshot.getSources()),
                 mediaSnapshot.getCreateDate()
@@ -64,10 +64,10 @@ class Media {
                 .ownerId(ownerId)
                 .priority(priority.getPriority())
                 .extension(file.getExtension())
-                .thumbnailUrl(file.getThumbnailUrl())
+                .thumbnailUri(file.getThumbnailUri())
                 .filename(file.getFilename())
                 .md5(file.getMd5())
-                .fileUrl(file.getFileUrl())
+                .fileUri(file.getFileUri())
                 .sources(sources.stream().collect(Collectors.toUnmodifiableSet()))
                 .createDate(createDate)
                 .build();

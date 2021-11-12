@@ -47,15 +47,15 @@ public class MediaDtoFactory {
                                 null
                 )
                 .filename(mediaEvent.getData().getFilename())
-                .fileUrl(
-                        (mediaEvent.getData().getFileUrl() != null) ?
-                                new URI(mediaEvent.getData().getFileUrl()) :
+                .fileUri(
+                        (mediaEvent.getData().getFileUri() != null) ?
+                                new URI(mediaEvent.getData().getFileUri()) :
                                 null
                 )
                 .md5(mediaEvent.getData().getMd5())
-                .thumbnailUrl(
-                        (mediaEvent.getData().getThumbnailUrl() != null) ?
-                                new URI(mediaEvent.getData().getThumbnailUrl()) :
+                .thumbnailUri(
+                        (mediaEvent.getData().getThumbnailUri() != null) ?
+                                new URI(mediaEvent.getData().getThumbnailUri()) :
                                 null
 
                 )

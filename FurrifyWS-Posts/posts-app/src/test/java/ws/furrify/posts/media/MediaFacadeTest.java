@@ -50,8 +50,8 @@ class MediaFacadeTest {
                 .priority(0)
                 .extension(MediaExtension.PNG)
                 .filename("yes.png")
-                .fileUrl(new URI("/media"))
-                .thumbnailUrl(new URI("/media"))
+                .fileUri(new URI("/media"))
+                .thumbnailUri(new URI("/media"))
                 .md5("3c518eeb674c71b30297f072fde7eba5")
                 .createDate(ZonedDateTime.now())
                 .build();

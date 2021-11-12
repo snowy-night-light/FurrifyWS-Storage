@@ -56,8 +56,8 @@ class ArtistTest {
                         ArtistAvatar.builder()
                                 .avatarId(UUID.randomUUID())
                                 .extension("PNG")
-                                .fileUrl(new URL("https://example.com/"))
-                                .thumbnailUrl(new URL("https://example.com/"))
+                                .fileUri(new URL("https://example.com/"))
+                                .thumbnailUri(new URL("https://example.com/"))
                                 .build()
                 )
                 .createDate(ZonedDateTime.now())
@@ -284,8 +284,8 @@ class ArtistTest {
         ArtistAvatar artistAvatar = ArtistAvatar.builder()
                 .avatarId(UUID.randomUUID())
                 .extension("PNG")
-                .fileUrl(new URL("https://example.com/"))
-                .thumbnailUrl(new URL("https://example.com/"))
+                .fileUri(new URL("https://example.com/"))
+                .thumbnailUri(new URL("https://example.com/"))
                 .build();
         // When addAvatar() method called
         // Then add avatar to artist

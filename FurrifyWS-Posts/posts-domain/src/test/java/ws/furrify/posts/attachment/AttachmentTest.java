@@ -30,7 +30,7 @@ class AttachmentTest {
                 .postId(UUID.randomUUID())
                 .ownerId(UUID.randomUUID())
                 .filename("file.psd")
-                .fileUrl(new URI("/test"))
+                .fileUri(new URI("/test"))
                 .md5("3c518eeb674c71b30297f072fde7eba5")
                 .extension(AttachmentExtension.PSD)
                 .sources(Collections.singleton(

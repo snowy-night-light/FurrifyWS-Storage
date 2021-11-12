@@ -82,8 +82,8 @@ final class CreateAvatarImpl implements CreateAvatar {
                 .artistId(artistId)
                 .ownerId(userId)
                 .filename(avatarFile.getOriginalFilename())
-                .fileUrl(uploadedAvatarFile.getFileUrl())
-                .thumbnailUrl(uploadedAvatarFile.getThumbnailUrl())
+                .fileUri(uploadedAvatarFile.getFileUri())
+                .thumbnailUri(uploadedAvatarFile.getThumbnailUri())
                 .md5(md5)
                 .createDate(ZonedDateTime.now())
                 .build();

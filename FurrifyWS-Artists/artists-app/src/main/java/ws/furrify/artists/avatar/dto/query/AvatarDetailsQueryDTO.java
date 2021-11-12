@@ -22,9 +22,9 @@ public interface AvatarDetailsQueryDTO extends Serializable {
 
     AvatarExtension getExtension();
 
-    URI getFileUrl();
+    URI getFileUri();
 
-    URI getThumbnailUrl();
+    URI getThumbnailUri();
 
     String getMd5();
 

@@ -28,7 +28,7 @@ public class AttachmentFile {
     private AttachmentExtension extension;
 
     @NonNull
-    private URI fileUrl;
+    private URI fileUri;
 
     @NonNull
     private String md5;
@@ -41,7 +41,7 @@ public class AttachmentFile {
     @Builder
     private AttachmentFile(@NonNull final String filename,
                            @NonNull final AttachmentExtension extension,
-                           @NonNull final URI fileUrl,
+                           @NonNull final URI fileUri,
                            @NonNull final String md5) {
 
         // Validate given values
@@ -64,7 +64,7 @@ public class AttachmentFile {
 
         this.filename = filename;
         this.extension = extension;
-        this.fileUrl = fileUrl;
+        this.fileUri = fileUri;
         this.md5 = md5;
     }
 }

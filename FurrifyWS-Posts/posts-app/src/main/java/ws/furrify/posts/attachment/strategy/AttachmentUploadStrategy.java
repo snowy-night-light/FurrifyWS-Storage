@@ -17,7 +17,7 @@ public interface AttachmentUploadStrategy {
 
     @Value
     class UploadedAttachmentFile {
-        URI fileUrl;
+        URI fileUri;
     }
 
 }

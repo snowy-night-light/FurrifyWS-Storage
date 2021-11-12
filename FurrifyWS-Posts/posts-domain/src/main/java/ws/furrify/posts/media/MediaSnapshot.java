@@ -37,8 +37,8 @@ class MediaSnapshot {
 
     private MediaExtension extension;
 
-    private URI fileUrl;
-    private URI thumbnailUrl;
+    private URI fileUri;
+    private URI thumbnailUri;
 
     private Set<MediaSource> sources;
 
