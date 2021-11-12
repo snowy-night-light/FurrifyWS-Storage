@@ -105,8 +105,9 @@ final public class MediaFacade {
     public UUID createMedia(final UUID userId,
                             final UUID postId,
                             final MediaDTO mediaDTO,
-                            final MultipartFile mediaFile) {
-        return createMediaImpl.createMedia(userId, postId, mediaDTO, mediaFile);
+                            final MultipartFile mediaFile,
+                            final MultipartFile thumbnailFile) {
+        return createMediaImpl.createMedia(userId, postId, mediaDTO, mediaFile, thumbnailFile);
     }
 
     /**

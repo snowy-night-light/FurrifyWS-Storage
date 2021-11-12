@@ -46,7 +46,10 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
     private final static String THUMBNAIL_EXTENSION = ".jpg";
 
     @Override
-    public UploadedMediaFile uploadMediaWithGeneratedThumbnail(final UUID mediaId, final MediaExtension extension, final MultipartFile fileSource) {
+    public UploadedMediaFile uploadMediaWithGeneratedThumbnail(final UUID mediaId,
+                                                               final MediaExtension extension,
+                                                               final MultipartFile fileSource) {
+
         try (
                 // Generate thumbnail
                 InputStream thumbnailInputStream = MediaUploadStrategyUtils.generateThumbnail(
@@ -59,56 +62,11 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
                 InputStream mediaInputStream = fileSource.getInputStream()
         ) {
 
-            // Check if filename is not null
-            if (fileSource.getOriginalFilename() == null) {
-                throw new IllegalStateException("Filename cannot be empty.");
-            }
-
-            // Create files
-            File mediaFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + fileSource.getOriginalFilename());
-            // Create directories where file need to be located
-            boolean wasMediaFileCreated = mediaFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
-
-            if (!wasMediaFileCreated) {
-                throw new FileUploadCannotCreatePathException(Errors.FILE_UPLOAD_CANNOT_CREATE_PATH.getErrorMessage());
-            }
-
-            // Upload file
-            writeToFile(mediaFile, mediaInputStream);
-
-            URI fileUri = new URI(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + fileSource.getOriginalFilename());
-
-            URI thumbnailUri = null;
-
-            // If there is a thumbnail generated
-            if (thumbnailInputStream != null) {
-                // Create thumbnail filename by removing extension from original filename
-                String thumbnailFileName = THUMBNAIL_PREFIX +
-                        fileSource.getOriginalFilename().substring(
-                                0,
-                                fileSource.getOriginalFilename().lastIndexOf(".")
-                        ) + THUMBNAIL_EXTENSION;
-
-                File thumbnailFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName);
-                // Create directories where file need to be located
-                boolean wasMediaThumbnailFileCreated = thumbnailFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
-
-                if (!wasMediaThumbnailFileCreated) {
-                    throw new FileUploadCannotCreatePathException(Errors.FILE_UPLOAD_CANNOT_CREATE_PATH.getErrorMessage());
-                }
-
-                // Upload file
-                writeToFile(thumbnailFile, thumbnailInputStream);
-
-                thumbnailUri = new URI(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName);
-            }
-
-            // Return created urls
-            return new UploadedMediaFile(
-                    // Original
-                    fileUri,
-                    // Thumbnail
-                    thumbnailUri
+            return uploadFiles(
+                    mediaId,
+                    fileSource.getOriginalFilename(),
+                    mediaInputStream,
+                    thumbnailInputStream
             );
 
         } catch (IOException | URISyntaxException e) {
@@ -116,6 +74,27 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
         }
     }
 
+    @Override
+    public UploadedMediaFile uploadMedia(final UUID mediaId,
+                                         final MediaExtension extension,
+                                         final MultipartFile fileSource,
+                                         final MultipartFile thumbnailSource) {
+        try (
+                InputStream thumbnailInputStream = thumbnailSource.getInputStream();
+
+                InputStream mediaInputStream = fileSource.getInputStream()
+        ) {
+            return uploadFiles(
+                    mediaId,
+                    fileSource.getOriginalFilename(),
+                    mediaInputStream,
+                    thumbnailInputStream
+            );
+
+        } catch (IOException | URISyntaxException e) {
+            throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
+        }
+    }
 
     private void writeToFile(File file, InputStream inputStream) {
         try (OutputStream outputStream = new FileOutputStream(file)) {
@@ -125,4 +104,63 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
         }
     }
 
+    private UploadedMediaFile uploadFiles(
+            final UUID mediaId,
+            final String originalFilename,
+            final InputStream mediaInputStream,
+            final InputStream thumbnailInputStream
+    ) throws URISyntaxException {
+
+        // Check if filename is not null
+        if (originalFilename == null) {
+            throw new IllegalStateException("Filename cannot be empty.");
+        }
+
+        // Create files
+        File mediaFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + originalFilename);
+        // Create directories where file need to be located
+        boolean wasMediaFileCreated = mediaFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
+
+        if (!wasMediaFileCreated) {
+            throw new FileUploadCannotCreatePathException(Errors.FILE_UPLOAD_CANNOT_CREATE_PATH.getErrorMessage());
+        }
+
+        // Upload file
+        writeToFile(mediaFile, mediaInputStream);
+
+        URI fileUri = new URI(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + originalFilename);
+
+        URI thumbnailUri = null;
+
+        // If there is a thumbnail
+        if (thumbnailInputStream != null) {
+            // Create thumbnail filename by removing extension from original filename
+            String thumbnailFileName = THUMBNAIL_PREFIX +
+                    originalFilename.substring(
+                            0,
+                            originalFilename.lastIndexOf(".")
+                    ) + THUMBNAIL_EXTENSION;
+
+            File thumbnailFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName);
+            // Create directories where file need to be located
+            boolean wasMediaThumbnailFileCreated = thumbnailFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
+
+            if (!wasMediaThumbnailFileCreated) {
+                throw new FileUploadCannotCreatePathException(Errors.FILE_UPLOAD_CANNOT_CREATE_PATH.getErrorMessage());
+            }
+
+            // Upload file
+            writeToFile(thumbnailFile, thumbnailInputStream);
+
+            thumbnailUri = new URI(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName);
+        }
+
+        // Return created urls
+        return new UploadedMediaFile(
+                // Original
+                fileUri,
+                // Thumbnail
+                thumbnailUri
+        );
+    }
 }

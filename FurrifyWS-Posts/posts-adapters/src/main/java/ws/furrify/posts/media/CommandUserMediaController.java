@@ -40,12 +40,13 @@ class CommandUserMediaController {
                                          @PathVariable UUID postId,
                                          @RequestPart("media") @Validated MediaCreateCommandDTO mediaCreateCommandDTO,
                                          @RequestPart("file") MultipartFile mediaFile,
+                                         @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnailFile,
                                          KeycloakAuthenticationToken keycloakAuthenticationToken,
                                          HttpServletResponse response) {
         MediaDTO mediaDTO = mediaCreateCommandDTO.toDTO();
 
         response.addHeader("Id",
-                mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile).toString()
+                mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile, thumbnailFile).toString()
         );
 
         return ResponseEntity.accepted().build();

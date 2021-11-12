@@ -8,6 +8,8 @@ import ws.furrify.posts.FileUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -59,9 +61,26 @@ public enum MediaExtension {
         }
     }
 
+    public static boolean isThumbnailValid(final String filename,
+                                           final MultipartFile file) {
+        try {
+            // Get file mimetype
+            String mimeType = FileUtils.getMimeType(filename, file.getInputStream());
+
+            // Add both jpg and jpeg mime types to set
+            Set<String> allowedMimetypes = new HashSet<>(Arrays.asList(MediaExtension.JPG.getMimeTypes()));
+            allowedMimetypes.addAll(Arrays.asList(MediaExtension.JPEG.getMimeTypes()));
+
+            return allowedMimetypes.contains(mimeType);
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     public static boolean isFilenameValid(String filename) {
         return filename != null && FILENAME_PATTERN.matcher(filename).matches();
     }
+
 
     /**
      * Media type file represents.

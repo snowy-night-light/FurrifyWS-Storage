@@ -30,7 +30,8 @@ final class CreateMediaImpl implements CreateMedia {
     public UUID createMedia(@NonNull final UUID userId,
                             @NonNull final UUID postId,
                             @NonNull final MediaDTO mediaDTO,
-                            @NonNull final MultipartFile mediaFile) {
+                            @NonNull final MultipartFile mediaFile,
+                            final MultipartFile thumbnailFile) {
         if (postService.getUserPost(userId, postId) == null) {
             throw new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId.toString()));
         }
@@ -46,6 +47,15 @@ final class CreateMediaImpl implements CreateMedia {
         );
         if (!isFileContentValid) {
             throw new FileExtensionIsNotMatchingContentException(Errors.FILE_EXTENSION_IS_NOT_MATCHING_CONTENT.getErrorMessage());
+        }
+
+        // Check if thumbnail meets the requirements
+        boolean isThumbnailFileValid = MediaExtension.isThumbnailValid(
+                thumbnailFile.getOriginalFilename(),
+                thumbnailFile
+        );
+        if (!isThumbnailFileValid) {
+            throw new FileExtensionIsNotMatchingContentException(Errors.THUMBNAIL_CONTENT_IS_INVALID.getErrorMessage());
         }
 
         // Check if filename is valid
@@ -66,11 +76,19 @@ final class CreateMediaImpl implements CreateMedia {
 
         // Upload file and generate thumbnail
         MediaUploadStrategy.UploadedMediaFile uploadedMediaFile =
-                mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(
-                        mediaId,
-                        mediaDTO.getExtension(),
-                        mediaFile
-                );
+                // If thumbnail was included in request
+                (thumbnailFile != null) ?
+                        mediaUploadStrategy.uploadMedia(
+                                mediaId,
+                                mediaDTO.getExtension(),
+                                mediaFile,
+                                thumbnailFile
+                        ) :
+                        mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(
+                                mediaId,
+                                mediaDTO.getExtension(),
+                                mediaFile
+                        );
 
         // Edit mediaDTO with generated media uuid
         MediaDTO updatedMediaToCreateDTO = mediaDTO.toBuilder()
