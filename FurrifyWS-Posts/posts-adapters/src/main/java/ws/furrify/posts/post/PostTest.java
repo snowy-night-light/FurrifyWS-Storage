@@ -108,12 +108,48 @@ class PostTest implements CommandLineRunner {
                                 .description("desc")
                                 .tags(Set.of(
                                         PostTag.builder()
-                                                .value("walking2")
+                                                .value("walking1")
                                                 .type("ACTION")
                                                 .build(),
                                         PostTag.builder()
+                                                .value("walking2")
+                                                .type("AGE")
+                                                .build(),
+                                        PostTag.builder()
                                                 .value("walking3")
-                                                .type("ACTION")
+                                                .type("AMOUNT")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking4")
+                                                .type("BACKGROUND")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking5")
+                                                .type("BODY")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking6")
+                                                .type("CHARACTER")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking7")
+                                                .type("COMPANY")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking8")
+                                                .type("MOVIE")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking9")
+                                                .type("SEX")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking10")
+                                                .type("SPECIE")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking11")
+                                                .type("UNIVERSE")
                                                 .build()
                                 ))
                                 .artists(Set.of(
