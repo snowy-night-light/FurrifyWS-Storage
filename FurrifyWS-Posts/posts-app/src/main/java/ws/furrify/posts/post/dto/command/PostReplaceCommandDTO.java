@@ -48,7 +48,7 @@ public class PostReplaceCommandDTO implements CommandDTO<PostDTO> {
                 )
                 .artists(
                         artists.stream()
-                                .map(artist -> new PostArtist(artist.getArtistId(), null))
+                                .map(artist -> new PostArtist(artist.getArtistId(), null, null))
                                 .collect(Collectors.toSet())
                 )
                 .build();

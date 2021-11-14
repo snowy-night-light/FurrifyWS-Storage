@@ -227,6 +227,9 @@
             <basic name="preferredNickname">
                 <column nullable="false"/>
             </basic>
+            <basic name="thumbnailUri">
+                <column nullable="true"/>
+            </basic>
         </attributes>
     </embeddable>
 

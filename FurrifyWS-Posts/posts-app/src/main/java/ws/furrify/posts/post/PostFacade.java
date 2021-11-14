@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import ws.furrify.artists.artist.ArtistEvent;
 import ws.furrify.posts.attachment.AttachmentEvent;
+import ws.furrify.posts.avatar.AvatarEvent;
 import ws.furrify.posts.media.MediaEvent;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
@@ -144,6 +145,30 @@ public class PostFacade {
             );
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + attachmentEvent.getState() + " Topic=attachments_events");
+        }
+    }
+
+    /**
+     * Handle incoming avatar events.
+     *
+     * @param avatarEvent Avatar event instance received from kafka.
+     */
+    @SneakyThrows
+    public void handleEvent(final UUID key, final AvatarEvent avatarEvent) {
+        UUID artistId = UUID.fromString(avatarEvent.getData().getArtistId());
+
+        switch (DomainEventPublisher.AvatarEventType.valueOf(avatarEvent.getState())) {
+            case REMOVED -> deleteArtistAvatarFromPost(
+                    key,
+                    artistId
+            );
+            case CREATED -> addArtistAvatarToPost(
+                    key,
+                    artistId,
+                    new URI(avatarEvent.getData().getThumbnailUri())
+            );
+            default -> log.warning("State received from kafka is not defined. " +
+                    "State=" + avatarEvent.getState() + " Topic=avatar_events");
         }
     }
 
@@ -331,5 +356,26 @@ public class PostFacade {
         post.updateAttachmentDetailsInAttachments(postAttachment);
 
         postRepository.save(post);
+    }
+
+    private void addArtistAvatarToPost(final UUID ownerId,
+                                       final UUID artistId,
+                                       final URI thumbnailUri) {
+        postRepository.findAllByOwnerIdAndArtistIdInArtists(ownerId, artistId)
+                .forEach(post -> {
+                    post.setArtistThumbnailUri(artistId, thumbnailUri);
+
+                    postRepository.save(post);
+                });
+    }
+
+    private void deleteArtistAvatarFromPost(final UUID ownerId,
+                                            final UUID artistId) {
+        postRepository.findAllByOwnerIdAndArtistIdInArtists(ownerId, artistId)
+                .forEach(post -> {
+                    post.setArtistThumbnailUri(artistId, null);
+
+                    postRepository.save(post);
+                });
     }
 }

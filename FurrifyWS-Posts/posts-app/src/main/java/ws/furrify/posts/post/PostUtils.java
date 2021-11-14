@@ -65,7 +65,7 @@ class PostUtils {
                                     artistServiceClient.getUserArtist(ownerId, oldArtist.getArtistId())
                             ).orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(oldArtist.getArtistId())));
 
-                            return new PostArtist(artist.getArtistId(), artist.getPreferredNickname());
+                            return new PostArtist(artist.getArtistId(), artist.getPreferredNickname(), artist.getAvatar().getThumbnailUri());
                         }
                 ).collect(Collectors.toSet());
     }
@@ -107,6 +107,7 @@ class PostUtils {
                                                         PostArtistData.newBuilder()
                                                                 .setArtistId(artist.getArtistId().toString())
                                                                 .setPreferredNickname(artist.getPreferredNickname())
+                                                                .setThumbnailUri(artist.getThumbnailUri().toString())
                                                                 .build()
                                                 ).collect(Collectors.toList())
                                 )

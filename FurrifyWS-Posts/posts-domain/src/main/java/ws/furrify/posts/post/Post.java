@@ -13,6 +13,7 @@ import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.posts.post.vo.PostTitle;
 
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -136,17 +137,18 @@ class Post {
                     return new IllegalStateException("Original artistId was not found.");
                 });
 
-        // Create artist with new preferred nickname
-        PostArtist postArtist = new PostArtist(artistId, newPreferredNickname);
+        // Map updated artist with new preferred nickname
+        this.artists = this.artists.stream()
+                .map(artist -> {
+                    if (!artist.getArtistId().equals(artistId)) {
+                        return artist;
+                    }
 
-        // Filter artists to get all without old artist
-        Set<PostArtist> filteredArtists = this.artists.stream()
-                .filter(artist -> !artist.getArtistId().equals(artistId))
+                    return artist.toBuilder()
+                            .preferredNickname(newPreferredNickname)
+                            .build();
+                })
                 .collect(Collectors.toSet());
-        // Add updated artists to artists
-        filteredArtists.add(postArtist);
-
-        this.artists = filteredArtists;
     }
 
     void replaceArtists(@NonNull final Set<PostArtist> artists) {
@@ -213,5 +215,20 @@ class Post {
         filteredAttachments.add(postAttachment);
 
         this.attachments = filteredAttachments;
+    }
+
+    void setArtistThumbnailUri(@NonNull final UUID artistId,
+                               final URI thumbnailUri) {
+        this.artists = this.artists.stream()
+                .map(postArtist -> {
+                    if (!postArtist.getArtistId().equals(artistId)) {
+                        return postArtist;
+                    }
+
+                    return postArtist.toBuilder()
+                            .thumbnailUri(thumbnailUri)
+                            .build();
+                })
+                .collect(Collectors.toUnmodifiableSet());
     }
 }
