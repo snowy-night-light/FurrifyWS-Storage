@@ -51,17 +51,17 @@ public class AvatarFile {
 
         // Check if valid filename
         if (filenameWithExt.length < MINIMUM_DIVIDE_COUNT) {
-            throw new IllegalStateException("Media filename [filename=" + filename + "] must contain extension.");
+            throw new IllegalStateException("Avatar filename [filename=" + filename + "] must contain extension.");
         }
 
         // Check if filename extension matches declared
-        if (!filenameWithExt[1].equalsIgnoreCase(extension.name())) {
-            throw new IllegalStateException("Media filename [filename=" + filename + "] must be the same as declared extension.");
+        if (!filenameWithExt[filenameWithExt.length - 1].equalsIgnoreCase(extension.name())) {
+            throw new IllegalStateException("Avatar filename [filename=" + filename + "] must be the same as declared extension.");
         }
 
         // Check if MD5 hash is valid
         if (!md5.matches(MD5_HASH_PATTERN)) {
-            throw new IllegalStateException("Media file hash [hash=" + md5 + "] is not valid MD5 hash.");
+            throw new IllegalStateException("Avatar file hash [hash=" + md5 + "] is not valid MD5 hash.");
         }
 
         this.filename = filename;

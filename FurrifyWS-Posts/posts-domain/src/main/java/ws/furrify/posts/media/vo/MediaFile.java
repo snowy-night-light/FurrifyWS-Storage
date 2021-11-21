@@ -55,7 +55,7 @@ public class MediaFile {
         }
 
         // Check if filename extension matches declared
-        if (!filenameWithExt[1].equalsIgnoreCase(extension.name())) {
+        if (!filenameWithExt[filenameWithExt.length - 1].equalsIgnoreCase(extension.name())) {
             throw new IllegalStateException("Media filename [filename=" + filename + "] must be the same as declared extension.");
         }
 

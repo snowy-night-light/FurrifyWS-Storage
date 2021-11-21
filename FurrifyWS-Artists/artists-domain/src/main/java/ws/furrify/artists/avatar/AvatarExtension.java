@@ -35,7 +35,7 @@ public enum AvatarExtension {
      */
     private final MediaType type;
 
-    private final static Pattern FILENAME_PATTERN = Pattern.compile("^[\\w,\\s-]+\\.[A-Za-z1-9]{3,4}$");
+    private final static Pattern FILENAME_PATTERN = Pattern.compile("^[a-zA-Z0-9](?:[a-zA-Z0-9 ._-]*[a-zA-Z0-9])?\\.[a-zA-Z0-9_-]+$");
 
     AvatarExtension(final MediaType type, final String... mimeTypes) {
         this.mimeTypes = mimeTypes;
