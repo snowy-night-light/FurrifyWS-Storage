@@ -7,6 +7,7 @@ import ws.furrify.artists.artist.dto.ArtistDTO;
 import ws.furrify.shared.dto.CommandDTO;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -22,6 +23,7 @@ public class ArtistCreateCommandDTO implements CommandDTO<ArtistDTO> {
 
     @NotBlank
     @Size(min = 1, max = 256)
+    @Pattern(regexp = "^[a-z0-9._\\-]+$")
     String preferredNickname;
 
     @Override

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
 
+import java.util.regex.Pattern;
+
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -22,6 +24,11 @@ public class ArtistNickname {
     String nickname;
 
     /**
+     * Artist nickname regex pattern
+     */
+    public final static String PATTERN = "^[a-z0-9._\\-]+$";
+
+    /**
      * Create artist nickname from string.
      * Validate given value.
      *
@@ -36,6 +43,10 @@ public class ArtistNickname {
         if (nickname.length() < MIN_LENGTH || nickname.length() > MAX_LENGTH) {
             throw new IllegalStateException("Nickname [nickname=" + nickname + "] must be between "
                     + MIN_LENGTH + " and " + MAX_LENGTH + " but is " + nickname.length() + ".");
+        }
+
+        if (!Pattern.matches(PATTERN, nickname)) {
+            throw new IllegalStateException("Artist preferred nickname [nickname=" + nickname + "] must only consist of a-z, A-Z, \"-\", \".\" and \"_\".");
         }
 
         return new ArtistNickname(nickname);
