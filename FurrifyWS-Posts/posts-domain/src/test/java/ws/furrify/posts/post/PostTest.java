@@ -44,7 +44,7 @@ class PostTest {
                 .title("Test")
                 .description("dsa")
                 .tags(Collections.singleton(new PostTag("tag_value", "ACTION")))
-                .artists(Collections.singleton(new PostArtist(UUID.randomUUID(), "example_nickname")))
+                .artists(Collections.singleton(new PostArtist(UUID.randomUUID(), "example_nickname", new URI("/test"))))
                 .mediaSet(Collections.singleton(
                         PostMedia.builder()
                                 .mediaId(UUID.randomUUID())
@@ -209,7 +209,7 @@ class PostTest {
 
     @Test
     @DisplayName("Update artist details in artists")
-    void updateArtistDetailsInArtists() {
+    void updateArtistDetailsInArtists() throws URISyntaxException {
         // Given existing artistId and new artist preferredNickname
         UUID artistId = ((PostArtist) postSnapshot.getArtists().toArray()[0]).getArtistId();
         String newPreferredNickname = "example_nickname2";
@@ -219,7 +219,7 @@ class PostTest {
 
         assertEquals(
                 post.getSnapshot().getArtists().toArray()[0],
-                new PostArtist(artistId, newPreferredNickname),
+                new PostArtist(artistId, newPreferredNickname, new URI("/test")),
                 "Artist was not updated."
         );
     }
@@ -242,9 +242,9 @@ class PostTest {
 
     @Test
     @DisplayName("Replace artists in post")
-    void replaceArtists() {
+    void replaceArtists() throws URISyntaxException {
         // Given new artists set
-        PostArtist postArtist = new PostArtist(UUID.randomUUID(), "preferred_nickname");
+        PostArtist postArtist = new PostArtist(UUID.randomUUID(), "preferred_nickname", new URI("/t2est"));
 
         Set<PostArtist> newArtists = Collections.singleton(postArtist);
         // When replaceArtists() method called
