@@ -23,7 +23,7 @@ public class ArtistCreateCommandDTO implements CommandDTO<ArtistDTO> {
 
     @NotBlank
     @Size(min = 1, max = 256)
-    @Pattern(regexp = "^[a-z0-9._\\-]+$")
+    @Pattern(regexp = "^[A-Za-z0-9._\\-]+$")
     String preferredNickname;
 
     @Override
