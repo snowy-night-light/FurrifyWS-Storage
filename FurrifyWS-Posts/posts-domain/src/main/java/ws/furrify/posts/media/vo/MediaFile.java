@@ -43,7 +43,7 @@ public class MediaFile {
     private MediaFile(@NonNull final String filename,
                       @NonNull final MediaExtension extension,
                       @NonNull final URI fileUri,
-                      @NonNull final URI thumbnailUri,
+                      final URI thumbnailUri,
                       @NonNull final String md5) {
 
         // Validate given values

@@ -92,7 +92,9 @@ public class PostFacade {
                             )
                             .extension(mediaEvent.getData().getExtension())
                             .thumbnailUri(
-                                    new URI(mediaEvent.getData().getThumbnailUri())
+                                    (mediaEvent.getData().getThumbnailUri() == null) ?
+                                            null :
+                                            new URI(mediaEvent.getData().getThumbnailUri())
                             )
                             .priority(mediaEvent.getData().getPriority())
                             .build()

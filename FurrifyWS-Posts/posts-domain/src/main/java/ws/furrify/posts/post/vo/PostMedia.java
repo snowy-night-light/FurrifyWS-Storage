@@ -31,7 +31,6 @@ public class PostMedia {
     @NonNull
     private URI fileUri;
 
-    @NonNull
     private URI thumbnailUri;
 
     @NonNull
