@@ -59,7 +59,7 @@ public enum MediaExtension {
      */
     private final MediaType type;
 
-    private final static Pattern FILENAME_PATTERN = Pattern.compile("^[a-zA-Z0-9](?:[a-zA-Z0-9 ._-]*[a-zA-Z0-9])?\\.[a-zA-Z0-9_-]+$");
+    private final static Pattern FILENAME_PATTERN = Pattern.compile("^[a-zA-Z0-9](?:[a-zA-Z0-9() ._-]*[a-zA-Z0-9() ._-])?\\.[a-zA-Z0-9_-]+$");
 
     MediaExtension(final MediaType type, final String... mimeTypes) {
         this.mimeTypes = mimeTypes;
