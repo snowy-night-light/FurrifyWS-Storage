@@ -98,8 +98,8 @@ public class MediaUploadStrategyUtils {
 
                 Java2DFrameConverter converter = new Java2DFrameConverter();
                 /* TODO Following code is broken, it will not work for videos with broken index.
-                  Currently no fix is available until JavaCv fix is out. https://github.com/bytedeco/javacv/issues/1689 */
-                frameGrabber.setFrameNumber(frameGrabber.getLengthInFrames() / PART_OF_VIDEO_TO_THUMBNAIL);
+                  Uncomment when fix is applied. Currently no fix is available until JavaCv fix is out. https://github.com/bytedeco/javacv/issues/1689 */
+                //frameGrabber.setFrameNumber(frameGrabber.getLengthInFrames() / PART_OF_VIDEO_TO_THUMBNAIL);
 
                 Frame frame = frameGrabber.grabImage();
                 BufferedImage image = converter.convert(frame);
