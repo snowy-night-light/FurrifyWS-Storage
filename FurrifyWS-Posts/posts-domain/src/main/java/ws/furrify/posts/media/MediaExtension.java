@@ -26,7 +26,7 @@ public enum MediaExtension {
     OGG(MediaType.AUDIO, "application/ogg", "audio/ogg"),
     FLAC(MediaType.AUDIO, "audio/x-flac", "audio/flac"),
     MP3(MediaType.AUDIO, "audio/mpeg"),
-    WAV(MediaType.AUDIO, "audio/wav"),
+    WAV(MediaType.AUDIO, "audio/wav", "audio/vnd.wave", "audio/wave", "audio/x-wav"),
 
     GIF(MediaType.ANIMATION, "image/gif"),
 
