@@ -24,13 +24,13 @@
         "doc": "Attachment filename enum field name."
       },
       {
-        "name": "fileUrl",
+        "name": "fileUri",
         "type": [
           "null",
           "string"
         ],
         "default": null,
-        "doc": "Attachment file URL."
+        "doc": "Attachment file URI."
       },
       {
         "name": "md5",
@@ -42,7 +42,7 @@
         "doc": "Attachment file MD5 hash."
       },
       {
-        "name": "thumbnailUrl",
+        "name": "thumbnailUri",
         "type": [
           "null",
           "string"

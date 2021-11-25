@@ -44,7 +44,7 @@ class Attachment {
                         .extension(attachmentSnapshot.getExtension())
                         .filename(attachmentSnapshot.getFilename())
                         .md5(attachmentSnapshot.getMd5())
-                        .fileUrl(attachmentSnapshot.getFileUrl())
+                        .fileUri(attachmentSnapshot.getFileUri())
                         .build(),
                 new HashSet<>(attachmentSnapshot.getSources()),
                 attachmentSnapshot.getCreateDate()
@@ -60,7 +60,7 @@ class Attachment {
                 .extension(file.getExtension())
                 .filename(file.getFilename())
                 .md5(file.getMd5())
-                .fileUrl(file.getFileUrl())
+                .fileUri(file.getFileUri())
                 .sources(sources.stream().collect(Collectors.toUnmodifiableSet()))
                 .createDate(createDate)
                 .build();

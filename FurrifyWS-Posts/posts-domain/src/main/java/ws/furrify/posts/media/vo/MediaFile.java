@@ -7,7 +7,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import ws.furrify.posts.media.MediaExtension;
 
-import java.net.URL;
+import java.net.URI;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -28,9 +28,9 @@ public class MediaFile {
     private MediaExtension extension;
 
     @NonNull
-    private URL fileUrl;
+    private URI fileUri;
     @NonNull
-    private URL thumbnailUrl;
+    private URI thumbnailUri;
 
     @NonNull
     private String md5;
@@ -42,8 +42,8 @@ public class MediaFile {
     @Builder
     private MediaFile(@NonNull final String filename,
                       @NonNull final MediaExtension extension,
-                      @NonNull final URL fileUrl,
-                      @NonNull final URL thumbnailUrl,
+                      @NonNull final URI fileUri,
+                      final URI thumbnailUri,
                       @NonNull final String md5) {
 
         // Validate given values
@@ -55,7 +55,7 @@ public class MediaFile {
         }
 
         // Check if filename extension matches declared
-        if (!filenameWithExt[1].equalsIgnoreCase(extension.name())) {
+        if (!filenameWithExt[filenameWithExt.length - 1].equalsIgnoreCase(extension.name())) {
             throw new IllegalStateException("Media filename [filename=" + filename + "] must be the same as declared extension.");
         }
 
@@ -66,8 +66,8 @@ public class MediaFile {
 
         this.filename = filename;
         this.extension = extension;
-        this.fileUrl = fileUrl;
-        this.thumbnailUrl = thumbnailUrl;
+        this.fileUri = fileUri;
+        this.thumbnailUri = thumbnailUri;
         this.md5 = md5;
     }
 }

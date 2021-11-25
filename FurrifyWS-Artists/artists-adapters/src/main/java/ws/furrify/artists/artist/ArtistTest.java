@@ -9,7 +9,7 @@ import ws.furrify.artists.artist.dto.ArtistDTO;
 import ws.furrify.artists.artist.vo.ArtistAvatar;
 import ws.furrify.artists.artist.vo.ArtistSource;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,7 +35,7 @@ class ArtistTest implements CommandLineRunner {
     private void createTestingArtists() {
         var artistFactory = new ArtistFactory();
 
-        var userId = UUID.fromString("f08e6027-b997-452d-85a6-0cf2d5a1741e");
+        var userId = UUID.fromString("e440a70e-d9af-42c4-a4f1-38677c0c950d");
         var artistId = UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00");
         var avatarId = UUID.fromString("4d482df8-7380-4164-96ef-58f3796d8f27");
         var sourceId = UUID.fromString("02038a77-9717-4de8-a21b-3a722f158be2");
@@ -60,8 +60,8 @@ class ArtistTest implements CommandLineRunner {
                                         ArtistAvatar.builder()
                                                 .avatarId(avatarId)
                                                 .extension("PNG")
-                                                .fileUrl(new URL("https://example.com/"))
-                                                .thumbnailUrl(new URL("https://example.com/"))
+                                                .fileUri(new URI("/avatar/4d482df8-7380-4164-96ef-58f3796d8f27/image.png"))
+                                                .thumbnailUri(new URI("/avatar/4d482df8-7380-4164-96ef-58f3796d8f27/thumbnail_image.jpg"))
                                                 .build()
                                 )
                                 .createDate(ZonedDateTime.now())

@@ -19,7 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -50,8 +51,8 @@ class AvatarFacadeTest {
                 .artistId(UUID.randomUUID())
                 .extension(AvatarExtension.PNG)
                 .filename("yes.png")
-                .fileUrl(new URL("https://example.com/"))
-                .thumbnailUrl(new URL("https://example.com/"))
+                .fileUri(new URI("/test"))
+                .thumbnailUri(new URI("/test"))
                 .md5("3c518eeb674c71b30297f072fde7eba5")
                 .createDate(ZonedDateTime.now())
                 .build();
@@ -84,7 +85,7 @@ class AvatarFacadeTest {
 
     @Test
     @DisplayName("Create avatar")
-    void createAvatar() throws MalformedURLException {
+    void createAvatar() throws MalformedURLException, URISyntaxException {
         // Given ownerId, avatarDTO and multipart file
         UUID userId = UUID.randomUUID();
         UUID artistId = UUID.randomUUID();
@@ -135,8 +136,8 @@ class AvatarFacadeTest {
         // When createAvatar() method called
         when(artistServiceClient.getUserArtist(any(), any())).thenReturn(artistQueryDTO);
         when(avatarUploadStrategy.uploadAvatarWithGeneratedThumbnail(any(), any(), any())).thenReturn(new AvatarUploadStrategy.UploadedAvatarFile(
-                new URL("https://example.com"),
-                new URL("https://example.com")
+                new URI("https://example.com"),
+                new URI("https://example.com")
         ));
         // Then return generated uuid
         assertNotNull(avatarFacade.createAvatar(userId, artistId, avatarDTO, avatarFile), "AvatarId was not returned.");

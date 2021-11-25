@@ -5,6 +5,11 @@ import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+/**
+ * Prevents MySQL from having issues with storing ZonedDateTime.
+ *
+ * @author sky
+ */
 public class ZonedDateTimeAttributeConverter implements AttributeConverter<ZonedDateTime, Timestamp> {
 
     /**

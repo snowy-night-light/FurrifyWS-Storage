@@ -21,6 +21,7 @@ public enum AttachmentExtension {
     /**
      * File extensions
      */
+    SWF(AttachmentType.ADOBE_FLASH, "application/x-shockwave-flash"),
     PSD(AttachmentType.PHOTOSHOP_DOCUMENT, "image/vnd.adobe.photoshop"),
     BLEND(AttachmentType.BLENDER_PROJECT, "application/octet-stream");
 
@@ -34,23 +35,17 @@ public enum AttachmentExtension {
      */
     private final AttachmentType type;
 
-    private final static Pattern FILENAME_PATTERN = Pattern.compile("^[\\w,\\s-]+\\.[A-Za-z]{3}$");
+    private final static Pattern FILENAME_PATTERN = Pattern.compile("^[a-zA-Z0-9](?:[a-zA-Z0-9() ._-]*[a-zA-Z0-9() ._-])?\\.[a-zA-Z0-9_-]+$");
 
     AttachmentExtension(final AttachmentType type, final String... mimeTypes) {
         this.mimeTypes = mimeTypes;
         this.type = type;
     }
 
-    public static boolean isValidFile(String filename,
-                                      MultipartFile file,
-                                      AttachmentExtension attachmentExtension) {
+    public static boolean isFileContentValid(String filename,
+                                             MultipartFile file,
+                                             AttachmentExtension attachmentExtension) {
         try {
-            // Check if filename matches regex for filename
-            if (file.getOriginalFilename() == null ||
-                    !FILENAME_PATTERN.matcher(file.getOriginalFilename()).matches()) {
-                return false;
-            }
-
             // Get file mimetype
             String mimeType = FileUtils.getMimeType(filename, file.getInputStream());
 
@@ -58,6 +53,10 @@ public enum AttachmentExtension {
         } catch (IOException e) {
             return false;
         }
+    }
+
+    public static boolean isFilenameValid(String filename) {
+        return !(filename == null || !FILENAME_PATTERN.matcher(filename).matches());
     }
 
     /**
@@ -71,6 +70,10 @@ public enum AttachmentExtension {
         /**
          * Blender project file
          */
-        BLENDER_PROJECT
+        BLENDER_PROJECT,
+        /**
+         * Adobe flash file
+         */
+        ADOBE_FLASH
     }
 }

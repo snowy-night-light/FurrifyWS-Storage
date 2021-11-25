@@ -30,13 +30,13 @@
         "doc": "Media filename enum field name."
       },
       {
-        "name": "fileUrl",
+        "name": "fileUri",
         "type": [
           "null",
           "string"
         ],
         "default": null,
-        "doc": "Media file URL."
+        "doc": "Media file URI."
       },
       {
         "name": "md5",
@@ -48,13 +48,13 @@
         "doc": "Media file MD5 hash."
       },
       {
-        "name": "thumbnailUrl",
+        "name": "thumbnailUri",
         "type": [
           "null",
           "string"
         ],
         "default": null,
-        "doc": "Media file thumbnail URL."
+        "doc": "Media file thumbnail URI."
       },
       {
         "name": "ownerId",

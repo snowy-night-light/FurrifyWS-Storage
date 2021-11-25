@@ -14,7 +14,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
 /**
@@ -32,9 +33,6 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
     @Value("${REMOTE_STORAGE_ATTACHMENT_PATH:/attachment}")
     private String REMOTE_STORAGE_ATTACHMENT_PATH;
 
-    @Value("${REMOTE_STORAGE_ATTACHMENT_URL:http://localhost}")
-    private String REMOTE_STORAGE_ATTACHMENT_URL;
-
     @Override
     public UploadedAttachmentFile uploadAttachment(final UUID attachmentId, final MultipartFile fileSource) {
         try (
@@ -45,9 +43,9 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
             File attachmentFile = new File(LOCAL_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + fileSource.getOriginalFilename());
 
             // Create directories where files need to be located
-            boolean wasAttachmentFileFolderCreated = attachmentFile.getParentFile().mkdirs() || attachmentFile.getParentFile().exists();
+            boolean wasAttachmentFileCreated = attachmentFile.getParentFile().mkdirs() || attachmentFile.getParentFile().exists();
 
-            if (!wasAttachmentFileFolderCreated) {
+            if (!wasAttachmentFileCreated) {
                 throw new FileUploadCannotCreatePathException(Errors.FILE_UPLOAD_CANNOT_CREATE_PATH.getErrorMessage());
             }
 
@@ -56,10 +54,10 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
 
             // Return created urls
             return new UploadedAttachmentFile(
-                    new URL(REMOTE_STORAGE_ATTACHMENT_URL + REMOTE_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + fileSource.getOriginalFilename())
+                    new URI(REMOTE_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + fileSource.getOriginalFilename())
             );
 
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
         }
     }

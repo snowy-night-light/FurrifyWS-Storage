@@ -6,6 +6,8 @@ import ws.furrify.posts.post.PostQueryRepository;
 import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -48,9 +50,20 @@ public class PostDtoFactory {
                 )
                 .artists(
                         postEvent.getData().getArtists().stream()
-                                .map(postArtist -> new PostArtist(
-                                        UUID.fromString(postArtist.getArtistId()), postArtist.getPreferredNickname()
-                                ))
+                                .map(postArtist -> {
+                                    URI thumbnailUri;
+                                    try {
+                                        thumbnailUri = new URI(postArtist.getThumbnailUri());
+                                    } catch (NullPointerException | URISyntaxException e) {
+                                        thumbnailUri = null;
+                                    }
+
+                                    return new PostArtist(
+                                            UUID.fromString(postArtist.getArtistId()),
+                                            postArtist.getPreferredNickname(),
+                                            thumbnailUri
+                                    );
+                                })
                                 .collect(Collectors.toSet())
                 )
                 .createDate(createDate)

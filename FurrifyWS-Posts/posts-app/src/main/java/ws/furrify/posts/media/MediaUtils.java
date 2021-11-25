@@ -35,12 +35,12 @@ class MediaUtils {
                                 .setPriority(mediaSnapshot.getPriority())
                                 .setExtension(mediaSnapshot.getExtension().name())
                                 .setFilename(mediaSnapshot.getFilename())
-                                .setFileUrl(
-                                        (mediaSnapshot.getFileUrl() != null) ? mediaSnapshot.getFileUrl().toString() : null
+                                .setFileUri(
+                                        (mediaSnapshot.getFileUri() != null) ? mediaSnapshot.getFileUri().toString() : null
                                 )
                                 .setMd5(mediaSnapshot.getMd5())
-                                .setThumbnailUrl(
-                                        (mediaSnapshot.getThumbnailUrl() != null) ? mediaSnapshot.getThumbnailUrl().toString() : null
+                                .setThumbnailUri(
+                                        (mediaSnapshot.getThumbnailUri() != null) ? mediaSnapshot.getThumbnailUri().toString() : null
                                 )
                                 .setCreateDate(mediaSnapshot.getCreateDate().toInstant())
                 ).build();

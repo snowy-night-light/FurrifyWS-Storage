@@ -22,8 +22,8 @@ final class MediaFactory {
                 .filename(mediaDTO.getFilename())
                 .md5(mediaDTO.getMd5())
                 .extension(mediaDTO.getExtension())
-                .fileUrl(mediaDTO.getFileUrl())
-                .thumbnailUrl(mediaDTO.getThumbnailUrl())
+                .fileUri(mediaDTO.getFileUri())
+                .thumbnailUri(mediaDTO.getThumbnailUri())
                 .sources(
                         (mediaDTO.getSources() != null) ? mediaDTO.getSources() : new HashSet<>()
                 )

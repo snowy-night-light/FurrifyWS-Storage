@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class PostDescription {
 
     private final static short MAX_LENGTH = 1024;
-    private final static short MIN_LENGTH = 1;
+    private final static short MIN_LENGTH = 0;
 
     @NonNull
     String description;

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import ws.furrify.artists.artist.ArtistEvent;
 import ws.furrify.posts.attachment.AttachmentEvent;
 import ws.furrify.posts.attachment.AttachmentFacade;
+import ws.furrify.posts.avatar.AvatarEvent;
 import ws.furrify.posts.media.MediaEvent;
 import ws.furrify.posts.media.MediaFacade;
 import ws.furrify.posts.post.PostEvent;
@@ -74,7 +75,7 @@ class EventListenerRegistry {
         postFacade.handleEvent(UUID.fromString(key), artistEvent);
     }
 
-    @KafkaListener(topics = "media_events")
+    @KafkaListener(topics = "avatar_events")
     @Retryable(
             value = {Exception.class},
             maxAttempts = 3,
@@ -83,7 +84,22 @@ class EventListenerRegistry {
     public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
                    @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                    @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                   @Payload MediaEvent mediaEvent) {
+                   @Payload AvatarEvent avatarEvent) {
+        log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
+
+        postFacade.handleEvent(UUID.fromString(key), avatarEvent);
+    }
+
+    @KafkaListener(topics = "media_events")
+    @Retryable(
+            value = {Exception.class},
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 10_000)
+    )
+    public void onMediaEvent(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+                             @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                             @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+                             @Payload MediaEvent mediaEvent) {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
         UUID keyId = UUID.fromString(key);
@@ -98,10 +114,10 @@ class EventListenerRegistry {
             maxAttempts = 3,
             backoff = @Backoff(delay = 10_000)
     )
-    public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
-                   @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
-                   @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                   @Payload AttachmentEvent attachmentEvent) {
+    public void onAttachmentEvent(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+                                  @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                                  @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+                                  @Payload AttachmentEvent attachmentEvent) {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
         UUID keyId = UUID.fromString(key);
@@ -116,13 +132,13 @@ class EventListenerRegistry {
             maxAttempts = 3,
             backoff = @Backoff(delay = 10_000)
     )
-    public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
-                   @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
-                   @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                   @Payload SourceEvent sourceEvent) {
+    public void onSourceEvent(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+                              @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                              @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+                              @Payload SourceEvent sourceEvent) {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
-        mediaFacade.handleEvent(UUID.fromString(key), sourceEvent);
         attachmentFacade.handleEvent(UUID.fromString(key), sourceEvent);
+        mediaFacade.handleEvent(UUID.fromString(key), sourceEvent);
     }
 }

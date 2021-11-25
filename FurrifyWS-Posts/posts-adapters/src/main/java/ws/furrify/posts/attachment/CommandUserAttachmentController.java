@@ -6,19 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.attachment.dto.AttachmentDTO;
 import ws.furrify.posts.attachment.dto.command.AttachmentCreateCommandDTO;
-import ws.furrify.posts.attachment.dto.command.AttachmentReplaceCommandDTO;
-import ws.furrify.posts.attachment.dto.command.AttachmentUpdateCommandDTO;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
@@ -61,36 +56,6 @@ class CommandUserAttachmentController {
                                               @PathVariable UUID attachmentId,
                                               KeycloakAuthenticationToken keycloakAuthenticationToken) {
         attachmentFacade.deleteAttachment(userId, postId, attachmentId);
-
-        return ResponseEntity.accepted().build();
-    }
-
-    @PatchMapping("/{attachmentId}")
-    @PreAuthorize(
-            "hasRole('admin') ||" +
-                    "(hasRole('update_post_attachment') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
-    )
-    public ResponseEntity<?> updateAttachment(@PathVariable UUID userId,
-                                              @PathVariable UUID postId,
-                                              @PathVariable UUID attachmentId,
-                                              @RequestBody @Validated AttachmentUpdateCommandDTO attachmentUpdateCommandDTO,
-                                              KeycloakAuthenticationToken keycloakAuthenticationToken) {
-        attachmentFacade.updateAttachment(userId, postId, attachmentId, attachmentUpdateCommandDTO.toDTO());
-
-        return ResponseEntity.accepted().build();
-    }
-
-    @PutMapping("/{attachmentId}")
-    @PreAuthorize(
-            "hasRole('admin') ||" +
-                    "(hasRole('update_post_attachment') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
-    )
-    public ResponseEntity<?> replaceAttachment(@PathVariable UUID userId,
-                                               @PathVariable UUID postId,
-                                               @PathVariable UUID attachmentId,
-                                               @RequestBody @Validated AttachmentReplaceCommandDTO attachmentReplaceCommandDTO,
-                                               KeycloakAuthenticationToken keycloakAuthenticationToken) {
-        attachmentFacade.replaceAttachment(userId, postId, attachmentId, attachmentReplaceCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();
     }

@@ -32,10 +32,10 @@
                 <column nullable="false"/>
                 <enumerated>STRING</enumerated>
             </basic>
-            <basic name="fileUrl">
+            <basic name="fileUri">
                 <column nullable="true"/>
             </basic>
-            <basic name="thumbnailUrl">
+            <basic name="thumbnailUri">
                 <column nullable="true"/>
             </basic>
             <basic name="createDate">
@@ -74,7 +74,7 @@
                 <column nullable="false"/>
                 <enumerated>STRING</enumerated>
             </basic>
-            <basic name="fileUrl">
+            <basic name="fileUri">
                 <column nullable="true"/>
             </basic>
             <basic name="createDate">
@@ -182,13 +182,13 @@
             <basic name="priority">
                 <column nullable="false"/>
             </basic>
-            <basic name="thumbnailUrl">
+            <basic name="thumbnailUri">
                 <column nullable="true"/>
             </basic>
             <basic name="extension">
                 <column nullable="false"/>
             </basic>
-            <basic name="fileUrl">
+            <basic name="fileUri">
                 <column nullable="false"/>
             </basic>
         </attributes>
@@ -201,7 +201,7 @@
             <basic name="filename">
                 <column nullable="true"/>
             </basic>
-            <basic name="fileUrl">
+            <basic name="fileUri">
                 <column nullable="true"/>
             </basic>
             <basic name="extension">
@@ -226,6 +226,9 @@
             </basic>
             <basic name="preferredNickname">
                 <column nullable="false"/>
+            </basic>
+            <basic name="thumbnailUri">
+                <column nullable="true"/>
             </basic>
         </attributes>
     </embeddable>

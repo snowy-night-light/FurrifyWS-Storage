@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import ws.furrify.posts.attachment.AttachmentExtension;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,26 +17,26 @@ class AttachmentFileTest {
 
     private static String filename;
     private static AttachmentExtension extension;
-    private static URL fileUrl;
+    private static URI fileUri;
     private static String md5;
 
     @BeforeAll
-    static void setUp() throws MalformedURLException {
+    static void setUp() throws MalformedURLException, URISyntaxException {
         filename = "test.psd";
         extension = AttachmentExtension.PSD;
-        fileUrl = new URL("https://google.pl");
+        fileUri = new URI("/test");
         md5 = "3c518eeb674c71b30297f072fde7eba5";
     }
 
     @Test
     @DisplayName("Create AttachmentFile")
     void of() {
-        // Given filename, extension, fileUrl and md5
+        // Given filename, extension, fileUri and md5
         // When builder build
         var attachmentFile = AttachmentFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
+                .fileUri(fileUri)
                 .md5(md5)
                 .build();
         // Then return created AttachmentFile
@@ -51,9 +52,9 @@ class AttachmentFileTest {
                         "Created extension is not the same."
                 ),
                 () -> assertEquals(
-                        fileUrl,
-                        attachmentFile.getFileUrl(),
-                        "Created fileUrl is not the same."
+                        fileUri,
+                        attachmentFile.getFileUri(),
+                        "Created fileUri is not the same."
                 ),
                 () -> assertEquals(
                         md5,
@@ -72,7 +73,7 @@ class AttachmentFileTest {
         var attachmentFileBuilder = AttachmentFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
+                .fileUri(fileUri)
                 .md5(md5);
         // Then throw IllegalStateException
         assertThrows(
@@ -91,7 +92,7 @@ class AttachmentFileTest {
         var attachmentFileBuilder = AttachmentFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
+                .fileUri(fileUri)
                 .md5(md5);
         // Then throw IllegalStateException
         assertThrows(
@@ -110,7 +111,7 @@ class AttachmentFileTest {
         var attachmentFileBuilder = AttachmentFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
+                .fileUri(fileUri)
                 .md5(md5);
         // Then throw IllegalStateException
         assertThrows(

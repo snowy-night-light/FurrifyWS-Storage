@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import ws.furrify.posts.attachment.vo.AttachmentSource;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -35,7 +35,7 @@ class AttachmentSnapshot {
 
     private AttachmentExtension extension;
 
-    private URL fileUrl;
+    private URI fileUri;
 
     private Set<AttachmentSource> sources;
 

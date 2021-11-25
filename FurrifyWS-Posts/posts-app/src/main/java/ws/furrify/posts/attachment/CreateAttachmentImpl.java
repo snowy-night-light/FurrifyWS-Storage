@@ -10,6 +10,7 @@ import ws.furrify.posts.post.dto.PostServiceClient;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileExtensionIsNotMatchingContentException;
+import ws.furrify.shared.exception.FilenameIsInvalidException;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
@@ -38,14 +39,21 @@ final class CreateAttachmentImpl implements CreateAttachment {
         UUID attachmentId = UUID.randomUUID();
 
         // Check if file is matching declared extension
-        boolean isFileValid = AttachmentExtension.isValidFile(
+        boolean isFileContentValid = AttachmentExtension.isFileContentValid(
                 attachmentFile.getOriginalFilename(),
                 attachmentFile,
                 attachmentDTO.getExtension()
         );
-
-        if (!isFileValid) {
+        if (!isFileContentValid) {
             throw new FileExtensionIsNotMatchingContentException(Errors.FILE_EXTENSION_IS_NOT_MATCHING_CONTENT.getErrorMessage());
+        }
+
+        // Check if filename is valid
+        boolean isFilenameValid = AttachmentExtension.isFilenameValid(
+                attachmentFile.getOriginalFilename()
+        );
+        if (!isFilenameValid) {
+            throw new FilenameIsInvalidException(Errors.FILENAME_IS_INVALID.getErrorMessage(attachmentFile.getOriginalFilename()));
         }
 
         String md5;
@@ -66,7 +74,7 @@ final class CreateAttachmentImpl implements CreateAttachment {
                 .postId(postId)
                 .ownerId(userId)
                 .filename(attachmentFile.getOriginalFilename())
-                .fileUrl(uploadedAttachmentFile.getFileUrl())
+                .fileUri(uploadedAttachmentFile.getFileUri())
                 .md5(md5)
                 .createDate(ZonedDateTime.now())
                 .build();

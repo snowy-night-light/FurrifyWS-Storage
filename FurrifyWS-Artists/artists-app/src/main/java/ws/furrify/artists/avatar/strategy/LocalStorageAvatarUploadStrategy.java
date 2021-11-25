@@ -14,7 +14,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
 /**
@@ -26,7 +27,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
 
-    @Value("${LOCAL_STORAGE_AVATAR_PATH:/data/artist}")
+    @Value("${LOCAL_STORAGE_AVATAR_PATH:/usr/share/nginx/html/artist}")
     private String LOCAL_STORAGE_AVATAR_PATH;
 
     @Value("${REMOTE_STORAGE_AVATAR_PATH:/artist}")
@@ -40,10 +41,6 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
 
     @Value("${THUMBNAIL_PREFIX:thumbnail_}")
     private String THUMBNAIL_PREFIX;
-
-    // FIXME Url should update on all records when changed
-    @Value("${REMOTE_STORAGE_AVATAR_URL:http://localhost}")
-    private String REMOTE_STORAGE_AVATAR_URL;
 
     private final static String THUMBNAIL_EXTENSION = ".jpg";
 
@@ -76,10 +73,10 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
 
             File thumbnailFile = new File(LOCAL_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + thumbnailFileName);
             // Create directories where files need to be located
-            boolean wasAvatarFileFolderCreated = avatarFile.getParentFile().mkdirs() || avatarFile.getParentFile().exists();
-            boolean wasAvatarThumbnailFolderCreated = thumbnailFile.getParentFile().mkdirs() || avatarFile.getParentFile().exists();
+            boolean wasAvatarFileCreated = avatarFile.getParentFile().mkdirs() || avatarFile.getParentFile().exists();
+            boolean wasAvatarThumbnailFileCreated = thumbnailFile.getParentFile().mkdirs() || avatarFile.getParentFile().exists();
 
-            if (!wasAvatarFileFolderCreated || !wasAvatarThumbnailFolderCreated) {
+            if (!wasAvatarFileCreated || !wasAvatarThumbnailFileCreated) {
                 throw new FileUploadCannotCreatePathException(Errors.FILE_UPLOAD_CANNOT_CREATE_PATH.getErrorMessage());
             }
 
@@ -90,12 +87,12 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
             // Return created urls
             return new UploadedAvatarFile(
                     // Original
-                    new URL(REMOTE_STORAGE_AVATAR_URL + REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + fileSource.getOriginalFilename()),
+                    new URI(REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + fileSource.getOriginalFilename()),
                     // Thumbnail
-                    new URL(REMOTE_STORAGE_AVATAR_URL + REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + thumbnailFileName)
+                    new URI(REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + thumbnailFileName)
             );
 
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
         }
     }

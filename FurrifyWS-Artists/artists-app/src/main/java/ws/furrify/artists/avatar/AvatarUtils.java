@@ -35,12 +35,12 @@ class AvatarUtils {
                                 .setArtistId(avatarSnapshot.getArtistId().toString())
                                 .setExtension(avatarSnapshot.getExtension().name())
                                 .setFilename(avatarSnapshot.getFilename())
-                                .setFileUrl(
-                                        (avatarSnapshot.getFileUrl() != null) ? avatarSnapshot.getFileUrl().toString() : null
+                                .setFileUri(
+                                        (avatarSnapshot.getFileUri() != null) ? avatarSnapshot.getFileUri().toString() : null
                                 )
                                 .setMd5(avatarSnapshot.getMd5())
-                                .setThumbnailUrl(
-                                        (avatarSnapshot.getThumbnailUrl() != null) ? avatarSnapshot.getThumbnailUrl().toString() : null
+                                .setThumbnailUri(
+                                        (avatarSnapshot.getThumbnailUri() != null) ? avatarSnapshot.getThumbnailUri().toString() : null
                                 )
                                 .setCreateDate(avatarSnapshot.getCreateDate().toInstant())
                 ).build();

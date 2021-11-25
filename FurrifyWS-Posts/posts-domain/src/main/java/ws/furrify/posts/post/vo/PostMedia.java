@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.UUID;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -29,10 +29,9 @@ public class PostMedia {
     private Integer priority;
 
     @NonNull
-    private URL fileUrl;
+    private URI fileUri;
 
-    @NonNull
-    private URL thumbnailUrl;
+    private URI thumbnailUri;
 
     @NonNull
     private String extension;

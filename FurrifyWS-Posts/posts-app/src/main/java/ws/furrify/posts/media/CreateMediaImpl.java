@@ -10,6 +10,7 @@ import ws.furrify.posts.post.dto.PostServiceClient;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileExtensionIsNotMatchingContentException;
+import ws.furrify.shared.exception.FilenameIsInvalidException;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
@@ -29,7 +30,8 @@ final class CreateMediaImpl implements CreateMedia {
     public UUID createMedia(@NonNull final UUID userId,
                             @NonNull final UUID postId,
                             @NonNull final MediaDTO mediaDTO,
-                            @NonNull final MultipartFile mediaFile) {
+                            @NonNull final MultipartFile mediaFile,
+                            final MultipartFile thumbnailFile) {
         if (postService.getUserPost(userId, postId) == null) {
             throw new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId.toString()));
         }
@@ -38,14 +40,21 @@ final class CreateMediaImpl implements CreateMedia {
         UUID mediaId = UUID.randomUUID();
 
         // Check if file is matching declared extension
-        boolean isFileValid = MediaExtension.isValidFile(
+        boolean isFileContentValid = MediaExtension.isFileContentValid(
                 mediaFile.getOriginalFilename(),
                 mediaFile,
                 mediaDTO.getExtension()
         );
-
-        if (!isFileValid) {
+        if (!isFileContentValid) {
             throw new FileExtensionIsNotMatchingContentException(Errors.FILE_EXTENSION_IS_NOT_MATCHING_CONTENT.getErrorMessage());
+        }
+
+        // Check if filename is valid
+        boolean isFilenameValid = MediaExtension.isFilenameValid(
+                mediaFile.getOriginalFilename()
+        );
+        if (!isFilenameValid) {
+            throw new FilenameIsInvalidException(Errors.FILENAME_IS_INVALID.getErrorMessage(mediaFile.getOriginalFilename()));
         }
 
         String md5;
@@ -56,9 +65,34 @@ final class CreateMediaImpl implements CreateMedia {
             throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
         }
 
-        // Upload file and generate thumbnail
-        MediaUploadStrategy.UploadedMediaFile uploadedMediaFile =
-                mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(mediaId, mediaFile);
+        MediaUploadStrategy.UploadedMediaFile uploadedMediaFile;
+
+        // If thumbnail is present
+        if (thumbnailFile != null) {
+            // Check if thumbnail meets the requirements
+            boolean isThumbnailFileValid = MediaExtension.isThumbnailValid(
+                    thumbnailFile.getOriginalFilename(),
+                    thumbnailFile
+            );
+            if (!isThumbnailFileValid) {
+                throw new FileExtensionIsNotMatchingContentException(Errors.THUMBNAIL_CONTENT_IS_INVALID.getErrorMessage());
+            }
+
+            // Upload media with thumbnail
+            uploadedMediaFile = mediaUploadStrategy.uploadMedia(
+                    mediaId,
+                    mediaDTO.getExtension(),
+                    mediaFile,
+                    thumbnailFile
+            );
+        } else {
+            // Generate thumbnail and upload media and thumbnail
+            uploadedMediaFile = mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(
+                    mediaId,
+                    mediaDTO.getExtension(),
+                    mediaFile
+            );
+        }
 
         // Edit mediaDTO with generated media uuid
         MediaDTO updatedMediaToCreateDTO = mediaDTO.toBuilder()
@@ -66,8 +100,8 @@ final class CreateMediaImpl implements CreateMedia {
                 .postId(postId)
                 .ownerId(userId)
                 .filename(mediaFile.getOriginalFilename())
-                .fileUrl(uploadedMediaFile.getFileUrl())
-                .thumbnailUrl(uploadedMediaFile.getThumbnailUrl())
+                .fileUri(uploadedMediaFile.getFileUri())
+                .thumbnailUri(uploadedMediaFile.getThumbnailUri())
                 .md5(md5)
                 .priority(mediaDTO.getPriority())
                 .createDate(ZonedDateTime.now())

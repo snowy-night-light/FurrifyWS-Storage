@@ -7,7 +7,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import ws.furrify.posts.attachment.AttachmentExtension;
 
-import java.net.URL;
+import java.net.URI;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -28,7 +28,7 @@ public class AttachmentFile {
     private AttachmentExtension extension;
 
     @NonNull
-    private URL fileUrl;
+    private URI fileUri;
 
     @NonNull
     private String md5;
@@ -41,7 +41,7 @@ public class AttachmentFile {
     @Builder
     private AttachmentFile(@NonNull final String filename,
                            @NonNull final AttachmentExtension extension,
-                           @NonNull final URL fileUrl,
+                           @NonNull final URI fileUri,
                            @NonNull final String md5) {
 
         // Validate given values
@@ -53,7 +53,7 @@ public class AttachmentFile {
         }
 
         // Check if filename extension matches declared
-        if (!filenameWithExt[1].equalsIgnoreCase(extension.name())) {
+        if (!filenameWithExt[filenameWithExt.length - 1].equalsIgnoreCase(extension.name())) {
             throw new IllegalStateException("Attachment filename [filename=" + filename + "] must be the same as declared extension.");
         }
 
@@ -64,7 +64,7 @@ public class AttachmentFile {
 
         this.filename = filename;
         this.extension = extension;
-        this.fileUrl = fileUrl;
+        this.fileUri = fileUri;
         this.md5 = md5;
     }
 }

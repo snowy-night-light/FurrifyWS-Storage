@@ -11,7 +11,7 @@ import ws.furrify.posts.post.vo.PostAttachment;
 import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Set;
@@ -36,7 +36,7 @@ class PostTest implements CommandLineRunner {
     private void createTestingPosts() {
         var postFactory = new PostFactory();
 
-        var userId = UUID.fromString("f08e6027-b997-452d-85a6-0cf2d5a1741e");
+        var userId = UUID.fromString("e440a70e-d9af-42c4-a4f1-38677c0c950d");
         var postId = UUID.fromString("7c2c35f3-20e9-4b7e-a455-253b7b78e2fa");
 
         sqlPostRepository.save(
@@ -62,6 +62,7 @@ class PostTest implements CommandLineRunner {
                                                         UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00")
                                                 )
                                                 .preferredNickname("test_nickname")
+                                                .thumbnailUri(new URI("/avatar/4d482df8-7380-4164-96ef-58f3796d8f27/thumbnail_image.jpg"))
                                                 .build()
                                 ))
                                 .attachments(Set.of(
@@ -71,7 +72,7 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .filename("test.psd")
                                                 .extension("PSD")
-                                                .fileUrl(new URL("http://localhost/attachment/14925445-f5dc-43b9-a1a0-230cb0f10e51/furrify-horizontal.png"))
+                                                .fileUri(new URI("/attachment/14925445-f5dc-43b9-a1a0-230cb0f10e51/furrify-horizontal.png"))
                                                 .build()
                                 ))
                                 .mediaSet(Set.of(
@@ -81,8 +82,8 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .priority(1)
                                                 .extension("PNG")
-                                                .fileUrl(new URL("http://localhost/media/19c02f53-486e-4205-b1b7-74977ae13941/2620245.png"))
-                                                .thumbnailUrl(new URL("http://localhost/media/19c02f53-486e-4205-b1b7-74977ae13941/thumbnail_2620245.png"))
+                                                .fileUri(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/2620245.png"))
+                                                .thumbnailUri(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/thumbnail_2620245.png"))
                                                 .build(),
                                         PostMedia.builder()
                                                 .mediaId(
@@ -90,8 +91,8 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .priority(2)
                                                 .extension("PNG")
-                                                .fileUrl(new URL("http://localhost/media/29c02f53-486e-4205-b1b7-74977ae13941/123.png"))
-                                                .thumbnailUrl(new URL("http://localhost/media/29c02f53-486e-4205-b1b7-74977ae13941/thumbnail_123.png"))
+                                                .fileUri(new URI("/media/29c02f53-486e-4205-b1b7-74977ae13941/123.png"))
+                                                .thumbnailUri(new URI("/media/29c02f53-486e-4205-b1b7-74977ae13941/thumbnail_123.png"))
                                                 .build()
                                 ))
                                 .createDate(ZonedDateTime.now())
@@ -108,12 +109,48 @@ class PostTest implements CommandLineRunner {
                                 .description("desc")
                                 .tags(Set.of(
                                         PostTag.builder()
-                                                .value("walking2")
+                                                .value("walking1")
                                                 .type("ACTION")
                                                 .build(),
                                         PostTag.builder()
+                                                .value("walking2")
+                                                .type("AGE")
+                                                .build(),
+                                        PostTag.builder()
                                                 .value("walking3")
-                                                .type("ACTION")
+                                                .type("AMOUNT")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking4")
+                                                .type("BACKGROUND")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking5")
+                                                .type("BODY")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking6")
+                                                .type("CHARACTER")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking7")
+                                                .type("COMPANY")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking8")
+                                                .type("MOVIE")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking9")
+                                                .type("SEX")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking10")
+                                                .type("SPECIE")
+                                                .build(),
+                                        PostTag.builder()
+                                                .value("walking11")
+                                                .type("UNIVERSE")
                                                 .build()
                                 ))
                                 .artists(Set.of(
@@ -122,6 +159,7 @@ class PostTest implements CommandLineRunner {
                                                         UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00")
                                                 )
                                                 .preferredNickname("test_nickname")
+                                                .thumbnailUri(new URI("/avatar/4d482df8-7380-4164-96ef-58f3796d8f27/thumbnail_image.jpg"))
                                                 .build()
                                 ))
                                 .attachments(Set.of(
@@ -131,7 +169,7 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .filename("test.psd")
                                                 .extension("PSD")
-                                                .fileUrl(new URL("http://localhost/attachment/14925445-f5dc-43b9-a1a0-230cb0f10e51/furrify-horizontal.png"))
+                                                .fileUri(new URI("/attachment/14925445-f5dc-43b9-a1a0-230cb0f10e51/furrify-horizontal.png"))
                                                 .build()
                                 ))
                                 .mediaSet(Set.of(
@@ -141,8 +179,8 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .priority(2)
                                                 .extension("PNG")
-                                                .fileUrl(new URL("http://localhost/media/19c02f53-486e-4205-b1b7-74977ae13941/2620245.png"))
-                                                .thumbnailUrl(new URL("http://localhost/media/19c02f53-486e-4205-b1b7-74977ae13941/thumbnail_2620245.png"))
+                                                .fileUri(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/2620245.png"))
+                                                .thumbnailUri(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/thumbnail_2620245.png"))
                                                 .build(),
                                         PostMedia.builder()
                                                 .mediaId(
@@ -150,14 +188,113 @@ class PostTest implements CommandLineRunner {
                                                 )
                                                 .priority(1)
                                                 .extension("PNG")
-                                                .fileUrl(new URL("http://localhost/media/29c02f53-486e-4205-b1b7-74977ae13941/123.png"))
-                                                .thumbnailUrl(new URL("http://localhost/media/29c02f53-486e-4205-b1b7-74977ae13941/thumbnail_123.png"))
+                                                .fileUri(new URI("/media/29c02f53-486e-4205-b1b7-74977ae13941/123.png"))
+                                                .thumbnailUri(new URI("/media/29c02f53-486e-4205-b1b7-74977ae13941/thumbnail_123.png"))
                                                 .build()
                                 ))
                                 .createDate(ZonedDateTime.now())
                                 .build()
                 ).getSnapshot()
         );
+
+        for (int i = 0; i < 100; i++) {
+            sqlPostRepository.save(
+                    postFactory.from(
+                            PostDTO.builder()
+                                    .postId(UUID.randomUUID())
+                                    .ownerId(userId)
+                                    .title("title2")
+                                    .description("desc")
+                                    .tags(Set.of(
+                                            PostTag.builder()
+                                                    .value("walking1")
+                                                    .type("ACTION")
+                                                    .build(),
+                                            PostTag.builder()
+                                                    .value("walking2")
+                                                    .type("AGE")
+                                                    .build(),
+                                            PostTag.builder()
+                                                    .value("walking3")
+                                                    .type("AMOUNT")
+                                                    .build(),
+                                            PostTag.builder()
+                                                    .value("walking4")
+                                                    .type("BACKGROUND")
+                                                    .build(),
+                                            PostTag.builder()
+                                                    .value("walking5")
+                                                    .type("BODY")
+                                                    .build(),
+                                            PostTag.builder()
+                                                    .value("walking6")
+                                                    .type("CHARACTER")
+                                                    .build(),
+                                            PostTag.builder()
+                                                    .value("walking7")
+                                                    .type("COMPANY")
+                                                    .build(),
+                                            PostTag.builder()
+                                                    .value("walking8")
+                                                    .type("MOVIE")
+                                                    .build(),
+                                            PostTag.builder()
+                                                    .value("walking9")
+                                                    .type("SEX")
+                                                    .build(),
+                                            PostTag.builder()
+                                                    .value("walking10")
+                                                    .type("SPECIE")
+                                                    .build(),
+                                            PostTag.builder()
+                                                    .value("walking11")
+                                                    .type("UNIVERSE")
+                                                    .build()
+                                    ))
+                                    .artists(Set.of(
+                                            PostArtist.builder()
+                                                    .artistId(
+                                                            UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00")
+                                                    )
+                                                    .preferredNickname("test_nickname")
+                                                    .thumbnailUri(new URI("/avatar/4d482df8-7380-4164-96ef-58f3796d8f27/thumbnail_image.jpg"))
+                                                    .build()
+                                    ))
+                                    .attachments(Set.of(
+                                            PostAttachment.builder()
+                                                    .attachmentId(
+                                                            UUID.fromString("14925445-f5dc-43b9-a1a0-230cb0f10e51")
+                                                    )
+                                                    .filename("test.psd")
+                                                    .extension("PSD")
+                                                    .fileUri(new URI("/attachment/14925445-f5dc-43b9-a1a0-230cb0f10e51/furrify-horizontal.png"))
+                                                    .build()
+                                    ))
+                                    .mediaSet(Set.of(
+                                            PostMedia.builder()
+                                                    .mediaId(
+                                                            UUID.fromString("19c02f53-486e-4205-b1b7-74977ae13941")
+                                                    )
+                                                    .priority(2)
+                                                    .extension("PNG")
+                                                    .fileUri(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/2620245.png"))
+                                                    .thumbnailUri(new URI("/media/19c02f53-486e-4205-b1b7-74977ae13941/thumbnail_2620245.png"))
+                                                    .build(),
+                                            PostMedia.builder()
+                                                    .mediaId(
+                                                            UUID.fromString("29c02f53-486e-4205-b1b7-74977ae13941")
+                                                    )
+                                                    .priority(1)
+                                                    .extension("PNG")
+                                                    .fileUri(new URI("/media/29c02f53-486e-4205-b1b7-74977ae13941/123.png"))
+                                                    .thumbnailUri(new URI("/media/29c02f53-486e-4205-b1b7-74977ae13941/thumbnail_123.png"))
+                                                    .build()
+                                    ))
+                                    .createDate(ZonedDateTime.now())
+                                    .build()
+                    ).getSnapshot()
+            );
+        }
 
         System.out.println("UserId: " + userId);
         System.out.println("PostId: " + postId);

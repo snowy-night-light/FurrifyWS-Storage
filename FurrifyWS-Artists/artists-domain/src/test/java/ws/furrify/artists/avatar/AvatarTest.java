@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -26,8 +26,8 @@ class AvatarTest {
                 .ownerId(UUID.randomUUID())
                 .filename("file.png")
                 .md5("3c518eeb674c71b30297f072fde7eba5")
-                .fileUrl(new URL("https://example.com/"))
-                .thumbnailUrl(new URL("https://example.com/"))
+                .fileUri(new URI("/test"))
+                .thumbnailUri(new URI("/test"))
                 .extension(AvatarExtension.PNG)
                 .createDate(ZonedDateTime.now())
                 .build();

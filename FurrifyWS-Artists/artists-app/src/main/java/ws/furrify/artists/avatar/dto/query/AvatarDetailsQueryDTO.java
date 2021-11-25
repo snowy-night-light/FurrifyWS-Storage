@@ -3,7 +3,7 @@ package ws.furrify.artists.avatar.dto.query;
 import ws.furrify.artists.avatar.AvatarExtension;
 
 import java.io.Serializable;
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -22,9 +22,9 @@ public interface AvatarDetailsQueryDTO extends Serializable {
 
     AvatarExtension getExtension();
 
-    URL getFileUrl();
+    URI getFileUri();
 
-    URL getThumbnailUrl();
+    URI getThumbnailUri();
 
     String getMd5();
 

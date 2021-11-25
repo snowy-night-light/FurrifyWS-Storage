@@ -13,6 +13,7 @@ import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
+import java.net.URI;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.Set;
@@ -65,7 +66,11 @@ class PostUtils {
                                     artistServiceClient.getUserArtist(ownerId, oldArtist.getArtistId())
                             ).orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(oldArtist.getArtistId())));
 
-                            return new PostArtist(artist.getArtistId(), artist.getPreferredNickname());
+                            final ArtistDetailsQueryDTO.ArtistAvatar avatar = artist.getAvatar();
+                            // Check if avatar exists
+                            URI thumbnailUri = (avatar == null) ? null : avatar.getThumbnailUri();
+
+                            return new PostArtist(artist.getArtistId(), artist.getPreferredNickname(), thumbnailUri);
                         }
                 ).collect(Collectors.toSet());
     }
@@ -107,6 +112,9 @@ class PostUtils {
                                                         PostArtistData.newBuilder()
                                                                 .setArtistId(artist.getArtistId().toString())
                                                                 .setPreferredNickname(artist.getPreferredNickname())
+                                                                .setThumbnailUri(
+                                                                        (artist.getThumbnailUri() != null) ? artist.getThumbnailUri().toString() : null
+                                                                )
                                                                 .build()
                                                 ).collect(Collectors.toList())
                                 )

@@ -34,10 +34,13 @@ public enum Errors {
     NICKNAMES_CANNOT_BE_EMPTY("Nicknames array must not be empty."),
     FILE_UPLOAD_FAILED("File upload to remote storage has failed."),
     FILE_UPLOAD_CANNOT_CREATE_PATH("File upload can't create path to file."),
-    FILE_CONTENT_IS_CORRUPTED("File content is corrupted or invalid extension in filename was given."),
+    FILE_CONTENT_IS_CORRUPTED("File content is corrupted."),
     FILE_EXTENSION_IS_NOT_MATCHING_CONTENT("File extension is not matching provided file content or filename is invalid."),
+    THUMBNAIL_CONTENT_IS_INVALID("Thumbnail extension must be .jpg or .jpeg."),
     MISSING_STRATEGY("Strategy was not found in given package [class={0}]."),
     VALIDATION_FAILED("Validation failed for [strategy={0}] with [error={1}]."),
+    FILENAME_IS_INVALID("Given filename [filename={0}] is invalid."),
+    VIDEO_FRAME_EXTRACTION_FAILED("Video frame extraction for thumbnail has failed."),
     UNIDENTIFIED("Unknown error occurred.");
 
     private final String errorMessage;

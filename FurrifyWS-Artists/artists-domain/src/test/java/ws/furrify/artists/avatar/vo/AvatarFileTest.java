@@ -5,8 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.artists.avatar.AvatarExtension;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,29 +16,29 @@ class AvatarFileTest {
 
     private static String filename;
     private static AvatarExtension extension;
-    private static URL fileUrl;
-    private static URL thumbnailUrl;
+    private static URI fileUri;
+    private static URI thumbnailUri;
     private static String md5;
 
     @BeforeAll
-    static void setUp() throws MalformedURLException {
+    static void setUp() throws URISyntaxException {
         filename = "test.png";
         extension = AvatarExtension.PNG;
-        fileUrl = new URL("https://google.pl");
-        thumbnailUrl = new URL("https://google2.pl");
+        fileUri = new URI("/test");
+        thumbnailUri = new URI("/test");
         md5 = "3c518eeb674c71b30297f072fde7eba5";
     }
 
     @Test
     @DisplayName("Create AvatarFile")
     void of() {
-        // Given filename, extension, fileUrl, thumbnailUrl and md5
+        // Given filename, extension, fileUri, thumbnailUri and md5
         // When builder build
         var avatarFile = AvatarFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
-                .thumbnailUrl(thumbnailUrl)
+                .fileUri(fileUri)
+                .thumbnailUri(thumbnailUri)
                 .md5(md5)
                 .build();
         // Then return created AvatarFile
@@ -54,14 +54,14 @@ class AvatarFileTest {
                         "Created extension is not the same."
                 ),
                 () -> assertEquals(
-                        fileUrl,
-                        avatarFile.getFileUrl(),
-                        "Created fileUrl is not the same."
+                        fileUri,
+                        avatarFile.getFileUri(),
+                        "Created fileUri is not the same."
                 ),
                 () -> assertEquals(
-                        thumbnailUrl,
-                        avatarFile.getThumbnailUrl(),
-                        "Created thumbnailUrl is not the same."
+                        thumbnailUri,
+                        avatarFile.getThumbnailUri(),
+                        "Created thumbnailUri is not the same."
                 ),
                 () -> assertEquals(
                         md5,
@@ -80,8 +80,8 @@ class AvatarFileTest {
         var avatarFileBuilder = AvatarFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
-                .thumbnailUrl(thumbnailUrl)
+                .fileUri(fileUri)
+                .thumbnailUri(thumbnailUri)
                 .md5(md5);
         // Then throw IllegalStateException
         assertThrows(
@@ -100,8 +100,8 @@ class AvatarFileTest {
         var avatarFileBuilder = AvatarFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
-                .thumbnailUrl(thumbnailUrl)
+                .fileUri(fileUri)
+                .thumbnailUri(thumbnailUri)
                 .md5(md5);
         // Then throw IllegalStateException
         assertThrows(
@@ -120,8 +120,8 @@ class AvatarFileTest {
         var avatarFileBuilder = AvatarFile.builder()
                 .filename(filename)
                 .extension(extension)
-                .fileUrl(fileUrl)
-                .thumbnailUrl(thumbnailUrl)
+                .fileUri(fileUri)
+                .thumbnailUri(thumbnailUri)
                 .md5(md5);
         // Then throw IllegalStateException
         assertThrows(

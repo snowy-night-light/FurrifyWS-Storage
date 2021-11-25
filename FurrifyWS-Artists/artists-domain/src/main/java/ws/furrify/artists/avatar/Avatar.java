@@ -36,10 +36,10 @@ class Avatar {
                 avatarSnapshot.getOwnerId(),
                 AvatarFile.builder()
                         .extension(avatarSnapshot.getExtension())
-                        .thumbnailUrl(avatarSnapshot.getThumbnailUrl())
+                        .thumbnailUri(avatarSnapshot.getThumbnailUri())
                         .filename(avatarSnapshot.getFilename())
                         .md5(avatarSnapshot.getMd5())
-                        .fileUrl(avatarSnapshot.getFileUrl())
+                        .fileUri(avatarSnapshot.getFileUri())
                         .build(),
                 avatarSnapshot.getCreateDate()
         );
@@ -52,10 +52,10 @@ class Avatar {
                 .artistId(postId)
                 .ownerId(ownerId)
                 .extension(file.getExtension())
-                .thumbnailUrl(file.getThumbnailUrl())
+                .thumbnailUri(file.getThumbnailUri())
                 .filename(file.getFilename())
                 .md5(file.getMd5())
-                .fileUrl(file.getFileUrl())
+                .fileUri(file.getFileUri())
                 .createDate(createDate)
                 .build();
     }

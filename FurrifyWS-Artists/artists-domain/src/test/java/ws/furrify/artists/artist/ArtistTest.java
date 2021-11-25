@@ -12,7 +12,7 @@ import ws.furrify.shared.exception.InvalidDataGivenException;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -56,8 +56,8 @@ class ArtistTest {
                         ArtistAvatar.builder()
                                 .avatarId(UUID.randomUUID())
                                 .extension("PNG")
-                                .fileUrl(new URL("https://example.com/"))
-                                .thumbnailUrl(new URL("https://example.com/"))
+                                .fileUri(new URI("/test"))
+                                .thumbnailUri(new URI("/test"))
                                 .build()
                 )
                 .createDate(ZonedDateTime.now())
@@ -284,8 +284,8 @@ class ArtistTest {
         ArtistAvatar artistAvatar = ArtistAvatar.builder()
                 .avatarId(UUID.randomUUID())
                 .extension("PNG")
-                .fileUrl(new URL("https://example.com/"))
-                .thumbnailUrl(new URL("https://example.com/"))
+                .fileUri(new URI("/test"))
+                .thumbnailUri(new URI("/test"))
                 .build();
         // When addAvatar() method called
         // Then add avatar to artist

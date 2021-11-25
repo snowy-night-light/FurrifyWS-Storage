@@ -6,7 +6,7 @@ import lombok.Value;
 import ws.furrify.posts.media.MediaExtension;
 import ws.furrify.posts.media.vo.MediaSource;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -30,8 +30,8 @@ public class MediaDTO {
 
     MediaExtension extension;
 
-    URL fileUrl;
-    URL thumbnailUrl;
+    URI fileUri;
+    URI thumbnailUri;
 
     String md5;
 

@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import ws.furrify.artists.artist.ArtistEvent;
 import ws.furrify.posts.attachment.AttachmentEvent;
+import ws.furrify.posts.avatar.AvatarEvent;
 import ws.furrify.posts.media.MediaEvent;
 import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.PostDtoFactory;
@@ -14,7 +15,7 @@ import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.tag.TagEvent;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.UUID;
 
 /**
@@ -70,12 +71,12 @@ public class PostFacade {
                     // Build post media from media event
                     PostMedia.builder()
                             .mediaId(mediaId)
-                            .fileUrl(
-                                    new URL(mediaEvent.getData().getFileUrl())
+                            .fileUri(
+                                    new URI(mediaEvent.getData().getFileUri())
                             )
                             .extension(mediaEvent.getData().getExtension())
-                            .thumbnailUrl(
-                                    new URL(mediaEvent.getData().getThumbnailUrl())
+                            .thumbnailUri(
+                                    new URI(mediaEvent.getData().getThumbnailUri())
                             )
                             .priority(mediaEvent.getData().getPriority())
                             .build()
@@ -86,12 +87,14 @@ public class PostFacade {
                     // Build post media from media event
                     PostMedia.builder()
                             .mediaId(mediaId)
-                            .fileUrl(
-                                    new URL(mediaEvent.getData().getFileUrl())
+                            .fileUri(
+                                    new URI(mediaEvent.getData().getFileUri())
                             )
                             .extension(mediaEvent.getData().getExtension())
-                            .thumbnailUrl(
-                                    new URL(mediaEvent.getData().getThumbnailUrl())
+                            .thumbnailUri(
+                                    (mediaEvent.getData().getThumbnailUri() == null) ?
+                                            null :
+                                            new URI(mediaEvent.getData().getThumbnailUri())
                             )
                             .priority(mediaEvent.getData().getPriority())
                             .build()
@@ -122,8 +125,8 @@ public class PostFacade {
                     // Build post attachment from attachment event
                     PostAttachment.builder()
                             .attachmentId(attachmentId)
-                            .fileUrl(
-                                    new URL(attachmentEvent.getData().getFileUrl())
+                            .fileUri(
+                                    new URI(attachmentEvent.getData().getFileUri())
                             )
                             .extension(attachmentEvent.getData().getExtension())
                             .filename(attachmentEvent.getData().getFilename())
@@ -135,8 +138,8 @@ public class PostFacade {
                     // Build post attachment from attachment event
                     PostAttachment.builder()
                             .attachmentId(attachmentId)
-                            .fileUrl(
-                                    new URL(attachmentEvent.getData().getFileUrl())
+                            .fileUri(
+                                    new URI(attachmentEvent.getData().getFileUri())
                             )
                             .extension(attachmentEvent.getData().getExtension())
                             .filename(attachmentEvent.getData().getFilename())
@@ -144,6 +147,30 @@ public class PostFacade {
             );
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + attachmentEvent.getState() + " Topic=attachments_events");
+        }
+    }
+
+    /**
+     * Handle incoming avatar events.
+     *
+     * @param avatarEvent Avatar event instance received from kafka.
+     */
+    @SneakyThrows
+    public void handleEvent(final UUID key, final AvatarEvent avatarEvent) {
+        UUID artistId = UUID.fromString(avatarEvent.getData().getArtistId());
+
+        switch (DomainEventPublisher.AvatarEventType.valueOf(avatarEvent.getState())) {
+            case REMOVED -> deleteArtistAvatarFromPost(
+                    key,
+                    artistId
+            );
+            case CREATED -> addArtistAvatarToPost(
+                    key,
+                    artistId,
+                    new URI(avatarEvent.getData().getThumbnailUri())
+            );
+            default -> log.warning("State received from kafka is not defined. " +
+                    "State=" + avatarEvent.getState() + " Topic=avatar_events");
         }
     }
 
@@ -331,5 +358,26 @@ public class PostFacade {
         post.updateAttachmentDetailsInAttachments(postAttachment);
 
         postRepository.save(post);
+    }
+
+    private void addArtistAvatarToPost(final UUID ownerId,
+                                       final UUID artistId,
+                                       final URI thumbnailUri) {
+        postRepository.findAllByOwnerIdAndArtistIdInArtists(ownerId, artistId)
+                .forEach(post -> {
+                    post.setArtistThumbnailUri(artistId, thumbnailUri);
+
+                    postRepository.save(post);
+                });
+    }
+
+    private void deleteArtistAvatarFromPost(final UUID ownerId,
+                                            final UUID artistId) {
+        postRepository.findAllByOwnerIdAndArtistIdInArtists(ownerId, artistId)
+                .forEach(post -> {
+                    post.setArtistThumbnailUri(artistId, null);
+
+                    postRepository.save(post);
+                });
     }
 }

@@ -19,7 +19,7 @@ class AttachmentFactory {
                 .filename(attachmentDTO.getFilename())
                 .md5(attachmentDTO.getMd5())
                 .extension(attachmentDTO.getExtension())
-                .fileUrl(attachmentDTO.getFileUrl())
+                .fileUri(attachmentDTO.getFileUri())
                 .sources(
                         (attachmentDTO.getSources() != null) ? attachmentDTO.getSources() : new HashSet<>()
                 )

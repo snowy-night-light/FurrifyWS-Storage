@@ -15,6 +15,8 @@ import ws.furrify.posts.tag.dto.query.TagDetailsQueryDTO;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Optional;
@@ -41,9 +43,9 @@ class PostFacadeTest {
     private ArtistDetailsQueryDTO artistDetailsQueryDTO;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws URISyntaxException {
         postTag = new PostTag("walking", "ACTION");
-        postArtist = new PostArtist(UUID.randomUUID(), "preferred_nickname");
+        postArtist = new PostArtist(UUID.randomUUID(), "preferred_nickname", new URI("/test"));
 
         tagDetailsQueryDTO = new TagDetailsQueryDTO() {
             @Override

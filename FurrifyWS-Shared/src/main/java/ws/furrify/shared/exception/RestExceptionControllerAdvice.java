@@ -151,7 +151,9 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
             FileUploadFailedException.class,
             FileExtensionIsNotMatchingContentException.class,
             FileUploadCannotCreatePathException.class,
-            StrategyNotFoundException.class
+            StrategyNotFoundException.class,
+            FilenameIsInvalidException.class,
+            VideoFrameExtractionFailedException.class
     })
     protected ResponseEntity<Object> handleException(
             RestException exception) {

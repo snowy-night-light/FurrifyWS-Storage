@@ -1,5 +1,6 @@
 package ws.furrify.posts.post.dto.command;
 
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
 import ws.furrify.posts.post.dto.PostDTO;
@@ -25,7 +26,8 @@ public class PostCreateCommandDTO implements CommandDTO<PostDTO> {
     @Size(min = 1, max = 64)
     String title;
 
-    @Size(min = 1, max = 1024)
+    @Size(max = 1024)
+    @NonNull
     String description;
 
     @NotNull
@@ -48,7 +50,7 @@ public class PostCreateCommandDTO implements CommandDTO<PostDTO> {
                 )
                 .artists(
                         artists.stream()
-                                .map(artist -> new PostArtist(artist.getArtistId(), null))
+                                .map(artist -> new PostArtist(artist.getArtistId(), null, null))
                                 .collect(Collectors.toSet())
                 )
                 .build();

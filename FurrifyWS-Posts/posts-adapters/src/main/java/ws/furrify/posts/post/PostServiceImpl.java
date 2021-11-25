@@ -16,6 +16,8 @@ import java.util.UUID;
 
 /**
  * Currently public class as both media and attachment are in the same module.
+ *
+ * @author sky
  */
 @Service
 @RequiredArgsConstructor

@@ -17,8 +17,8 @@ import ws.furrify.shared.kafka.DomainEventPublisher;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -50,8 +50,8 @@ class MediaFacadeTest {
                 .priority(0)
                 .extension(MediaExtension.PNG)
                 .filename("yes.png")
-                .fileUrl(new URL("https://example.com/"))
-                .thumbnailUrl(new URL("https://example.com/"))
+                .fileUri(new URI("/media"))
+                .thumbnailUri(new URI("/media"))
                 .md5("3c518eeb674c71b30297f072fde7eba5")
                 .createDate(ZonedDateTime.now())
                 .build();
@@ -84,8 +84,8 @@ class MediaFacadeTest {
     }
 
     @Test
-    @DisplayName("Create media")
-    void createMedia() throws MalformedURLException {
+    @DisplayName("Create media with generated thumbnail")
+    void createMedia() throws URISyntaxException {
         // Given ownerId, mediaDTO and multipart file
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
@@ -135,12 +135,12 @@ class MediaFacadeTest {
         };
         // When createMedia() method called
         when(postServiceClient.getUserPost(any(), any())).thenReturn(postDetailsDTO);
-        when(mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
-                new URL("https://example.com"),
-                new URL("https://example.com")
+        when(mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(any(), any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
+                new URI("/test"),
+                new URI("/test")
         ));
         // Then return generated uuid
-        assertNotNull(mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile), "MediaId was not returned.");
+        assertNotNull(mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile, null), "MediaId was not returned.");
     }
 
 
@@ -197,11 +197,111 @@ class MediaFacadeTest {
         // Then throw exception
         assertThrows(
                 RecordNotFoundException.class,
-                () -> mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile),
+                () -> mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile, null),
                 "Exception was not thrown."
         );
     }
 
+    @Test
+    @DisplayName("Create media with given thumbnail")
+    void createMedia3() throws URISyntaxException {
+        // Given ownerId, mediaDTO and multipart file
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+
+        PostDetailsDTO postDetailsDTO = new PostDetailsDTO(null, null, null, null, null, null, null, null, null);
+
+        MultipartFile mediaFile = new MultipartFile() {
+            @Override
+            public String getName() {
+                return "test";
+            }
+
+            @Override
+            public String getOriginalFilename() {
+                return "test.png";
+            }
+
+            @Override
+            public String getContentType() {
+                return null;
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
+
+            @Override
+            public long getSize() {
+                return 0;
+            }
+
+            @Override
+            public byte[] getBytes() throws IOException {
+                return new byte[0];
+            }
+
+            @Override
+            public InputStream getInputStream() throws IOException {
+                return getClass().getClassLoader().getResourceAsStream("example.png");
+            }
+
+            @Override
+            public void transferTo(final File file) throws IOException, IllegalStateException {
+
+            }
+        };
+        MultipartFile thumbnailFile = new MultipartFile() {
+            @Override
+            public String getName() {
+                return "test";
+            }
+
+            @Override
+            public String getOriginalFilename() {
+                return "test.jpg";
+            }
+
+            @Override
+            public String getContentType() {
+                return null;
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
+
+            @Override
+            public long getSize() {
+                return 1;
+            }
+
+            @Override
+            public byte[] getBytes() throws IOException {
+                return new byte[0];
+            }
+
+            @Override
+            public InputStream getInputStream() throws IOException {
+                return getClass().getClassLoader().getResourceAsStream("example.png");
+            }
+
+            @Override
+            public void transferTo(final File file) throws IOException, IllegalStateException {
+
+            }
+        };
+        // When createMedia() method called
+        when(postServiceClient.getUserPost(any(), any())).thenReturn(postDetailsDTO);
+        when(mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(any(), any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
+                new URI("/test"),
+                new URI("/test")
+        ));
+        // Then return generated uuid
+        assertNotNull(mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile, thumbnailFile), "MediaId was not returned.");
+    }
 
     @Test
     @DisplayName("Replace media")
