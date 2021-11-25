@@ -106,6 +106,12 @@
             <artifactId>javacv-platform</artifactId>
             <version>1.5.6</version>
         </dependency>
+        <!-- I/O -->
+        <dependency>
+            <groupId>org.sejda.webp-imageio</groupId>
+            <artifactId>webp-imageio-sejda</artifactId>
+            <version>0.1.0</version>
+        </dependency>
     </dependencies>
 
 </project>

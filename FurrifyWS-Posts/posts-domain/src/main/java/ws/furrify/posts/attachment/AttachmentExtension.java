@@ -21,8 +21,43 @@ public enum AttachmentExtension {
     /**
      * File extensions
      */
+    MID(AttachmentType.MUSIC_DIGITAL_INTERFACE, "application/vnd.microsoft.portable-executable"),
+    MIDI(AttachmentType.MUSIC_DIGITAL_INTERFACE, "application/java-archive"),
+
+    EXE(AttachmentType.PROGRAM, "application/vnd.microsoft.portable-executable"),
+    JAR(AttachmentType.PROGRAM, "application/java-archive"),
+
+    PPT(AttachmentType.PRESENTATION, "application/vnd.ms-powerpoint"),
+    PPTX(AttachmentType.PRESENTATION, "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+
+    ODT(AttachmentType.TEXT_DOCUMENT, "application/vnd.oasis.opendocument.text"),
+    TXT(AttachmentType.TEXT_DOCUMENT, "text/plain"),
+    DOC(AttachmentType.TEXT_DOCUMENT, "application/msword"),
+    DOCX(AttachmentType.TEXT_DOCUMENT, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+
+    TORRENT(AttachmentType.TORRENT, "application/x-bittorrent"),
+
+    AZW3(AttachmentType.EBOOK, "application/vnd.amazon.mobi8-ebook"),
+    MOBI(AttachmentType.EBOOK, "application/x-mobipocket-ebook"),
+    EPUB(AttachmentType.EBOOK, "application/epub+zip"),
+
+    PDF(AttachmentType.ADOBE_DOCUMENT, "application/pdf"),
+
+    SAI(AttachmentType.PAINTTOOL_SAI_DOCUMENT, "application/octet-stream"),
+
+    ZIP(AttachmentType.COMPRESSED_ARCHIVE, "application/zip"),
+    RAR(AttachmentType.COMPRESSED_ARCHIVE, "application/vnd.rar"),
+    BZIP(AttachmentType.COMPRESSED_ARCHIVE, "application/x-bzip"),
+    BZIP2(AttachmentType.COMPRESSED_ARCHIVE, "application/x-bzip2"),
+
+    TAR(AttachmentType.ARCHIVE, "application/x-tar"),
+
+    GZ(AttachmentType.COMPRESSED, "application/gzip"),
+
     SWF(AttachmentType.ADOBE_FLASH, "application/x-shockwave-flash"),
+
     PSD(AttachmentType.PHOTOSHOP_DOCUMENT, "image/vnd.adobe.photoshop"),
+
     BLEND(AttachmentType.BLENDER_PROJECT, "application/octet-stream");
 
     /**
@@ -64,6 +99,38 @@ public enum AttachmentExtension {
      */
     private enum AttachmentType {
         /**
+         * Presentation file
+         */
+        PRESENTATION,
+        /**
+         * Musical Instrument Digital Interface (MIDI)
+         */
+        MUSIC_DIGITAL_INTERFACE,
+        /**
+         * Program file
+         */
+        PROGRAM,
+        /**
+         * Torrent file
+         */
+        TORRENT,
+        /**
+         * Text document
+         */
+        TEXT_DOCUMENT,
+        /**
+         * eBook format
+         */
+        EBOOK,
+        /**
+         * PDF document
+         */
+        ADOBE_DOCUMENT,
+        /**
+         * PaintTool SAI document
+         */
+        PAINTTOOL_SAI_DOCUMENT,
+        /**
          * Photoshop Document
          */
         PHOTOSHOP_DOCUMENT,
@@ -74,6 +141,18 @@ public enum AttachmentExtension {
         /**
          * Adobe flash file
          */
-        ADOBE_FLASH
+        ADOBE_FLASH,
+        /**
+         * Compressed archive file
+         */
+        COMPRESSED_ARCHIVE,
+        /**
+         * Archive file
+         */
+        ARCHIVE,
+        /**
+         * Compressed file
+         */
+        COMPRESSED
     }
 }
