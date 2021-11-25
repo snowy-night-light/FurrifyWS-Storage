@@ -292,7 +292,7 @@ class PostTest {
         );
 
         assertEquals(
-                post.getSnapshot().getMediaSet().toArray()[1],
+                post.getSnapshot().getMediaSet().toArray()[post.getSnapshot().getMediaSet().size() - 1],
                 postMedia,
                 "Media was not added."
         );
@@ -315,7 +315,7 @@ class PostTest {
         );
 
         assertEquals(
-                post.getSnapshot().getAttachments().toArray()[1],
+                post.getSnapshot().getAttachments().toArray()[post.getSnapshot().getAttachments().size() - 1],
                 postAttachment,
                 "Attachment was not added."
         );
@@ -450,6 +450,26 @@ class PostTest {
                                 .build()
                 ),
                 "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Set artist thumbnail uri")
+    void setArtistThumbnailUri() throws URISyntaxException {
+        // Given existing artistId and new fileUri
+        UUID artistId = ((PostArtist) postSnapshot.getArtists().toArray()[0]).getArtistId();
+        URI newThumbnailUri = new URI("/test");
+        // When setArtistThumbnailUri() method called
+        // Then set artist thumbnail url
+        post.setArtistThumbnailUri(
+                artistId,
+                newThumbnailUri
+        );
+
+        assertEquals(
+                newThumbnailUri,
+                ((PostArtist) post.getSnapshot().getArtists().toArray()[0]).getThumbnailUri(),
+                "Artist thumbnail uri was not updated."
         );
     }
 }
