@@ -31,7 +31,7 @@ import static ws.furrify.posts.media.MediaExtension.GIF;
 public class MediaUploadStrategyUtils {
 
     private final static int PART_OF_VIDEO_TO_THUMBNAIL = 3;
-    private final static int TIMOUT_FRAME_EXTRACTION_SECONDS = 30;
+    private final static int TIMOUT_FRAME_EXTRACTION_SECONDS = 10;
 
     public static InputStream generateThumbnail(final MediaExtension extension,
                                                 final int width,
@@ -97,9 +97,7 @@ public class MediaUploadStrategyUtils {
                 frameGrabber.start();
 
                 Java2DFrameConverter converter = new Java2DFrameConverter();
-                /* TODO Following code is broken, it will not work for videos with broken index.
-                  Uncomment when fix is applied. Currently no fix is available until JavaCv fix is out. https://github.com/bytedeco/javacv/issues/1689 */
-                //frameGrabber.setFrameNumber(frameGrabber.getLengthInFrames() / PART_OF_VIDEO_TO_THUMBNAIL);
+                frameGrabber.setVideoFrameNumber(frameGrabber.getLengthInFrames() / PART_OF_VIDEO_TO_THUMBNAIL);
 
                 Frame frame = frameGrabber.grabImage();
                 BufferedImage image = converter.convert(frame);
