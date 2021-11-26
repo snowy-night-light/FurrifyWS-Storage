@@ -35,18 +35,4 @@ class PostDescriptionTest {
                 "Exception was not thrown."
         );
     }
-
-    @Test
-    @DisplayName("Create PostDescription from too short string")
-    void of3() {
-        // Given too short description string
-        String description = "";
-        // When of()
-        // Then throw IllegalStateException
-        assertThrows(
-                IllegalStateException.class,
-                () -> PostDescription.of(description),
-                "Exception was not thrown."
-        );
-    }
 }

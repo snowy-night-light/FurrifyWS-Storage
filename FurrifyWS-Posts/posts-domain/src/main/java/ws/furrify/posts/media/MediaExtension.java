@@ -38,7 +38,10 @@ public enum MediaExtension {
     MKV(MediaType.VIDEO, "video/x-matroska"),
     WEBM(MediaType.VIDEO, "video/webm"),
     MP4(MediaType.VIDEO, "video/mp4"),
+    MPEG(MediaType.IMAGE, "video/mpeg"),
 
+    WEBP(MediaType.IMAGE, "image/webp"),
+    ICO(MediaType.IMAGE, "image/vnd.microsoft.icon"),
     SVG(MediaType.IMAGE, "image/svg+xml"),
     TIF(MediaType.IMAGE, "image/tiff"),
     TIFF(MediaType.IMAGE, "image/tiff"),

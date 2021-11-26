@@ -49,7 +49,6 @@ interface SqlPostQueryRepositoryImpl extends PostQueryRepository, Repository<Pos
     Page<PostDetailsQueryDTO> findAllByOwnerId(UUID ownerId, Pageable pageable);
 
     @Override
-    // TODO This query can probably be optimised by using the same subqueries for both artists and tags.
     @Query("select p from PostSnapshot p where " +
             // Tags
             "(:#{#query.withTags.size()} = 0 or p.id in (" +
