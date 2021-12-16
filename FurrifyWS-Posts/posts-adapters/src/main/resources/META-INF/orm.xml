@@ -110,7 +110,7 @@
                 <column updatable="false" nullable="false"/>
             </basic>
             <element-collection fetch="EAGER" name="mediaSet">
-                <collection-table name="post_mediaSet">
+                <collection-table name="post_media_set">
                     <join-column name="postId"/>
                 </collection-table>
             </element-collection>

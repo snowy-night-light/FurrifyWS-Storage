@@ -130,6 +130,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+        <!-- Fix for spring cloud 2021 -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.6.2.Final</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
