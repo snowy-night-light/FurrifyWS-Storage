@@ -34,7 +34,7 @@ class AttachmentTest implements CommandLineRunner {
     private void createTestingAttachments() {
         var attachmentFactory = new AttachmentFactory();
 
-        var userId = UUID.fromString("e440a70e-d9af-42c4-a4f1-38677c0c950d");
+        var userId = UUID.fromString("f4612c64-f11e-4d73-8f2f-006303287f35");
         var postId = UUID.fromString("7c2c35f3-20e9-4b7e-a455-253b7b78e2fa");
         var attachmentId = UUID.fromString("566548cf-fb1d-4552-a880-c741a1eb9d0e");
         var attachmentSourceId = UUID.fromString("87a5d0b2-bba8-4e94-b7d3-c9ad51431dd5");
