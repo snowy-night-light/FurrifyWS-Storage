@@ -35,7 +35,6 @@ class PostServiceImpl implements PostServiceClient {
         return postServiceClient.getPostMedia(userId, postId, mediaId);
     }
 
-
     private MediaDetailsQueryDTO getPostMediaFallback(Throwable throwable) {
         return fallback(throwable);
     }

@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
-import ws.furrify.posts.FileUtils;
+import ws.furrify.posts.utils.FileUtils;
 
 import java.io.IOException;
 import java.util.Arrays;

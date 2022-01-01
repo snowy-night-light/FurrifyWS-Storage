@@ -5,10 +5,10 @@ import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
 import ws.furrify.posts.media.MediaExtension;
+import ws.furrify.posts.utils.GifDecoder;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.VideoFrameExtractionFailedException;
-import ws.furrify.shared.utils.GifDecoder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

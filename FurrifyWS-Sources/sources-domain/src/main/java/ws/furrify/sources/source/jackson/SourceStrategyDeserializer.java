@@ -1,11 +1,13 @@
-package ws.furrify.sources.source.strategy;
+package ws.furrify.sources.source.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import org.springframework.stereotype.Component;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.StrategyNotFoundException;
+import ws.furrify.sources.source.strategy.SourceStrategy;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -13,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * @author sky
  */
+@Component
 public class SourceStrategyDeserializer extends StdDeserializer<SourceStrategy> {
 
     private final static String STRATEGY_PACKAGE = "ws.furrify.sources.source.strategy";
@@ -42,4 +45,6 @@ public class SourceStrategyDeserializer extends StdDeserializer<SourceStrategy> 
 
         return strategy;
     }
+
+
 }

@@ -1,4 +1,4 @@
-package ws.furrify.shared.utils;
+package ws.furrify.posts.utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
