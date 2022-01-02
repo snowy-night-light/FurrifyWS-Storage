@@ -30,7 +30,7 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
             return ValidationResult.invalid("Deviation id is required.");
         }
 
-        String providerBearerToken = "Bearer " + keycloakService.getKeycloakIdentityProviderToken(null, PropertyHolder.REALM, BROKER_ID);
+        String providerBearerToken = "Bearer " + keycloakService.getKeycloakIdentityProviderToken(null, PropertyHolder.REALM, BROKER_ID).getAccessToken();
 
         DeviantArtDeviationQueryDTO deviationQueryDTO =
                 deviantArtService.getDeviation(providerBearerToken, data.get(DEVIATION_ID_FIELD));
