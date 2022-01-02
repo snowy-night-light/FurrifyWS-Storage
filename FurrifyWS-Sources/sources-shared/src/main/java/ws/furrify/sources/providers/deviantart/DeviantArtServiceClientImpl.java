@@ -21,11 +21,11 @@ import ws.furrify.sources.providers.deviantart.dto.DeviantArtDeviationQueryDTO;
  * @author Skyte
  */
 @Slf4j
-public class DeviantArtServiceImpl implements DeviantArtServiceClient {
+public class DeviantArtServiceClientImpl implements DeviantArtServiceClient {
 
     private final DeviantArtServiceClient deviantArtServiceClient;
 
-    public DeviantArtServiceImpl() {
+    public DeviantArtServiceClientImpl() {
         FeignDecorators decorators = FeignDecorators.builder()
                 .withFallbackFactory(DeviantArtServiceClientFallback::new)
                 .build();

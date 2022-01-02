@@ -25,12 +25,12 @@ import java.util.Objects;
  * @author Skyte
  */
 @Slf4j
-public class KeycloakServiceImpl implements KeycloakServiceClient {
+public class KeycloakServiceClientImpl implements KeycloakServiceClient {
 
     private final KeycloakServiceClient keycloakServiceClient;
 
     @SneakyThrows
-    public KeycloakServiceImpl() {
+    public KeycloakServiceClientImpl() {
         FeignDecorators decorators = FeignDecorators.builder()
                 .withFallbackFactory(KeycloakServiceClientFallback::new)
                 .build();
