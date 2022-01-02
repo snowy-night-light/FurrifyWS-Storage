@@ -1,4 +1,4 @@
-package ws.furrify.posts;
+package ws.furrify.posts.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

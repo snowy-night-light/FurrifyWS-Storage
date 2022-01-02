@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import ws.furrify.sources.source.jackson.SourceStrategyDeserializer;
+import ws.furrify.sources.source.jackson.SourceStrategySerializer;
 
 import java.util.HashMap;
 
@@ -45,5 +47,4 @@ public interface SourceStrategy {
             return new ValidationResult(false, reason);
         }
     }
-
 }

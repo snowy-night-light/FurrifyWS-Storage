@@ -1,6 +1,8 @@
 package ws.furrify.sources.source.dto.query;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ws.furrify.shared.vo.SourceOriginType;
+import ws.furrify.sources.source.jackson.SourceStrategySerializer;
 import ws.furrify.sources.source.strategy.SourceStrategy;
 
 import java.io.Serializable;
@@ -23,6 +25,7 @@ public interface SourceDetailsQueryDTO extends Serializable {
 
     HashMap<String, String> getData();
 
+    @JsonSerialize(using = SourceStrategySerializer.class)
     SourceStrategy getStrategy();
 
     SourceOriginType getOriginType();

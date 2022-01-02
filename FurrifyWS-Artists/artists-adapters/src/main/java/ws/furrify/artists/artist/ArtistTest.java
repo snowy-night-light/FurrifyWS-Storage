@@ -35,7 +35,7 @@ class ArtistTest implements CommandLineRunner {
     private void createTestingArtists() {
         var artistFactory = new ArtistFactory();
 
-        var userId = UUID.fromString("e440a70e-d9af-42c4-a4f1-38677c0c950d");
+        var userId = UUID.fromString("f4612c64-f11e-4d73-8f2f-006303287f35");
         var artistId = UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00");
         var avatarId = UUID.fromString("4d482df8-7380-4164-96ef-58f3796d8f27");
         var sourceId = UUID.fromString("02038a77-9717-4de8-a21b-3a722f158be2");

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import ws.furrify.posts.FileUtils;
+import ws.furrify.posts.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;

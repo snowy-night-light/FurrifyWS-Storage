@@ -7,7 +7,7 @@ import java.text.MessageFormat;
 /**
  * Class contains error messages enum which can be accessed using getErrorMessage().
  * Messages can contain parenthesis which can be filled using ex. Your id is {0}! and use method getErrorMessage(3);
- * Messages also can contain multiple parenthesis all can be filled using ex. Your id is {0} and your name is {1}! and use method getErrorMessage(new String[]{"3", "John"})
+ * Messages also can contain multiple parenthesis all can be filled using ex. Your id is {0} and your name is {1}! and use method getErrorMessage("3", "John")
  * It would be nice to also indicate what value was filled for ex. [uuid={0}].
  * <p>
  * Each exception that wants to use those error messages should be registered in RestExceptionControllerAdvice.
@@ -41,6 +41,8 @@ public enum Errors {
     VALIDATION_FAILED("Validation failed for [strategy={0}] with [error={1}]."),
     FILENAME_IS_INVALID("Given filename [filename={0}] is invalid."),
     VIDEO_FRAME_EXTRACTION_FAILED("Video frame extraction for thumbnail has failed."),
+    EXTERNAL_PROVIDER_SERVER_SIDE_ERROR("External provider [provider={0}] has encountered a server error on their side. Try again."),
+    EXTERNAL_PROVIDER_TOKEN_HAS_EXPIRED("External provider [provider={0}] token has expired. You will need to reconnect it in account options."),
     UNIDENTIFIED("Unknown error occurred.");
 
     private final String errorMessage;

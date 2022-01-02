@@ -1,8 +1,9 @@
-package ws.furrify.sources.source.strategy;
+package ws.furrify.sources.source.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import ws.furrify.sources.source.strategy.SourceStrategy;
 
 import java.io.IOException;
 
