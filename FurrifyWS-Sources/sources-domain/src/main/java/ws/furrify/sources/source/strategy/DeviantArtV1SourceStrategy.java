@@ -2,6 +2,7 @@ package ws.furrify.sources.source.strategy;
 
 import lombok.RequiredArgsConstructor;
 import ws.furrify.sources.keycloak.KeycloakServiceImpl;
+import ws.furrify.sources.keycloak.PropertyHolder;
 import ws.furrify.sources.providers.deviantart.DeviantArtServiceImpl;
 import ws.furrify.sources.providers.deviantart.dto.DeviantArtDeviationQueryDTO;
 
@@ -27,11 +28,10 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
             return ValidationResult.invalid("Deviation id is required.");
         }
 
-        // TODO Load from application yaml
-        String bearerToken = "Bearer " + keycloakService.getKeycloakIdentityProviderToken("dev", BROKER_ID);
+        String providerBearerToken = "Bearer " + keycloakService.getKeycloakIdentityProviderToken(null, PropertyHolder.REALM, BROKER_ID);
 
         DeviantArtDeviationQueryDTO deviationQueryDTO =
-                deviantArtService.getDeviation(bearerToken, data.get(DEVIATION_ID_FIELD));
+                deviantArtService.getDeviation(providerBearerToken, data.get(DEVIATION_ID_FIELD));
         if (deviationQueryDTO == null) {
             return ValidationResult.invalid("Deviation not found.");
         }

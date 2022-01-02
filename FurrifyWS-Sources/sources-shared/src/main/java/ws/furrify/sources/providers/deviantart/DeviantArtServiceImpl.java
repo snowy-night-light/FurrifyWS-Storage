@@ -1,13 +1,13 @@
 package ws.furrify.sources.providers.deviantart;
 
-import feign.Feign;
 import feign.FeignException;
 import feign.Logger;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
 import feign.okhttp.OkHttpClient;
 import feign.slf4j.Slf4jLogger;
-import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.feign.FeignDecorators;
+import io.github.resilience4j.feign.Resilience4jFeign;
 import lombok.extern.slf4j.Slf4j;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.ExternalProviderServerSideErrorException;
@@ -26,7 +26,11 @@ public class DeviantArtServiceImpl implements DeviantArtServiceClient {
     private final DeviantArtServiceClient deviantArtServiceClient;
 
     public DeviantArtServiceImpl() {
-        this.deviantArtServiceClient = Feign.builder()
+        FeignDecorators decorators = FeignDecorators.builder()
+                .withFallbackFactory(DeviantArtServiceClientFallback::new)
+                .build();
+
+        this.deviantArtServiceClient = Resilience4jFeign.builder(decorators)
                 .client(new OkHttpClient())
                 .encoder(new GsonEncoder())
                 .decoder(new GsonDecoder())
@@ -35,30 +39,38 @@ public class DeviantArtServiceImpl implements DeviantArtServiceClient {
                 .target(DeviantArtServiceClient.class, "https://www.deviantart.com/api/v1/oauth2");
     }
 
-    @Bulkhead(name = "getDeviation", fallbackMethod = "deviantArtFallback")
     @Override
     public DeviantArtDeviationQueryDTO getDeviation(final String bearerToken, final String deviationId) {
         return deviantArtServiceClient.getDeviation(bearerToken, deviationId);
     }
 
-    private DeviantArtDeviationQueryDTO deviantArtFallback(Throwable throwable) {
-        var exception = (FeignException) throwable;
+    public static class DeviantArtServiceClientFallback implements DeviantArtServiceClient {
+        private final Exception exception;
 
-        HttpStatus status = HttpStatus.of(exception.status());
+        public DeviantArtServiceClientFallback(Exception exception) {
+            this.exception = exception;
+        }
 
-        switch (status) {
-            case NOT_FOUND -> {
-                return null;
-            }
+        @Override
+        public DeviantArtDeviationQueryDTO getDeviation(final String bearerToken, final String deviationId) {
+            var feignException = (FeignException) this.exception;
 
-            case INTERNAL_SERVER_ERROR -> throw new ExternalProviderServerSideErrorException(Errors.EXTERNAL_PROVIDER_SERVER_SIDE_ERROR.getErrorMessage("deviantart"));
+            HttpStatus status = HttpStatus.of(feignException.status());
 
-            case UNAUTHORIZED -> throw new ExternalProviderTokenExpiredException(Errors.EXTERNAL_PROVIDER_TOKEN_HAS_EXPIRED.getErrorMessage("deviantart"));
+            switch (status) {
+                case NOT_FOUND -> {
+                    return null;
+                }
 
-            default -> {
-                log.error("DeviantArt identity provider endpoint returned unhandled status " + status.getStatus() + ".");
+                case INTERNAL_SERVER_ERROR -> throw new ExternalProviderServerSideErrorException(Errors.EXTERNAL_PROVIDER_SERVER_SIDE_ERROR.getErrorMessage("deviantart"));
 
-                throw exception;
+                case UNAUTHORIZED -> throw new ExternalProviderTokenExpiredException(Errors.EXTERNAL_PROVIDER_TOKEN_HAS_EXPIRED.getErrorMessage("deviantart"));
+
+                default -> {
+                    log.error("DeviantArt identity provider endpoint returned unhandled status " + status.getStatus() + ".");
+
+                    throw feignException;
+                }
             }
         }
     }

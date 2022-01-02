@@ -14,6 +14,7 @@ public interface DeviantArtServiceClient {
     /**
      * Get DeviantArt deviation.
      *
+     * @param bearerToken Bearer token to use for authentication.
      * @param deviationId Deviation id.
      * @return Deviation query dto.
      */
