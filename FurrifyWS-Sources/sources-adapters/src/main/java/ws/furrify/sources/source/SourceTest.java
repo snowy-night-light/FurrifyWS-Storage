@@ -48,7 +48,7 @@ class SourceTest implements CommandLineRunner {
                         .ownerId(userId)
                         .strategy(new DeviantArtV1SourceStrategy())
                         .data(new HashMap<>(1) {{
-                            put("id", "123");
+                            put("id", "EC0AAF26-D129-8165-7E5A-1B3E0B2BBF82");
                         }})
                         .originType(SourceOriginType.ARTIST)
                         .createDate(ZonedDateTime.now())
@@ -63,7 +63,7 @@ class SourceTest implements CommandLineRunner {
                         .ownerId(userId)
                         .strategy(new DeviantArtV1SourceStrategy())
                         .data(new HashMap<>(1) {{
-                            put("id", "525");
+                            put("id", "EC0AAF26-D129-8165-7E5A-1B3E0B2BBF82");
                         }})
                         .originType(SourceOriginType.MEDIA)
                         .createDate(ZonedDateTime.now())
@@ -78,7 +78,7 @@ class SourceTest implements CommandLineRunner {
                         .ownerId(userId)
                         .strategy(new DeviantArtV1SourceStrategy())
                         .data(new HashMap<>(1) {{
-                            put("id", "2662");
+                            put("id", "EC0AAF26-D129-8165-7E5A-1B3E0B2BBF82");
                         }})
                         .originType(SourceOriginType.ATTACHMENT)
                         .createDate(ZonedDateTime.now())

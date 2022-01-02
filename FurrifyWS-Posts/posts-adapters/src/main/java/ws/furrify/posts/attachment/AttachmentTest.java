@@ -54,7 +54,7 @@ class AttachmentTest implements CommandLineRunner {
                                                 attachmentSourceId,
                                                 "DeviantArtV1SourceStrategy",
                                                 new HashMap<>(1) {{
-                                                    put("id", "2662");
+                                                    put("id", "EC0AAF26-D129-8165-7E5A-1B3E0B2BBF82");
                                                 }}
                                         )
                                 ))

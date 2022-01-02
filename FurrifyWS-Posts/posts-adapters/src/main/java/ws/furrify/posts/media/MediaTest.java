@@ -56,7 +56,7 @@ class MediaTest implements CommandLineRunner {
                                                 mediaSourceId,
                                                 "DeviantArtV1SourceStrategy",
                                                 new HashMap<>(1) {{
-                                                    put("id", "525");
+                                                    put("id", "EC0AAF26-D129-8165-7E5A-1B3E0B2BBF82");
                                                 }}
                                         )
                                 ))
