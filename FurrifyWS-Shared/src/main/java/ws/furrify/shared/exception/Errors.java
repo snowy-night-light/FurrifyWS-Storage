@@ -7,7 +7,7 @@ import java.text.MessageFormat;
 /**
  * Class contains error messages enum which can be accessed using getErrorMessage().
  * Messages can contain parenthesis which can be filled using ex. Your id is {0}! and use method getErrorMessage(3);
- * Messages also can contain multiple parenthesis all can be filled using ex. Your id is {0} and your name is {1}! and use method getErrorMessage(new String[]{"3", "John"})
+ * Messages also can contain multiple parenthesis all can be filled using ex. Your id is {0} and your name is {1}! and use method getErrorMessage("3", "John")
  * It would be nice to also indicate what value was filled for ex. [uuid={0}].
  * <p>
  * Each exception that wants to use those error messages should be registered in RestExceptionControllerAdvice.
