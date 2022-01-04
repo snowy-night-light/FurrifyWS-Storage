@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.shared.vo.SourceOriginType;
-import ws.furrify.sources.source.strategy.DeviantArtV1SourceStrategy;
+import ws.furrify.sources.keycloak.PropertyHolder;
 import ws.furrify.sources.source.strategy.PatreonV1SourceStrategy;
 import ws.furrify.sources.source.strategy.SourceStrategy;
 
@@ -27,13 +27,30 @@ class SourceTest {
 
     @BeforeEach
     void setUp() {
+        PropertyHolder.AUTH_SERVER = "test";
+
         sourceSnapshot = SourceSnapshot.builder()
                 .id(0L)
                 .sourceId(UUID.randomUUID())
                 .ownerId(UUID.randomUUID())
                 .originId(UUID.randomUUID())
                 .originType(SourceOriginType.ARTIST)
-                .strategy(new DeviantArtV1SourceStrategy())
+                .strategy(new SourceStrategy() {
+                    @Override
+                    public ValidationResult validateMedia(final HashMap<String, String> data) {
+                        return ValidationResult.valid();
+                    }
+
+                    @Override
+                    public ValidationResult validateUser(final HashMap<String, String> data) {
+                        return ValidationResult.valid();
+                    }
+
+                    @Override
+                    public ValidationResult validateAttachment(final HashMap<String, String> data) {
+                        return ValidationResult.valid();
+                    }
+                })
                 .data(new HashMap<>())
                 .createDate(ZonedDateTime.now())
                 .build();
@@ -108,7 +125,7 @@ class SourceTest {
     void updateData3() {
         // Given new data
         HashMap<String, String> data = new HashMap<>() {{
-            put("test", "test2");
+            put("username", "test2");
         }};
         // When updateData() method called
         // Then update data

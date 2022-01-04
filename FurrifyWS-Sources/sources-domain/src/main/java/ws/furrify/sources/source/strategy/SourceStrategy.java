@@ -52,14 +52,14 @@ public interface SourceStrategy {
         /**
          * @return Instance of ValidationResult with valid field set as true.
          */
-        static ValidationResult valid() {
+        public static ValidationResult valid() {
             return new ValidationResult(true, null);
         }
 
         /**
          * @return Instance of ValidationResult with valid field set as false and given reason.
          */
-        static ValidationResult invalid(final String reason) {
+        public static ValidationResult invalid(final String reason) {
             return new ValidationResult(false, reason);
         }
     }

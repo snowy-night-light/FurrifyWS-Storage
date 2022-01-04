@@ -1,6 +1,5 @@
 package ws.furrify.sources.source.strategy;
 
-import lombok.RequiredArgsConstructor;
 import ws.furrify.sources.keycloak.KeycloakServiceClient;
 import ws.furrify.sources.keycloak.KeycloakServiceClientImpl;
 import ws.furrify.sources.keycloak.PropertyHolder;
@@ -17,7 +16,6 @@ import java.util.HashMap;
  *
  * @author sky
  */
-@RequiredArgsConstructor
 public class DeviantArtV1SourceStrategy implements SourceStrategy {
 
     public final static String BROKER_ID = "deviantart";
@@ -25,8 +23,18 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
     private final static String DEVIATION_ID_FIELD = "id";
     private final static String USERNAME_FIELD = "username";
 
-    private final KeycloakServiceClient keycloakService = new KeycloakServiceClientImpl();
-    private final DeviantArtServiceClient deviantArtService = new DeviantArtServiceClientImpl();
+    private final KeycloakServiceClient keycloakService;
+    private final DeviantArtServiceClient deviantArtService;
+
+    public DeviantArtV1SourceStrategy() {
+        this.keycloakService = new KeycloakServiceClientImpl();
+        this.deviantArtService = new DeviantArtServiceClientImpl();
+    }
+
+    public DeviantArtV1SourceStrategy(final KeycloakServiceClient keycloakService, final DeviantArtServiceClient deviantArtService) {
+        this.keycloakService = keycloakService;
+        this.deviantArtService = deviantArtService;
+    }
 
     @Override
     public ValidationResult validateMedia(final HashMap<String, String> data) {

@@ -285,7 +285,7 @@ class MediaFacadeTest {
 
             @Override
             public InputStream getInputStream() throws IOException {
-                return getClass().getClassLoader().getResourceAsStream("example.png");
+                return getClass().getClassLoader().getResourceAsStream("example.jpg");
             }
 
             @Override
@@ -295,7 +295,7 @@ class MediaFacadeTest {
         };
         // When createMedia() method called
         when(postServiceClient.getUserPost(any(), any())).thenReturn(postDetailsDTO);
-        when(mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(any(), any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
+        when(mediaUploadStrategy.uploadMedia(any(), any(), any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
                 new URI("/test"),
                 new URI("/test")
         ));
