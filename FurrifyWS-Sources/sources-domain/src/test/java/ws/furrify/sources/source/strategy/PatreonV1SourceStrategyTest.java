@@ -27,6 +27,6 @@ class PatreonV1SourceStrategyTest {
         PatreonV1SourceStrategy patreonV1SourceStrategy = new PatreonV1SourceStrategy();
         // When
         // Then
-        assertTrue(patreonV1SourceStrategy.validate(data).isValid(), "Validation failed with correct parameters.");
+        assertTrue(patreonV1SourceStrategy.validateMedia(data).isValid(), "Validation failed with correct parameters.");
     }
 }

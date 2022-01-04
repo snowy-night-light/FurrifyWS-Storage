@@ -11,7 +11,21 @@ import java.util.HashMap;
 public class PatreonV1SourceStrategy implements SourceStrategy {
 
     @Override
-    public ValidationResult validate(final HashMap<String, String> data) {
+    public ValidationResult validateMedia(final HashMap<String, String> data) {
+        // TODO Implement me
+
+        return ValidationResult.valid();
+    }
+
+    @Override
+    public ValidationResult validateUser(final HashMap<String, String> data) {
+        // TODO Implement me
+
+        return ValidationResult.valid();
+    }
+
+    @Override
+    public ValidationResult validateAttachment(final HashMap<String, String> data) {
         // TODO Implement me
 
         return ValidationResult.valid();

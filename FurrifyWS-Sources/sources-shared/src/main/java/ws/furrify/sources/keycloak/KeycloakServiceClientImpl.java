@@ -44,6 +44,10 @@ public class KeycloakServiceClientImpl implements KeycloakServiceClient {
                 .target(KeycloakServiceClient.class, PropertyHolder.AUTH_SERVER);
     }
 
+    public KeycloakServiceClientImpl(KeycloakServiceClient keycloakServiceClient) {
+        this.keycloakServiceClient = keycloakServiceClient;
+    }
+
     @Override
     public KeycloakIdpTokenQueryDTO getKeycloakIdentityProviderToken(String bearerToken, final String realm, final String broker) {
         if (bearerToken == null) {

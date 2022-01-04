@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 class PostTest {
@@ -291,9 +292,8 @@ class PostTest {
                 postMedia
         );
 
-        assertEquals(
-                post.getSnapshot().getMediaSet().toArray()[post.getSnapshot().getMediaSet().size() - 1],
-                postMedia,
+        assertTrue(
+                post.getSnapshot().getMediaSet().contains(postMedia),
                 "Media was not added."
         );
     }
@@ -314,9 +314,8 @@ class PostTest {
                 postAttachment
         );
 
-        assertEquals(
-                post.getSnapshot().getAttachments().toArray()[post.getSnapshot().getAttachments().size() - 1],
-                postAttachment,
+        assertTrue(
+                post.getSnapshot().getAttachments().contains(postAttachment),
                 "Attachment was not added."
         );
     }

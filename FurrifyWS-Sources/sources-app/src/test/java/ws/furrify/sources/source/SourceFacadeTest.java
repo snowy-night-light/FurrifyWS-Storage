@@ -9,13 +9,14 @@ import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.shared.vo.SourceOriginType;
 import ws.furrify.sources.artists.ArtistServiceClient;
 import ws.furrify.sources.artists.dto.query.ArtistDetailsQueryDTO;
+import ws.furrify.sources.keycloak.PropertyHolder;
 import ws.furrify.sources.posts.PostServiceClient;
 import ws.furrify.sources.posts.dto.query.AttachmentDetailsQueryDTO;
 import ws.furrify.sources.posts.dto.query.MediaDetailsQueryDTO;
 import ws.furrify.sources.source.converter.SourceStrategyAttributeConverter;
 import ws.furrify.sources.source.dto.SourceDTO;
 import ws.furrify.sources.source.dto.SourceDtoFactory;
-import ws.furrify.sources.source.strategy.DeviantArtV1SourceStrategy;
+import ws.furrify.sources.source.strategy.SourceStrategy;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -41,18 +42,36 @@ class SourceFacadeTest {
 
     @BeforeEach
     void setUp() {
+        PropertyHolder.AUTH_SERVER = "test";
+
         sourceDTO = SourceDTO.builder()
                 .ownerId(UUID.randomUUID())
                 .originId(UUID.randomUUID())
                 .postId(UUID.randomUUID())
                 .originType(SourceOriginType.MEDIA)
-                .strategy(new DeviantArtV1SourceStrategy())
+                .strategy(new SourceStrategy() {
+                    @Override
+                    public ValidationResult validateMedia(final HashMap<String, String> data) {
+                        return ValidationResult.valid();
+                    }
+
+                    @Override
+                    public ValidationResult validateUser(final HashMap<String, String> data) {
+                        return ValidationResult.valid();
+                    }
+
+                    @Override
+                    public ValidationResult validateAttachment(final HashMap<String, String> data) {
+                        return ValidationResult.valid();
+                    }
+                })
                 .data(new HashMap<>())
                 .createDate(ZonedDateTime.now())
                 .build();
 
         source = new SourceFactory().from(sourceDTO);
         sourceSnapshot = source.getSnapshot();
+
     }
 
     @BeforeAll

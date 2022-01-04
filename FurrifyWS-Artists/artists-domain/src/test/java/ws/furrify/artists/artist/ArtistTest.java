@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -211,10 +212,9 @@ class ArtistTest {
         // Then add source to artist
         artist.addSource(artistSource);
 
-        assertEquals(
-                artistSource,
-                artist.getSnapshot().getSources().toArray()[0],
-                "Avatar was added."
+        assertTrue(
+                artist.getSnapshot().getSources().contains(artistSource),
+                "Source was not added."
         );
     }
 
