@@ -20,12 +20,28 @@ import java.util.HashMap;
 public interface SourceStrategy {
 
     /**
-     * Validate if given data is matching strategy requirements.
+     * Validate if given data is matching strategy requirements for remote media.
      *
-     * @param data Data given in form of hash map containing information to access ex. artist, content.
+     * @param data Data given in form of hash map containing information to access ex. username.
      * @return Instance of Validation Result.
      */
-    ValidationResult validate(HashMap<String, String> data);
+    ValidationResult validateMedia(HashMap<String, String> data);
+
+    /**
+     * Validate if given data is matching strategy requirements for remote artist.
+     *
+     * @param data Data given in form of hash map containing information to access ex. id.
+     * @return Instance of Validation Result.
+     */
+    ValidationResult validateUser(HashMap<String, String> data);
+
+    /**
+     * Validate if given data is matching strategy requirements for remote attachment.
+     *
+     * @param data Data given in form of hash map containing information to access ex. id.
+     * @return Instance of Validation Result.
+     */
+    ValidationResult validateAttachment(HashMap<String, String> data);
 
     @Value
     @AllArgsConstructor(access = AccessLevel.PRIVATE)

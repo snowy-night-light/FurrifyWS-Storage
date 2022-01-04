@@ -85,7 +85,11 @@ class Source {
         final HashMap<String, String> finalData = (data != null) ? data : new HashMap<>(this.data);
         final SourceStrategy finalStrategy = (strategy != null) ? strategy : this.strategy;
 
-        var validationResult = finalStrategy.validate(finalData);
+        var validationResult = switch (originType) {
+            case MEDIA -> finalStrategy.validateMedia(finalData);
+            case ARTIST -> finalStrategy.validateUser(finalData);
+            case ATTACHMENT -> finalStrategy.validateAttachment(finalData);
+        };
 
         if (!validationResult.isValid()) {
             throw new InvalidDataGivenException(Errors.VALIDATION_FAILED.getErrorMessage(

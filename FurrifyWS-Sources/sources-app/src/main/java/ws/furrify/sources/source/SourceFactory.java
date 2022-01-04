@@ -3,6 +3,7 @@ package ws.furrify.sources.source;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.InvalidDataGivenException;
 import ws.furrify.sources.source.dto.SourceDTO;
+import ws.furrify.sources.source.strategy.SourceStrategy;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -11,12 +12,18 @@ final class SourceFactory {
 
     Source from(SourceDTO sourceDTO) {
         // Validation result
-        var validationResult = sourceDTO.getStrategy().validate(sourceDTO.getData());
+        SourceStrategy strategy = sourceDTO.getStrategy();
+
+        var validationResult = switch (sourceDTO.getOriginType()) {
+            case MEDIA -> strategy.validateMedia(sourceDTO.getData());
+            case ARTIST -> strategy.validateUser(sourceDTO.getData());
+            case ATTACHMENT -> strategy.validateAttachment(sourceDTO.getData());
+        };
 
         // Was validation successful
         if (!validationResult.isValid()) {
             throw new InvalidDataGivenException(Errors.VALIDATION_FAILED.getErrorMessage(
-                    sourceDTO.getStrategy().getClass().getSimpleName(),
+                    strategy.getClass().getSimpleName(),
                     validationResult.getReason()
             ));
         }

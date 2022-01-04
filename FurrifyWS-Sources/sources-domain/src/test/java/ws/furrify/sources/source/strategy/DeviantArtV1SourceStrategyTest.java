@@ -50,7 +50,7 @@ class DeviantArtV1SourceStrategyTest {
         when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(deviantArtResponse);
         // Then
-        assertTrue(deviantArtV1SourceStrategy.validate(data).isValid(), "Validation failed with correct parameters.");
+        assertTrue(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation failed with correct parameters.");
     }
 
     @Test
@@ -60,7 +60,7 @@ class DeviantArtV1SourceStrategyTest {
         DeviantArtV1SourceStrategy deviantArtV1SourceStrategy = new DeviantArtV1SourceStrategy();
         // When
         // Then
-        assertFalse(deviantArtV1SourceStrategy.validate(data).isValid(), "Validation accepted empty id.");
+        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted empty id.");
     }
 
     @Test
@@ -72,7 +72,7 @@ class DeviantArtV1SourceStrategyTest {
         when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(null);
         // Then
-        assertFalse(deviantArtV1SourceStrategy.validate(data).isValid(), "Validation accepted empty id.");
+        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted empty id.");
     }
 
 }
