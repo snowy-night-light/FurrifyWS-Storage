@@ -30,7 +30,7 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
 
     @Override
     public ValidationResult validateMedia(final HashMap<String, String> data) {
-        if (data.get(DEVIATION_ID_FIELD) == null) {
+        if (data.get(DEVIATION_ID_FIELD) == null || data.get(DEVIATION_ID_FIELD).isBlank()) {
             return ValidationResult.invalid("Deviation id is required.");
         }
 
@@ -47,7 +47,7 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
 
     @Override
     public ValidationResult validateUser(final HashMap<String, String> data) {
-        if (data.get(USERNAME_FIELD) == null) {
+        if (data.get(USERNAME_FIELD) == null || data.get(DEVIATION_ID_FIELD).isBlank()) {
             return ValidationResult.invalid("Username is required.");
         }
 
