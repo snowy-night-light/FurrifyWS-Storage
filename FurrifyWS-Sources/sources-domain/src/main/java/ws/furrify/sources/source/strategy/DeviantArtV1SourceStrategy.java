@@ -47,7 +47,7 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
 
     @Override
     public ValidationResult validateUser(final HashMap<String, String> data) {
-        if (data.get(USERNAME_FIELD) == null || data.get(DEVIATION_ID_FIELD).isBlank()) {
+        if (data.get(USERNAME_FIELD) == null || data.get(USERNAME_FIELD).isBlank()) {
             return ValidationResult.invalid("Username is required.");
         }
 
