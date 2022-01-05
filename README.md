@@ -5,6 +5,11 @@ Microservices infrastructure for content management.
 Documentation: - Not released yet
 REST endpoints: https://documenter.getpostman.com/view/9259933/TzRUBnQm
 
+## Setup Keycloak
+
+To set up keycloak you can use [this](#) docker image. In panel, you can import settings from [this](#) file.
+! Links are not yet available as project version 0.0.1 is not released.
+
 ## Compile project yourself
 
 ! All ip's can be changed in application-{profile}.yml regarding selected profile.
