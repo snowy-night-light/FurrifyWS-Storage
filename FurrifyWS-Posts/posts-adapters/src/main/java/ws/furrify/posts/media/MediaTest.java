@@ -34,7 +34,7 @@ class MediaTest implements CommandLineRunner {
     private void createTestingMedia() {
         var mediaFactory = new MediaFactory();
 
-        var userId = UUID.fromString("f4612c64-f11e-4d73-8f2f-006303287f35");
+        var userId = UUID.fromString("4b255497-0200-4ee1-8922-892233173c10");
         var postId = UUID.fromString("7c2c35f3-20e9-4b7e-a455-253b7b78e2fa");
         var mediaId = UUID.fromString("19c02f53-486e-4205-b1b7-74977ae13941");
         var mediaSourceId = UUID.fromString("482b628f-4ca9-4c96-a199-bf25e21b5bca");
