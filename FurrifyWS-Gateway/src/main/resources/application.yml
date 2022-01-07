@@ -4,6 +4,10 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: sourcesService
+          uri: lb://SOURCES-SERVICE
+          predicates:
+            - Path=/users/*/sources/**, /users/*/posts/*/media/*/sources, /users/*/posts/*/attachment/*/sources, , /users/*/artists/*/sources
         - id: postsService
           uri: lb://POSTS-SERVICE
           predicates:
@@ -16,7 +20,3 @@ spring:
           uri: lb://ARTISTS-SERVICE
           predicates:
             - Path=/users/*/artists/**, /users/*/artists/*/avatar/**
-        - id: sourcesService
-          uri: lb://SOURCES-SERVICE
-          predicates:
-            - Path=/users/*/sources/**, /users/*/posts/*/media/*/sources, /users/*/posts/*/attachment/*/sources, , /users/*/artists/*/sources
