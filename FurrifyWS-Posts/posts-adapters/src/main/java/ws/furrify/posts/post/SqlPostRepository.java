@@ -74,6 +74,9 @@ interface SqlPostQueryRepositoryImpl extends PostQueryRepository, Repository<Pos
             "group by post.id " +
             "having count(distinct artist.preferredNickname) = :#{#query.withoutArtists.size() * 1L}" +
             ")) " +
+            // Title like words
+            "and (lower(p.title) like concat('%', lower(:#{#query.words.toArray[0]}) ,'%') or :#{#query.words.isEmpty()} = true)" +
+            // OwnerId
             "and p.ownerId = :ownerId")
     Page<PostSnapshot> findAllByOwnerIdAndQuery(@Param("ownerId") UUID ownerId, @Param("query") PostQuerySearchDTO query, Pageable pageable);
 
