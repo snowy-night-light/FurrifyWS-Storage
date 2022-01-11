@@ -1,10 +1,13 @@
 package ws.furrify.artists.artist;
 
+import ws.furrify.artists.artist.vo.ArtistAvatarData;
 import ws.furrify.artists.artist.vo.ArtistData;
+import ws.furrify.artists.artist.vo.ArtistSourceData;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,6 +28,23 @@ class ArtistUtils {
                                                 final Artist artist) {
         ArtistSnapshot artistSnapshot = artist.getSnapshot();
 
+        ArtistAvatarData artistAvatarData = (artistSnapshot.getAvatar() == null) ? null :
+                ArtistAvatarData.newBuilder()
+                        .setAvatarId(artistSnapshot.getAvatar().getAvatarId().toString())
+                        .setExtension(artistSnapshot.getAvatar().getExtension())
+                        .setFileUri(artistSnapshot.getAvatar().getFileUri().toString())
+                        .setThumbnailUri(artistSnapshot.getAvatar().getThumbnailUri().toString())
+                        .build();
+
+        List<ArtistSourceData> artistSourceDataList = artistSnapshot.getSources().stream()
+                .map(source -> ArtistSourceData.newBuilder()
+                        .setSourceId(source.getSourceId().toString())
+                        .setData(source.getData())
+                        .setStrategy(source.getStrategy())
+                        .build())
+                .toList();
+
+
         return ArtistEvent.newBuilder()
                 .setState(eventType.name())
                 .setArtistId(artistSnapshot.getArtistId().toString())
@@ -33,6 +53,8 @@ class ArtistUtils {
                                 .setOwnerId(artistSnapshot.getOwnerId().toString())
                                 .setNicknames(new ArrayList<>(artistSnapshot.getNicknames()))
                                 .setPreferredNickname(artistSnapshot.getPreferredNickname())
+                                .setAvatar(artistAvatarData)
+                                .setSources(artistSourceDataList)
                                 .setCreateDate(artistSnapshot.getCreateDate().toInstant())
                                 .build()
                 )

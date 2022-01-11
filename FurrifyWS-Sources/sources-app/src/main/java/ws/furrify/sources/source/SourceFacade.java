@@ -88,7 +88,21 @@ final public class SourceFacade {
     }
 
     private void saveSourceToDatabase(final SourceDTO sourceDTO) {
-        sourceRepository.save(sourceFactory.from(sourceDTO));
+        sourceRepository.save(
+                Source.restore(
+                        SourceSnapshot.builder()
+                                .id(sourceDTO.getId())
+                                .postId(sourceDTO.getPostId())
+                                .originId(sourceDTO.getOriginId())
+                                .sourceId(sourceDTO.getSourceId())
+                                .ownerId(sourceDTO.getOwnerId())
+                                .strategy(sourceDTO.getStrategy())
+                                .data(sourceDTO.getData())
+                                .originType(sourceDTO.getOriginType())
+                                .createDate(sourceDTO.getCreateDate())
+                                .build()
+                )
+        );
     }
 
 }
