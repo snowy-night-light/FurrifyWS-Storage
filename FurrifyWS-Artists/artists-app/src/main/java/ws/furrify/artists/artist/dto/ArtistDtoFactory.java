@@ -1,10 +1,13 @@
 package ws.furrify.artists.artist.dto;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import ws.furrify.artists.artist.ArtistEvent;
 import ws.furrify.artists.artist.ArtistQueryRepository;
+import ws.furrify.artists.artist.vo.ArtistAvatar;
 import ws.furrify.artists.artist.vo.ArtistSource;
 
+import java.net.URI;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -23,6 +26,7 @@ public class ArtistDtoFactory {
 
     private final ArtistQueryRepository artistQueryRepository;
 
+    @SneakyThrows
     public ArtistDTO from(UUID key, ArtistEvent artistEvent) {
         Instant createDateInstant = artistEvent.getData().getCreateDate();
         ZonedDateTime createDate = null;
@@ -45,11 +49,22 @@ public class ArtistDtoFactory {
                         artistEvent.getData().getSources().stream()
                                 .map(artistSourceEvent ->
                                         new ArtistSource(
-                                                artistSourceEvent.getSourceId(),
+                                                UUID.fromString(artistSourceEvent.getSourceId()),
                                                 artistSourceEvent.getStrategy(),
                                                 artistSourceEvent.getData()
                                         )
                                 ).collect(Collectors.toSet())
+                )
+                .avatar(
+                        (artistEvent.getData().getAvatar() == null) ? null :
+                                ArtistAvatar.builder()
+                                        .avatarId(
+                                                UUID.fromString(artistEvent.getData().getAvatar().getAvatarId())
+                                        )
+                                        .fileUri(new URI(artistEvent.getData().getAvatar().getFileUri()))
+                                        .thumbnailUri(new URI(artistEvent.getData().getAvatar().getThumbnailUri()))
+                                        .extension(artistEvent.getData().getAvatar().getExtension())
+                                        .build()
                 )
                 .createDate(createDate)
                 .build();

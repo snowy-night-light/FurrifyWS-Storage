@@ -26,6 +26,8 @@ public class DeviantArtServiceClientImpl implements DeviantArtServiceClient {
 
     private final DeviantArtServiceClient deviantArtServiceClient;
 
+    private final static String ID = "deviantart";
+
     public DeviantArtServiceClientImpl() {
         FeignDecorators decorators = FeignDecorators.builder()
                 .withFallbackFactory(DeviantArtServiceClientFallback::new)
@@ -68,9 +70,9 @@ public class DeviantArtServiceClientImpl implements DeviantArtServiceClient {
                     return null;
                 }
 
-                case INTERNAL_SERVER_ERROR -> throw new ExternalProviderServerSideErrorException(Errors.EXTERNAL_PROVIDER_SERVER_SIDE_ERROR.getErrorMessage("deviantart"));
+                case INTERNAL_SERVER_ERROR -> throw new ExternalProviderServerSideErrorException(Errors.EXTERNAL_PROVIDER_SERVER_SIDE_ERROR.getErrorMessage(ID));
 
-                case UNAUTHORIZED -> throw new ExternalProviderTokenExpiredException(Errors.EXTERNAL_PROVIDER_TOKEN_HAS_EXPIRED.getErrorMessage("deviantart"));
+                case UNAUTHORIZED -> throw new ExternalProviderTokenExpiredException(Errors.EXTERNAL_PROVIDER_TOKEN_HAS_EXPIRED.getErrorMessage(ID));
 
                 default -> {
                     log.error("DeviantArt identity provider endpoint returned unhandled status " + status.getStatus() + ".");
@@ -91,9 +93,9 @@ public class DeviantArtServiceClientImpl implements DeviantArtServiceClient {
                     return null;
                 }
 
-                case INTERNAL_SERVER_ERROR -> throw new ExternalProviderServerSideErrorException(Errors.EXTERNAL_PROVIDER_SERVER_SIDE_ERROR.getErrorMessage("deviantart"));
+                case INTERNAL_SERVER_ERROR -> throw new ExternalProviderServerSideErrorException(Errors.EXTERNAL_PROVIDER_SERVER_SIDE_ERROR.getErrorMessage(ID));
 
-                case UNAUTHORIZED -> throw new ExternalProviderTokenExpiredException(Errors.EXTERNAL_PROVIDER_TOKEN_HAS_EXPIRED.getErrorMessage("deviantart"));
+                case UNAUTHORIZED -> throw new ExternalProviderTokenExpiredException(Errors.EXTERNAL_PROVIDER_TOKEN_HAS_EXPIRED.getErrorMessage(ID));
 
                 default -> {
                     log.error("DeviantArt identity provider endpoint returned unhandled status " + status.getStatus() + ".");

@@ -2,8 +2,52 @@
   {
     "type": "record",
     "namespace": "ws.furrify.artists.artist.vo",
+    "doc": "Artist avatar containing required information to perform state change across multiple microservices.",
+    "name": "ArtistAvatarData",
+    "fields": [
+      {
+        "name": "avatarId",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Avatar UUID."
+      },
+      {
+        "name": "fileUri",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "File URI"
+      },
+      {
+        "name": "thumbnailUri",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Thumbnail URI"
+      },
+      {
+        "name": "extension",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Avatar file extension"
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "ws.furrify.artists.artist.vo",
     "doc": "Artist source containing required information to perform state change across multiple microservices.",
-    "name": "ArtistSource",
+    "name": "ArtistSourceData",
     "fields": [
       {
         "name": "sourceId",
@@ -15,7 +59,16 @@
         "doc": "Source UUID."
       },
       {
-        "name": "dataHashMap",
+        "name": "strategy",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Source strategy class."
+      },
+      {
+        "name": "data",
         "type": [
           "null",
           {
@@ -65,10 +118,19 @@
         "name": "sources",
         "type": {
           "type": "array",
-          "items": "ws.furrify.artists.artist.vo.ArtistSource"
+          "items": "ws.furrify.artists.artist.vo.ArtistSourceData"
         },
         "default": [],
         "doc": "Artist sources."
+      },
+      {
+        "name": "avatar",
+        "type": [
+          "null",
+          "ws.furrify.artists.artist.vo.ArtistAvatarData"
+        ],
+        "default": null,
+        "doc": "Artist avatar."
       },
       {
         "name": "createDate",
