@@ -48,7 +48,7 @@ class MediaFacadeTest {
                 .postId(UUID.randomUUID())
                 .mediaId(UUID.randomUUID())
                 .priority(0)
-                .extension(MediaExtension.PNG)
+                .extension(MediaExtension.EXTENSION_PNG)
                 .filename("yes.png")
                 .fileUri(new URI("/media"))
                 .thumbnailUri(new URI("/media"))

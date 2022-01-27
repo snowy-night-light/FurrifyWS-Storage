@@ -46,7 +46,7 @@ class MediaTest implements CommandLineRunner {
                                 .postId(postId)
                                 .ownerId(userId)
                                 .priority(0)
-                                .extension(MediaExtension.PNG)
+                                .extension(MediaExtension.EXTENSION_PNG)
                                 .filename("yes.png")
                                 .fileUri(new URI("/test"))
                                 .thumbnailUri(new URI("/test"))

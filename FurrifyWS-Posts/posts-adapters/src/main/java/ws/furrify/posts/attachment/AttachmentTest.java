@@ -45,7 +45,7 @@ class AttachmentTest implements CommandLineRunner {
                                 .attachmentId(attachmentId)
                                 .postId(postId)
                                 .ownerId(userId)
-                                .extension(AttachmentExtension.PSD)
+                                .extension(AttachmentExtension.EXTENSION_PSD)
                                 .fileUri(new URI("/test"))
                                 .filename("yes.psd")
                                 .md5("3c518eeb674c71b30297f072fde7eba5")

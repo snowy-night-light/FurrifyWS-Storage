@@ -21,7 +21,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static ws.furrify.posts.media.MediaExtension.GIF;
+import static ws.furrify.posts.media.MediaExtension.EXTENSION_GIF;
 
 /**
  * Utils class for media upload strategy.
@@ -46,7 +46,7 @@ public class MediaUploadStrategyUtils {
             );
             case ANIMATION -> {
                 // Workaround for gif
-                if (extension == GIF) {
+                if (extension == EXTENSION_GIF) {
                     InputStream frame = extractFirstFrameFromGif(source);
 
                     yield generateThumbnailForImage(width, quality, frame);

@@ -23,7 +23,7 @@ class AttachmentFileTest {
     @BeforeAll
     static void setUp() throws MalformedURLException, URISyntaxException {
         filename = "test.psd";
-        extension = AttachmentExtension.PSD;
+        extension = AttachmentExtension.EXTENSION_PSD;
         fileUri = new URI("/test");
         md5 = "3c518eeb674c71b30297f072fde7eba5";
     }
@@ -87,7 +87,7 @@ class AttachmentFileTest {
     @DisplayName("Create AttachmentFile from invalid extension")
     void of3() {
         // Given not matching declared extension
-        AttachmentExtension extension = AttachmentExtension.BLEND;
+        AttachmentExtension extension = AttachmentExtension.EXTENSION_BLEND;
         // When builder
         var attachmentFileBuilder = AttachmentFile.builder()
                 .filename(filename)

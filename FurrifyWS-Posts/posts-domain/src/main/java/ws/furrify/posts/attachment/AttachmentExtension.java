@@ -21,44 +21,44 @@ public enum AttachmentExtension {
     /**
      * File extensions
      */
-    MID(AttachmentType.MUSIC_DIGITAL_INTERFACE, "application/vnd.microsoft.portable-executable"),
-    MIDI(AttachmentType.MUSIC_DIGITAL_INTERFACE, "application/java-archive"),
+    EXTENSION_MID(AttachmentType.MUSIC_DIGITAL_INTERFACE, "application/vnd.microsoft.portable-executable"),
+    EXTENSION_MIDI(AttachmentType.MUSIC_DIGITAL_INTERFACE, "application/java-archive"),
 
-    EXE(AttachmentType.PROGRAM, "application/vnd.microsoft.portable-executable"),
-    JAR(AttachmentType.PROGRAM, "application/java-archive"),
+    EXTENSION_EXE(AttachmentType.PROGRAM, "application/vnd.microsoft.portable-executable"),
+    EXTENSION_JAR(AttachmentType.PROGRAM, "application/java-archive"),
 
-    PPT(AttachmentType.PRESENTATION, "application/vnd.ms-powerpoint"),
-    PPTX(AttachmentType.PRESENTATION, "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+    EXTENSION_PPT(AttachmentType.PRESENTATION, "application/vnd.ms-powerpoint"),
+    EXTENSION_PPTX(AttachmentType.PRESENTATION, "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
 
-    ODT(AttachmentType.TEXT_DOCUMENT, "application/vnd.oasis.opendocument.text"),
-    TXT(AttachmentType.TEXT_DOCUMENT, "text/plain"),
-    DOC(AttachmentType.TEXT_DOCUMENT, "application/msword"),
-    DOCX(AttachmentType.TEXT_DOCUMENT, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+    EXTENSION_ODT(AttachmentType.TEXT_DOCUMENT, "application/vnd.oasis.opendocument.text"),
+    EXTENSION_TXT(AttachmentType.TEXT_DOCUMENT, "text/plain"),
+    EXTENSION_DOC(AttachmentType.TEXT_DOCUMENT, "application/msword"),
+    EXTENSION_DOCX(AttachmentType.TEXT_DOCUMENT, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
 
-    TORRENT(AttachmentType.TORRENT, "application/x-bittorrent"),
+    EXTENSION_TORRENT(AttachmentType.TORRENT, "application/x-bittorrent"),
 
-    AZW3(AttachmentType.EBOOK, "application/vnd.amazon.mobi8-ebook"),
-    MOBI(AttachmentType.EBOOK, "application/x-mobipocket-ebook"),
-    EPUB(AttachmentType.EBOOK, "application/epub+zip"),
+    EXTENSION_AZW3(AttachmentType.EBOOK, "application/vnd.amazon.mobi8-ebook"),
+    EXTENSION_MOBI(AttachmentType.EBOOK, "application/x-mobipocket-ebook"),
+    EXTENSION_EPUB(AttachmentType.EBOOK, "application/epub+zip"),
 
-    PDF(AttachmentType.ADOBE_DOCUMENT, "application/pdf"),
+    EXTENSION_PDF(AttachmentType.ADOBE_DOCUMENT, "application/pdf"),
 
-    SAI(AttachmentType.PAINTTOOL_SAI_DOCUMENT, "application/octet-stream"),
+    EXTENSION_SAI(AttachmentType.PAINTTOOL_SAI_DOCUMENT, "application/octet-stream"),
 
-    ZIP(AttachmentType.COMPRESSED_ARCHIVE, "application/zip"),
-    RAR(AttachmentType.COMPRESSED_ARCHIVE, "application/vnd.rar"),
-    BZIP(AttachmentType.COMPRESSED_ARCHIVE, "application/x-bzip"),
-    BZIP2(AttachmentType.COMPRESSED_ARCHIVE, "application/x-bzip2"),
+    EXTENSION_ZIP(AttachmentType.COMPRESSED_ARCHIVE, "application/zip"),
+    EXTENSION_RAR(AttachmentType.COMPRESSED_ARCHIVE, "application/vnd.rar"),
+    EXTENSION_BZIP(AttachmentType.COMPRESSED_ARCHIVE, "application/x-bzip"),
+    EXTENSION_BZIP2(AttachmentType.COMPRESSED_ARCHIVE, "application/x-bzip2"),
 
-    TAR(AttachmentType.ARCHIVE, "application/x-tar"),
+    EXTENSION_TAR(AttachmentType.ARCHIVE, "application/x-tar"),
 
-    GZ(AttachmentType.COMPRESSED, "application/gzip"),
+    EXTENSION_GZ(AttachmentType.COMPRESSED, "application/gzip"),
 
-    SWF(AttachmentType.ADOBE_FLASH, "application/x-shockwave-flash"),
+    EXTENSION_SWF(AttachmentType.ADOBE_FLASH, "application/x-shockwave-flash"),
 
-    PSD(AttachmentType.PHOTOSHOP_DOCUMENT, "image/vnd.adobe.photoshop"),
+    EXTENSION_PSD(AttachmentType.PHOTOSHOP_DOCUMENT, "image/vnd.adobe.photoshop"),
 
-    BLEND(AttachmentType.BLENDER_PROJECT, "application/octet-stream");
+    EXTENSION_BLEND(AttachmentType.BLENDER_PROJECT, "application/octet-stream");
 
     /**
      * Mime type of extension.

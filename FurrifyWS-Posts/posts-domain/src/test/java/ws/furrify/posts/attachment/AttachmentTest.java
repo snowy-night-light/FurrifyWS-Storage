@@ -32,7 +32,7 @@ class AttachmentTest {
                 .filename("file.psd")
                 .fileUri(new URI("/test"))
                 .md5("3c518eeb674c71b30297f072fde7eba5")
-                .extension(AttachmentExtension.PSD)
+                .extension(AttachmentExtension.EXTENSION_PSD)
                 .sources(Collections.singleton(
                         new AttachmentSource(
                                 UUID.randomUUID(),

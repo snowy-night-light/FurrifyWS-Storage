@@ -47,7 +47,7 @@ class AttachmentFacadeTest {
                 .ownerId(UUID.randomUUID())
                 .postId(UUID.randomUUID())
                 .attachmentId(UUID.randomUUID())
-                .extension(AttachmentExtension.PSD)
+                .extension(AttachmentExtension.EXTENSION_PSD)
                 .filename("example.psd")
                 .fileUri(new URI("/test"))
                 .md5("3c518eeb674c71b30297f072fde7eba5")

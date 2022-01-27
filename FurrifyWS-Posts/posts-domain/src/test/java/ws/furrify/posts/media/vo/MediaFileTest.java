@@ -23,7 +23,7 @@ class MediaFileTest {
     @BeforeAll
     static void setUp() throws URISyntaxException {
         filename = "test.png";
-        extension = MediaExtension.PNG;
+        extension = MediaExtension.EXTENSION_PNG;
         fileUri = new URI("/test");
         thumbnailUri = new URI("/test");
         md5 = "3c518eeb674c71b30297f072fde7eba5";
@@ -95,7 +95,7 @@ class MediaFileTest {
     @DisplayName("Create MediaFile from invalid extension")
     void of3() {
         // Given not matching declared extension
-        MediaExtension extension = MediaExtension.JPG;
+        MediaExtension extension = MediaExtension.EXTENSION_JPG;
         // When builder
         var mediaFileBuilder = MediaFile.builder()
                 .filename(filename)

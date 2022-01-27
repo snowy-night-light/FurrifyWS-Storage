@@ -35,7 +35,7 @@ class MediaTest {
                 .md5("3c518eeb674c71b30297f072fde7eba5")
                 .fileUri(new URI("/test"))
                 .thumbnailUri(new URI("/test"))
-                .extension(MediaExtension.PNG)
+                .extension(MediaExtension.EXTENSION_PNG)
                 .sources(Collections.singleton(
                         new MediaSource(
                                 UUID.randomUUID(),

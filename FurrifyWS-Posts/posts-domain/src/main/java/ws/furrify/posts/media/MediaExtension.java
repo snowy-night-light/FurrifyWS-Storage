@@ -23,34 +23,34 @@ public enum MediaExtension {
     /**
      * File extensions
      */
-    OGG(MediaType.AUDIO, "application/ogg", "audio/ogg"),
-    FLAC(MediaType.AUDIO, "audio/x-flac", "audio/flac"),
-    MP3(MediaType.AUDIO, "audio/mpeg"),
-    WAV(MediaType.AUDIO, "audio/wav", "audio/vnd.wave", "audio/wave", "audio/x-wav"),
+    EXTENSION_OGG(MediaType.AUDIO, "application/ogg", "audio/ogg"),
+    EXTENSION_FLAC(MediaType.AUDIO, "audio/x-flac", "audio/flac"),
+    EXTENSION_MP3(MediaType.AUDIO, "audio/mpeg"),
+    EXTENSION_WAV(MediaType.AUDIO, "audio/wav", "audio/vnd.wave", "audio/wave", "audio/x-wav"),
 
-    GIF(MediaType.ANIMATION, "image/gif"),
+    EXTENSION_GIF(MediaType.ANIMATION, "image/gif"),
 
-    TS(MediaType.VIDEO, "video/MP2T"),
-    MOV(MediaType.VIDEO, "video/quicktime"),
-    FLV(MediaType.VIDEO, "video/x-flv"),
-    AVI(MediaType.VIDEO, "video/x-msvideo"),
-    WMV(MediaType.VIDEO, "video/x-ms-wmv"),
-    MKV(MediaType.VIDEO, "video/x-matroska"),
-    WEBM(MediaType.VIDEO, "video/webm"),
-    MP4(MediaType.VIDEO, "video/mp4"),
-    MPEG(MediaType.IMAGE, "video/mpeg"),
+    EXTENSION_TS(MediaType.VIDEO, "video/MP2T"),
+    EXTENSION_MOV(MediaType.VIDEO, "video/quicktime"),
+    EXTENSION_FLV(MediaType.VIDEO, "video/x-flv"),
+    EXTENSION_AVI(MediaType.VIDEO, "video/x-msvideo"),
+    EXTENSION_WMV(MediaType.VIDEO, "video/x-ms-wmv"),
+    EXTENSION_MKV(MediaType.VIDEO, "video/x-matroska"),
+    EXTENSION_WEBM(MediaType.VIDEO, "video/webm"),
+    EXTENSION_MP4(MediaType.VIDEO, "video/mp4"),
+    EXTENSION_MPEG(MediaType.IMAGE, "video/mpeg"),
 
-    WEBP(MediaType.IMAGE, "image/webp"),
-    ICO(MediaType.IMAGE, "image/vnd.microsoft.icon"),
-    SVG(MediaType.IMAGE, "image/svg+xml"),
-    TIF(MediaType.IMAGE, "image/tiff"),
-    TIFF(MediaType.IMAGE, "image/tiff"),
-    WBMP(MediaType.IMAGE, "image/vnd.wap.wbmp"),
-    BMP(MediaType.IMAGE, "image/bmp"),
-    BM(MediaType.IMAGE, "image/bmp"),
-    PNG(MediaType.IMAGE, "image/png"),
-    JPEG(MediaType.IMAGE, "image/jpeg"),
-    JPG(MediaType.IMAGE, "image/jpeg");
+    EXTENSION_WEBP(MediaType.IMAGE, "image/webp"),
+    EXTENSION_ICO(MediaType.IMAGE, "image/vnd.microsoft.icon"),
+    EXTENSION_SVG(MediaType.IMAGE, "image/svg+xml"),
+    EXTENSION_TIF(MediaType.IMAGE, "image/tiff"),
+    EXTENSION_TIFF(MediaType.IMAGE, "image/tiff"),
+    EXTENSION_WBMP(MediaType.IMAGE, "image/vnd.wap.wbmp"),
+    EXTENSION_BMP(MediaType.IMAGE, "image/bmp"),
+    EXTENSION_BM(MediaType.IMAGE, "image/bmp"),
+    EXTENSION_PNG(MediaType.IMAGE, "image/png"),
+    EXTENSION_JPEG(MediaType.IMAGE, "image/jpeg"),
+    EXTENSION_JPG(MediaType.IMAGE, "image/jpeg");
 
     /**
      * Mime type of extension.
@@ -89,7 +89,7 @@ public enum MediaExtension {
             String mimeType = FileUtils.getMimeType(filename, file.getInputStream());
 
             // Add allowed mime types to set
-            Set<String> allowedMimetypes = new HashSet<>(Arrays.asList(MediaExtension.JPG.getMimeTypes()));
+            Set<String> allowedMimetypes = new HashSet<>(Arrays.asList(MediaExtension.EXTENSION_JPG.getMimeTypes()));
 
             return allowedMimetypes.contains(mimeType);
         } catch (IOException e) {

@@ -52,7 +52,7 @@ class PostTest {
                                 .priority(1)
                                 .fileUri(new URI("/test"))
                                 .thumbnailUri(new URI("/test"))
-                                .extension(MediaExtension.PNG.name())
+                                .extension(MediaExtension.EXTENSION_PNG.name())
                                 .build()
                 ))
                 .attachments(Collections.singleton(
@@ -60,7 +60,7 @@ class PostTest {
                                 .attachmentId(UUID.randomUUID())
                                 .fileUri(new URI("/test"))
                                 .filename("yes.psd")
-                                .extension(AttachmentExtension.PSD.name())
+                                .extension(AttachmentExtension.EXTENSION_PSD.name())
                                 .build()
                 ))
                 .createDate(ZonedDateTime.now())
