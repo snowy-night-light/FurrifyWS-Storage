@@ -21,44 +21,49 @@ public enum AttachmentExtension {
     /**
      * File extensions
      */
-    EXTENSION_MID(AttachmentType.MUSIC_DIGITAL_INTERFACE, "application/vnd.microsoft.portable-executable"),
-    EXTENSION_MIDI(AttachmentType.MUSIC_DIGITAL_INTERFACE, "application/java-archive"),
+    EXTENSION_MID("MID", AttachmentType.MUSIC_DIGITAL_INTERFACE, "application/vnd.microsoft.portable-executable"),
+    EXTENSION_MIDI("MIDI", AttachmentType.MUSIC_DIGITAL_INTERFACE, "application/java-archive"),
 
-    EXTENSION_EXE(AttachmentType.PROGRAM, "application/vnd.microsoft.portable-executable"),
-    EXTENSION_JAR(AttachmentType.PROGRAM, "application/java-archive"),
+    EXTENSION_EXE("EXE", AttachmentType.PROGRAM, "application/vnd.microsoft.portable-executable"),
+    EXTENSION_JAR("JAR", AttachmentType.PROGRAM, "application/java-archive"),
 
-    EXTENSION_PPT(AttachmentType.PRESENTATION, "application/vnd.ms-powerpoint"),
-    EXTENSION_PPTX(AttachmentType.PRESENTATION, "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+    EXTENSION_PPT("PPT", AttachmentType.PRESENTATION, "application/vnd.ms-powerpoint"),
+    EXTENSION_PPTX("PPTX", AttachmentType.PRESENTATION, "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
 
-    EXTENSION_ODT(AttachmentType.TEXT_DOCUMENT, "application/vnd.oasis.opendocument.text"),
-    EXTENSION_TXT(AttachmentType.TEXT_DOCUMENT, "text/plain"),
-    EXTENSION_DOC(AttachmentType.TEXT_DOCUMENT, "application/msword"),
-    EXTENSION_DOCX(AttachmentType.TEXT_DOCUMENT, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+    EXTENSION_ODT("ODT", AttachmentType.TEXT_DOCUMENT, "application/vnd.oasis.opendocument.text"),
+    EXTENSION_TXT("TXT", AttachmentType.TEXT_DOCUMENT, "text/plain"),
+    EXTENSION_DOC("DOC", AttachmentType.TEXT_DOCUMENT, "application/msword"),
+    EXTENSION_DOCX("DOCX", AttachmentType.TEXT_DOCUMENT, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
 
-    EXTENSION_TORRENT(AttachmentType.TORRENT, "application/x-bittorrent"),
+    EXTENSION_TORRENT("TORRENT", AttachmentType.TORRENT, "application/x-bittorrent"),
 
-    EXTENSION_AZW3(AttachmentType.EBOOK, "application/vnd.amazon.mobi8-ebook"),
-    EXTENSION_MOBI(AttachmentType.EBOOK, "application/x-mobipocket-ebook"),
-    EXTENSION_EPUB(AttachmentType.EBOOK, "application/epub+zip"),
+    EXTENSION_AZW3("AZW3", AttachmentType.EBOOK, "application/vnd.amazon.mobi8-ebook"),
+    EXTENSION_MOBI("MOBI", AttachmentType.EBOOK, "application/x-mobipocket-ebook"),
+    EXTENSION_EPUB("EPUB", AttachmentType.EBOOK, "application/epub+zip"),
 
-    EXTENSION_PDF(AttachmentType.ADOBE_DOCUMENT, "application/pdf"),
+    EXTENSION_PDF("PDF", AttachmentType.ADOBE_DOCUMENT, "application/pdf"),
 
-    EXTENSION_SAI(AttachmentType.PAINTTOOL_SAI_DOCUMENT, "application/octet-stream"),
+    EXTENSION_SAI("SAI", AttachmentType.PAINTTOOL_SAI_DOCUMENT, "application/octet-stream"),
 
-    EXTENSION_ZIP(AttachmentType.COMPRESSED_ARCHIVE, "application/zip"),
-    EXTENSION_RAR(AttachmentType.COMPRESSED_ARCHIVE, "application/vnd.rar"),
-    EXTENSION_BZIP(AttachmentType.COMPRESSED_ARCHIVE, "application/x-bzip"),
-    EXTENSION_BZIP2(AttachmentType.COMPRESSED_ARCHIVE, "application/x-bzip2"),
+    EXTENSION_ZIP("ZIP", AttachmentType.COMPRESSED_ARCHIVE, "application/zip"),
+    EXTENSION_RAR("RAR", AttachmentType.COMPRESSED_ARCHIVE, "application/vnd.rar"),
+    EXTENSION_BZIP("BZIP", AttachmentType.COMPRESSED_ARCHIVE, "application/x-bzip"),
+    EXTENSION_BZIP2("BZIP2", AttachmentType.COMPRESSED_ARCHIVE, "application/x-bzip2"),
 
-    EXTENSION_TAR(AttachmentType.ARCHIVE, "application/x-tar"),
+    EXTENSION_TAR("TAR", AttachmentType.ARCHIVE, "application/x-tar"),
 
-    EXTENSION_GZ(AttachmentType.COMPRESSED, "application/gzip"),
+    EXTENSION_GZ("GZ", AttachmentType.COMPRESSED, "application/gzip"),
 
-    EXTENSION_SWF(AttachmentType.ADOBE_FLASH, "application/x-shockwave-flash"),
+    EXTENSION_SWF("SWF", AttachmentType.ADOBE_FLASH, "application/x-shockwave-flash"),
 
-    EXTENSION_PSD(AttachmentType.PHOTOSHOP_DOCUMENT, "image/vnd.adobe.photoshop"),
+    EXTENSION_PSD("PSD", AttachmentType.PHOTOSHOP_DOCUMENT, "image/vnd.adobe.photoshop"),
 
-    EXTENSION_BLEND(AttachmentType.BLENDER_PROJECT, "application/octet-stream");
+    EXTENSION_BLEND("BLEND", AttachmentType.BLENDER_PROJECT, "application/octet-stream");
+
+    /**
+     * File extension in uppercase.
+     */
+    private final String extension;
 
     /**
      * Mime type of extension.
@@ -72,7 +77,8 @@ public enum AttachmentExtension {
 
     private final static Pattern FILENAME_PATTERN = Pattern.compile("^[a-zA-Z0-9](?:[a-zA-Z0-9() ._-]*[a-zA-Z0-9() ._-])?\\.[a-zA-Z0-9_-]+$");
 
-    AttachmentExtension(final AttachmentType type, final String... mimeTypes) {
+    AttachmentExtension(final String extension, final AttachmentType type, final String... mimeTypes) {
+        this.extension = extension;
         this.mimeTypes = mimeTypes;
         this.type = type;
     }

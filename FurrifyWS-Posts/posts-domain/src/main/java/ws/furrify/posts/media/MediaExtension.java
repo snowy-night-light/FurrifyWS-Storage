@@ -23,34 +23,39 @@ public enum MediaExtension {
     /**
      * File extensions
      */
-    EXTENSION_OGG(MediaType.AUDIO, "application/ogg", "audio/ogg"),
-    EXTENSION_FLAC(MediaType.AUDIO, "audio/x-flac", "audio/flac"),
-    EXTENSION_MP3(MediaType.AUDIO, "audio/mpeg"),
-    EXTENSION_WAV(MediaType.AUDIO, "audio/wav", "audio/vnd.wave", "audio/wave", "audio/x-wav"),
+    EXTENSION_OGG("OGG", MediaType.AUDIO, "application/ogg", "audio/ogg"),
+    EXTENSION_FLAC("FLAC", MediaType.AUDIO, "audio/x-flac", "audio/flac"),
+    EXTENSION_MP3("MP3", MediaType.AUDIO, "audio/mpeg"),
+    EXTENSION_WAV("WAV", MediaType.AUDIO, "audio/wav", "audio/vnd.wave", "audio/wave", "audio/x-wav"),
 
-    EXTENSION_GIF(MediaType.ANIMATION, "image/gif"),
+    EXTENSION_GIF("GIF", MediaType.ANIMATION, "image/gif"),
 
-    EXTENSION_TS(MediaType.VIDEO, "video/MP2T"),
-    EXTENSION_MOV(MediaType.VIDEO, "video/quicktime"),
-    EXTENSION_FLV(MediaType.VIDEO, "video/x-flv"),
-    EXTENSION_AVI(MediaType.VIDEO, "video/x-msvideo"),
-    EXTENSION_WMV(MediaType.VIDEO, "video/x-ms-wmv"),
-    EXTENSION_MKV(MediaType.VIDEO, "video/x-matroska"),
-    EXTENSION_WEBM(MediaType.VIDEO, "video/webm"),
-    EXTENSION_MP4(MediaType.VIDEO, "video/mp4"),
-    EXTENSION_MPEG(MediaType.IMAGE, "video/mpeg"),
+    EXTENSION_TS("TS", MediaType.VIDEO, "video/MP2T"),
+    EXTENSION_MOV("MOV", MediaType.VIDEO, "video/quicktime"),
+    EXTENSION_FLV("FLV", MediaType.VIDEO, "video/x-flv"),
+    EXTENSION_AVI("AVI", MediaType.VIDEO, "video/x-msvideo"),
+    EXTENSION_WMV("WMV", MediaType.VIDEO, "video/x-ms-wmv"),
+    EXTENSION_MKV("MKV", MediaType.VIDEO, "video/x-matroska"),
+    EXTENSION_WEBM("WEBM", MediaType.VIDEO, "video/webm"),
+    EXTENSION_MP4("MP4", MediaType.VIDEO, "video/mp4"),
+    EXTENSION_MPEG("MPEG", MediaType.IMAGE, "video/mpeg"),
 
-    EXTENSION_WEBP(MediaType.IMAGE, "image/webp"),
-    EXTENSION_ICO(MediaType.IMAGE, "image/vnd.microsoft.icon"),
-    EXTENSION_SVG(MediaType.IMAGE, "image/svg+xml"),
-    EXTENSION_TIF(MediaType.IMAGE, "image/tiff"),
-    EXTENSION_TIFF(MediaType.IMAGE, "image/tiff"),
-    EXTENSION_WBMP(MediaType.IMAGE, "image/vnd.wap.wbmp"),
-    EXTENSION_BMP(MediaType.IMAGE, "image/bmp"),
-    EXTENSION_BM(MediaType.IMAGE, "image/bmp"),
-    EXTENSION_PNG(MediaType.IMAGE, "image/png"),
-    EXTENSION_JPEG(MediaType.IMAGE, "image/jpeg"),
-    EXTENSION_JPG(MediaType.IMAGE, "image/jpeg");
+    EXTENSION_WEBP("WEBP", MediaType.IMAGE, "image/webp"),
+    EXTENSION_ICO("ICO", MediaType.IMAGE, "image/vnd.microsoft.icon"),
+    EXTENSION_SVG("SVG", MediaType.IMAGE, "image/svg+xml"),
+    EXTENSION_TIF("TIF", MediaType.IMAGE, "image/tiff"),
+    EXTENSION_TIFF("TIFF", MediaType.IMAGE, "image/tiff"),
+    EXTENSION_WBMP("WBMP", MediaType.IMAGE, "image/vnd.wap.wbmp"),
+    EXTENSION_BMP("BMP", MediaType.IMAGE, "image/bmp"),
+    EXTENSION_BM("BM", MediaType.IMAGE, "image/bmp"),
+    EXTENSION_PNG("PNG", MediaType.IMAGE, "image/png"),
+    EXTENSION_JPEG("JPEG", MediaType.IMAGE, "image/jpeg"),
+    EXTENSION_JPG("JPG", MediaType.IMAGE, "image/jpeg");
+
+    /**
+     * File extension in uppercase.
+     */
+    private final String extension;
 
     /**
      * Mime type of extension.
@@ -64,7 +69,8 @@ public enum MediaExtension {
 
     private final static Pattern FILENAME_PATTERN = Pattern.compile("^[a-zA-Z0-9](?:[a-zA-Z0-9() ._-]*[a-zA-Z0-9() ._-])?\\.[a-zA-Z0-9_-]+$");
 
-    MediaExtension(final MediaType type, final String... mimeTypes) {
+    MediaExtension(final String extension, final MediaType type, final String... mimeTypes) {
+        this.extension = extension;
         this.mimeTypes = mimeTypes;
         this.type = type;
     }
