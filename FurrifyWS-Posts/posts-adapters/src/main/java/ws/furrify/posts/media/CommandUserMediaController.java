@@ -2,6 +2,7 @@ package ws.furrify.posts.media;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +20,8 @@ import ws.furrify.posts.media.dto.MediaDTO;
 import ws.furrify.posts.media.dto.command.MediaCreateCommandDTO;
 import ws.furrify.posts.media.dto.command.MediaReplaceCommandDTO;
 import ws.furrify.posts.media.dto.command.MediaUpdateCommandDTO;
+import ws.furrify.shared.exception.Errors;
+import ws.furrify.shared.exception.HardLimitForEntityTypeException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
@@ -30,6 +33,10 @@ import java.util.UUID;
 class CommandUserMediaController {
 
     private final MediaFacade mediaFacade;
+    private final MediaRepository mediaRepository;
+
+    @Value("${furrify.limits.media}")
+    private long mediaLimitPerUser;
 
     @PostMapping
     @PreAuthorize(
@@ -43,6 +50,14 @@ class CommandUserMediaController {
                                          @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnailFile,
                                          KeycloakAuthenticationToken keycloakAuthenticationToken,
                                          HttpServletResponse response) {
+        // Hard limit for media
+        long userMediaCount = mediaRepository.countMediaByUserId(userId);
+        if (userMediaCount >= mediaLimitPerUser) {
+            throw new HardLimitForEntityTypeException(
+                    Errors.HARD_LIMIT_FOR_ENTITY_TYPE.getErrorMessage(mediaLimitPerUser, "Media")
+            );
+        }
+
         MediaDTO mediaDTO = mediaCreateCommandDTO.toDTO();
 
         response.addHeader("Id",

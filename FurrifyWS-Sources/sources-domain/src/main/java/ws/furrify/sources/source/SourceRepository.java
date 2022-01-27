@@ -11,4 +11,6 @@ interface SourceRepository {
     Optional<Source> findByOwnerIdAndSourceId(UUID ownerId, UUID sourceId);
 
     boolean existsByOwnerIdAndSourceId(UUID ownerId, UUID sourceId);
+
+    long countSourcesByUserId(UUID userId);
 }

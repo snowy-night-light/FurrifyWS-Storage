@@ -11,4 +11,6 @@ interface MediaRepository {
     boolean existsByOwnerIdAndPostIdAndMediaId(UUID ownerId, UUID postId, UUID mediaId);
 
     Media save(Media media);
+
+    long countMediaByUserId(UUID userId);
 }

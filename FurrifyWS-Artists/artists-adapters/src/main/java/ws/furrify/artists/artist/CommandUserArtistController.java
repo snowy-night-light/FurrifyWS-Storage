@@ -2,6 +2,7 @@ package ws.furrify.artists.artist;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,8 @@ import ws.furrify.artists.artist.dto.ArtistDTO;
 import ws.furrify.artists.artist.dto.command.ArtistCreateCommandDTO;
 import ws.furrify.artists.artist.dto.command.ArtistReplaceCommandDTO;
 import ws.furrify.artists.artist.dto.command.ArtistUpdateCommandDTO;
+import ws.furrify.shared.exception.Errors;
+import ws.furrify.shared.exception.HardLimitForEntityTypeException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
@@ -28,6 +31,10 @@ import java.util.UUID;
 class CommandUserArtistController {
 
     private final ArtistFacade artistFacade;
+    private final ArtistRepository artistRepository;
+
+    @Value("${furrify.limits.artists}")
+    private long artistsLimitPerUser;
 
     @PostMapping
     @PreAuthorize(
@@ -38,6 +45,14 @@ class CommandUserArtistController {
                                           @RequestBody @Validated ArtistCreateCommandDTO artistCreateCommandDTO,
                                           KeycloakAuthenticationToken keycloakAuthenticationToken,
                                           HttpServletResponse response) {
+        // Hard limit for artist
+        long userArtistsCount = artistRepository.countPostsByUserId(userId);
+        if (userArtistsCount >= artistsLimitPerUser) {
+            throw new HardLimitForEntityTypeException(
+                    Errors.HARD_LIMIT_FOR_ENTITY_TYPE.getErrorMessage(artistsLimitPerUser, "Artist")
+            );
+        }
+
         ArtistDTO artistDTO = artistCreateCommandDTO.toDTO();
 
         response.addHeader("Id",

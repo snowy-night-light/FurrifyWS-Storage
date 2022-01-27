@@ -13,4 +13,6 @@ interface ArtistRepository {
     Optional<Artist> findByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
 
     boolean existsByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
+
+    long countPostsByUserId(UUID userId);
 }

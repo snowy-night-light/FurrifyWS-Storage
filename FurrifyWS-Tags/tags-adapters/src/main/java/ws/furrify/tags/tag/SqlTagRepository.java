@@ -21,6 +21,9 @@ interface SqlTagRepository extends Repository<TagSnapshot, Long> {
     Optional<TagSnapshot> findByOwnerIdAndValue(UUID ownerId, String value);
 
     void deleteByValue(String value);
+
+    @Query("select count(a) from TagSnapshot a where a.ownerId = ?1")
+    long countTagsByUserId(UUID userId);
 }
 
 @Transactional(rollbackFor = {})
@@ -63,5 +66,10 @@ class TagRepositoryImpl implements TagRepository {
     @Override
     public Optional<Tag> findByOwnerIdAndValue(final UUID userId, final String value) {
         return sqlTagRepository.findByOwnerIdAndValue(userId, value).map(Tag::restore);
+    }
+
+    @Override
+    public long countTagsByUserId(final UUID userId) {
+        return sqlTagRepository.countTagsByUserId(userId);
     }
 }

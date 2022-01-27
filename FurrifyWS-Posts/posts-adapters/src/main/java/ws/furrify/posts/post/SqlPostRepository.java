@@ -37,6 +37,9 @@ interface SqlPostRepository extends Repository<PostSnapshot, Long> {
 
     @Query("from PostSnapshot post join post.attachments attachment where attachment.attachmentId = ?3 and post.postId = ?2 and post.ownerId = ?1")
     Optional<PostSnapshot> findByOwnerIdAndPostIdAndAttachmentId(UUID ownerId, UUID postId, UUID attachmentId);
+
+    @Query("select count(a) from PostSnapshot a where a.ownerId = ?1")
+    long countPostsByUserId(UUID userId);
 }
 
 @Transactional(rollbackFor = {})
@@ -139,5 +142,10 @@ class PostRepositoryImpl implements PostRepository {
     @Override
     public Optional<Post> findByOwnerIdAndPostIdAndAttachmentId(final UUID ownerId, final UUID postId, final UUID attachment) {
         return sqlPostRepository.findByOwnerIdAndPostIdAndAttachmentId(ownerId, postId, attachment).map(Post::restore);
+    }
+
+    @Override
+    public long countPostsByUserId(final UUID userId) {
+        return sqlPostRepository.countPostsByUserId(userId);
     }
 }

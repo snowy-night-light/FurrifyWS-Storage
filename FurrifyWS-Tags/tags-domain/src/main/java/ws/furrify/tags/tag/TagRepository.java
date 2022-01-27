@@ -11,4 +11,6 @@ interface TagRepository {
     boolean existsByOwnerIdAndValue(UUID ownerId, String value);
 
     Optional<Tag> findByOwnerIdAndValue(UUID userId, String value);
+
+    long countTagsByUserId(UUID userId);
 }

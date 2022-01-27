@@ -23,6 +23,9 @@ interface SqlArtistRepository extends Repository<ArtistSnapshot, Long> {
     boolean existsByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
 
     Optional<ArtistSnapshot> findByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
+
+    @Query("select count(a) from ArtistSnapshot a where a.ownerId = ?1")
+    long countArtistsByUserId(UUID userId);
 }
 
 @Transactional(rollbackFor = {})
@@ -73,6 +76,11 @@ class ArtistRepositoryImpl implements ArtistRepository {
     @Override
     public boolean existsByOwnerIdAndArtistId(final UUID ownerId, final UUID artistId) {
         return sqlArtistRepository.existsByOwnerIdAndArtistId(ownerId, artistId);
+    }
+
+    @Override
+    public long countPostsByUserId(final UUID userId) {
+        return sqlArtistRepository.countArtistsByUserId(userId);
     }
 
 
