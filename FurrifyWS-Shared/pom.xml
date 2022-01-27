@@ -96,7 +96,7 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-security-adapter</artifactId>
-            <version>16.1.0</version>
+            <version>16.1.1</version>
             <scope>compile</scope>
         </dependency>
         <!-- JPA -->
@@ -109,7 +109,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.6.4.Final</version>
+            <version>5.6.5.Final</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
