@@ -53,7 +53,7 @@ public class AttachmentFile {
         }
 
         // Check if filename extension matches declared
-        if (!filenameWithExt[filenameWithExt.length - 1].equalsIgnoreCase(extension.name())) {
+        if (!filenameWithExt[filenameWithExt.length - 1].equalsIgnoreCase(extension.getExtension())) {
             throw new IllegalStateException("Attachment filename [filename=" + filename + "] must be the same as declared extension.");
         }
 
