@@ -21,6 +21,9 @@ interface SqlAttachmentRepository extends Repository<AttachmentSnapshot, Long> {
     Optional<AttachmentSnapshot> findByOwnerIdAndPostIdAndAttachmentId(UUID ownerId, UUID postId, UUID attachmentId);
 
     boolean existsByOwnerIdAndPostIdAndAttachmentId(UUID ownerId, UUID postId, UUID attachmentId);
+
+    @Query("select count(a) from AttachmentSnapshot a where a.ownerId = ?1")
+    long countAttachmentsByUserId(UUID userId);
 }
 
 @Transactional(rollbackFor = {})
@@ -49,6 +52,11 @@ class AttachmentRepositoryImpl implements AttachmentRepository {
         return Attachment.restore(
                 sqlAttachmentRepository.save(attachment.getSnapshot())
         );
+    }
+
+    @Override
+    public long countAttachmentsByUserId(final UUID userId) {
+        return sqlAttachmentRepository.countAttachmentsByUserId(userId);
     }
 
     @Override

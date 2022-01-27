@@ -155,7 +155,8 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
             FilenameIsInvalidException.class,
             VideoFrameExtractionFailedException.class,
             ExternalProviderTokenExpiredException.class,
-            ExternalProviderServerSideErrorException.class
+            ExternalProviderServerSideErrorException.class,
+            HardLimitForEntityTypeException.class
     })
     protected ResponseEntity<Object> handleException(
             RestException exception) {

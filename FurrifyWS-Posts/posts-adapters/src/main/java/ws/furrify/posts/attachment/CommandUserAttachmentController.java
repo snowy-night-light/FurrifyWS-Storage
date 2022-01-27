@@ -2,6 +2,7 @@ package ws.furrify.posts.attachment;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.attachment.dto.AttachmentDTO;
 import ws.furrify.posts.attachment.dto.command.AttachmentCreateCommandDTO;
+import ws.furrify.shared.exception.Errors;
+import ws.furrify.shared.exception.HardLimitForEntityTypeException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
@@ -25,6 +28,10 @@ import java.util.UUID;
 class CommandUserAttachmentController {
 
     private final AttachmentFacade attachmentFacade;
+    private final SqlAttachmentRepository sqlAttachmentRepository;
+
+    @Value("${furrify.limits.attachments}")
+    private long attachmentsLimitPerUser;
 
     @PostMapping
     @PreAuthorize(
@@ -37,6 +44,13 @@ class CommandUserAttachmentController {
                                               @RequestPart("file") MultipartFile mediaFile,
                                               KeycloakAuthenticationToken keycloakAuthenticationToken,
                                               HttpServletResponse response) {
+        long userAttachmentsCount = sqlAttachmentRepository.countAttachmentsByUserId(userId);
+        if (userAttachmentsCount >= attachmentsLimitPerUser) {
+            throw new HardLimitForEntityTypeException(
+                    Errors.HARD_LIMIT_FOR_ENTITY_TYPE.getErrorMessage(attachmentsLimitPerUser, "Attachment")
+            );
+        }
+
         AttachmentDTO attachmentDTO = attachmentCreateCommandDTO.toDTO();
 
         response.addHeader("Id",

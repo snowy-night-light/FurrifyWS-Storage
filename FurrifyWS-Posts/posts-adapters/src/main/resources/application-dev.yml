@@ -46,3 +46,8 @@ keycloak:
   bearer-only: true
   use-resource-role-mappings: true
 
+furrify:
+  limits:
+    posts: 10000
+    media: 50000
+    attachments: 50000

@@ -14,6 +14,21 @@
       "name": "eureka.client.service-url.defaultZone",
       "type": "java.lang.String",
       "description": "Default eureka zone."
+    },
+    {
+      "name": "furrify.limits.posts",
+      "type": "java.lang.String",
+      "description": "Hard limit of posts per user."
+    },
+    {
+      "name": "furrify.limits.media",
+      "type": "java.lang.String",
+      "description": "Hard limit of media per user."
+    },
+    {
+      "name": "furrify.limits.attachments",
+      "type": "java.lang.String",
+      "description": "Hard limit of attachments per user."
     }
   ]
 }

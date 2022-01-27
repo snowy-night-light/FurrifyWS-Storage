@@ -11,4 +11,6 @@ interface AttachmentRepository {
     boolean existsByOwnerIdAndPostIdAndAttachmentId(UUID ownerId, UUID postId, UUID attachmentId);
 
     Attachment save(Attachment attachment);
+
+    long countAttachmentsByUserId(UUID userId);
 }
