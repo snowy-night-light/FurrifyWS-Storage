@@ -11,3 +11,7 @@ spring:
     web:
       pageable:
         one-indexed-parameters: true
+
+furrify:
+  limits:
+    artists: ${FURRIFY_LIMITS_ARTISTS:1000}

@@ -68,6 +68,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>furrifyws-storage-posts</finalName>
     </build>
 
 </project>

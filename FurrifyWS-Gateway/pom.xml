@@ -84,6 +84,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>furrifyws-storage-gateway</finalName>
     </build>
 
     <repositories>

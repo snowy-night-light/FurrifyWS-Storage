@@ -1,6 +1,7 @@
 package ws.furrify.artists.kafka;
 
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 @Configuration
 @EnableRetry
+@Log4j2
 class KafkaConsumerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
@@ -36,6 +38,7 @@ class KafkaConsumerConfig {
     @Bean
     public Map<String, Object> consumerConfigs() {
         Map<String, Object> properties = new HashMap<>(7);
+
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);

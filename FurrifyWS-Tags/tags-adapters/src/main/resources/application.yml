@@ -11,3 +11,8 @@ spring:
     web:
       pageable:
         one-indexed-parameters: true
+
+
+furrify:
+  limits:
+    tags: ${FURRIFY_LIMITS_TAGS:1000}

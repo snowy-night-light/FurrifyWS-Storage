@@ -98,6 +98,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>furrifyws-storage-eureka-server</finalName>
 	</build>
 
 	<repositories>

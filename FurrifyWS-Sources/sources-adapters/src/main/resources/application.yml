@@ -11,3 +11,7 @@ spring:
     web:
       pageable:
         one-indexed-parameters: true
+
+furrify:
+  limits:
+    sources: ${FURRIFY_LIMITS_SOURCES:50000}
