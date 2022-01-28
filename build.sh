@@ -1,7 +1,7 @@
 #!/bin/bash
 VERSION=0.0.1-alpine
 
-mvn clean package -Dspring.profiles.active=dev -DskipTests
+mvn install -Dspring.profiles.active=dev -DskipTests
 
 docker build -t furrifyws-storage-artists:$VERSION ./FurrifyWS-Artists
 docker build -t furrifyws-storage-eureka-server:$VERSION ./FurrifyWS-EurekaServer
