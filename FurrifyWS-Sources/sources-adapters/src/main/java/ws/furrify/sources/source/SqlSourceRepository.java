@@ -21,6 +21,9 @@ interface SqlSourceRepository extends Repository<SourceSnapshot, Long> {
     boolean existsByOwnerIdAndSourceId(UUID ownerId, UUID sourceId);
 
     Optional<SourceSnapshot> findByOwnerIdAndSourceId(UUID ownerId, UUID sourceId);
+
+    @Query("select count(a) from SourceSnapshot a where a.ownerId = ?1")
+    long countSourcesByUserId(UUID userId);
 }
 
 @Transactional(rollbackFor = {})
@@ -61,6 +64,11 @@ class SourceRepositoryImpl implements SourceRepository {
     @Override
     public boolean existsByOwnerIdAndSourceId(final UUID ownerId, final UUID sourceId) {
         return sqlSourceRepository.existsByOwnerIdAndSourceId(ownerId, sourceId);
+    }
+
+    @Override
+    public long countSourcesByUserId(final UUID userId) {
+        return sqlSourceRepository.countSourcesByUserId(userId);
     }
 
 

@@ -44,6 +44,7 @@ class CommandUserAttachmentController {
                                               @RequestPart("file") MultipartFile mediaFile,
                                               KeycloakAuthenticationToken keycloakAuthenticationToken,
                                               HttpServletResponse response) {
+        // Hard limit for attachments
         long userAttachmentsCount = sqlAttachmentRepository.countAttachmentsByUserId(userId);
         if (userAttachmentsCount >= attachmentsLimitPerUser) {
             throw new HardLimitForEntityTypeException(

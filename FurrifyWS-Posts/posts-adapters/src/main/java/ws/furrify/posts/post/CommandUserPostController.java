@@ -2,6 +2,7 @@ package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,8 @@ import ws.furrify.posts.post.dto.PostDTO;
 import ws.furrify.posts.post.dto.command.PostCreateCommandDTO;
 import ws.furrify.posts.post.dto.command.PostReplaceCommandDTO;
 import ws.furrify.posts.post.dto.command.PostUpdateCommandDTO;
+import ws.furrify.shared.exception.Errors;
+import ws.furrify.shared.exception.HardLimitForEntityTypeException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
@@ -28,6 +31,10 @@ import java.util.UUID;
 class CommandUserPostController {
 
     private final PostFacade postFacade;
+    private final PostRepository postRepository;
+
+    @Value("${furrify.limits.posts}")
+    private long postsLimitPerUser;
 
     @PostMapping
     @PreAuthorize(
@@ -39,6 +46,14 @@ class CommandUserPostController {
                                         @RequestBody @Validated PostCreateCommandDTO postCreateCommandDTO,
                                         KeycloakAuthenticationToken keycloakAuthenticationToken,
                                         HttpServletResponse response) {
+        // Hard limit for posts
+        long userPostsCount = postRepository.countPostsByUserId(userId);
+        if (userPostsCount >= postsLimitPerUser) {
+            throw new HardLimitForEntityTypeException(
+                    Errors.HARD_LIMIT_FOR_ENTITY_TYPE.getErrorMessage(postsLimitPerUser, "Post")
+            );
+        }
+
         PostDTO postDTO = postCreateCommandDTO.toDTO();
 
         response.addHeader("Id",

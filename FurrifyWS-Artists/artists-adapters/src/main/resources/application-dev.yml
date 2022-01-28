@@ -41,3 +41,7 @@ keycloak:
   principal-attribute: preferred_username
   bearer-only: true
   use-resource-role-mappings: true
+
+furrify:
+  limits:
+    artists: 1000

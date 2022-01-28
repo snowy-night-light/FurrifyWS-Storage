@@ -20,4 +20,6 @@ interface PostRepository {
     Optional<Post> findByOwnerIdAndPostIdAndMediaId(UUID ownerId, UUID postId, UUID mediaId);
 
     Optional<Post> findByOwnerIdAndPostIdAndAttachmentId(UUID ownerId, UUID postId, UUID attachment);
+
+    long countPostsByUserId(UUID userId);
 }

@@ -24,6 +24,7 @@ import java.util.UUID;
 class CommandAttachmentSourceController {
 
     private final SourceFacade sourceFacade;
+    private final CommandSourceControllerUtils commandSourceControllerUtils;
 
     @PostMapping
     @PreAuthorize(
@@ -36,6 +37,9 @@ class CommandAttachmentSourceController {
                                                     @RequestBody @Validated SourceCreateCommandDTO sourceCreateCommandDTO,
                                                     KeycloakAuthenticationToken keycloakAuthenticationToken,
                                                     HttpServletResponse response) {
+
+        commandSourceControllerUtils.checkForSourceHardLimit(userId);
+
         SourceDTO sourceDTO = sourceCreateCommandDTO.toDTO();
 
         // Add values from path
