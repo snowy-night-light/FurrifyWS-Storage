@@ -181,6 +181,8 @@ public class PostFacade {
      */
     public void handleEvent(final UUID key, final TagEvent tagEvent) {
         switch (DomainEventPublisher.TagEventType.valueOf(tagEvent.getState())) {
+            case CREATED -> {
+            }
             case REMOVED -> deleteTagFromPosts(key, tagEvent.getTagValue());
             case UPDATED, REPLACED -> updateTagDetailsInPosts(key,
                     tagEvent.getTagValue(),
@@ -199,6 +201,8 @@ public class PostFacade {
      */
     public void handleEvent(final UUID key, final ArtistEvent artistEvent) {
         switch (DomainEventPublisher.ArtistEventType.valueOf(artistEvent.getState())) {
+            case CREATED -> {
+            }
             case REMOVED -> deleteArtistFromPosts(key, UUID.fromString(artistEvent.getArtistId()));
             case UPDATED, REPLACED -> updateArtistDetailsInPosts(key,
                     UUID.fromString(artistEvent.getArtistId()),

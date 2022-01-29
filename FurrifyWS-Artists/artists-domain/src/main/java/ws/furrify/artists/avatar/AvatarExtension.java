@@ -21,9 +21,14 @@ public enum AvatarExtension {
     /**
      * File extensions
      */
-    JPEG(MediaType.IMAGE, "image/jpeg"),
-    PNG(MediaType.IMAGE, "image/png"),
-    JPG(MediaType.IMAGE, "image/jpeg");
+    EXTENSION_JPEG("jpeg", MediaType.IMAGE, "image/jpeg"),
+    EXTENSION_PNG("png", MediaType.IMAGE, "image/png"),
+    EXTENSION_JPG("jpg", MediaType.IMAGE, "image/jpeg");
+
+    /**
+     * File extension.
+     */
+    private final String extension;
 
     /**
      * Mime type of extension.
@@ -37,7 +42,8 @@ public enum AvatarExtension {
 
     private final static Pattern FILENAME_PATTERN = Pattern.compile("^[a-zA-Z0-9](?:[a-zA-Z0-9() ._-]*[a-zA-Z0-9() ._-])?\\.[a-zA-Z0-9_-]+$");
 
-    AvatarExtension(final MediaType type, final String... mimeTypes) {
+    AvatarExtension(final String extension, final MediaType type, final String... mimeTypes) {
+        this.extension = extension;
         this.mimeTypes = mimeTypes;
         this.type = type;
     }

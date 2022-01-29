@@ -1,6 +1,8 @@
 spring:
   application:
     name: "EUREKA_SERVER"
+  profiles:
+    active: prod
 
 server:
   port: 8761

@@ -11,6 +11,10 @@ spring:
         prefix: "artists-test-"
     producer:
       retries: 3
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
 
   datasource:
     driverClassName: org.h2.Driver

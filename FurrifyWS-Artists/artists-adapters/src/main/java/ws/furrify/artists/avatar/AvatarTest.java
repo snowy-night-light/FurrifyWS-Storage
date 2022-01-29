@@ -41,7 +41,7 @@ class AvatarTest implements CommandLineRunner {
                                 .avatarId(avatarId)
                                 .artistId(artistId)
                                 .ownerId(userId)
-                                .extension(AvatarExtension.PNG)
+                                .extension(AvatarExtension.EXTENSION_PNG)
                                 .filename("test.png")
                                 .fileUri(new URI("/test"))
                                 .thumbnailUri(new URI("/test"))

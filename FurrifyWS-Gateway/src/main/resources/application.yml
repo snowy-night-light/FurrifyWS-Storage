@@ -1,6 +1,8 @@
 spring:
   application:
     name: "GATEWAY-SERVICE"
+  profiles:
+    active: prod
   cloud:
     gateway:
       routes:

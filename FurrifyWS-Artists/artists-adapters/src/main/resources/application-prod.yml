@@ -11,6 +11,10 @@ spring:
         prefix: "furrifyws-storage-artists-"
     producer:
       retries: 3
+  servlet:
+    multipart:
+      max-file-size: ${MAX_UPLOAD_FILE_SIZE}
+      max-request-size: ${MAX_REQUEST_SIZE}
 
   datasource:
     driverClassName: ${DATABASE_DRIVER}

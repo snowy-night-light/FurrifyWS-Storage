@@ -8,6 +8,18 @@ services:
     networks:
       - furrifyws-storage
 
+  # Gateway
+  furrifyws-storage-gateway:
+    image: furrifyws-storage-gateway:0.0.1-alpine
+    restart: always
+    networks:
+      - furrifyws-storage
+    ports:
+      - "8080:8080"
+    environment:
+      # Eureka
+      EUREKA_ZONE: "http://furrifyws-storage-eureka-server:8761/eureka"
+
   # Artists
   furrifyws-storage-artists-mysql:
     image: mysql:8.0.28
@@ -19,18 +31,23 @@ services:
       MYSQL_ROOT_PASSWORD: 'change_me'
     volumes:
       - ./mysql:/var/lib/mysql
+
   furrifyws-storage-artists:
     image: furrifyws-storage-artists:0.0.1-alpine
     restart: always
     networks:
       - furrifyws-storage-artists
       - furrifyws-storage
+    volumes:
+      - /usr/share/nginx/html:/data # Volume mapping to save files to
     environment:
       FURRIFY_LIMITS_ARTISTS: 1000 # Limit amount of artists per user
       KAFKA_CONSUMER_GROUP_ID: "eu-poland-1" # A unique group id for this instance of microservice.
+      MAX_UPLOAD_FILE_SIZE: "1GB" # Max size of uploaded file
+      MAX_REQUEST_SIZE: "1GB" # Max size of multipart/form-data request
       # Keycloak config
-      KEYCLOAK_AUTH_URL: "https://keycloak:8080/auth"
-      KEYCLOAK_REALM: "master"
+      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565/auth"
+      KEYCLOAK_REALM: "dev"
       KEYCLOAK_RESOURCE: "furrifyws-storage"
       # Database config
       DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver" # For PostgreSQL driver use: org.postgresql.Driver
@@ -44,8 +61,132 @@ services:
       # Eureka
       EUREKA_ZONE: "http://furrifyws-storage-eureka-server:8761/eureka"
 
+  # Posts
+  furrifyws-storage-posts-mysql:
+    image: mysql:8.0.28
+    restart: always
+    networks:
+      - furrifyws-storage-posts
+    environment:
+      MYSQL_DATABASE: 'furrifyws-storage-posts'
+      MYSQL_ROOT_PASSWORD: 'change_me'
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+  furrifyws-storage-posts:
+    image: furrifyws-storage-posts:0.0.1-alpine
+    restart: always
+    networks:
+      - furrifyws-storage-posts
+      - furrifyws-storage
+    volumes:
+      - /usr/share/nginx/html:/data # Volume mapping to save files to
+    environment:
+      FURRIFY_LIMITS_POSTS: 10000 # Limit amount of posts per user
+      FURRIFY_LIMITS_MEDIA: 50000 # Limit amount of media per user
+      FURRIFY_LIMITS_ATTACHMENTS: 50000 # Limit amount of attachments per user
+      KAFKA_CONSUMER_GROUP_ID: "eu-poland-1" # A unique group id for this instance of microservice.
+      MAX_UPLOAD_FILE_SIZE: "10GB" # Max size of uploaded file
+      MAX_REQUEST_SIZE: "10GB" # Max size of multipart/form-data request
+      # Keycloak config
+      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565/auth"
+      KEYCLOAK_REALM: "dev"
+      KEYCLOAK_RESOURCE: "furrifyws-storage"
+      # Database config
+      DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver" # For PostgreSQL driver use: org.postgresql.Driver
+      DATABASE_DIALECT: "org.hibernate.dialect.MySQL8Dialect" # For PostgreSQL dialect use: org.hibernate.dialect.PostgreSQLDialect
+      DATABASE_USERNAME: "root"
+      DATABASE_PASSWORD: "change_me"
+      DATABASE_URL: "jdbc:mysql://furrifyws-storage-posts-mysql:3306/furrifyws-storage-posts?serverTimezone=UTC&autoReconnect=true&characterEncoding=utf8&useUnicode=true" # JDBC Connection url
+      # Kafka config
+      KAFKA_BOOTSTRAP_SERVERS: "http://192.168.0.200:9092"
+      KAFKA_SCHEMA_REGISTRY_SERVERS: "http://192.168.0.200:8081"
+      # Eureka
+      EUREKA_ZONE: "http://furrifyws-storage-eureka-server:8761/eureka"
+
+  # Sources
+  furrifyws-storage-sources-mysql:
+    image: mysql:8.0.28
+    restart: always
+    networks:
+      - furrifyws-storage-sources
+    environment:
+      MYSQL_DATABASE: 'furrifyws-storage-sources'
+      MYSQL_ROOT_PASSWORD: 'change_me'
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+  furrifyws-storage-sources:
+    image: furrifyws-storage-sources:0.0.1-alpine
+    restart: always
+    networks:
+      - furrifyws-storage-sources
+      - furrifyws-storage
+    environment:
+      FURRIFY_LIMITS_SOURCES: 50000 # Limit amount of sources per user
+      KAFKA_CONSUMER_GROUP_ID: "eu-poland-1" # A unique group id for this instance of microservice.
+      # Keycloak config
+      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565/auth"
+      KEYCLOAK_REALM: "dev"
+      KEYCLOAK_RESOURCE: "furrifyws-storage"
+      # Database config
+      DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver" # For PostgreSQL driver use: org.postgresql.Driver
+      DATABASE_DIALECT: "org.hibernate.dialect.MySQL8Dialect" # For PostgreSQL dialect use: org.hibernate.dialect.PostgreSQLDialect
+      DATABASE_USERNAME: "root"
+      DATABASE_PASSWORD: "change_me"
+      DATABASE_URL: "jdbc:mysql://furrifyws-storage-sources-mysql:3306/furrifyws-storage-sources?serverTimezone=UTC&autoReconnect=true&characterEncoding=utf8&useUnicode=true" # JDBC Connection url
+      # Kafka config
+      KAFKA_BOOTSTRAP_SERVERS: "http://192.168.0.200:9092"
+      KAFKA_SCHEMA_REGISTRY_SERVERS: "http://192.168.0.200:8081"
+      # Eureka
+      EUREKA_ZONE: "http://furrifyws-storage-eureka-server:8761/eureka"
+
+  # Tags
+  furrifyws-storage-tags-mysql:
+    image: mysql:8.0.28
+    restart: always
+    networks:
+      - furrifyws-storage-tags
+    environment:
+      MYSQL_DATABASE: 'furrifyws-storage-tags'
+      MYSQL_ROOT_PASSWORD: 'change_me'
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+  furrifyws-storage-tags:
+    image: furrifyws-storage-tags:0.0.1-alpine
+    restart: always
+    networks:
+      - furrifyws-storage-tags
+      - furrifyws-storage
+    environment:
+      FURRIFY_LIMITS_TAGS: 1000 # Limit amount of tags per user
+      KAFKA_CONSUMER_GROUP_ID: "eu-poland-1" # A unique group id for this instance of microservice.
+      # Keycloak config
+      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565/auth"
+      KEYCLOAK_REALM: "dev"
+      KEYCLOAK_RESOURCE: "furrifyws-storage"
+      # Database config
+      DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver" # For PostgreSQL driver use: org.postgresql.Driver
+      DATABASE_DIALECT: "org.hibernate.dialect.MySQL8Dialect" # For PostgreSQL dialect use: org.hibernate.dialect.PostgreSQLDialect
+      DATABASE_USERNAME: "root"
+      DATABASE_PASSWORD: "change_me"
+      DATABASE_URL: "jdbc:mysql://furrifyws-storage-tags-mysql:3306/furrifyws-storage-tags?serverTimezone=UTC&autoReconnect=true&characterEncoding=utf8&useUnicode=true" # JDBC Connection url
+      # Kafka config
+      KAFKA_BOOTSTRAP_SERVERS: "http://192.168.0.200:9092"
+      KAFKA_SCHEMA_REGISTRY_SERVERS: "http://192.168.0.200:8081"
+      # Eureka
+      EUREKA_ZONE: "http://furrifyws-storage-eureka-server:8761/eureka"
+
+
 networks:
+  furrifyws-storage-tags:
+    driver: bridge
+  furrifyws-storage-sources:
+    driver: bridge
   furrifyws-storage-artists:
+    driver: bridge
+  furrifyws-storage-posts:
     driver: bridge
   furrifyws-storage:
     driver: bridge
