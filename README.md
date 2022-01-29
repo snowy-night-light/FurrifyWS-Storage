@@ -42,9 +42,9 @@ Supported:
 
 ## Compile project yourself
 
-If you wish to compile the project yourself don't forget to set all env variables listed in docker-compose.yml.
+If you wish to compile the project yourself don't forget to set all env variables listed in `docker-compose.yml`.
 
-To build project follow docker section above.
+To build the project follow docker section above.
 
 ## Tests
 
