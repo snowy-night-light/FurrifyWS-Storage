@@ -49,7 +49,7 @@ class AvatarFacadeTest {
                 .ownerId(UUID.randomUUID())
                 .avatarId(UUID.randomUUID())
                 .artistId(UUID.randomUUID())
-                .extension(AvatarExtension.PNG)
+                .extension(AvatarExtension.EXTENSION_PNG)
                 .filename("yes.png")
                 .fileUri(new URI("/test"))
                 .thumbnailUri(new URI("/test"))

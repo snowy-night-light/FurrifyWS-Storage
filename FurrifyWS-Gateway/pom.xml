@@ -11,7 +11,6 @@
     <groupId>ws.furrify</groupId>
     <artifactId>gateway</artifactId>
     <version>0.0.1</version>
-    <packaging>war</packaging>
     <name>FurrifyWS-Gateway</name>
     <description>Gateway as a part of FurrifyWS Storage.</description>
 
@@ -29,11 +28,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -84,6 +78,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>furrifyws-storage-gateway</finalName>
     </build>
 
     <repositories>

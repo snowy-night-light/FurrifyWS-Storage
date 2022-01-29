@@ -11,3 +11,9 @@ spring:
     web:
       pageable:
         one-indexed-parameters: true
+
+furrify:
+  limits:
+    posts: ${FURRIFY_LIMITS_POSTS:10000}
+    media: ${FURRIFY_LIMITS_MEDIA:50000}
+    attachments: ${FURRIFY_LIMITS_ATTACHMENTS:50000}

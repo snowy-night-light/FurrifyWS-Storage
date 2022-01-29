@@ -55,7 +55,7 @@ public class AvatarFile {
         }
 
         // Check if filename extension matches declared
-        if (!filenameWithExt[filenameWithExt.length - 1].equalsIgnoreCase(extension.name())) {
+        if (!filenameWithExt[filenameWithExt.length - 1].equalsIgnoreCase(extension.getExtension())) {
             throw new IllegalStateException("Avatar filename [filename=" + filename + "] must be the same as declared extension.");
         }
 

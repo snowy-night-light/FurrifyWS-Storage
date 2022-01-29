@@ -23,7 +23,7 @@ class AvatarFileTest {
     @BeforeAll
     static void setUp() throws URISyntaxException {
         filename = "test.png";
-        extension = AvatarExtension.PNG;
+        extension = AvatarExtension.EXTENSION_PNG;
         fileUri = new URI("/test");
         thumbnailUri = new URI("/test");
         md5 = "3c518eeb674c71b30297f072fde7eba5";
@@ -95,7 +95,7 @@ class AvatarFileTest {
     @DisplayName("Create AvatarFile from invalid extension")
     void of3() {
         // Given not matching declared extension
-        AvatarExtension extension = AvatarExtension.JPG;
+        AvatarExtension extension = AvatarExtension.EXTENSION_JPG;
         // When builder
         var avatarFileBuilder = AvatarFile.builder()
                 .filename(filename)

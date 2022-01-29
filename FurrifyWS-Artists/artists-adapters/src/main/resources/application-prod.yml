@@ -1,2 +1,46 @@
+logging:
+  level:
+    web: INFO
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    schema-registry-servers: ${KAFKA_SCHEMA_REGISTRY_SERVERS}
+    consumer:
+      group-id:
+        prefix: "furrifyws-storage-artists-"
+    producer:
+      retries: 3
+  servlet:
+    multipart:
+      max-file-size: ${MAX_UPLOAD_FILE_SIZE}
+      max-request-size: ${MAX_REQUEST_SIZE}
+
+  datasource:
+    driverClassName: ${DATABASE_DRIVER}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    url: ${DATABASE_URL}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: ${DATABASE_DIALECT}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_ZONE}
+
 server:
-  port: 0
+  port: 8080
+
+keycloak:
+  auth-server-url: ${KEYCLOAK_AUTH_URL}
+  realm: ${KEYCLOAK_REALM}
+  resource: ${KEYCLOAK_RESOURCE}
+  public-client: true
+  principal-attribute: preferred_username
+  bearer-only: true
+  use-resource-role-mappings: true
