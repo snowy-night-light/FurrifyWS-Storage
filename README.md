@@ -5,11 +5,6 @@ Microservices infrastructure for content management.
 Documentation: - Not released yet REST endpoints (in
 development): https://documenter.getpostman.com/view/9259933/TzRUBnQm
 
-## Setup Keycloak
-
-To set up keycloak you can use [this](#) docker image. In panel, you can import settings from [this](#) file.
-! Links are not yet available as project version 0.0.1 is not released.
-
 ## Docker
 
 This project is now docker supported. You can build it using either `build.sh` or `build.bat`.
@@ -19,26 +14,37 @@ that file.
 
 When you are ready to go, just do `docker-compose up -d` to start all the microservices.
 
-Requirements:
+Requirements for build:
 
 - Maven
 - Docker
 - Docker-compose
 
+External requirements:
+
+- Keycloak
+- Kafka
+- Confluent schema registry
+
+## Setup Keycloak
+
+To set up keycloak you can use [this](#) docker image. In panel, you can import settings from [this](#) file.
+! Links are not yet available as project version 0.0.1 is not released.
+
+## Databases
+
+You can configure database you want to use with env variables listed in `docker-compose.yml` file.
+
+Supported:
+
+- MySQL (Tested)
+- PostgreSQL (Not tested)
+
 ## Compile project yourself
 
-! All ip's can be changed in application-{profile}.yml regarding selected profile.
+If you wish to compile the project yourself don't forget to set all env variables listed in docker-compose.yml.
 
-Requirements:
-
-- Need to set env variable KAFKA_CONSUMER_GROUP_ID (It is any string to make groupId unique and don't lose offset in
-  kafka)
-- Other env variables from prod profiles (Look for them in `application-prod.yml`.)
-- Kafka
-- Schema Registry
-- Keycloak
-
-You can then build the project following the docker section above.
+To build project follow docker section above.
 
 ## Tests
 
