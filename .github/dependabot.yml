@@ -7,8 +7,8 @@ updates:
     open-pull-requests-limit: 10
     ignore:
       - dependency-name: org.hibernate.validator:hibernate-validator
-    versions:
-      - 7.0.1.Final
+        versions:
+          - 7.0.1.Final
 
   - package-ecosystem: docker
     directory: "/"
