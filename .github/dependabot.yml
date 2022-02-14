@@ -1,6 +1,7 @@
 version: 2
 updates:
-- package-ecosystem: maven
+
+  - package-ecosystem: maven
   directory: "/"
   schedule:
     interval: daily
@@ -9,3 +10,8 @@ updates:
   - dependency-name: org.hibernate.validator:hibernate-validator
     versions:
       - 7.0.1.Final
+
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: daily
