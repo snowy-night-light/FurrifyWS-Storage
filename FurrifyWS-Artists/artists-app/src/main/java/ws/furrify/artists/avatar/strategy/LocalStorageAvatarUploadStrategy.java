@@ -27,10 +27,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
 
-    @Value("${LOCAL_STORAGE_AVATAR_PATH:/data/artist}")
+    @Value("${LOCAL_STORAGE_AVATAR_PATH:/data/artist/avatar}")
     private String LOCAL_STORAGE_AVATAR_PATH;
 
-    @Value("${REMOTE_STORAGE_AVATAR_PATH:/artist}")
+    @Value("${REMOTE_STORAGE_AVATAR_PATH:/artist/avatar}")
     private String REMOTE_STORAGE_AVATAR_PATH;
 
     @Value("${THUMBNAIL_WIDTH:600}")
