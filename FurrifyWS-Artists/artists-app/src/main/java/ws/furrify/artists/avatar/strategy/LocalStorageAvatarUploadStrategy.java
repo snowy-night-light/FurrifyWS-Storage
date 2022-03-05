@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import java.util.UUID;
 
 /**
@@ -27,10 +28,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
 
-    @Value("${LOCAL_STORAGE_AVATAR_PATH:/data/artist/avatar}")
+    @Value("${LOCAL_STORAGE_AVATAR_PATH:/data/artist/{0}/avatar/{1}}")
     private String LOCAL_STORAGE_AVATAR_PATH;
 
-    @Value("${REMOTE_STORAGE_AVATAR_PATH:/artist/avatar}")
+    @Value("${REMOTE_STORAGE_AVATAR_PATH:/artist/{0}/avatar/{1}}")
     private String REMOTE_STORAGE_AVATAR_PATH;
 
     @Value("${THUMBNAIL_WIDTH:600}")
@@ -56,8 +57,12 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
                 InputStream avatarInputStream = fileSource.getInputStream()
         ) {
 
+            // Storage paths used for file creation and CDN requests
+            String localStoragePath = MessageFormat.format(LOCAL_STORAGE_AVATAR_PATH, artistId, avatarId);
+            String remoteStoragePath = MessageFormat.format(REMOTE_STORAGE_AVATAR_PATH, artistId, avatarId);
+
             // Create files
-            File avatarFile = new File(LOCAL_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + fileSource.getOriginalFilename());
+            File avatarFile = new File(localStoragePath + "/" + fileSource.getOriginalFilename());
 
             // Check if filename is not null
             if (fileSource.getOriginalFilename() == null) {
@@ -71,7 +76,7 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
                             fileSource.getOriginalFilename().lastIndexOf(".")
                     ) + THUMBNAIL_EXTENSION;
 
-            File thumbnailFile = new File(LOCAL_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + thumbnailFileName);
+            File thumbnailFile = new File(localStoragePath + "/" + thumbnailFileName);
             // Create directories where files need to be located
             boolean wasAvatarFileCreated = avatarFile.getParentFile().mkdirs() || avatarFile.getParentFile().exists();
             boolean wasAvatarThumbnailFileCreated = thumbnailFile.getParentFile().mkdirs() || avatarFile.getParentFile().exists();
@@ -87,9 +92,9 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
             // Return created urls
             return new UploadedAvatarFile(
                     // Original
-                    new URI(REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + fileSource.getOriginalFilename()),
+                    new URI(remoteStoragePath + "/" + fileSource.getOriginalFilename()),
                     // Thumbnail
-                    new URI(REMOTE_STORAGE_AVATAR_PATH + "/" + artistId + "/" + avatarId + "/" + thumbnailFileName)
+                    new URI(remoteStoragePath + "/" + thumbnailFileName)
             );
 
         } catch (IOException | URISyntaxException e) {
