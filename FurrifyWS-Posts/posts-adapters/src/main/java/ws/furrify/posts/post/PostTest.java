@@ -62,7 +62,7 @@ class PostTest implements CommandLineRunner {
                                                         UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00")
                                                 )
                                                 .preferredNickname("test_nickname")
-                                                .thumbnailUri(new URI("/avatar/4d482df8-7380-4164-96ef-58f3796d8f27/thumbnail_image.jpg"))
+                                                .thumbnailUri(new URI("/artist/9551e7e0-4550-41b9-8c4a-57943642fa00/avatar/4d482df8-7380-4164-96ef-58f3796d8f27/thumbnail_image.jpg"))
                                                 .build()
                                 ))
                                 .attachments(Set.of(
@@ -159,7 +159,7 @@ class PostTest implements CommandLineRunner {
                                                         UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00")
                                                 )
                                                 .preferredNickname("test_nickname")
-                                                .thumbnailUri(new URI("/avatar/4d482df8-7380-4164-96ef-58f3796d8f27/thumbnail_image.jpg"))
+                                                .thumbnailUri(new URI("/artist/9551e7e0-4550-41b9-8c4a-57943642fa00/avatar/4d482df8-7380-4164-96ef-58f3796d8f27/thumbnail_image.jpg"))
                                                 .build()
                                 ))
                                 .attachments(Set.of(
@@ -257,7 +257,7 @@ class PostTest implements CommandLineRunner {
                                                             UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00")
                                                     )
                                                     .preferredNickname("test_nickname")
-                                                    .thumbnailUri(new URI("/avatar/4d482df8-7380-4164-96ef-58f3796d8f27/thumbnail_image.jpg"))
+                                                    .thumbnailUri(new URI("/artist/9551e7e0-4550-41b9-8c4a-57943642fa00/avatar/4d482df8-7380-4164-96ef-58f3796d8f27/thumbnail_image.jpg"))
                                                     .build()
                                     ))
                                     .attachments(Set.of(
