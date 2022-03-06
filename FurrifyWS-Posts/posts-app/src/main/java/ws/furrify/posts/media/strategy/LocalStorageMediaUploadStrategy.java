@@ -116,8 +116,11 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
             throw new IllegalStateException("Filename cannot be empty.");
         }
 
+        // Sanitize filename
+        String filename = originalFilename.replaceAll("\\s+","_");
+
         // Create files
-        File mediaFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + originalFilename);
+        File mediaFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + filename);
         // Create directories where file need to be located
         boolean wasMediaFileCreated = mediaFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
 
@@ -128,7 +131,7 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
         // Upload file
         writeToFile(mediaFile, mediaInputStream);
 
-        URI fileUri = new URI(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + originalFilename);
+        URI fileUri = new URI(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + filename);
 
         URI thumbnailUri = null;
 
@@ -136,9 +139,9 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
         if (thumbnailInputStream != null) {
             // Create thumbnail filename by removing extension from original filename
             String thumbnailFileName = THUMBNAIL_PREFIX +
-                    originalFilename.substring(
+                    filename.substring(
                             0,
-                            originalFilename.lastIndexOf(".")
+                            filename.lastIndexOf(".")
                     ) + THUMBNAIL_EXTENSION;
 
             File thumbnailFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName);

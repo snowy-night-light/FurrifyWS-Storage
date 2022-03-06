@@ -57,23 +57,26 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
                 InputStream avatarInputStream = fileSource.getInputStream()
         ) {
 
-            // Storage paths used for file creation and CDN requests
-            String localStoragePath = MessageFormat.format(LOCAL_STORAGE_AVATAR_PATH, artistId, avatarId);
-            String remoteStoragePath = MessageFormat.format(REMOTE_STORAGE_AVATAR_PATH, artistId, avatarId);
-
-            // Create files
-            File avatarFile = new File(localStoragePath + "/" + fileSource.getOriginalFilename());
-
             // Check if filename is not null
             if (fileSource.getOriginalFilename() == null) {
                 throw new IllegalStateException("Filename cannot be empty.");
             }
 
+            // Sanitize filename
+            String filename = fileSource.getOriginalFilename().replaceAll("\\s+","_");
+
+            // Storage paths used for file creation and CDN requests
+            String localStoragePath = MessageFormat.format(LOCAL_STORAGE_AVATAR_PATH, artistId, avatarId);
+            String remoteStoragePath = MessageFormat.format(REMOTE_STORAGE_AVATAR_PATH, artistId, avatarId);
+
+            // Create files
+            File avatarFile = new File(localStoragePath + "/" + filename);
+
             // Create thumbnail filename by removing extension from original filename
             String thumbnailFileName = THUMBNAIL_PREFIX +
-                    fileSource.getOriginalFilename().substring(
+                    filename.substring(
                             0,
-                            fileSource.getOriginalFilename().lastIndexOf(".")
+                            filename.lastIndexOf(".")
                     ) + THUMBNAIL_EXTENSION;
 
             File thumbnailFile = new File(localStoragePath + "/" + thumbnailFileName);
@@ -92,7 +95,7 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
             // Return created urls
             return new UploadedAvatarFile(
                     // Original
-                    new URI(remoteStoragePath + "/" + fileSource.getOriginalFilename()),
+                    new URI(remoteStoragePath + "/" + filename),
                     // Thumbnail
                     new URI(remoteStoragePath + "/" + thumbnailFileName)
             );

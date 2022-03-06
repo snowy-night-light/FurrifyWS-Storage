@@ -39,8 +39,16 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
                 InputStream attachmentInputStream = fileSource.getInputStream()
         ) {
 
+            // Check if filename is not null
+            if (fileSource.getOriginalFilename() == null) {
+                throw new IllegalStateException("Filename cannot be empty.");
+            }
+
+            // Sanitize filename
+            String filename = fileSource.getOriginalFilename().replaceAll("\\s+","_");
+
             // Create file
-            File attachmentFile = new File(LOCAL_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + fileSource.getOriginalFilename());
+            File attachmentFile = new File(LOCAL_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + filename);
 
             // Create directories where files need to be located
             boolean wasAttachmentFileCreated = attachmentFile.getParentFile().mkdirs() || attachmentFile.getParentFile().exists();
@@ -54,7 +62,7 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
 
             // Return created urls
             return new UploadedAttachmentFile(
-                    new URI(REMOTE_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + fileSource.getOriginalFilename())
+                    new URI(REMOTE_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + filename)
             );
 
         } catch (IOException | URISyntaxException e) {
