@@ -281,7 +281,7 @@ class PostTest {
         // Given post media
         PostMedia postMedia = PostMedia.builder()
                 .mediaId(UUID.randomUUID())
-                .extension("PNG")
+                .extension("EXTENSION_PNG")
                 .priority(3)
                 .thumbnailUri(new URI("/test"))
                 .fileUri(new URI("/test"))

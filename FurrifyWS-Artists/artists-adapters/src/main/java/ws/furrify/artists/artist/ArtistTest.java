@@ -59,7 +59,7 @@ class ArtistTest implements CommandLineRunner {
                                 .avatar(
                                         ArtistAvatar.builder()
                                                 .avatarId(avatarId)
-                                                .extension("PNG")
+                                                .extension("EXTENSION_PNG")
                                                 .fileUri(new URI("/artist/9551e7e0-4550-41b9-8c4a-57943642fa00/avatar/4d482df8-7380-4164-96ef-58f3796d8f27/image.png"))
                                                 .thumbnailUri(new URI("/artist/9551e7e0-4550-41b9-8c4a-57943642fa00/avatar/4d482df8-7380-4164-96ef-58f3796d8f27/thumbnail_image.jpg"))
                                                 .build()
