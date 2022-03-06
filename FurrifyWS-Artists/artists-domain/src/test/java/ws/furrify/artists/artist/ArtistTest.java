@@ -56,7 +56,7 @@ class ArtistTest {
                 .avatar(
                         ArtistAvatar.builder()
                                 .avatarId(UUID.randomUUID())
-                                .extension("PNG")
+                                .extension("EXTENSION_PNG")
                                 .fileUri(new URI("/test"))
                                 .thumbnailUri(new URI("/test"))
                                 .build()
@@ -283,7 +283,7 @@ class ArtistTest {
         // Given artist avatar
         ArtistAvatar artistAvatar = ArtistAvatar.builder()
                 .avatarId(UUID.randomUUID())
-                .extension("PNG")
+                .extension("EXTENSION_PNG")
                 .fileUri(new URI("/test"))
                 .thumbnailUri(new URI("/test"))
                 .build();
