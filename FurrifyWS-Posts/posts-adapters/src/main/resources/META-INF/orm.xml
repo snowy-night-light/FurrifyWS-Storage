@@ -23,7 +23,7 @@
                 <column nullable="false"/>
             </basic>
             <basic name="filename">
-                <column nullable="false"/>
+                <column length="1024" nullable="false"/>
             </basic>
             <basic name="md5">
                 <column nullable="false"/>
@@ -33,10 +33,10 @@
                 <enumerated>STRING</enumerated>
             </basic>
             <basic name="fileUri">
-                <column nullable="true"/>
+                <column length="1024" nullable="true"/>
             </basic>
             <basic name="thumbnailUri">
-                <column nullable="true"/>
+                <column length="1024" nullable="true"/>
             </basic>
             <basic name="createDate">
                 <column updatable="false" nullable="false"/>
@@ -65,7 +65,7 @@
                 <column updatable="false" nullable="false"/>
             </basic>
             <basic name="filename">
-                <column nullable="false"/>
+                <column length="1024" nullable="false"/>
             </basic>
             <basic name="md5">
                 <column nullable="false"/>
@@ -75,7 +75,7 @@
                 <enumerated>STRING</enumerated>
             </basic>
             <basic name="fileUri">
-                <column nullable="true"/>
+                <column length="1024" nullable="true"/>
             </basic>
             <basic name="createDate">
                 <column updatable="false" nullable="false"/>
@@ -183,13 +183,13 @@
                 <column nullable="false"/>
             </basic>
             <basic name="thumbnailUri">
-                <column nullable="true"/>
+                <column length="1024" nullable="true"/>
             </basic>
             <basic name="extension">
                 <column nullable="false"/>
             </basic>
             <basic name="fileUri">
-                <column nullable="false"/>
+                <column length="1024" nullable="false"/>
             </basic>
         </attributes>
     </embeddable>
@@ -199,10 +199,10 @@
                 <column nullable="false"/>
             </basic>
             <basic name="filename">
-                <column nullable="true"/>
+                <column length="1024" nullable="true"/>
             </basic>
             <basic name="fileUri">
-                <column nullable="true"/>
+                <column length="1024" nullable="true"/>
             </basic>
             <basic name="extension">
                 <column nullable="false"/>
@@ -228,7 +228,7 @@
                 <column nullable="false"/>
             </basic>
             <basic name="thumbnailUri">
-                <column nullable="true"/>
+                <column length="1024" nullable="true"/>
             </basic>
         </attributes>
     </embeddable>
