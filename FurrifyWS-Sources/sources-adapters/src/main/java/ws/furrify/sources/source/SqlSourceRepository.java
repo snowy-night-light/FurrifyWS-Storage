@@ -6,9 +6,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.transaction.annotation.Transactional;
 import ws.furrify.sources.source.dto.query.SourceDetailsQueryDTO;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,6 +41,18 @@ interface SqlSourceQueryRepositoryImpl extends SourceQueryRepository, Repository
     @Override
     @Query("select id from SourceSnapshot where sourceId = ?1")
     Long getIdBySourceId(UUID sourceId);
+
+    @Override
+    @Query("select s from SourceSnapshot s where s.ownerId = ?1 and s.originType = 'ARTIST' and s.originId = ?2")
+    Page<SourceDetailsQueryDTO> findAllByOwnerIdAndArtistId(UUID userId, UUID artistId, Pageable pageable);
+
+    @Override
+    @Query("select s from SourceSnapshot s where s.ownerId = ?1 and s.postId = ?2 and s.originType = 'MEDIA' and s.originId = ?3")
+    Page<SourceDetailsQueryDTO> findAllByOwnerIdAndPostIdAndMediaId(UUID userId, UUID postId, UUID mediaId, Pageable pageable);
+
+    @Override
+    @Query("select s from SourceSnapshot s where s.ownerId = ?1 and s.postId = ?2  and s.originType = 'ATTACHMENT' and s.originId = ?3")
+    Page<SourceDetailsQueryDTO> findAllByOwnerIdAndPostIdAndAttachmentId(UUID userId, UUID postId, UUID attachmentId, Pageable pageable);
 }
 
 @org.springframework.stereotype.Repository

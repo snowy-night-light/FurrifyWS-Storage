@@ -16,4 +16,10 @@ public interface SourceQueryRepository {
     Page<SourceDetailsQueryDTO> findAllByOwnerId(UUID ownerId, Pageable pageable);
 
     Long getIdBySourceId(UUID sourceId);
+
+    Page<SourceDetailsQueryDTO> findAllByOwnerIdAndArtistId(UUID userId, UUID artistId, Pageable pageable);
+
+    Page<SourceDetailsQueryDTO> findAllByOwnerIdAndPostIdAndMediaId(UUID userId, UUID postId, UUID mediaId, Pageable pageable);
+
+    Page<SourceDetailsQueryDTO> findAllByOwnerIdAndPostIdAndAttachmentId(UUID userId, UUID postId, UUID attachmentId, Pageable pageable);
 }
