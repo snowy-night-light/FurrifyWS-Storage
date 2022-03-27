@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ws.furrify.shared.exception.Errors;
-import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.pageable.PageableRequest;
 import ws.furrify.sources.source.dto.query.SourceDetailsQueryDTO;
 
@@ -24,20 +22,23 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/users/{userId}/sources")
+@RequestMapping("/users/{userId}/posts/{postId}/attachments/{attachmentId}/sources")
 @RequiredArgsConstructor
-class QuerySourceController {
+class QueryPostAttachmentSourceController {
 
     private final SqlSourceQueryRepositoryImpl sourceQueryRepository;
     private final PagedResourcesAssembler<SourceDetailsQueryDTO> pagedResourcesAssembler;
 
+
     @GetMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_user_sources') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('query_post_attachment_sources') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
-    public PagedModel<EntityModel<SourceDetailsQueryDTO>> getUserSources(
+    public PagedModel<EntityModel<SourceDetailsQueryDTO>> getPostAttachmentSources(
             @PathVariable UUID userId,
+            @PathVariable UUID postId,
+            @PathVariable UUID attachmentId,
             @RequestParam(required = false) String order,
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer size,
@@ -53,14 +54,16 @@ class QuerySourceController {
                 .build().toPageable();
 
         PagedModel<EntityModel<SourceDetailsQueryDTO>> sources = pagedResourcesAssembler.toModel(
-                sourceQueryRepository.findAllByOwnerId(userId, pageable)
+                sourceQueryRepository.findAllByOwnerIdAndPostIdAndAttachmentId(userId, postId, attachmentId, pageable)
         );
 
         sources.forEach(this::addSourceRelations);
 
         // Add hateoas relation
-        var sourcesRel = linkTo(methodOn(QuerySourceController.class).getUserSources(
+        var sourcesRel = linkTo(methodOn(QueryPostAttachmentSourceController.class).getPostAttachmentSources(
                 userId,
+                postId,
+                attachmentId,
                 null,
                 null,
                 null,
@@ -71,23 +74,6 @@ class QuerySourceController {
         sources.add(sourcesRel);
 
         return sources;
-    }
-
-    @GetMapping("/{sourceId}")
-    @PreAuthorize(
-            "hasRole('admin') ||" +
-                    "(hasRole('query_user_sources') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
-    )
-    public EntityModel<SourceDetailsQueryDTO> getUserSource(@PathVariable UUID userId,
-                                                            @PathVariable UUID sourceId,
-                                                            KeycloakAuthenticationToken keycloakAuthenticationToken) {
-
-        SourceDetailsQueryDTO sourceQueryDTO = sourceQueryRepository.findByOwnerIdAndSourceId(userId, sourceId)
-                .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(sourceId)));
-
-        return addSourceRelations(
-                EntityModel.of(sourceQueryDTO)
-        );
     }
 
     private EntityModel<SourceDetailsQueryDTO> addSourceRelations(EntityModel<SourceDetailsQueryDTO> sourceQueryDtoModel) {
