@@ -482,6 +482,26 @@ class DeviantArtV1SourceStrategyTest {
     }
 
     @Test
+    @DisplayName("Validate media with invalid url property")
+    void validateMedia4() {
+        // Given
+        data.put("url", "test");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted empty url.");
+    }
+
+    @Test
+    @DisplayName("Validate media with missing art in url property")
+    void validateMedia5() {
+        // Given
+        data.put("url", "https://deviantart.com/test");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted empty url.");
+    }
+
+    @Test
     @DisplayName("Validate attachment")
     void validateAttachment() throws IOException {
         // Given
