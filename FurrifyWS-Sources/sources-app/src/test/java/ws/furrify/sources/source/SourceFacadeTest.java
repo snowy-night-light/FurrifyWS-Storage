@@ -52,17 +52,17 @@ class SourceFacadeTest {
                 .strategy(new SourceStrategy() {
                     @Override
                     public ValidationResult validateMedia(final HashMap<String, String> data) {
-                        return ValidationResult.valid();
+                        return ValidationResult.valid(data);
                     }
 
                     @Override
                     public ValidationResult validateUser(final HashMap<String, String> data) {
-                        return ValidationResult.valid();
+                        return ValidationResult.valid(data);
                     }
 
                     @Override
                     public ValidationResult validateAttachment(final HashMap<String, String> data) {
-                        return ValidationResult.valid();
+                        return ValidationResult.valid(data);
                     }
                 })
                 .data(new HashMap<>())
