@@ -28,6 +28,11 @@ public class DeviantArtUserQueryDTO {
         @JsonProperty("userid")
         private String userId;
 
+        /**
+         * User username.
+         */
+        @JsonProperty("username")
+        private String username;
     }
 
 }

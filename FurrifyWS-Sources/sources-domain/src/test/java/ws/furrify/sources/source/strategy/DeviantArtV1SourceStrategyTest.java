@@ -57,8 +57,10 @@ class DeviantArtV1SourceStrategyTest {
 
     private final static String DEVIATION_ID_KEY = "deviation_id";
 
-    private UUID id;
-    private String url;
+    private UUID deviationId;
+    private UUID userId;
+    private String deviationUrl;
+    private String userUrl;
     private String username;
     private HashMap<String, String> data;
     private DeviantArtV1SourceStrategy deviantArtV1SourceStrategy;
@@ -422,8 +424,10 @@ class DeviantArtV1SourceStrategyTest {
 
     @BeforeEach
     void setUp() {
-        id = UUID.randomUUID();
-        url = "https://www.deviantart.com/freak-side/art/C-h-i-l-l-i-n-911198824";
+        deviationId = UUID.randomUUID();
+        userId = UUID.randomUUID();
+        deviationUrl = "https://www.deviantart.com/freak-side/art/C-h-i-l-l-i-n-911198824";
+        userUrl = "https://www.deviantart.com/freak-side";
         username = "Test";
         data = new HashMap<>();
 
@@ -437,12 +441,12 @@ class DeviantArtV1SourceStrategyTest {
     @DisplayName("Validate media")
     void validateMedia() throws IOException {
         // Given
-        data.put("url", url);
+        data.put("url", deviationUrl);
         // When
         var deviantArtResponse = new DeviantArtDeviationQueryDTO();
-        deviantArtResponse.setDeviationId(id.toString());
+        deviantArtResponse.setDeviationId(deviationId.toString());
 
-        when(deviantArtScrapperClient.scrapDeviationId(any())).thenReturn(id.toString());
+        when(deviantArtScrapperClient.scrapDeviationId(any())).thenReturn(deviationId.toString());
         when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(deviantArtResponse);
 
@@ -482,13 +486,13 @@ class DeviantArtV1SourceStrategyTest {
     }
 
     @Test
-    @DisplayName("Validate media with invalid url property")
+    @DisplayName("Validate media with invalid domain in url property")
     void validateMedia4() {
         // Given
         data.put("url", "test");
         // When
         // Then
-        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted empty url.");
+        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted invalid url property.");
     }
 
     @Test
@@ -498,19 +502,59 @@ class DeviantArtV1SourceStrategyTest {
         data.put("url", "https://deviantart.com/test");
         // When
         // Then
-        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted empty url.");
+        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted missing art in url property.");
+    }
+
+    @Test
+    @DisplayName("Validate media with invalid url given for uri object")
+    void validateMedia6() {
+        // Given
+        data.put("url", "https://de`vianta`rt.com/test");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted invalid url given for uri object.");
+    }
+
+    @Test
+    @DisplayName("Validate media with not expected domain in url property")
+    void validateMedia7() {
+        // Given
+        data.put("url", "test.pl");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted not expected domain in url property.");
+    }
+
+    @Test
+    @DisplayName("Validate media with missing art id in url property")
+    void validateMedia8() {
+        // Given
+        data.put("url", "https://deviantart.com/test/art/");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted missing art id in url property.");
+    }
+
+    @Test
+    @DisplayName("Validate media with non existing deviation")
+    void validateMedia9() {
+        // Given
+        data.put("url", "https://deviantart.com/test/art/test");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted non existing url property.");
     }
 
     @Test
     @DisplayName("Validate attachment")
     void validateAttachment() throws IOException {
         // Given
-        data.put("url", url);
+        data.put("url", deviationUrl);
         // When
         var deviantArtResponse = new DeviantArtDeviationQueryDTO();
-        deviantArtResponse.setDeviationId(id.toString());
+        deviantArtResponse.setDeviationId(deviationId.toString());
 
-        when(deviantArtScrapperClient.scrapDeviationId(any())).thenReturn(id.toString());
+        when(deviantArtScrapperClient.scrapDeviationId(any())).thenReturn(deviationId.toString());
         when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(deviantArtResponse);
 
@@ -550,14 +594,75 @@ class DeviantArtV1SourceStrategyTest {
     }
 
     @Test
+    @DisplayName("Validate attachment with invalid domain in url property")
+    void validateAttachment4() {
+        // Given
+        data.put("url", "test");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateAttachment(data).isValid(), "Validation accepted invalid url property.");
+    }
+
+    @Test
+    @DisplayName("Validate attachment with missing art in url property")
+    void validateAttachment5() {
+        // Given
+        data.put("url", "https://deviantart.com/test");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateAttachment(data).isValid(), "Validation accepted missing art in url property.");
+    }
+
+    @Test
+    @DisplayName("Validate attachment with invalid url given for uri object")
+    void validateAttachment6() {
+        // Given
+        data.put("url", "https://de`vianta`rt.com/test");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateAttachment(data).isValid(), "Validation accepted invalid url given for uri object.");
+    }
+
+    @Test
+    @DisplayName("Validate attachment with not expected domain in url property")
+    void validateAttachment7() {
+        // Given
+        data.put("url", "test.pl");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateAttachment(data).isValid(), "Validation accepted not expected domain in url property.");
+    }
+
+    @Test
+    @DisplayName("Validate attachment with missing art id in url property")
+    void validateAttachment8() {
+        // Given
+        data.put("url", "https://deviantart.com/test/art/");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateAttachment(data).isValid(), "Validation accepted missing art id in url property.");
+    }
+
+    @Test
+    @DisplayName("Validate attachment with non existing deviation")
+    void validateAttachment9() {
+        // Given
+        data.put("url", "https://deviantart.com/test/art/test");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateAttachment(data).isValid(), "Validation accepted non existing url property.");
+    }
+
+
+    @Test
     @DisplayName("Validate user")
     void validateUser() {
         // Given
-        data.put("username", username);
+        data.put("url", userUrl);
         // When
         var deviantArtResponse = new DeviantArtUserQueryDTO();
         deviantArtResponse.setUser(
-                new DeviantArtUserQueryDTO.User(username)
+                new DeviantArtUserQueryDTO.User(userId.toString(), username)
         );
 
         when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
@@ -567,22 +672,73 @@ class DeviantArtV1SourceStrategyTest {
     }
 
     @Test
-    @DisplayName("Validate attachment with empty username property")
+    @DisplayName("Validate user with empty url property")
     void validateUser2() {
         // Given
         // When
         // Then
-        assertFalse(deviantArtV1SourceStrategy.validateUser(data).isValid(), "Validation accepted empty username.");
+        assertFalse(deviantArtV1SourceStrategy.validateUser(data).isValid(), "Validation accepted empty url.");
     }
 
     @Test
-    @DisplayName("Validate attachment with non existing username")
+    @DisplayName("Validate user with non existing url")
     void validateUser3() {
         // Given
         // When
         when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
-        when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(null);
+        when(deviantArtServiceClient.getUser(any(), any())).thenReturn(null);
         // Then
-        assertFalse(deviantArtV1SourceStrategy.validateUser(data).isValid(), "Validation accepted empty username.");
+        assertFalse(deviantArtV1SourceStrategy.validateUser(data).isValid(), "Validation accepted empty url.");
     }
+
+    @Test
+    @DisplayName("Validate user with invalid domain in url property")
+    void validateUser4() {
+        // Given
+        data.put("url", "test");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateUser(data).isValid(), "Validation accepted invalid url property.");
+    }
+
+    @Test
+    @DisplayName("Validate user with invalid url given for uri object")
+    void validateUser5() {
+        // Given
+        data.put("url", "https://de`vianta`rt.com");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateUser(data).isValid(), "Validation accepted invalid url given for uri object.");
+    }
+
+    @Test
+    @DisplayName("Validate user with not expected domain in url property")
+    void validateUser6() {
+        // Given
+        data.put("url", "test.pl");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateUser(data).isValid(), "Validation accepted not expected domain in url property.");
+    }
+
+    @Test
+    @DisplayName("Validate user with missing username in url property")
+    void validateUser7() {
+        // Given
+        data.put("url", "https://deviantart.com/");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateUser(data).isValid(), "Validation accepted missing art id in url property.");
+    }
+
+    @Test
+    @DisplayName("Validate user with non existing username")
+    void validateUser8() {
+        // Given
+        data.put("url", "https://deviantart.com/test");
+        // When
+        // Then
+        assertFalse(deviantArtV1SourceStrategy.validateUser(data).isValid(), "Validation accepted non existing url property.");
+    }
+
 }
