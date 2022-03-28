@@ -1,7 +1,5 @@
 package ws.furrify.sources.source.strategy;
 
-import lombok.SneakyThrows;
-import ws.furrify.shared.exception.InvalidDataGivenException;
 import ws.furrify.sources.keycloak.KeycloakServiceClient;
 import ws.furrify.sources.keycloak.KeycloakServiceClientImpl;
 import ws.furrify.sources.keycloak.PropertyHolder;
@@ -27,11 +25,16 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
 
     public final static String BROKER_ID = "deviantart";
 
-    private final static String DOMAIN = "https://deviantart.com";
+    private final static String PROTOCOL = "https://";
+    private final static String DOMAIN = "deviantart.com";
+    private final static String WWW_SUBDOMAIN = "www.";
     private final static String DEVIATION_URL_FIELD = "url";
-    private final static String USERNAME_FIELD = "username";
+    private final static String USER_URL_FIELD = "url";
     private final static String DEVIATION_ART_PATH = "art";
     private final static byte DEVIATION_ART_PATH_POSITION_IN_URI = 2;
+    private final static byte USERNAME_PATH_POSITION_IN_URI = 1;
+    private final static byte DEVIATION_PATH_SEGMENTS = 4;
+    private final static byte USER_PATH_SEGMENTS = 2;
 
     private final KeycloakServiceClient keycloakService;
     private final DeviantArtServiceClient deviantArtService;
@@ -60,12 +63,21 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
 
         try {
             uri = new URI(data.get(DEVIATION_URL_FIELD));
+            if (uri.getHost() == null) {
+                throw new URISyntaxException(data.get(DEVIATION_URL_FIELD), "Domain is missing");
+            }
         } catch (URISyntaxException e) {
             return ValidationResult.invalid("Deviation url is invalid.");
         }
 
+        // If url does not contain correct domain
+        if (!uri.getHost().replace(WWW_SUBDOMAIN, "").equalsIgnoreCase(DOMAIN)) {
+            return ValidationResult.invalid("Deviation url is invalid.");
+        }
+
         String[] path = uri.getPath().split("[/\\\\]");
-        if (!path[DEVIATION_ART_PATH_POSITION_IN_URI].equals(DEVIATION_ART_PATH)) {
+        // If there are not enough path params in url or art path is present
+        if (path.length < DEVIATION_PATH_SEGMENTS || !path[DEVIATION_ART_PATH_POSITION_IN_URI].equals(DEVIATION_ART_PATH)) {
             return ValidationResult.invalid("Deviation url is invalid.");
         }
 
@@ -74,7 +86,7 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
         try {
             /* Extract deviation id using scrapper cause deviant art api
                is weird and doesn't allow getting deviation by id in url */
-            deviationId = deviantArtScrapperClient.scrapDeviationId(DOMAIN + uri.getPath());
+            deviationId = deviantArtScrapperClient.scrapDeviationId(PROTOCOL + DOMAIN + uri.getPath());
         } catch (IOException e) {
             return ValidationResult.invalid("Deviation not found.");
         }
@@ -95,17 +107,42 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
 
     @Override
     public ValidationResult validateUser(final HashMap<String, String> data) {
-        if (data.get(USERNAME_FIELD) == null || data.get(USERNAME_FIELD).isBlank()) {
-            return ValidationResult.invalid("Username is required.");
+        if (data.get(USER_URL_FIELD) == null || data.get(USER_URL_FIELD).isBlank()) {
+            return ValidationResult.invalid("User url is required.");
+        }
+
+        URI uri;
+
+        try {
+            uri = new URI(data.get(DEVIATION_URL_FIELD));
+            if (uri.getHost() == null) {
+                throw new URISyntaxException(data.get(DEVIATION_URL_FIELD), "Domain is missing");
+            }
+        } catch (URISyntaxException e) {
+            return ValidationResult.invalid("User url is invalid.");
+        }
+
+        // If url does not contain correct domain
+        if (!uri.getHost().replace(WWW_SUBDOMAIN, "").equalsIgnoreCase(DOMAIN)) {
+            return ValidationResult.invalid("User url is invalid.");
+        }
+
+        String[] path = uri.getPath().split("[/\\\\]");
+        // If there are not enough path params
+        if (path.length < USER_PATH_SEGMENTS) {
+            return ValidationResult.invalid("User url is invalid.");
         }
 
         String providerBearerToken = "Bearer " + keycloakService.getKeycloakIdentityProviderToken(null, PropertyHolder.REALM, BROKER_ID).getAccessToken();
 
         DeviantArtUserQueryDTO userQueryDTO =
-                deviantArtService.getUser(providerBearerToken, data.get(USERNAME_FIELD));
+                deviantArtService.getUser(providerBearerToken, path[USERNAME_PATH_POSITION_IN_URI]);
         if (userQueryDTO == null) {
             return ValidationResult.invalid("User not found.");
         }
+
+        data.put("user_id", userQueryDTO.getUser().getUserId());
+        data.put("username", userQueryDTO.getUser().getUsername());
 
         return ValidationResult.valid(data);
     }
