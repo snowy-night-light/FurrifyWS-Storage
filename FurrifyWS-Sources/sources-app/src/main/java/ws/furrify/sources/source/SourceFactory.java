@@ -37,7 +37,8 @@ final class SourceFactory {
                 )
                 .ownerId(sourceDTO.getOwnerId())
                 .strategy(sourceDTO.getStrategy())
-                .data(sourceDTO.getData())
+                // Set updated data from validation result
+                .data(validationResult.getData())
                 .originType(sourceDTO.getOriginType())
                 .createDate(
                         sourceDTO.getCreateDate() != null ? sourceDTO.getCreateDate() : ZonedDateTime.now()

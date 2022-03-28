@@ -48,19 +48,20 @@ public interface SourceStrategy {
     class ValidationResult {
         boolean valid;
         String reason;
+        HashMap<String, String> data;
 
         /**
          * @return Instance of ValidationResult with valid field set as true.
          */
-        public static ValidationResult valid() {
-            return new ValidationResult(true, null);
+        public static ValidationResult valid(final HashMap<String, String> data) {
+            return new ValidationResult(true, null, data);
         }
 
         /**
          * @return Instance of ValidationResult with valid field set as false and given reason.
          */
         public static ValidationResult invalid(final String reason) {
-            return new ValidationResult(false, reason);
+            return new ValidationResult(false, reason, null);
         }
     }
 }

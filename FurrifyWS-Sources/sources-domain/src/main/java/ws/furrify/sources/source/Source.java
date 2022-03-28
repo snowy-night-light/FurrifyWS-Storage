@@ -99,6 +99,7 @@ class Source {
         }
 
         this.strategy = finalStrategy;
-        this.data = finalData;
+        // Update data with validation result data
+        this.data = validationResult.getData();
     }
 }
