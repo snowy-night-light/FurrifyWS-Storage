@@ -55,8 +55,9 @@ class MediaTest implements CommandLineRunner {
                                         new MediaSource(
                                                 mediaSourceId,
                                                 "DeviantArtV1SourceStrategy",
-                                                new HashMap<>(1) {{
-                                                    put("id", "EC0AAF26-D129-8165-7E5A-1B3E0B2BBF82");
+                                                new HashMap<>(2) {{
+                                                    put("url", "https://www.deviantart.com/freak-side/art/C-h-i-l-l-i-n-911198824");
+                                                    put("deviation_id", "EC0AAF26-D129-8165-7E5A-1B3E0B2BBF82");
                                                 }}
                                         )
                                 ))
