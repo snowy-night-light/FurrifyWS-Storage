@@ -51,7 +51,7 @@ class ArtistTest implements CommandLineRunner {
                                         new ArtistSource(
                                                 sourceId,
                                                 "DeviantArtV1SourceStrategy",
-                                                new HashMap<>(1) {{
+                                                new HashMap<>(2) {{
                                                     put("id", "123");
                                                 }}
                                         )

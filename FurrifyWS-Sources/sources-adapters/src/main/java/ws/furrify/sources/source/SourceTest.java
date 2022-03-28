@@ -47,8 +47,9 @@ class SourceTest implements CommandLineRunner {
                         .sourceId(artistSourceId)
                         .ownerId(userId)
                         .strategy(new DeviantArtV1SourceStrategy())
-                        .data(new HashMap<>(1) {{
-                            put("id", "EC0AAF26-D129-8165-7E5A-1B3E0B2BBF82");
+                        .data(new HashMap<>(2) {{
+                            put("url", "https://www.deviantart.com/freak-side/art/C-h-i-l-l-i-n-911198824");
+                            put("deviation_id", "EC0AAF26-D129-8165-7E5A-1B3E0B2BBF82");
                         }})
                         .originType(SourceOriginType.ARTIST)
                         .createDate(ZonedDateTime.now())
@@ -62,8 +63,9 @@ class SourceTest implements CommandLineRunner {
                         .sourceId(mediaSourceId)
                         .ownerId(userId)
                         .strategy(new DeviantArtV1SourceStrategy())
-                        .data(new HashMap<>(1) {{
-                            put("id", "EC0AAF26-D129-8165-7E5A-1B3E0B2BBF82");
+                        .data(new HashMap<>(2) {{
+                            put("url", "https://www.deviantart.com/freak-side/art/C-h-i-l-l-i-n-911198824");
+                            put("deviation_id", "EC0AAF26-D129-8165-7E5A-1B3E0B2BBF82");
                         }})
                         .originType(SourceOriginType.MEDIA)
                         .createDate(ZonedDateTime.now())
@@ -77,8 +79,9 @@ class SourceTest implements CommandLineRunner {
                         .sourceId(attachmentSourceId)
                         .ownerId(userId)
                         .strategy(new DeviantArtV1SourceStrategy())
-                        .data(new HashMap<>(1) {{
-                            put("id", "EC0AAF26-D129-8165-7E5A-1B3E0B2BBF82");
+                        .data(new HashMap<>(2) {{
+                            put("url", "https://www.deviantart.com/freak-side/art/C-h-i-l-l-i-n-911198824");
+                            put("deviation_id", "EC0AAF26-D129-8165-7E5A-1B3E0B2BBF82");
                         }})
                         .originType(SourceOriginType.ATTACHMENT)
                         .createDate(ZonedDateTime.now())
