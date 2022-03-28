@@ -11,6 +11,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import ws.furrify.sources.keycloak.KeycloakServiceClient;
 import ws.furrify.sources.keycloak.PropertyHolder;
 import ws.furrify.sources.keycloak.dto.KeycloakIdpTokenQueryDTO;
+import ws.furrify.sources.providers.deviantart.DeviantArtScrapperClient;
 import ws.furrify.sources.providers.deviantart.DeviantArtServiceClient;
 import ws.furrify.sources.providers.deviantart.dto.DeviantArtDeviationQueryDTO;
 import ws.furrify.sources.providers.deviantart.dto.DeviantArtUserQueryDTO;
@@ -40,20 +41,24 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-// TODO update tests for new strategy
 class DeviantArtV1SourceStrategyTest {
 
     private static KeycloakServiceClient keycloakServiceClient;
     private static DeviantArtServiceClient deviantArtServiceClient;
+    private static DeviantArtScrapperClient deviantArtScrapperClient;
     private static ServletRequestAttributes servletRequestAttributes;
 
+    private final static String DEVIATION_ID_KEY = "deviation_id";
+
     private UUID id;
+    private String url;
     private String username;
     private HashMap<String, String> data;
     private DeviantArtV1SourceStrategy deviantArtV1SourceStrategy;
@@ -62,6 +67,7 @@ class DeviantArtV1SourceStrategyTest {
     static void beforeAll() {
         keycloakServiceClient = mock(KeycloakServiceClient.class);
         deviantArtServiceClient = mock(DeviantArtServiceClient.class);
+        deviantArtScrapperClient = mock(DeviantArtScrapperClient.class);
 
         PropertyHolder.AUTH_SERVER = "test";
         PropertyHolder.REALM = "test";
@@ -417,6 +423,7 @@ class DeviantArtV1SourceStrategyTest {
     @BeforeEach
     void setUp() {
         id = UUID.randomUUID();
+        url = "https://www.deviantart.com/freak-side/art/C-h-i-l-l-i-n-911198824";
         username = "Test";
         data = new HashMap<>();
 
@@ -428,77 +435,98 @@ class DeviantArtV1SourceStrategyTest {
 
     @Test
     @DisplayName("Validate media")
-    void validateMedia() {
+    void validateMedia() throws IOException {
         // Given
-        data.put("id", id.toString());
+        data.put("url", url);
         // When
         var deviantArtResponse = new DeviantArtDeviationQueryDTO();
         deviantArtResponse.setDeviationId(id.toString());
 
+        when(deviantArtScrapperClient.scrapDeviationId(any())).thenReturn(id.toString());
         when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(deviantArtResponse);
 
         try (MockedStatic<RequestContextHolder> mock = Mockito.mockStatic(RequestContextHolder.class)) {
             mock.when(RequestContextHolder::getRequestAttributes).thenReturn(servletRequestAttributes);
 
+            SourceStrategy.ValidationResult validationResult =
+                    deviantArtV1SourceStrategy.validateMedia(data);
+
             // Then
-            assertTrue(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation failed with correct parameters.");
+            assertAll(() -> {
+                assertTrue(validationResult.isValid(), "Validation failed with correct parameters.");
+                // Check if id was added to data
+                assertFalse(validationResult.getData().get(DEVIATION_ID_KEY).isBlank(), "Validation failed with correct parameters.");
+            });
         }
     }
 
     @Test
-    @DisplayName("Validate media with empty id property")
+    @DisplayName("Validate media with empty url property")
     void validateMedia2() {
         // Given
         // When
         // Then
-        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted empty id.");
+        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted empty url.");
     }
 
     @Test
-    @DisplayName("Validate media with non existing id")
+    @DisplayName("Validate media with non existing url")
     void validateMedia3() {
         // Given
         // When
         when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(null);
         // Then
-        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted empty id.");
+        assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted empty url.");
     }
 
     @Test
     @DisplayName("Validate attachment")
-    void validateAttachment() {
+    void validateAttachment() throws IOException {
         // Given
-        data.put("id", id.toString());
+        data.put("url", url);
         // When
         var deviantArtResponse = new DeviantArtDeviationQueryDTO();
         deviantArtResponse.setDeviationId(id.toString());
 
+        when(deviantArtScrapperClient.scrapDeviationId(any())).thenReturn(id.toString());
         when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(deviantArtResponse);
-        // Then
-        assertTrue(deviantArtV1SourceStrategy.validateAttachment(data).isValid(), "Validation failed with correct parameters.");
+
+        try (MockedStatic<RequestContextHolder> mock = Mockito.mockStatic(RequestContextHolder.class)) {
+            mock.when(RequestContextHolder::getRequestAttributes).thenReturn(servletRequestAttributes);
+
+            SourceStrategy.ValidationResult validationResult =
+                    deviantArtV1SourceStrategy.validateAttachment(data);
+
+            // Then
+            assertAll(() -> {
+                assertTrue(validationResult.isValid(), "Validation failed with correct parameters.");
+                // Check if id was added to data
+                assertFalse(validationResult.getData().get(DEVIATION_ID_KEY).isBlank(), "Validation failed with correct parameters.");
+            });
+        }
     }
 
     @Test
-    @DisplayName("Validate attachment with empty id property")
+    @DisplayName("Validate attachment with empty url property")
     void validateAttachment2() {
         // Given
         // When
         // Then
-        assertFalse(deviantArtV1SourceStrategy.validateAttachment(data).isValid(), "Validation accepted empty id.");
+        assertFalse(deviantArtV1SourceStrategy.validateAttachment(data).isValid(), "Validation accepted empty url.");
     }
 
     @Test
-    @DisplayName("Validate attachment with non existing id")
+    @DisplayName("Validate attachment with non existing url")
     void validateAttachment3() {
         // Given
         // When
         when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(null);
         // Then
-        assertFalse(deviantArtV1SourceStrategy.validateAttachment(data).isValid(), "Validation accepted empty id.");
+        assertFalse(deviantArtV1SourceStrategy.validateAttachment(data).isValid(), "Validation accepted empty url.");
     }
 
     @Test
