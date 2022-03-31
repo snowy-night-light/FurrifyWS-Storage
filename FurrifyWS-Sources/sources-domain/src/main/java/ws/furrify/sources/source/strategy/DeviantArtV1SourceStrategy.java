@@ -64,7 +64,7 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
         try {
             uri = new URI(data.get(DEVIATION_URL_FIELD));
             if (uri.getHost() == null) {
-                throw new URISyntaxException(data.get(DEVIATION_URL_FIELD), "Domain is missing");
+                throw new URISyntaxException(data.get(DEVIATION_URL_FIELD), "Domain is missing.");
             }
         } catch (URISyntaxException e) {
             return ValidationResult.invalid("Deviation url is invalid.");
@@ -76,8 +76,9 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
         }
 
         String[] path = uri.getPath().split("[/\\\\]");
-        // If there are not enough path params in url or art path is present
-        if (path.length < DEVIATION_PATH_SEGMENTS || !path[DEVIATION_ART_PATH_POSITION_IN_URI].equals(DEVIATION_ART_PATH)) {
+        // If there are not enough path params in url or art path is not present
+        if (path.length < DEVIATION_PATH_SEGMENTS
+                || !path[DEVIATION_ART_PATH_POSITION_IN_URI].equals(DEVIATION_ART_PATH)) {
             return ValidationResult.invalid("Deviation url is invalid.");
         }
 
@@ -91,10 +92,11 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
             return ValidationResult.invalid("Deviation not found.");
         }
 
-        String providerBearerToken = "Bearer " + keycloakService.getKeycloakIdentityProviderToken(null, PropertyHolder.REALM, BROKER_ID).getAccessToken();
-
         DeviantArtDeviationQueryDTO deviationQueryDTO =
-                deviantArtService.getDeviation(providerBearerToken, deviationId);
+                deviantArtService.getDeviation(
+                        SourceStrategy.getKeycloakBearerToken(keycloakService, BROKER_ID),
+                        deviationId
+                );
         if (deviationQueryDTO == null) {
             return ValidationResult.invalid("Deviation not found.");
         }
@@ -133,10 +135,11 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
             return ValidationResult.invalid("User url is invalid.");
         }
 
-        String providerBearerToken = "Bearer " + keycloakService.getKeycloakIdentityProviderToken(null, PropertyHolder.REALM, BROKER_ID).getAccessToken();
-
         DeviantArtUserQueryDTO userQueryDTO =
-                deviantArtService.getUser(providerBearerToken, path[USERNAME_PATH_POSITION_IN_URI]);
+                deviantArtService.getUser(
+                        SourceStrategy.getKeycloakBearerToken(keycloakService, BROKER_ID),
+                        path[USERNAME_PATH_POSITION_IN_URI]
+                );
         if (userQueryDTO == null) {
             return ValidationResult.invalid("User not found.");
         }

@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Deviation dto recived from DeviantArt API.
+ * Deviation dto received from DeviantArt API.
  *
  * @author Skyte
  */

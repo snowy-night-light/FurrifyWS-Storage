@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import ws.furrify.sources.keycloak.KeycloakServiceClient;
+import ws.furrify.sources.keycloak.PropertyHolder;
 import ws.furrify.sources.source.jackson.SourceStrategyDeserializer;
 import ws.furrify.sources.source.jackson.SourceStrategySerializer;
 
@@ -63,5 +65,17 @@ public interface SourceStrategy {
         public static ValidationResult invalid(final String reason) {
             return new ValidationResult(false, reason, null);
         }
+    }
+
+    /**
+     * Get broker bearer token from keycloak.
+     *
+     * @param keycloakServiceClient Instance of keycloak service client.
+     * @param brokerId Broker id in keycloak to get token from.
+     * @return Broker access token.
+     */
+    static String getKeycloakBearerToken(final KeycloakServiceClient keycloakServiceClient,
+                                         final String brokerId) {
+        return "Bearer " + keycloakServiceClient.getKeycloakIdentityProviderToken(null, PropertyHolder.REALM, brokerId).getAccessToken();
     }
 }

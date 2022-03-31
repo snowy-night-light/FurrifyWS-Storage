@@ -44,7 +44,8 @@ public enum Errors {
     EXTERNAL_PROVIDER_SERVER_SIDE_ERROR("External provider [provider={0}] has encountered a server error on their side. Try again."),
     EXTERNAL_PROVIDER_TOKEN_HAS_EXPIRED("External provider [provider={0}] token has expired. You will need to reconnect it in account options."),
     HARD_LIMIT_FOR_ENTITY_TYPE("Hard limit of [limit={0}] has been reached for [entity={1}], further create requests will not be accepted."),
-    UNIDENTIFIED("Unknown error occurred.");
+    UNIDENTIFIED("Unknown error occurred."),
+    EXTERNAL_PROVIDER_FORBIDDEN("You don't have permission to access that resource on external provider [provider={0}] endpoint.");
 
     private final String errorMessage;
 
