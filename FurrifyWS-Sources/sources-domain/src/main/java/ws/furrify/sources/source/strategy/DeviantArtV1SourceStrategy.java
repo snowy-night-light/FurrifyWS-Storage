@@ -141,7 +141,7 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
             return ValidationResult.invalid("User not found.");
         }
 
-        data.put("user_id", userQueryDTO.getUser().getUserId());
+        data.put("userid", userQueryDTO.getUser().getUserId());
         data.put("username", userQueryDTO.getUser().getUsername());
 
         return ValidationResult.valid(data);
