@@ -24,6 +24,15 @@
         "doc": "Source origin UUID."
       },
       {
+        "name": "postId",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Source post UUID."
+      },
+      {
         "name": "dataHashMap",
         "type": [
           "null",
