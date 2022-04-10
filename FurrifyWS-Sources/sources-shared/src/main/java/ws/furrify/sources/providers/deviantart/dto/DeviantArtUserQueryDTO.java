@@ -1,12 +1,16 @@
 package ws.furrify.sources.providers.deviantart.dto;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * Deviation dto recived from DeviantArt API.
+ * Deviation dto received from DeviantArt API.
  *
  * @author Skyte
  */
