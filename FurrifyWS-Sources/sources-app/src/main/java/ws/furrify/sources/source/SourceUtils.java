@@ -32,9 +32,6 @@ class SourceUtils {
                         SourceData.newBuilder()
                                 .setOwnerId(sourceSnapshot.getOwnerId().toString())
                                 .setOriginId(sourceSnapshot.getOriginId().toString())
-                                .setPostId(
-                                        (sourceSnapshot.getPostId() != null) ? sourceSnapshot.getPostId().toString() : null
-                                )
                                 .setStrategy(
                                         sourceStrategyAttributeConverter.convertToDatabaseColumn(
                                                 sourceSnapshot.getStrategy()
