@@ -111,7 +111,7 @@ class Artist {
         // Verify is preferred nickname is already taken
         boolean isPreferredNicknameTaken =
                 // Is nickname different from original
-                !this.preferredNickname.equals(preferredNickname) &&
+                this.preferredNickname.equals(preferredNickname) ||
                         // Do nickname is selected as preferred in other artists
                         artistRepository.existsByOwnerIdAndPreferredNickname(ownerId, preferredNickname.getNickname());
 
