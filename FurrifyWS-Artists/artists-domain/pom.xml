@@ -56,6 +56,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.12.10</version>
+        </dependency>
+        <dependency>
             <groupId>ws.furrify</groupId>
             <artifactId>posts-shared</artifactId>
             <version>0.0.1</version>
