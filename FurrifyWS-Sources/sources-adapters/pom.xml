@@ -24,7 +24,7 @@
     </build>
 
     <properties>
-        <keycloak.version>17.0.1</keycloak.version>
+        <keycloak.version>18.0.0</keycloak.version>
     </properties>
 
     <dependencies>
@@ -94,12 +94,12 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.28</version>
+            <version>8.0.29</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.3.4</version>
+            <version>42.3.5</version>
         </dependency>
         <!-- Tools -->
         <dependency>
