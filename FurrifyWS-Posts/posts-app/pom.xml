@@ -105,6 +105,12 @@
             <artifactId>javacv-platform</artifactId>
             <version>1.5.7</version>
         </dependency>
+        <!-- Formats -->
+        <dependency>
+            <groupId>net.jthink</groupId>
+            <artifactId>jaudiotagger</artifactId>
+            <version>3.0.1</version>
+        </dependency>
         <!-- I/O -->
         <dependency>
             <groupId>org.sejda.webp-imageio</groupId>
