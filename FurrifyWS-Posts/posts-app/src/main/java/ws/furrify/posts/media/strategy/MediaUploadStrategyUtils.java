@@ -6,10 +6,23 @@ import org.apache.commons.io.IOUtils;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
-import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.flac.FlacTagWriter;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.aiff.AiffTagReader;
+import org.jaudiotagger.audio.asf.AsfFileReader;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.audio.flac.FlacTagReader;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.mp4.Mp4TagReader;
+import org.jaudiotagger.audio.ogg.OggVorbisTagReader;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.tag.aiff.AiffTag;
 import org.jaudiotagger.tag.flac.FlacTag;
 import org.jaudiotagger.tag.images.Artwork;
+import org.jaudiotagger.tag.mp4.Mp4Tag;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import ws.furrify.posts.media.MediaExtension;
 import ws.furrify.posts.utils.GifDecoder;
 import ws.furrify.shared.exception.Errors;
@@ -24,6 +37,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -86,49 +100,90 @@ public class MediaUploadStrategyUtils {
     }
 
     private static InputStream extractAudioFileAlbumCover(final InputStream source, final MediaExtension extension) {
-        ByteArrayOutputStream albumCover = new ByteArrayOutputStream();
+        ByteArrayInputStream albumCoverInputStream = null;
+        File tempFile = null;
 
-        switch (extension) {
-            case EXTENSION_FLAC -> {
-                File tempFile = null;
-                BufferedImage artworkBufferedImage = null;
+        try {
+            // Create temp file for artwork extraction
+            tempFile = File.createTempFile(TEMP_FILE_PREFIX, null);
+            tempFile.deleteOnExit();
 
-                try {
-                    // Create temp file for artwork extraction
-                    tempFile = File.createTempFile(TEMP_FILE_PREFIX, null);
-                    tempFile.deleteOnExit();
+            // Copy input stream to tmp file
+            try (FileOutputStream out = new FileOutputStream(tempFile)) {
+                IOUtils.copy(source, out);
+            }
 
-                    try (FileOutputStream out = new FileOutputStream(tempFile)) {
-                        IOUtils.copy(source, out);
-                    }
-                    FlacTag tag = new FlacTag();
+            // Handle extension for each format to extract thumbnail
+            switch (extension) {
+                case EXTENSION_MP3 -> {
+                    MP3File mp3File = (MP3File) AudioFileIO.read(tempFile);
 
-                    FlacTagWriter flacTagWriter = new FlacTagWriter();
-                    flacTagWriter.write(tag, tempFile.toPath());
+                    Artwork artwork = mp3File.getTag().getFirstArtwork();
+
+                    albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                }
+
+                case EXTENSION_FLAC -> {
+                    FlacTagReader flacTagReader = new FlacTagReader();
+                    FlacTag tag = flacTagReader.read(tempFile.toPath());
 
                     Artwork artwork = tag.getFirstArtwork();
 
-                    artworkBufferedImage = (BufferedImage) artwork.getImage();
+                    albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                }
 
-                    // Write image to output stream
-                    ImageIO.write(artworkBufferedImage, "png", albumCover);
-                } catch (CannotWriteException | IOException e) {
-                    throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
-                } finally {
-                    if (tempFile != null && !tempFile.delete()) {
-                        log.warn("Temp file [filename=" + tempFile.getName() + "] could not be deleted from temp directory.");
+                case EXTENSION_OGG -> {
+                    try (RandomAccessFile oggRandomAccessFile = new RandomAccessFile(tempFile, "r")) {
+                        OggVorbisTagReader oggVorbisTagReader = new OggVorbisTagReader();
+
+                        VorbisCommentTag oggTag = (VorbisCommentTag) oggVorbisTagReader.read(oggRandomAccessFile);
+
+                        albumCoverInputStream = new ByteArrayInputStream(oggTag.getFirstArtwork().getBinaryData());
                     }
                 }
+
+                case EXTENSION_AIF, EXTENSION_AIFF -> {
+                    AiffTagReader aiffTagReader = new AiffTagReader("furrify-aiff-tag-reader");
+                    AiffTag tag = aiffTagReader.read(tempFile.toPath());
+
+                    Artwork artwork = tag.getFirstArtwork();
+
+                    albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                }
+
+                case EXTENSION_WMA -> {
+                    AsfFileReader asfFileReader = new AsfFileReader();
+                    Tag tag = asfFileReader.read(tempFile).getTag();
+
+                    Artwork artwork = tag.getFirstArtwork();
+
+                    albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                }
+
+
+                case EXTENSION_MP4_AUDIO -> {
+                    Mp4TagReader mp4TagReader = new Mp4TagReader();
+                    Mp4Tag tag = mp4TagReader.read(tempFile.toPath());
+
+                    Artwork artwork = tag.getFirstArtwork();
+
+                    albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                }
             }
-            // TODO Implement other file formats
+
+        } catch (TagException | InvalidAudioFrameException | ReadOnlyFileException |
+                 CannotReadException |
+                 IOException e) {
+
+            throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
+        } finally {
+
+            if (tempFile != null && !tempFile.delete()) {
+                log.warn("Temp file [filename=" + tempFile.getName() + "] could not be deleted from temp directory.");
+            }
         }
 
-        // If cover not found
-        if (albumCover.size() == 0) {
-            return null;
-        }
-
-        return new ByteArrayInputStream(albumCover.toByteArray());
+        return albumCoverInputStream;
     }
 
     private static InputStream extractFirstFrameFromGif(final InputStream source) throws IOException {
