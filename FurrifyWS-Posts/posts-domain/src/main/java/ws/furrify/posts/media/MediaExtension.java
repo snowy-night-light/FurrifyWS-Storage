@@ -23,7 +23,7 @@ public enum MediaExtension {
     /**
      * File extensions
      */
-    EXTENSION_OGG("OGG", MediaType.AUDIO, "application/ogg", "audio/ogg"),
+    EXTENSION_OGG("OGG", MediaType.AUDIO, "application/ogg", "audio/ogg", "audio/vorbis"),
     EXTENSION_FLAC("FLAC", MediaType.AUDIO, "audio/x-flac", "audio/flac"),
     EXTENSION_AIF("AIF", MediaType.AUDIO, "audio/aiff", "audio/x-aiff"),
     EXTENSION_AIFF("AIFF", MediaType.AUDIO, "audio/aiff", "audio/x-aiff"),

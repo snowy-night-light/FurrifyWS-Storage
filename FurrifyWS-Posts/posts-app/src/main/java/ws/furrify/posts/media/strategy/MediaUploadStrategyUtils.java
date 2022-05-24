@@ -6,7 +6,6 @@ import org.apache.commons.io.IOUtils;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
-import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.aiff.AiffTagReader;
 import org.jaudiotagger.audio.asf.AsfFileReader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -14,6 +13,7 @@ import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.FlacTagReader;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.mp3.MP3FileReader;
 import org.jaudiotagger.audio.mp4.Mp4TagReader;
 import org.jaudiotagger.audio.ogg.OggVorbisTagReader;
 import org.jaudiotagger.tag.Tag;
@@ -91,11 +91,18 @@ public class MediaUploadStrategyUtils {
 
                 yield null;
             }
-            case AUDIO -> generateThumbnailForImage(
-                    width,
-                    quality,
-                    extractAudioFileAlbumCover(source, extension)
-            );
+            case AUDIO -> {
+                InputStream artwork = extractAudioFileAlbumCover(source, extension);
+                if (artwork != null) {
+                    yield generateThumbnailForImage(
+                            width,
+                            quality,
+                            artwork
+                    );
+                }
+
+                yield null;
+            }
         };
     }
 
@@ -116,11 +123,13 @@ public class MediaUploadStrategyUtils {
             // Handle extension for each format to extract thumbnail
             switch (extension) {
                 case EXTENSION_MP3 -> {
-                    MP3File mp3File = (MP3File) AudioFileIO.read(tempFile);
+                    MP3FileReader mp3FileReader = new MP3FileReader();
+                    MP3File mp3File = (MP3File) mp3FileReader.read(tempFile);
 
                     Artwork artwork = mp3File.getTag().getFirstArtwork();
-
-                    albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                    if (artwork != null) {
+                        albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                    }
                 }
 
                 case EXTENSION_FLAC -> {
@@ -128,8 +137,9 @@ public class MediaUploadStrategyUtils {
                     FlacTag tag = flacTagReader.read(tempFile.toPath());
 
                     Artwork artwork = tag.getFirstArtwork();
-
-                    albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                    if (artwork != null) {
+                        albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                    }
                 }
 
                 case EXTENSION_OGG -> {
@@ -138,7 +148,10 @@ public class MediaUploadStrategyUtils {
 
                         VorbisCommentTag oggTag = (VorbisCommentTag) oggVorbisTagReader.read(oggRandomAccessFile);
 
-                        albumCoverInputStream = new ByteArrayInputStream(oggTag.getFirstArtwork().getBinaryData());
+                        Artwork artwork = oggTag.getFirstArtwork();
+                        if (artwork != null) {
+                            albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                        }
                     }
                 }
 
@@ -147,8 +160,9 @@ public class MediaUploadStrategyUtils {
                     AiffTag tag = aiffTagReader.read(tempFile.toPath());
 
                     Artwork artwork = tag.getFirstArtwork();
-
-                    albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                    if (artwork != null) {
+                        albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                    }
                 }
 
                 case EXTENSION_WMA -> {
@@ -156,8 +170,9 @@ public class MediaUploadStrategyUtils {
                     Tag tag = asfFileReader.read(tempFile).getTag();
 
                     Artwork artwork = tag.getFirstArtwork();
-
-                    albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                    if (artwork != null) {
+                        albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                    }
                 }
 
 
@@ -166,8 +181,9 @@ public class MediaUploadStrategyUtils {
                     Mp4Tag tag = mp4TagReader.read(tempFile.toPath());
 
                     Artwork artwork = tag.getFirstArtwork();
-
-                    albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                    if (artwork != null) {
+                        albumCoverInputStream = new ByteArrayInputStream(artwork.getBinaryData());
+                    }
                 }
             }
 
