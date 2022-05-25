@@ -42,7 +42,7 @@ public enum MediaExtension {
     EXTENSION_MKV("MKV", MediaType.VIDEO, "video/x-matroska"),
     EXTENSION_WEBM("WEBM", MediaType.VIDEO, "video/webm"),
     EXTENSION_MP4("MP4", MediaType.VIDEO, "video/mp4"),
-    EXTENSION_MPEG("MPEG", MediaType.IMAGE, "video/mpeg"),
+    EXTENSION_MPEG("MPEG", MediaType.VIDEO, "video/mpeg"),
 
     EXTENSION_WEBP("WEBP", MediaType.IMAGE, "image/webp"),
     EXTENSION_ICO("ICO", MediaType.IMAGE, "image/vnd.microsoft.icon"),
