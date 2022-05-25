@@ -44,7 +44,9 @@ public enum Errors {
     EXTERNAL_PROVIDER_SERVER_SIDE_ERROR("External provider [provider={0}] has encountered a server error on their side. Try again."),
     EXTERNAL_PROVIDER_TOKEN_HAS_EXPIRED("External provider [provider={0}] token has expired. You will need to reconnect it in account options."),
     HARD_LIMIT_FOR_ENTITY_TYPE("Hard limit of [limit={0}] has been reached for [entity={1}], further create requests will not be accepted."),
-    UNIDENTIFIED("Unknown error occurred.");
+    UNIDENTIFIED("Unknown error occurred."),
+    FILE_HASH_DUPLICATE_IN_POST("File with this [md5={0}] hash already exists in this post with [uuid={1}].");
+
 
     private final String errorMessage;
 
