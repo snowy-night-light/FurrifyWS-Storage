@@ -18,7 +18,7 @@ interface SqlArtistRepository extends Repository<ArtistSnapshot, Long> {
 
     void deleteByArtistId(UUID artistId);
 
-    @Query("select 1 from ArtistSnapshot a where a.ownerId = ?2 and lower(a.preferredNickname) = lower(?2)")
+    @Query("select new java.lang.Boolean(count(a) > 0) from ArtistSnapshot a where a.ownerId = ?1 and lower(a.preferredNickname) = lower(?2)")
     boolean existsByOwnerIdAndPreferredNickname(UUID ownerId, String preferredNickname);
 
     boolean existsByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
