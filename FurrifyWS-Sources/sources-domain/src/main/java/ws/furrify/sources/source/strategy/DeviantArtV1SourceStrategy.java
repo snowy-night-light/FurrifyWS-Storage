@@ -23,14 +23,17 @@ import java.util.HashMap;
  */
 public class DeviantArtV1SourceStrategy implements SourceStrategy {
 
-    public final static String BROKER_ID = "deviantart";
+    final static String PROTOCOL = "https://";
+    final static String DOMAIN = "deviantart.com";
+    final static String WWW_SUBDOMAIN = "www.";
+    final static String BROKER_ID = "deviantart";
+    final static String DEVIATION_URL_FIELD = "url";
+    final static String USER_URL_FIELD = "url";
+    final static String DEVIATION_ART_PATH = "art";
+    final static String DEVIATION_ID_FIELD = "deviation_id";
+    final static String USER_ID_FIELD = "userid";
+    final static String USER_USERNAME_FIELD = "username";
 
-    private final static String PROTOCOL = "https://";
-    private final static String DOMAIN = "deviantart.com";
-    private final static String WWW_SUBDOMAIN = "www.";
-    private final static String DEVIATION_URL_FIELD = "url";
-    private final static String USER_URL_FIELD = "url";
-    private final static String DEVIATION_ART_PATH = "art";
     private final static byte DEVIATION_ART_PATH_POSITION_IN_URI = 2;
     private final static byte USERNAME_PATH_POSITION_IN_URI = 1;
     private final static byte DEVIATION_PATH_SEGMENTS = 4;
@@ -54,17 +57,17 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
     }
 
     @Override
-    public ValidationResult validateMedia(final HashMap<String, String> data) {
-        if (data.get(DEVIATION_URL_FIELD) == null || data.get(DEVIATION_URL_FIELD).isBlank()) {
+    public ValidationResult validateMedia(final HashMap<String, String> requestData) {
+        if (requestData.get(DEVIATION_URL_FIELD) == null || requestData.get(DEVIATION_URL_FIELD).isBlank()) {
             return ValidationResult.invalid("Deviation url is required.");
         }
 
         URI uri;
 
         try {
-            uri = new URI(data.get(DEVIATION_URL_FIELD));
+            uri = new URI(requestData.get(DEVIATION_URL_FIELD));
             if (uri.getHost() == null) {
-                throw new URISyntaxException(data.get(DEVIATION_URL_FIELD), "Domain is missing");
+                throw new URISyntaxException(requestData.get(DEVIATION_URL_FIELD), "Domain is missing");
             }
         } catch (URISyntaxException e) {
             return ValidationResult.invalid("Deviation url is invalid.");
@@ -99,24 +102,26 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
             return ValidationResult.invalid("Deviation not found.");
         }
 
-        // Save scrapped id to data
-        data.put("deviation_id", deviationId);
+        HashMap<String, String> data = new HashMap<>(2);
+        data.put(DEVIATION_URL_FIELD, requestData.get(DEVIATION_URL_FIELD));
+        // Save deviation id to data
+        data.put(DEVIATION_ID_FIELD, deviationId);
 
         return ValidationResult.valid(data);
     }
 
     @Override
-    public ValidationResult validateUser(final HashMap<String, String> data) {
-        if (data.get(USER_URL_FIELD) == null || data.get(USER_URL_FIELD).isBlank()) {
+    public ValidationResult validateUser(final HashMap<String, String> requestData) {
+        if (requestData.get(USER_URL_FIELD) == null || requestData.get(USER_URL_FIELD).isBlank()) {
             return ValidationResult.invalid("User url is required.");
         }
 
         URI uri;
 
         try {
-            uri = new URI(data.get(DEVIATION_URL_FIELD));
+            uri = new URI(requestData.get(USER_URL_FIELD));
             if (uri.getHost() == null) {
-                throw new URISyntaxException(data.get(DEVIATION_URL_FIELD), "Domain is missing");
+                throw new URISyntaxException(requestData.get(USER_URL_FIELD), "Domain is missing");
             }
         } catch (URISyntaxException e) {
             return ValidationResult.invalid("User url is invalid.");
@@ -141,8 +146,11 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
             return ValidationResult.invalid("User not found.");
         }
 
-        data.put("userid", userQueryDTO.getUser().getUserId());
-        data.put("username", userQueryDTO.getUser().getUsername());
+
+        HashMap<String, String> data = new HashMap<>(2);
+        data.put(USER_URL_FIELD, requestData.get(USER_URL_FIELD));
+        data.put(USER_ID_FIELD, userQueryDTO.getUser().getUserId());
+        data.put(USER_USERNAME_FIELD, userQueryDTO.getUser().getUsername());
 
         return ValidationResult.valid(data);
     }

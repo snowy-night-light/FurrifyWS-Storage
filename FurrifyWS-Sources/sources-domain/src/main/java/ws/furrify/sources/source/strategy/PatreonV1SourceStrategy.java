@@ -14,20 +14,20 @@ public class PatreonV1SourceStrategy implements SourceStrategy {
     public ValidationResult validateMedia(final HashMap<String, String> data) {
         // TODO Implement me
 
-        return ValidationResult.valid(data);
+        return ValidationResult.valid(new HashMap<>(0));
     }
 
     @Override
     public ValidationResult validateUser(final HashMap<String, String> data) {
         // TODO Implement me
 
-        return ValidationResult.valid(data);
+        return ValidationResult.valid(new HashMap<>(0));
     }
 
     @Override
     public ValidationResult validateAttachment(final HashMap<String, String> data) {
         // TODO Implement me
 
-        return ValidationResult.valid(data);
+        return ValidationResult.valid(new HashMap<>(0));
     }
 }
