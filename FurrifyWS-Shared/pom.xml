@@ -83,7 +83,6 @@
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-core</artifactId>
-            <version>11.9</version>
             <scope>compile</scope>
         </dependency>
         <!-- Security -->
