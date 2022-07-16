@@ -38,7 +38,7 @@ server:
   port: 7071
 
 keycloak:
-  auth-server-url: http://192.168.0.200:6565/auth
+  auth-server-url: http://192.168.0.200:6565
   realm: dev
   resource: furrifyws-storage
   public-client: true
