@@ -11,7 +11,13 @@
                 <generated-value strategy="SEQUENCE"/>
             </id>
             <basic name="value">
-                <column name="tag_value" nullable="false"/>
+                <column length="64" name="tag_value" nullable="false"/>
+            </basic>
+            <basic name="title">
+                <column length="255" nullable="true"/>
+            </basic>
+            <basic name="description">
+                <column length="1024" nullable="true"/>
             </basic>
             <basic name="ownerId">
                 <column updatable="false" nullable="false"/>

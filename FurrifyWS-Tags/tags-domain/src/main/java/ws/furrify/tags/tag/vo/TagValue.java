@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class TagValue {
 
-    private final static short MAX_LENGTH = 32;
+    private final static short MAX_LENGTH = 64;
     private final static short MIN_LENGTH = 1;
 
     /**
