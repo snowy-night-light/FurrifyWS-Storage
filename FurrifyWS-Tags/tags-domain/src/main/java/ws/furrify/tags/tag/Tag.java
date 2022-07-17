@@ -32,10 +32,16 @@ class Tag {
     private final ZonedDateTime createDate;
 
     static Tag restore(TagSnapshot tagSnapshot) {
+        // Allow description to be null
+        TagDescription description = null;
+        if (tagSnapshot.getDescription() != null) {
+            description = TagDescription.of(tagSnapshot.getDescription());
+        }
+
         return new Tag(
                 tagSnapshot.getId(),
                 TagTitle.of(tagSnapshot.getTitle()),
-                TagDescription.of(tagSnapshot.getDescription()),
+                description,
                 TagValue.of(tagSnapshot.getValue()),
                 tagSnapshot.getOwnerId(),
                 tagSnapshot.getType(),
