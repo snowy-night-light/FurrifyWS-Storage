@@ -29,7 +29,7 @@ class TagTest implements CommandLineRunner {
     private void createTestingPosts() {
         var tagFactory = new TagFactory();
 
-        var userId = UUID.fromString("4b255497-0200-4ee1-8922-892233173c10");
+        var userId = UUID.fromString("5ce90f76-52cd-41e7-890c-b3cfbb4fd0e5");
         var tagValue = "walking";
 
         sqlTagRepository.save(
