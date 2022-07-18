@@ -36,7 +36,6 @@ class TagTest implements CommandLineRunner {
                 tagFactory.from(
                         TagDTO.builder()
                                 .title("Walking")
-                                .description("Describes a moving character.")
                                 .value(tagValue)
                                 .ownerId(userId)
                                 .type(TagType.ACTION)

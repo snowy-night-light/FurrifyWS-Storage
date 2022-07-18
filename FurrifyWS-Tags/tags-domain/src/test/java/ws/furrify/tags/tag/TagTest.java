@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
-import ws.furrify.tags.tag.vo.TagDescription;
 import ws.furrify.tags.tag.vo.TagTitle;
 import ws.furrify.tags.tag.vo.TagType;
 import ws.furrify.tags.tag.vo.TagValue;
@@ -31,7 +30,6 @@ class TagTest {
         tagSnapshot = TagSnapshot.builder()
                 .id(0L)
                 .title("Title")
-                .description("desc")
                 .value("walking")
                 .ownerId(UUID.randomUUID())
                 .type(TagType.ACTION)
@@ -78,20 +76,6 @@ class TagTest {
         );
 
         assertEquals(newTitle, tag.getSnapshot().getTitle(), "Title was not updated.");
-    }
-
-    @Test
-    @DisplayName("Update description")
-    void updateDetails() {
-        // Given description
-        String newDesc = "dsadasdsa";
-        // When updateDescription() method called
-        // Then update description
-        tag.updateDescription(
-                TagDescription.of(newDesc)
-        );
-
-        assertEquals(newDesc, tag.getSnapshot().getDescription(), "Description was not updated.");
     }
 
     @Test

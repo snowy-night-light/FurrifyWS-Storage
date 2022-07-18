@@ -7,7 +7,6 @@ import lombok.NonNull;
 import lombok.ToString;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
-import ws.furrify.tags.tag.vo.TagDescription;
 import ws.furrify.tags.tag.vo.TagTitle;
 import ws.furrify.tags.tag.vo.TagType;
 import ws.furrify.tags.tag.vo.TagValue;
@@ -22,7 +21,6 @@ class Tag {
     private final Long id;
     @NonNull
     private TagTitle title;
-    private TagDescription description;
     @NonNull
     private TagValue value;
     @NonNull
@@ -32,16 +30,9 @@ class Tag {
     private final ZonedDateTime createDate;
 
     static Tag restore(TagSnapshot tagSnapshot) {
-        // Allow description to be null
-        TagDescription description = null;
-        if (tagSnapshot.getDescription() != null) {
-            description = TagDescription.of(tagSnapshot.getDescription());
-        }
-
         return new Tag(
                 tagSnapshot.getId(),
                 TagTitle.of(tagSnapshot.getTitle()),
-                description,
                 TagValue.of(tagSnapshot.getValue()),
                 tagSnapshot.getOwnerId(),
                 tagSnapshot.getType(),
@@ -53,7 +44,6 @@ class Tag {
         return TagSnapshot.builder()
                 .id(id)
                 .title(title.getTitle())
-                .description(description.getDescription())
                 .value(value.getValue())
                 .ownerId(ownerId)
                 .type(type)
@@ -72,10 +62,6 @@ class Tag {
 
     void updateTitle(@NonNull final TagTitle title) {
         this.title = title;
-    }
-
-    void updateDescription(final TagDescription description) {
-        this.description = description;
     }
 
     void updateType(@NonNull final TagType type) {

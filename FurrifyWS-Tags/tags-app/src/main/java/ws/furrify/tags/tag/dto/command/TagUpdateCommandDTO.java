@@ -19,9 +19,6 @@ public class TagUpdateCommandDTO implements CommandDTO<TagDTO> {
     @Size(min = 1, max = 255)
     String title;
 
-    @Size(min = 1, max = 1024)
-    String description;
-
     @Size(min = 1, max = 64)
     @Pattern(regexp = "^[a-z_-]*$")
     String value;

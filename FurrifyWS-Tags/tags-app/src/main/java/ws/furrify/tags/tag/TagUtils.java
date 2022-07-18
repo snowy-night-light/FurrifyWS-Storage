@@ -31,7 +31,6 @@ class TagUtils {
                         TagData.newBuilder()
                                 .setValue(tagSnapshot.getValue())
                                 .setTitle(tagSnapshot.getTitle())
-                                .setDescription(tagSnapshot.getDescription())
                                 .setOwnerId(tagSnapshot.getOwnerId().toString())
                                 .setType(tagSnapshot.getType().name())
                                 .setCreateDate(tagSnapshot.getCreateDate().toInstant())

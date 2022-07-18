@@ -16,9 +16,6 @@
             <basic name="title">
                 <column length="255" nullable="true"/>
             </basic>
-            <basic name="description">
-                <column length="1024" nullable="true"/>
-            </basic>
             <basic name="ownerId">
                 <column updatable="false" nullable="false"/>
             </basic>
