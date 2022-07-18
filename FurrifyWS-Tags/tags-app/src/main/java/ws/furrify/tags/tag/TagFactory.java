@@ -10,7 +10,6 @@ final class TagFactory {
         TagSnapshot tagSnapshot = TagSnapshot.builder()
                 .id(tagDTO.getId())
                 .title(tagDTO.getTitle())
-                .description(tagDTO.getDescription())
                 .value(tagDTO.getValue())
                 .ownerId(tagDTO.getOwnerId())
                 .type(tagDTO.getType())

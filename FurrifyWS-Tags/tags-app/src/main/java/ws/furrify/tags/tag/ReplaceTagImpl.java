@@ -6,7 +6,6 @@ import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.tag.dto.TagDTO;
-import ws.furrify.tags.tag.vo.TagDescription;
 import ws.furrify.tags.tag.vo.TagTitle;
 import ws.furrify.tags.tag.vo.TagValue;
 
@@ -28,9 +27,6 @@ final class ReplaceTagImpl implements ReplaceTag {
         // Update fields in tag
         tag.updateTitle(
                 TagTitle.of(tagDTO.getTitle())
-        );
-        tag.updateDescription(
-                TagDescription.of(tagDTO.getDescription())
         );
         tag.updateValue(
                 TagValue.of(tagDTO.getValue()),

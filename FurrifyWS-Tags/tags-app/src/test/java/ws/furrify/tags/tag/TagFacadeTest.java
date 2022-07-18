@@ -33,7 +33,6 @@ class TagFacadeTest {
     void setUp() {
         tagDTO = TagDTO.builder()
                 .title("Walking")
-                .description("Desc")
                 .value("walking")
                 .type(TagType.ACTION)
                 .ownerId(UUID.randomUUID())

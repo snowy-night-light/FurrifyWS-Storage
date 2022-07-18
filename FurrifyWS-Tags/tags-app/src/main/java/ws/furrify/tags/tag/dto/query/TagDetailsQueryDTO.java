@@ -12,8 +12,6 @@ import java.util.UUID;
 public interface TagDetailsQueryDTO extends Serializable {
     String getTitle();
 
-    String getDescription();
-
     String getValue();
 
     UUID getOwnerId();

@@ -22,9 +22,6 @@ public class TagCreateCommandDTO implements CommandDTO<TagDTO> {
     @Size(min = 1, max = 255)
     String title;
 
-    @Size(min = 1, max = 1024)
-    String description;
-
     @NotBlank
     @Size(min = 1, max = 64)
     @Pattern(regexp = "^[a-z_-]*$")
@@ -37,7 +34,6 @@ public class TagCreateCommandDTO implements CommandDTO<TagDTO> {
     public TagDTO toDTO() {
         return TagDTO.builder()
                 .title(title)
-                .description(description)
                 .value(value)
                 .type(type)
                 .build();
