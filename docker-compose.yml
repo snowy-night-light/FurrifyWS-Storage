@@ -46,7 +46,7 @@ services:
       MAX_UPLOAD_FILE_SIZE: "1GB" # Max size of uploaded file
       MAX_REQUEST_SIZE: "1GB" # Max size of multipart/form-data request
       # Keycloak config
-      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565/auth"
+      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565"
       KEYCLOAK_REALM: "dev"
       KEYCLOAK_RESOURCE: "furrifyws-storage"
       # Database config
@@ -89,7 +89,7 @@ services:
       MAX_UPLOAD_FILE_SIZE: "10GB" # Max size of uploaded file
       MAX_REQUEST_SIZE: "10GB" # Max size of multipart/form-data request
       # Keycloak config
-      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565/auth"
+      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565"
       KEYCLOAK_REALM: "dev"
       KEYCLOAK_RESOURCE: "furrifyws-storage"
       # Database config
@@ -126,7 +126,7 @@ services:
       FURRIFY_LIMITS_SOURCES: 50000 # Limit amount of sources per user
       KAFKA_CONSUMER_GROUP_ID: "eu-poland-1" # A unique group id for this instance of microservice.
       # Keycloak config
-      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565/auth"
+      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565"
       KEYCLOAK_REALM: "dev"
       KEYCLOAK_RESOURCE: "furrifyws-storage"
       # Database config
@@ -163,7 +163,7 @@ services:
       FURRIFY_LIMITS_TAGS: 1000 # Limit amount of tags per user
       KAFKA_CONSUMER_GROUP_ID: "eu-poland-1" # A unique group id for this instance of microservice.
       # Keycloak config
-      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565/auth"
+      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565"
       KEYCLOAK_REALM: "dev"
       KEYCLOAK_RESOURCE: "furrifyws-storage"
       # Database config
