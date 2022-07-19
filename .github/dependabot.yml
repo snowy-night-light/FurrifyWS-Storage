@@ -4,7 +4,7 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-    open-pull-requests-limit: 20
+    open-pull-requests-limit: 10
     ignore:
       - dependency-name: org.hibernate.validator:hibernate-validator
         versions:
@@ -26,7 +26,7 @@ updates:
       interval: daily
 
   - package-ecosystem: docker
-    directory: "/FurrfiyWS-Posts"
+    directory: "/FurrifyWS-Posts"
     schedule:
       interval: daily
 
@@ -36,6 +36,6 @@ updates:
       interval: daily
 
   - package-ecosystem: docker
-    directory: "/FurrfiyWS-Tags"
+    directory: "/FurrifyWS-Tags"
     schedule:
       interval: daily
