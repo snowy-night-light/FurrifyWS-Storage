@@ -15,24 +15,6 @@
         "doc": "Tag new unique value."
       },
       {
-        "name": "title",
-        "type": [
-          "null",
-          "string"
-        ],
-        "default": null,
-        "doc": "Tag title."
-      },
-      {
-        "name": "description",
-        "type": [
-          "null",
-          "string"
-        ],
-        "default": null,
-        "doc": "Tag description."
-      },
-      {
         "name": "ownerId",
         "type": [
           "null",

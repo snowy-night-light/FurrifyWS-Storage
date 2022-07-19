@@ -35,7 +35,6 @@ class TagTest implements CommandLineRunner {
         sqlTagRepository.save(
                 tagFactory.from(
                         TagDTO.builder()
-                                .title("Walking")
                                 .value(tagValue)
                                 .ownerId(userId)
                                 .type(TagType.ACTION)

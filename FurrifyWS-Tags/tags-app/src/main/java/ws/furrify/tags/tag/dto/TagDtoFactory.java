@@ -36,7 +36,6 @@ public class TagDtoFactory {
                 .id(
                         tagQueryRepository.getIdByValue(value)
                 )
-                .title(tagEvent.getData().getTitle())
                 .value(value)
                 .ownerId(key)
                 .type((tagEvent.getData().getType() == null) ? null : TagType.valueOf(tagEvent.getData().getType()))

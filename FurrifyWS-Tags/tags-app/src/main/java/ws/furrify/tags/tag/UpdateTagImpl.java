@@ -6,7 +6,6 @@ import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.tags.tag.dto.TagDTO;
-import ws.furrify.tags.tag.vo.TagTitle;
 import ws.furrify.tags.tag.vo.TagValue;
 
 import java.util.UUID;
@@ -34,11 +33,6 @@ final class UpdateTagImpl implements UpdateTag {
         if (tagDTO.getType() != null) {
             tag.updateType(
                     tagDTO.getType()
-            );
-        }
-        if (tagDTO.getTitle() != null) {
-            tag.updateTitle(
-                    TagTitle.of(tagDTO.getTitle())
             );
         }
 
