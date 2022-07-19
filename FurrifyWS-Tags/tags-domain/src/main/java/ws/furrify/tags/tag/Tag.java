@@ -7,7 +7,6 @@ import lombok.NonNull;
 import lombok.ToString;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
-import ws.furrify.tags.tag.vo.TagTitle;
 import ws.furrify.tags.tag.vo.TagType;
 import ws.furrify.tags.tag.vo.TagValue;
 
@@ -20,8 +19,6 @@ import java.util.UUID;
 class Tag {
     private final Long id;
     @NonNull
-    private TagTitle title;
-    @NonNull
     private TagValue value;
     @NonNull
     private final UUID ownerId;
@@ -32,7 +29,6 @@ class Tag {
     static Tag restore(TagSnapshot tagSnapshot) {
         return new Tag(
                 tagSnapshot.getId(),
-                TagTitle.of(tagSnapshot.getTitle()),
                 TagValue.of(tagSnapshot.getValue()),
                 tagSnapshot.getOwnerId(),
                 tagSnapshot.getType(),
@@ -43,7 +39,6 @@ class Tag {
     TagSnapshot getSnapshot() {
         return TagSnapshot.builder()
                 .id(id)
-                .title(title.getTitle())
                 .value(value.getValue())
                 .ownerId(ownerId)
                 .type(type)
@@ -58,10 +53,6 @@ class Tag {
         }
 
         this.value = value;
-    }
-
-    void updateTitle(@NonNull final TagTitle title) {
-        this.title = title;
     }
 
     void updateType(@NonNull final TagType type) {

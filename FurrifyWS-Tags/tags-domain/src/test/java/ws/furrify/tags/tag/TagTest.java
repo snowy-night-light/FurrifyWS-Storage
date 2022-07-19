@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
-import ws.furrify.tags.tag.vo.TagTitle;
 import ws.furrify.tags.tag.vo.TagType;
 import ws.furrify.tags.tag.vo.TagValue;
 
@@ -29,7 +28,6 @@ class TagTest {
     void setUp() {
         tagSnapshot = TagSnapshot.builder()
                 .id(0L)
-                .title("Title")
                 .value("walking")
                 .ownerId(UUID.randomUUID())
                 .type(TagType.ACTION)
@@ -62,20 +60,6 @@ class TagTest {
         TagSnapshot tagSnapshot = tag.getSnapshot();
         // Then get snapshot of current data in aggregate
         assertEquals(this.tagSnapshot, tagSnapshot, "Data was lost in snapshot.");
-    }
-
-    @Test
-    @DisplayName("Update title")
-    void updateTitle() {
-        // Given title
-        String newTitle = "Title2";
-        // When updateTitle() method called
-        // Then update title
-        tag.updateTitle(
-                TagTitle.of(newTitle)
-        );
-
-        assertEquals(newTitle, tag.getSnapshot().getTitle(), "Title was not updated.");
     }
 
     @Test

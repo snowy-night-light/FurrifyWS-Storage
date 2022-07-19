@@ -13,9 +13,6 @@
             <basic name="value">
                 <column length="64" name="tag_value" nullable="false"/>
             </basic>
-            <basic name="title">
-                <column length="255" nullable="true"/>
-            </basic>
             <basic name="ownerId">
                 <column updatable="false" nullable="false"/>
             </basic>
