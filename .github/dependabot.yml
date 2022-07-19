@@ -4,13 +4,38 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 20
     ignore:
       - dependency-name: org.hibernate.validator:hibernate-validator
         versions:
           - 7.0.1.Final
 
   - package-ecosystem: docker
-    directory: "/"
+    directory: "/FurrifyWS-Artists"
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: "/FurrifyWS-EurekaServer"
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: "/FurrifyWS-Gateway"
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: "/FurrfiyWS-Posts"
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: "/FurrifyWS-Sources"
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: "/FurrfiyWS-Tags"
     schedule:
       interval: daily
