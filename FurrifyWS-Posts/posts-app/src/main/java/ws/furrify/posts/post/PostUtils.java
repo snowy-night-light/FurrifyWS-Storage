@@ -4,7 +4,9 @@ import ws.furrify.posts.artist.ArtistServiceClient;
 import ws.furrify.posts.artist.dto.query.ArtistDetailsQueryDTO;
 import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostArtistData;
+import ws.furrify.posts.post.vo.PostAttachmentData;
 import ws.furrify.posts.post.vo.PostData;
+import ws.furrify.posts.post.vo.PostMediaData;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.posts.post.vo.PostTagData;
 import ws.furrify.posts.tag.TagServiceClient;
@@ -95,6 +97,31 @@ class PostUtils {
                                 .setOwnerId(postSnapshot.getOwnerId().toString())
                                 .setTitle(postSnapshot.getTitle())
                                 .setDescription(postSnapshot.getDescription())
+                                .setMediaSet(
+                                        // Map PostMedia to PostMediaData
+                                        postSnapshot.getMediaSet().stream()
+                                                .map(media ->
+                                                        PostMediaData.newBuilder()
+                                                                .setMediaId(media.getMediaId().toString())
+                                                                .setPriority(media.getPriority())
+                                                                .setFileUri(media.getFileUri().toString())
+                                                                .setThumbnailUri(media.getThumbnailUri().toString())
+                                                                .setExtension(media.getExtension())
+                                                                .build()
+                                                ).collect(Collectors.toList())
+                                )
+                                .setAttachments(
+                                        // Map PostAttachment to PostAttachmentData
+                                        postSnapshot.getAttachments().stream()
+                                                .map(attachment ->
+                                                        PostAttachmentData.newBuilder()
+                                                                .setAttachmentId(attachment.getAttachmentId().toString())
+                                                                .setFilename(attachment.getFileUri().toString())
+                                                                .setFileUri(attachment.getFileUri().toString())
+                                                                .setExtension(attachment.getExtension())
+                                                                .build()
+                                                ).collect(Collectors.toList())
+                                )
                                 .setTags(
                                         // Map PostTag to PostTagData
                                         postSnapshot.getTags().stream()
