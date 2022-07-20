@@ -2,6 +2,80 @@
   {
     "type": "record",
     "namespace": "ws.furrify.posts.post.vo",
+    "doc": "Post attachment containing most important values to user to access with attachment.",
+    "name": "PostAttachmentData",
+    "fields": [
+      {
+        "name": "attachmentId",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Attachment UUID."
+      },
+      {
+        "name": "filename",
+        "type": "string",
+        "doc": "Original filename."
+      },
+      {
+        "name": "fileUri",
+        "type": "string",
+        "doc": "File URI."
+      },
+      {
+        "name": "extension",
+        "type": "string",
+        "doc": "Attachment extension."
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "ws.furrify.posts.post.vo",
+    "doc": "Post media containing most important values to user to access with media.",
+    "name": "PostMediaData",
+    "fields": [
+      {
+        "name": "mediaId",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Media UUID."
+      },
+      {
+        "name": "priority",
+        "type": "int",
+        "default": 0,
+        "doc": "An artist preferred nickname."
+      },
+      {
+        "name": "fileUri",
+        "type": "string",
+        "doc": "File URI."
+      },
+      {
+        "name": "thumbnailUri",
+        "type": [
+          "null",
+          "string"
+        ],
+        "default": null,
+        "doc": "Thumbnail URI."
+      },
+      {
+        "name": "extension",
+        "type": "string",
+        "doc": "Media extension."
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "ws.furrify.posts.post.vo",
     "doc": "Post artist containing most important values to user to access with artist.",
     "name": "PostArtistData",
     "fields": [
@@ -103,13 +177,31 @@
         "doc": "Post tags value objects."
       },
       {
+        "name": "mediaSet",
+        "type": {
+          "type": "array",
+          "items": "ws.furrify.posts.post.vo.PostMediaData"
+        },
+        "default": [],
+        "doc": "Post media value objects."
+      },
+      {
+        "name": "attachments",
+        "type": {
+          "type": "array",
+          "items": "ws.furrify.posts.post.vo.PostAttachmentData"
+        },
+        "default": [],
+        "doc": "Post attachment value objects."
+      },
+      {
         "name": "artists",
         "type": {
           "type": "array",
           "items": "ws.furrify.posts.post.vo.PostArtistData"
         },
         "default": [],
-        "doc": "Post artists value objects."
+        "doc": "Post artist value objects."
       },
       {
         "name": "createDate",
