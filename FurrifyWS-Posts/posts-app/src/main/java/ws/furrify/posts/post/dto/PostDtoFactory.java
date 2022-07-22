@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import ws.furrify.posts.post.PostEvent;
 import ws.furrify.posts.post.PostQueryRepository;
 import ws.furrify.posts.post.vo.PostArtist;
+import ws.furrify.posts.post.vo.PostAttachment;
+import ws.furrify.posts.post.vo.PostMedia;
 import ws.furrify.posts.post.vo.PostTag;
 
 import java.net.URI;
@@ -62,6 +64,53 @@ public class PostDtoFactory {
                                             UUID.fromString(postArtist.getArtistId()),
                                             postArtist.getPreferredNickname(),
                                             thumbnailUri
+                                    );
+                                })
+                                .collect(Collectors.toSet())
+                )
+                .mediaSet(
+                        postEvent.getData().getMediaSet().stream()
+                                .map(postMedia -> {
+                                    URI thumbnailUri;
+                                    try {
+                                        thumbnailUri = new URI(postMedia.getThumbnailUri());
+                                    } catch (NullPointerException | URISyntaxException e) {
+                                        thumbnailUri = null;
+                                    }
+
+                                    URI fileUri;
+                                    try {
+                                        fileUri = new URI(postMedia.getFileUri());
+                                    } catch (NullPointerException | URISyntaxException e) {
+                                        throw new IllegalStateException("Invalid file uri received in event.");
+                                    }
+
+                                    return new PostMedia(
+                                            UUID.fromString(postMedia.getMediaId()),
+                                            postMedia.getPriority(),
+                                            fileUri,
+                                            thumbnailUri,
+                                            postMedia.getExtension()
+                                    );
+                                })
+                                .collect(Collectors.toSet())
+                )
+                .attachments(
+                        postEvent.getData().getAttachments().stream()
+                                .map(postAttachment -> {
+
+                                    URI fileUri;
+                                    try {
+                                        fileUri = new URI(postAttachment.getFileUri());
+                                    } catch (NullPointerException | URISyntaxException e) {
+                                        throw new IllegalStateException("Invalid file uri received in event.");
+                                    }
+
+                                    return new PostAttachment(
+                                            UUID.fromString(postAttachment.getAttachmentId()),
+                                            fileUri,
+                                            postAttachment.getFilename(),
+                                            postAttachment.getExtension()
                                     );
                                 })
                                 .collect(Collectors.toSet())
