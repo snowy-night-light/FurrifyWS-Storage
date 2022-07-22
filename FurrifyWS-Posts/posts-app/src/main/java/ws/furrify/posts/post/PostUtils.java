@@ -116,7 +116,7 @@ class PostUtils {
                                                 .map(attachment ->
                                                         PostAttachmentData.newBuilder()
                                                                 .setAttachmentId(attachment.getAttachmentId().toString())
-                                                                .setFilename(attachment.getFileUri().toString())
+                                                                .setFilename(attachment.getFilename())
                                                                 .setFileUri(attachment.getFileUri().toString())
                                                                 .setExtension(attachment.getExtension())
                                                                 .build()
