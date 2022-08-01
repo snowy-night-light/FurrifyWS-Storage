@@ -336,7 +336,7 @@ public class PostFacade {
     private void deleteAttachmentFromPost(final UUID ownerId,
                                           final UUID postId,
                                           final UUID attachmentId) {
-        Post post = postRepository.findByOwnerIdAndPostIdAndMediaId(ownerId, postId, attachmentId)
+        Post post = postRepository.findByOwnerIdAndPostIdAndAttachmentId(ownerId, postId, attachmentId)
                 .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
         post.removeAttachment(attachmentId);
 
