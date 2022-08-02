@@ -18,6 +18,8 @@ public interface MediaUploadStrategy {
 
     UploadedMediaFile uploadMedia(final UUID mediaId, final MediaExtension extension, final MultipartFile fileSource, final MultipartFile thumbnailSource);
 
+    UploadedMediaFile uploadThumbnail(final UUID mediaId, final String originalMediaFilename, final MultipartFile thumbnailFile);
+
     @Value
     class UploadedMediaFile {
         URI fileUri;

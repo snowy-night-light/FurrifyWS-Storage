@@ -29,7 +29,7 @@ public class MediaFile {
 
     @NonNull
     private URI fileUri;
-    @NonNull
+
     private URI thumbnailUri;
 
     @NonNull

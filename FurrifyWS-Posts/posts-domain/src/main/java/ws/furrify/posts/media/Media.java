@@ -31,7 +31,7 @@ class Media {
     @NonNull
     private MediaPriority priority;
     @NonNull
-    private final MediaFile file;
+    private MediaFile file;
     @NonNull
     private Set<MediaSource> sources;
 
@@ -106,5 +106,9 @@ class Media {
         filteredSourceSet.add(artistSource);
 
         this.sources = filteredSourceSet;
+    }
+
+    void replaceMediaFile(@NonNull final MediaFile file) {
+        this.file = file;
     }
 }

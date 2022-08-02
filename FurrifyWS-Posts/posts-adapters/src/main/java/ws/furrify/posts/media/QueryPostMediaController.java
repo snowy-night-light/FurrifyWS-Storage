@@ -112,11 +112,11 @@ class QueryPostMediaController {
                 ))
         ).andAffordance(
                 afford(methodOn(CommandUserMediaController.class).replaceMedia(
-                        mediaQueryDto.getOwnerId(), mediaQueryDto.getPostId(), mediaQueryDto.getMediaId(), null, null
+                        mediaQueryDto.getOwnerId(), mediaQueryDto.getPostId(), mediaQueryDto.getMediaId(), null, null, null, null
                 ))
         ).andAffordance(
                 afford(methodOn(CommandUserMediaController.class).updateMedia(
-                        mediaQueryDto.getOwnerId(), mediaQueryDto.getPostId(), mediaQueryDto.getMediaId(), null, null
+                        mediaQueryDto.getOwnerId(), mediaQueryDto.getPostId(), mediaQueryDto.getMediaId(), null, null, null, null
                 ))
         );
 

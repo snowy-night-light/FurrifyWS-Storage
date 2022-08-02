@@ -90,8 +90,11 @@ class CommandUserMediaController {
                                          @PathVariable UUID postId,
                                          @PathVariable UUID mediaId,
                                          @RequestBody @Validated MediaUpdateCommandDTO mediaUpdateCommandDTO,
+                                         @RequestPart(value = "file", required = false) MultipartFile mediaFile,
+                                         @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnailFile,
                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
-        mediaFacade.updateMedia(userId, postId, mediaId, mediaUpdateCommandDTO.toDTO());
+
+        mediaFacade.updateMedia(userId, postId, mediaId, mediaUpdateCommandDTO.toDTO(), mediaFile, thumbnailFile);
 
         return ResponseEntity.accepted().build();
     }
@@ -105,8 +108,10 @@ class CommandUserMediaController {
                                           @PathVariable UUID postId,
                                           @PathVariable UUID mediaId,
                                           @RequestBody @Validated MediaReplaceCommandDTO mediaReplaceCommandDTO,
+                                          @RequestPart("file") MultipartFile mediaFile,
+                                          @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnailFile,
                                           KeycloakAuthenticationToken keycloakAuthenticationToken) {
-        mediaFacade.replaceMedia(userId, postId, mediaId, mediaReplaceCommandDTO.toDTO());
+        mediaFacade.replaceMedia(userId, postId, mediaId, mediaReplaceCommandDTO.toDTO(), mediaFile, thumbnailFile);
 
         return ResponseEntity.accepted().build();
     }

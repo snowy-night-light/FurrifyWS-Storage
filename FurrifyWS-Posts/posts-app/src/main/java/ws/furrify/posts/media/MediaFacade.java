@@ -122,27 +122,37 @@ final public class MediaFacade {
     }
 
     /**
-     * Replaces all fields in media.
+     * Replaces all fields in media and updates files.
      *
      * @param userId   Media owner UUID.
      * @param postId   Post UUID
      * @param mediaId  Media UUID
      * @param mediaDTO Replacement media.
      */
-    public void replaceMedia(final UUID userId, final UUID postId, final UUID mediaId, final MediaDTO mediaDTO) {
-        replaceMediaImpl.replaceMedia(userId, postId, mediaId, mediaDTO);
+    public void replaceMedia(final UUID userId,
+                             final UUID postId,
+                             final UUID mediaId,
+                             final MediaDTO mediaDTO,
+                             final MultipartFile mediaFile,
+                             final MultipartFile thumbnailFile) {
+        replaceMediaImpl.replaceMedia(userId, postId, mediaId, mediaDTO, mediaFile, thumbnailFile);
     }
 
     /**
-     * Updates specified fields in media.
+     * Updates specified fields in media and if specified also files.
      *
      * @param userId   Media owner UUID.
      * @param postId   Post UUID.
      * @param mediaId  Media UUID.
      * @param mediaDTO Media with updated specific fields.
      */
-    public void updateMedia(final UUID userId, final UUID postId, final UUID mediaId, final MediaDTO mediaDTO) {
-        updateMediaImpl.updateMedia(userId, postId, mediaId, mediaDTO);
+    public void updateMedia(final UUID userId,
+                            final UUID postId,
+                            final UUID mediaId,
+                            final MediaDTO mediaDTO,
+                            final MultipartFile mediaFile,
+                            final MultipartFile thumbnailFile) {
+        updateMediaImpl.updateMedia(userId, postId, mediaId, mediaDTO, mediaFile, thumbnailFile);
     }
 
     private void saveMediaInDatabase(final MediaDTO mediaDTO) {
