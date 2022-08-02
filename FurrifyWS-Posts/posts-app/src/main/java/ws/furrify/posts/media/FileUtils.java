@@ -19,7 +19,7 @@ import java.util.UUID;
  *
  * @author Skyte
  */
-public class FileUtils {
+class FileUtils {
 
     public static String generateMd5FromFile(@NonNull final MultipartFile mediaFile) {
         try {
