@@ -36,7 +36,7 @@ final class UpdateMediaImpl implements UpdateMedia {
         // Update changed fields in media
 
         // If only thumbnail file present with no media file
-        if (thumbnailFile != null && mediaFile == null) {
+        if (thumbnailFile != null && !thumbnailFile.isEmpty() && mediaFile == null) {
             FileUtils.validateThumbnail(
                     thumbnailFile
             );
@@ -59,7 +59,7 @@ final class UpdateMediaImpl implements UpdateMedia {
         }
 
         // If new media file provided with extension
-        if (mediaFile != null && mediaDTO.getExtension() != null) {
+        if (mediaFile != null && !mediaFile.isEmpty() && mediaDTO.getExtension() != null) {
             final String md5 = FileUtils.generateMd5FromFile(mediaFile);
 
             FileUtils.validateMedia(
@@ -74,11 +74,7 @@ final class UpdateMediaImpl implements UpdateMedia {
             MediaUploadStrategy.UploadedMediaFile uploadedMediaFile;
 
             // If thumbnail file is present
-            if (thumbnailFile != null) {
-                FileUtils.validateThumbnail(
-                        thumbnailFile
-                );
-
+            if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
                 // Upload media with thumbnail
                 uploadedMediaFile = mediaUploadStrategy.uploadMedia(
                         mediaId,

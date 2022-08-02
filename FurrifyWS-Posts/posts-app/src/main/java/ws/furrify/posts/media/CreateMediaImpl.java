@@ -82,7 +82,7 @@ final class CreateMediaImpl implements CreateMedia {
         MediaUploadStrategy.UploadedMediaFile uploadedMediaFile;
 
         // If thumbnail is present
-        if (thumbnailFile != null) {
+        if (thumbnailFile != null && !thumbnailFile.isEmpty() && !thumbnailFile.isEmpty()) {
             // Check if thumbnail meets the requirements
             boolean isThumbnailFileValid = MediaExtension.isThumbnailValid(
                     thumbnailFile.getOriginalFilename(),
