@@ -3,6 +3,7 @@ package ws.furrify.posts.media.strategy;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,7 @@ import java.util.UUID;
  * @author sky
  */
 @RequiredArgsConstructor
+@Log4j2
 public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
     @Value("${LOCAL_STORAGE_MEDIA_PATH:/data/media}")
@@ -47,7 +49,7 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
     private final static String THUMBNAIL_EXTENSION = ".jpg";
 
-    // TODO BOth functions check if file already exists and overwrite it
+    // TODO BOth functions check if file already exists and remove old file on replace it will have different filename
     // TODO Remove media files on post delete
     @Override
     public UploadedMediaFile uploadMediaWithGeneratedThumbnail(@NonNull final UUID mediaId,
@@ -120,6 +122,17 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
         }
     }
 
+    @Override
+    public void removeMediaFiles(@NonNull final UUID mediaId) {
+        File mediaDir = new java.io.File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId);
+
+        boolean result = mediaDir.delete();
+
+        if (!result) {
+            log.error("Cannot delete directory for media [media=" + mediaId + "].");
+        }
+    }
+
     private void writeToFile(File file, InputStream inputStream) {
         try (OutputStream outputStream = new FileOutputStream(file)) {
             // TODO Test if allows for files to be overwritten
@@ -146,7 +159,7 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
         // If there is media file to upload
         if (mediaInputStream != null) {
-            // Create files
+            // Create file
             File mediaFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + filename);
             // Create directories where file need to be located
             boolean wasMediaFileCreated = mediaFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
