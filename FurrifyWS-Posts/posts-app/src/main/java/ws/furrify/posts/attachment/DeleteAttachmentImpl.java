@@ -24,7 +24,7 @@ final class DeleteAttachmentImpl implements DeleteAttachment {
             throw new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(attachmentId.toString()));
         }
 
-        attachmentUploadStrategy.removeAttachmentFiles(attachmentId);
+        attachmentUploadStrategy.removeAllAttachmentFiles(attachmentId);
 
         // Publish delete attachment event
         domainEventPublisher.publish(

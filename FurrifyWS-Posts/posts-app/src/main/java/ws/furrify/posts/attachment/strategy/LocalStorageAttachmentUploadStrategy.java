@@ -37,6 +37,8 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
     @Value("${REMOTE_STORAGE_ATTACHMENT_PATH:/attachment}")
     private String REMOTE_STORAGE_ATTACHMENT_PATH;
 
+    private final static String ATTACHMENT_DIRECTORY = "thumbnail";
+
     @Override
     public UploadedAttachmentFile uploadAttachment(final UUID attachmentId, final MultipartFile fileSource) {
         try (
@@ -49,10 +51,13 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
             }
 
             // Sanitize filename
-            String filename = fileSource.getOriginalFilename().replaceAll("\\s+","_");
+            String filename = fileSource.getOriginalFilename().replaceAll("\\s+", "_");
+
+            // Remove old file if exists
+            removeAttachmentFile(attachmentId);
 
             // Create file
-            File attachmentFile = new File(LOCAL_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + filename);
+            File attachmentFile = new File(LOCAL_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + ATTACHMENT_DIRECTORY + "/" + filename);
 
             // Create directories where files need to be located
             boolean wasAttachmentFileCreated = attachmentFile.getParentFile().mkdirs() || attachmentFile.getParentFile().exists();
@@ -66,7 +71,7 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
 
             // Return created urls
             return new UploadedAttachmentFile(
-                    new URI(REMOTE_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + filename)
+                    new URI(REMOTE_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + ATTACHMENT_DIRECTORY + "/" + filename)
             );
 
         } catch (IOException | URISyntaxException e) {
@@ -75,7 +80,7 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
     }
 
     @Override
-    public void removeAttachmentFiles(@NonNull final UUID attachmentId) {
+    public void removeAllAttachmentFiles(@NonNull final UUID attachmentId) {
         File attachmentDir = new java.io.File(LOCAL_STORAGE_ATTACHMENT_PATH + "/" + attachmentId);
 
         if (attachmentDir.exists()) {
@@ -90,6 +95,16 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
             IOUtils.copy(inputStream, outputStream);
         } catch (IOException e) {
             throw new FileUploadFailedException(Errors.FILE_UPLOAD_FAILED.getErrorMessage());
+        }
+    }
+
+    private void removeAttachmentFile(UUID attachmentId) {
+        File fileDir = new java.io.File(LOCAL_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + ATTACHMENT_DIRECTORY);
+
+        if (fileDir.exists()) {
+            FileUtils.deleteDirectoryWithFiles(fileDir);
+        } else {
+            log.error("Attempting to remove not existing directory [path=" + fileDir.getAbsolutePath() + "].");
         }
     }
 

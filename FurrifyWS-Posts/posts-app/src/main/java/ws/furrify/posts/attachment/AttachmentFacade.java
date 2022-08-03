@@ -142,7 +142,7 @@ public class AttachmentFacade {
         attachments.forEach(attachment -> {
             AttachmentSnapshot snapshot = attachment.getSnapshot();
 
-            attachmentUploadStrategy.removeAttachmentFiles(snapshot.getAttachmentId());
+            attachmentUploadStrategy.removeAllAttachmentFiles(snapshot.getAttachmentId());
 
             attachmentRepository.deleteByAttachmentId(snapshot.getAttachmentId());
         });

@@ -53,8 +53,6 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
     private final static String THUMBNAIL_EXTENSION = ".jpg";
 
-    // TODO BOth functions check if file already exists and remove old file on replace it will have different filename
-    // TODO Remove media files on post delete
     @Override
     public UploadedMediaFile uploadMediaWithGeneratedThumbnail(@NonNull final UUID mediaId,
                                                                @NonNull final MediaExtension extension,
@@ -182,7 +180,7 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
         // If there is media file to upload
         if (mediaInputStream != null) {
-            // Remove old file
+            // Remove old file if exists
             removeMediaFile(mediaId);
 
             // Create file
@@ -204,7 +202,7 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
         // If there is a thumbnail
         if (thumbnailInputStream != null) {
-            // Remove old thumbnail
+            // Remove old thumbnail if exists
             removeThumbnailFile(mediaId);
 
             // Create thumbnail filename by removing extension from original filename
