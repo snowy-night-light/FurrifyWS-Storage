@@ -33,6 +33,7 @@ final class ReplaceMediaImpl implements ReplaceMedia {
 
         final String md5 = MediaFileUtils.generateMd5FromFile(mediaFile);
 
+        // Validate file
         MediaFileUtils.validateMedia(
                 userId,
                 postId,
@@ -46,6 +47,8 @@ final class ReplaceMediaImpl implements ReplaceMedia {
 
         // If thumbnail file is present
         if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
+
+            // Validate file
             MediaFileUtils.validateThumbnail(
                     thumbnailFile
             );

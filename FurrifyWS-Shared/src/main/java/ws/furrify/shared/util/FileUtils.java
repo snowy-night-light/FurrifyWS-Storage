@@ -11,6 +11,13 @@ import java.nio.file.Files;
 @Log4j2
 public class FileUtils {
 
+
+    /**
+     * Delete filesystem directory and its files.
+     *
+     * @param directory Directory to delete.
+     * @throws IllegalStateException Could not delete directory.
+     */
     public static void deleteDirectoryWithFiles(File directory) throws IllegalStateException {
         File[] contents = directory.listFiles();
         if (contents != null) {

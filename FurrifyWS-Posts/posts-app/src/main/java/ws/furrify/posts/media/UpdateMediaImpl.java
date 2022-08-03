@@ -37,6 +37,7 @@ final class UpdateMediaImpl implements UpdateMedia {
 
         // If only thumbnail file present with no media file
         if (thumbnailFile != null && !thumbnailFile.isEmpty() && mediaFile == null) {
+            // Validate file
             MediaFileUtils.validateThumbnail(
                     thumbnailFile
             );
@@ -62,6 +63,7 @@ final class UpdateMediaImpl implements UpdateMedia {
         if (mediaFile != null && !mediaFile.isEmpty() && mediaDTO.getExtension() != null) {
             final String md5 = MediaFileUtils.generateMd5FromFile(mediaFile);
 
+            // Validate file
             MediaFileUtils.validateMedia(
                     userId,
                     postId,

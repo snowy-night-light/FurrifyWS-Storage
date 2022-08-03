@@ -25,6 +25,8 @@ import java.util.UUID;
 public class AttachmentFacade {
 
     private final CreateAttachment createAttachmentImpl;
+    private final ReplaceAttachment replaceAttachmentImpl;
+    private final UpdateAttachment updateAttachmentImpl;
     private final DeleteAttachment deleteAttachmentImpl;
     private final AttachmentRepository attachmentRepository;
     private final AttachmentFactory attachmentFactory;
@@ -125,6 +127,39 @@ public class AttachmentFacade {
                                  final MultipartFile attachmentFile) {
         return createAttachmentImpl.createAttachment(userId, postId, attachmentDTO, attachmentFile);
     }
+
+    /**
+     * Replaces all fields in attachment and updates files.
+     *
+     * @param userId        Attachment owner UUID.
+     * @param postId        Post UUID
+     * @param attachmentId  Attachment UUID
+     * @param attachmentDTO Replacement attachment.
+     */
+    public void replaceAttachment(final UUID userId,
+                                  final UUID postId,
+                                  final UUID attachmentId,
+                                  final AttachmentDTO attachmentDTO,
+                                  final MultipartFile attachmentFile) {
+        replaceAttachmentImpl.replaceAttachment(userId, postId, attachmentId, attachmentDTO, attachmentFile);
+    }
+
+    /**
+     * Updates specified fields in attachment and if specified also files.
+     *
+     * @param userId        Attachment owner UUID.
+     * @param postId        Post UUID.
+     * @param attachmentId  Attachment UUID
+     * @param attachmentDTO Attachment with updated specific fields.
+     */
+    public void updateAttachment(final UUID userId,
+                                 final UUID postId,
+                                 final UUID attachmentId,
+                                 final AttachmentDTO attachmentDTO,
+                                 final MultipartFile attachmentFile) {
+        updateAttachmentImpl.updateAttachment(userId, postId, attachmentId, attachmentDTO, attachmentFile);
+    }
+
 
     /**
      * Deletes attachment.

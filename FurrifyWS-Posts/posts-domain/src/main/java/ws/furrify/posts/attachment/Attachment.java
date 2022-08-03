@@ -28,7 +28,7 @@ class Attachment {
     @NonNull
     private final UUID ownerId;
     @NonNull
-    private final AttachmentFile file;
+    private AttachmentFile file;
     @NonNull
     private Set<AttachmentSource> sources;
 
@@ -95,5 +95,9 @@ class Attachment {
         filteredSourceSet.add(artistSource);
 
         this.sources = filteredSourceSet;
+    }
+
+    void replaceAttachmentFile(@NonNull final AttachmentFile file) {
+        this.file = file;
     }
 }
