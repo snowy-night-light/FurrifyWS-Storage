@@ -25,7 +25,7 @@ class MediaConfig {
 
         return new MediaFacade(
                 new CreateMediaImpl(postServiceClient, mediaRepository, mediaFactory, mediaUploadStrategy(), eventPublisher),
-                new DeleteMediaImpl(eventPublisher, mediaRepository),
+                new DeleteMediaImpl(eventPublisher, mediaRepository, mediaUploadStrategy()),
                 new UpdateMediaImpl(eventPublisher, mediaRepository, mediaUploadStrategy()),
                 new ReplaceMediaImpl(eventPublisher, mediaRepository, mediaUploadStrategy()),
                 mediaRepository,

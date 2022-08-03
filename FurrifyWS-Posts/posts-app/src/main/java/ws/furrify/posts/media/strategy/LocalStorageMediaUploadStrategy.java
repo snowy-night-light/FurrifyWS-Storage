@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.util.UUID;
 
 /**
@@ -126,10 +127,24 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
     public void removeMediaFiles(@NonNull final UUID mediaId) {
         File mediaDir = new java.io.File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId);
 
-        boolean result = mediaDir.delete();
+        deleteDirectory(mediaDir);
+    }
+
+    private void deleteDirectory(File directory) throws IllegalStateException {
+        File[] contents = directory.listFiles();
+        if (contents != null) {
+            for (File file : contents) {
+                if (!Files.isSymbolicLink(file.toPath())) {
+                    deleteDirectory(file);
+                }
+            }
+        }
+        boolean result = directory.delete();
 
         if (!result) {
-            log.error("Cannot delete directory for media [media=" + mediaId + "].");
+            log.error("Cannot delete directory [path=" + directory.getAbsolutePath() + "].");
+
+            throw new IllegalStateException("Couldn't remove directory.");
         }
     }
 
