@@ -37,7 +37,7 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
     @Value("${REMOTE_STORAGE_ATTACHMENT_PATH:/attachment}")
     private String REMOTE_STORAGE_ATTACHMENT_PATH;
 
-    private final static String ATTACHMENT_DIRECTORY = "thumbnail";
+    private final static String ATTACHMENT_DIRECTORY = "file";
 
     @Override
     public UploadedAttachmentFile uploadAttachment(final UUID attachmentId, final MultipartFile fileSource) {
