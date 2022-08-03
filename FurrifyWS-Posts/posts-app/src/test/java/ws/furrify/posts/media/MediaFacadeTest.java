@@ -40,6 +40,33 @@ class MediaFacadeTest {
 
     private MediaDTO mediaDTO;
     private Media media;
+    private MultipartFile mediaFile;
+    private MultipartFile thumbnailFile;
+
+    @BeforeAll
+    static void beforeAll() {
+        mediaRepository = mock(MediaRepository.class);
+        var mediaQueryRepository = mock(MediaQueryRepository.class);
+        mediaUploadStrategy = mock(MediaUploadStrategy.class);
+        postServiceClient = mock(PostServiceClient.class);
+
+        var mediaFactory = new MediaFactory();
+        var mediaDtoFactory = new MediaDtoFactory(mediaQueryRepository);
+
+        @SuppressWarnings("unchecked")
+        var eventPublisher = (DomainEventPublisher<MediaEvent>) mock(DomainEventPublisher.class);
+
+        mediaFacade = new MediaFacade(
+                new CreateMediaImpl(postServiceClient, mediaRepository, mediaFactory, mediaUploadStrategy, eventPublisher),
+                new DeleteMediaImpl(eventPublisher, mediaRepository, mediaUploadStrategy),
+                new UpdateMediaImpl(eventPublisher, mediaRepository, mediaUploadStrategy),
+                new ReplaceMediaImpl(eventPublisher, mediaRepository, mediaUploadStrategy),
+                mediaRepository,
+                mediaFactory,
+                mediaDtoFactory,
+                mediaUploadStrategy
+        );
+    }
 
     @SneakyThrows
     @BeforeEach
@@ -58,42 +85,8 @@ class MediaFacadeTest {
                 .build();
 
         media = new MediaFactory().from(mediaDTO);
-    }
 
-    @BeforeAll
-    static void beforeAll() {
-        mediaRepository = mock(MediaRepository.class);
-        var mediaQueryRepository = mock(MediaQueryRepository.class);
-        mediaUploadStrategy = mock(MediaUploadStrategy.class);
-        postServiceClient = mock(PostServiceClient.class);
-
-        var mediaFactory = new MediaFactory();
-        var mediaDtoFactory = new MediaDtoFactory(mediaQueryRepository);
-
-        @SuppressWarnings("unchecked")
-        var eventPublisher = (DomainEventPublisher<MediaEvent>) mock(DomainEventPublisher.class);
-
-        mediaFacade = new MediaFacade(
-                new CreateMediaImpl(postServiceClient, mediaRepository, mediaFactory, mediaUploadStrategy, eventPublisher),
-                new DeleteMediaImpl(eventPublisher, mediaRepository),
-                new UpdateMediaImpl(eventPublisher, mediaRepository),
-                new ReplaceMediaImpl(eventPublisher, mediaRepository),
-                mediaRepository,
-                mediaFactory,
-                mediaDtoFactory
-        );
-    }
-
-    @Test
-    @DisplayName("Create media with generated thumbnail")
-    void createMedia() throws URISyntaxException {
-        // Given ownerId, mediaDTO and multipart file
-        UUID userId = UUID.randomUUID();
-        UUID postId = UUID.randomUUID();
-
-        PostDetailsDTO postDetailsDTO = new PostDetailsDTO(null, null, null, null, null, null, null, null, null);
-
-        MultipartFile mediaFile = new MultipartFile() {
+        mediaFile = new MultipartFile() {
             @Override
             public String getName() {
                 return "test";
@@ -134,127 +127,8 @@ class MediaFacadeTest {
 
             }
         };
-        // When createMedia() method called
-        when(postServiceClient.getUserPost(any(), any())).thenReturn(postDetailsDTO);
-        when(mediaRepository.findByOwnerIdAndPostIdAndMd5(any(), any(), any())).thenReturn(Optional.empty());
-        when(mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(any(), any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
-                new URI("/test"),
-                new URI("/test")
-        ));
-        // Then return generated uuid
-        assertNotNull(mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile, null), "MediaId was not returned.");
-    }
 
-
-    @Test
-    @DisplayName("Create media with non existing postId")
-    void createMedia2() {
-        // Given ownerId, non-existing postId, mediaDTO and multipart file
-        UUID userId = UUID.randomUUID();
-        UUID postId = UUID.randomUUID();
-
-        MultipartFile mediaFile = new MultipartFile() {
-            @Override
-            public String getName() {
-                return "test";
-            }
-
-            @Override
-            public String getOriginalFilename() {
-                return "example.psd";
-            }
-
-            @Override
-            public String getContentType() {
-                return null;
-            }
-
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-
-            @Override
-            public long getSize() {
-                return 0;
-            }
-
-            @Override
-            public byte[] getBytes() throws IOException {
-                return new byte[0];
-            }
-
-            @Override
-            public InputStream getInputStream() throws IOException {
-                return getClass().getClassLoader().getResourceAsStream("example.psd");
-            }
-
-            @Override
-            public void transferTo(final File file) throws IOException, IllegalStateException {
-
-            }
-        };
-        // When createMedia() method called
-        when(postServiceClient.getUserPost(any(), any())).thenReturn(null);
-        // Then throw exception
-        assertThrows(
-                RecordNotFoundException.class,
-                () -> mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile, null),
-                "Exception was not thrown."
-        );
-    }
-
-    @Test
-    @DisplayName("Create media with given thumbnail")
-    void createMedia3() throws URISyntaxException {
-        // Given ownerId, mediaDTO and multipart file
-        UUID userId = UUID.randomUUID();
-        UUID postId = UUID.randomUUID();
-
-        PostDetailsDTO postDetailsDTO = new PostDetailsDTO(null, null, null, null, null, null, null, null, null);
-
-        MultipartFile mediaFile = new MultipartFile() {
-            @Override
-            public String getName() {
-                return "test";
-            }
-
-            @Override
-            public String getOriginalFilename() {
-                return "test.png";
-            }
-
-            @Override
-            public String getContentType() {
-                return null;
-            }
-
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-
-            @Override
-            public long getSize() {
-                return 0;
-            }
-
-            @Override
-            public byte[] getBytes() {
-                return new byte[0];
-            }
-
-            @Override
-            public InputStream getInputStream() {
-                return getClass().getClassLoader().getResourceAsStream("example.png");
-            }
-
-            @Override
-            public void transferTo(final File file) throws IOException, IllegalStateException {
-
-            }
-        };
-        MultipartFile thumbnailFile = new MultipartFile() {
+        thumbnailFile = new MultipartFile() {
             @Override
             public String getName() {
                 return "test";
@@ -277,11 +151,11 @@ class MediaFacadeTest {
 
             @Override
             public long getSize() {
-                return 1;
+                return 0;
             }
 
             @Override
-            public byte[] getBytes() {
+            public byte[] getBytes() throws IOException {
                 return new byte[0];
             }
 
@@ -295,6 +169,55 @@ class MediaFacadeTest {
 
             }
         };
+    }
+
+    @Test
+    @DisplayName("Create media with generated thumbnail")
+    void createMedia() throws URISyntaxException {
+        // Given ownerId, mediaDTO and multipart file
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+
+        PostDetailsDTO postDetailsDTO = new PostDetailsDTO(null, null, null, null, null, null, null, null, null);
+
+        // When createMedia() method called
+        when(postServiceClient.getUserPost(any(), any())).thenReturn(postDetailsDTO);
+        when(mediaRepository.findByOwnerIdAndPostIdAndMd5(any(), any(), any())).thenReturn(Optional.empty());
+        when(mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(any(), any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
+                new URI("/test"),
+                new URI("/test")
+        ));
+        // Then return generated uuid
+        assertNotNull(mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile, thumbnailFile), "MediaId was not returned.");
+    }
+
+
+    @Test
+    @DisplayName("Create media with non existing postId")
+    void createMedia2() {
+        // Given ownerId, non-existing postId, mediaDTO and multipart file
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+
+        // When createMedia() method called
+        when(postServiceClient.getUserPost(any(), any())).thenReturn(null);
+        // Then throw exception
+        assertThrows(
+                RecordNotFoundException.class,
+                () -> mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile, thumbnailFile),
+                "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Create media with given thumbnail")
+    void createMedia3() throws URISyntaxException {
+        // Given ownerId, mediaDTO and multipart file
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+
+        PostDetailsDTO postDetailsDTO = new PostDetailsDTO(null, null, null, null, null, null, null, null, null);
+
         // When createMedia() method called
         when(postServiceClient.getUserPost(any(), any())).thenReturn(postDetailsDTO);
         when(mediaRepository.findByOwnerIdAndPostIdAndMd5(any(), any(), any())).thenReturn(Optional.empty());
@@ -315,120 +238,159 @@ class MediaFacadeTest {
 
         PostDetailsDTO postDetailsDTO = new PostDetailsDTO(null, null, null, null, null, null, null, null, null);
 
-        MultipartFile mediaFile = new MultipartFile() {
-            @Override
-            public String getName() {
-                return "test";
-            }
-
-            @Override
-            public String getOriginalFilename() {
-                return "test.png";
-            }
-
-            @Override
-            public String getContentType() {
-                return null;
-            }
-
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-
-            @Override
-            public long getSize() {
-                return 0;
-            }
-
-            @Override
-            public byte[] getBytes() throws IOException {
-                return new byte[0];
-            }
-
-            @Override
-            public InputStream getInputStream() throws IOException {
-                return getClass().getClassLoader().getResourceAsStream("example.png");
-            }
-
-            @Override
-            public void transferTo(final File file) throws IOException, IllegalStateException {
-
-            }
-        };
-
         // When createMedia() method called
         when(postServiceClient.getUserPost(any(), any())).thenReturn(postDetailsDTO);
         when(mediaRepository.findByOwnerIdAndPostIdAndMd5(any(), any(), any())).thenReturn(Optional.of(media));
         // Then throw exception
         assertThrows(
                 RecordAlreadyExistsException.class,
-                () -> mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile, null),
+                () -> mediaFacade.createMedia(userId, postId, mediaDTO, mediaFile, thumbnailFile),
                 "Exception was not thrown."
         );
     }
 
     @Test
-    @DisplayName("Replace media")
-    void replaceMedia() {
-        // Given mediaDto, userId and postId and mediaId
-        UUID userId = UUID.randomUUID();
-        UUID postId = UUID.randomUUID();
-        UUID mediaId = UUID.randomUUID();
-        // When replaceMedia() method called
-        when(mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId))
-                .thenReturn(Optional.of(media));
-        // Then run successfully
-        assertDoesNotThrow(() -> mediaFacade.replaceMedia(userId, postId, mediaId, mediaDTO), "Exception was thrown");
-    }
-
-    @Test
-    @DisplayName("Replace media with non existing mediaId")
-    void replaceMedia2() {
-        // Given mediaDTO, userId, postId and non existing mediaId
-        UUID userId = UUID.randomUUID();
-        UUID postId = UUID.randomUUID();
-        UUID mediaId = UUID.randomUUID();
-        // When replaceMedia() method called
-        when(mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId)).thenReturn(Optional.empty());
-        // Then throw no record found exception
-        assertThrows(
-                RecordNotFoundException.class,
-                () -> mediaFacade.replaceMedia(userId, postId, mediaId, mediaDTO),
-                "Exception was not thrown."
-        );
-    }
-
-    // TODO Fixme
-
-    @Test
-    @DisplayName("Update media")
-    void updateMedia() {
+    @DisplayName("Replace media with given thumbnail")
+    void replaceMedia() throws URISyntaxException {
         // Given mediaDTO, userId, postId and mediaId
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
         UUID mediaId = UUID.randomUUID();
         // When updateMedia() method called
-        when(mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId))
-                .thenReturn(Optional.of(media));
+        when(mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId)).thenReturn(Optional.of(media));
+        when(mediaRepository.findByOwnerIdAndPostIdAndMd5(any(), any(), any())).thenReturn(Optional.empty());
+        when(mediaUploadStrategy.uploadMedia(any(), any(), any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
+                new URI("/test"),
+                new URI("/test")
+        ));
+
         // Then run successfully
-        assertDoesNotThrow(() -> mediaFacade.updateMedia(userId, postId, mediaId, mediaDTO), "Exception was thrown");
+        assertDoesNotThrow(() -> mediaFacade.replaceMedia(userId, postId, mediaId, mediaDTO, mediaFile, thumbnailFile), "Exception was thrown");
     }
 
     @Test
-    @DisplayName("Update media with non existing mediaId")
-    void updateMedia2() {
-        // Given mediaDTO, userId, postId and non existing mediaId
+    @DisplayName("Replace media with generated thumbnail")
+    void replaceMedia2() throws URISyntaxException {
+        // Given mediaDTO, userId, postId and mediaId
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
         UUID mediaId = UUID.randomUUID();
         // When updateMedia() method called
-        when(mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId))
-                .thenReturn(Optional.empty());
+        when(mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId)).thenReturn(Optional.of(media));
+        when(mediaRepository.findByOwnerIdAndPostIdAndMd5(any(), any(), any())).thenReturn(Optional.empty());
+        when(mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(any(), any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
+                new URI("/test"),
+                new URI("/test")
+        ));
+
+        // Then run successfully
+        assertDoesNotThrow(() -> mediaFacade.replaceMedia(userId, postId, mediaId, mediaDTO, mediaFile, null), "Exception was thrown");
+    }
+
+    @Test
+    @DisplayName("Replace media with non existing mediaId")
+    void replaceMedia3() {
+        // Given mediaDTO, userId, postId and non-existing mediaId
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        UUID mediaId = UUID.randomUUID();
+        // When updateMedia() method called
+        when(mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId)).thenReturn(Optional.empty());
         // Then throw no record found exception
         assertThrows(
                 RecordNotFoundException.class,
-                () -> mediaFacade.updateMedia(userId, postId, mediaId, mediaDTO),
+                () -> mediaFacade.replaceMedia(userId, postId, mediaId, mediaDTO, mediaFile, thumbnailFile),
+                "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Replace media with md5 duplicate in post")
+    void replaceMedia4() {
+        // Given mediaDTO, userId, postId, mediaId and duplicate media file
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        UUID mediaId = UUID.randomUUID();
+        // When updateMedia() method called
+        when(mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId)).thenReturn(Optional.of(media));
+        when(mediaRepository.findByOwnerIdAndPostIdAndMd5(any(), any(), any())).thenReturn(Optional.of(media));
+        // Then throw no record found exception
+        assertThrows(
+                RecordAlreadyExistsException.class,
+                () -> mediaFacade.replaceMedia(userId, postId, mediaId, mediaDTO, mediaFile, thumbnailFile),
+                "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Update media with given thumbnail")
+    void updateMedia() throws URISyntaxException {
+        // Given mediaDTO, userId, postId and mediaId
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        UUID mediaId = UUID.randomUUID();
+        // When updateMedia() method called
+        when(mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId)).thenReturn(Optional.of(media));
+        when(mediaRepository.findByOwnerIdAndPostIdAndMd5(any(), any(), any())).thenReturn(Optional.empty());
+        when(mediaUploadStrategy.uploadMedia(any(), any(), any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
+                new URI("/test"),
+                new URI("/test")
+        ));
+
+        // Then run successfully
+        assertDoesNotThrow(() -> mediaFacade.updateMedia(userId, postId, mediaId, mediaDTO, mediaFile, thumbnailFile), "Exception was thrown");
+    }
+
+    @Test
+    @DisplayName("Update media with generated thumbnail")
+    void updateMedia2() throws URISyntaxException {
+        // Given mediaDTO, userId, postId and mediaId
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        UUID mediaId = UUID.randomUUID();
+        // When updateMedia() method called
+        when(mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId)).thenReturn(Optional.of(media));
+        when(mediaRepository.findByOwnerIdAndPostIdAndMd5(any(), any(), any())).thenReturn(Optional.empty());
+        when(mediaUploadStrategy.uploadMediaWithGeneratedThumbnail(any(), any(), any())).thenReturn(new MediaUploadStrategy.UploadedMediaFile(
+                new URI("/test"),
+                new URI("/test")
+        ));
+
+        // Then run successfully
+        assertDoesNotThrow(() -> mediaFacade.updateMedia(userId, postId, mediaId, mediaDTO, mediaFile, null), "Exception was thrown");
+    }
+
+    @Test
+    @DisplayName("Update media with non existing mediaId")
+    void updateMedia3() {
+        // Given mediaDTO, userId, postId and non-existing mediaId
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        UUID mediaId = UUID.randomUUID();
+        // When updateMedia() method called
+        when(mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId)).thenReturn(Optional.empty());
+        // Then throw no record found exception
+        assertThrows(
+                RecordNotFoundException.class,
+                () -> mediaFacade.updateMedia(userId, postId, mediaId, mediaDTO, mediaFile, thumbnailFile),
+                "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Update media with md5 duplicate in post")
+    void updateMedia4() {
+        // Given mediaDTO, userId, postId, mediaId and duplicate media file
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        UUID mediaId = UUID.randomUUID();
+        // When updateMedia() method called
+        when(mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId)).thenReturn(Optional.of(media));
+        when(mediaRepository.findByOwnerIdAndPostIdAndMd5(any(), any(), any())).thenReturn(Optional.of(media));
+        // Then throw no record found exception
+        assertThrows(
+                RecordAlreadyExistsException.class,
+                () -> mediaFacade.updateMedia(userId, postId, mediaId, mediaDTO, mediaFile, thumbnailFile),
                 "Exception was not thrown."
         );
     }
