@@ -25,7 +25,7 @@ final class DeleteMediaImpl implements DeleteMedia {
             throw new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(mediaId.toString()));
         }
 
-        mediaUploadStrategy.removeMediaFiles(mediaId);
+        mediaUploadStrategy.removeAllMediaFiles(mediaId);
 
         // Publish delete media event
         domainEventPublisher.publish(

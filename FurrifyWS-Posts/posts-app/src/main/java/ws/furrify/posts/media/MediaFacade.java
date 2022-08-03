@@ -183,7 +183,7 @@ final public class MediaFacade {
         mediaSet.forEach(media -> {
             MediaSnapshot snapshot = media.getSnapshot();
 
-            mediaUploadStrategy.removeMediaFiles(snapshot.getMediaId());
+            mediaUploadStrategy.removeAllMediaFiles(snapshot.getMediaId());
 
             mediaRepository.deleteByMediaId(snapshot.getMediaId());
         });

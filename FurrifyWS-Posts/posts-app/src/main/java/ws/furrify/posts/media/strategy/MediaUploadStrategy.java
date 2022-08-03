@@ -20,7 +20,7 @@ public interface MediaUploadStrategy {
 
     UploadedMediaFile uploadThumbnail(final UUID mediaId, final String originalMediaFilename, final MultipartFile thumbnailFile);
 
-    void removeMediaFiles(final UUID mediaId);
+    void removeAllMediaFiles(final UUID mediaId);
 
     @Value
     class UploadedMediaFile {
