@@ -1,6 +1,8 @@
 package ws.furrify.posts.attachment.strategy;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,6 +10,7 @@ import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileUploadCannotCreatePathException;
 import ws.furrify.shared.exception.FileUploadFailedException;
+import ws.furrify.shared.util.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,6 +28,7 @@ import java.util.UUID;
  * @author sky
  */
 @RequiredArgsConstructor
+@Log4j2
 public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStrategy {
 
     @Value("${LOCAL_STORAGE_ATTACHMENT_PATH:/data/attachment}")
@@ -70,6 +74,16 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
         }
     }
 
+    @Override
+    public void removeAttachmentFiles(@NonNull final UUID attachmentId) {
+        File attachmentDir = new java.io.File(LOCAL_STORAGE_ATTACHMENT_PATH + "/" + attachmentId);
+
+        if (attachmentDir.exists()) {
+            FileUtils.deleteDirectoryWithFiles(attachmentDir);
+        } else {
+            log.error("Attempting to remove not existing directory [path=" + attachmentDir.getAbsolutePath() + "].");
+        }
+    }
 
     private void writeToFile(File file, InputStream inputStream) {
         try (OutputStream outputStream = new FileOutputStream(file)) {

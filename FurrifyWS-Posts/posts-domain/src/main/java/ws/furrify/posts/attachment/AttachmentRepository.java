@@ -1,6 +1,7 @@
 package ws.furrify.posts.attachment;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 interface AttachmentRepository {
@@ -15,4 +16,6 @@ interface AttachmentRepository {
     Attachment save(Attachment attachment);
 
     long countAttachmentsByUserId(UUID userId);
+
+    Set<Attachment> findAllByOwnerIdAndPostId(UUID ownerId, UUID postId);
 }

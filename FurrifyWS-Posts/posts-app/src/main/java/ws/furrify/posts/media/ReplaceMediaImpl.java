@@ -31,9 +31,9 @@ final class ReplaceMediaImpl implements ReplaceMedia {
         Media media = mediaRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(mediaId.toString())));
 
-        final String md5 = FileUtils.generateMd5FromFile(mediaFile);
+        final String md5 = MediaFileUtils.generateMd5FromFile(mediaFile);
 
-        FileUtils.validateMedia(
+        MediaFileUtils.validateMedia(
                 userId,
                 postId,
                 mediaDTO,
@@ -46,7 +46,7 @@ final class ReplaceMediaImpl implements ReplaceMedia {
 
         // If thumbnail file is present
         if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
-            FileUtils.validateThumbnail(
+            MediaFileUtils.validateThumbnail(
                     thumbnailFile
             );
 

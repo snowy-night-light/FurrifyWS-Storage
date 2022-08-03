@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ws.furrify.posts.attachment.dto.query.AttachmentDetailsQueryDTO;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Transactional(rollbackFor = RuntimeException.class)
 interface SqlAttachmentRepository extends Repository<AttachmentSnapshot, Long> {
@@ -26,6 +28,8 @@ interface SqlAttachmentRepository extends Repository<AttachmentSnapshot, Long> {
     long countAttachmentsByUserId(UUID userId);
 
     Optional<AttachmentSnapshot> findByOwnerIdAndPostIdAndMd5(UUID ownerId, UUID postId, String md5);
+
+    Set<AttachmentSnapshot> findAllByOwnerIdAndPostId(UUID ownerId, UUID postId);
 }
 
 @Transactional(rollbackFor = {})
@@ -59,6 +63,13 @@ class AttachmentRepositoryImpl implements AttachmentRepository {
     @Override
     public long countAttachmentsByUserId(final UUID userId) {
         return sqlAttachmentRepository.countAttachmentsByUserId(userId);
+    }
+
+    @Override
+    public Set<Attachment> findAllByOwnerIdAndPostId(final UUID ownerId, final UUID postId) {
+        return sqlAttachmentRepository.findAllByOwnerIdAndPostId(ownerId, postId).stream()
+                .map(Attachment::restore)
+                .collect(Collectors.toSet());
     }
 
     @Override

@@ -25,10 +25,11 @@ class AttachmentConfig {
 
         return new AttachmentFacade(
                 new CreateAttachmentImpl(postServiceClient, attachmentRepository, attachmentFactory, attachmentUploadStrategy(), eventPublisher),
-                new DeleteAttachmentImpl(eventPublisher, attachmentRepository),
+                new DeleteAttachmentImpl(eventPublisher, attachmentRepository, attachmentUploadStrategy()),
                 attachmentRepository,
                 attachmentFactory,
-                attachmentDtoFactory
+                attachmentDtoFactory,
+                attachmentUploadStrategy()
         );
     }
 

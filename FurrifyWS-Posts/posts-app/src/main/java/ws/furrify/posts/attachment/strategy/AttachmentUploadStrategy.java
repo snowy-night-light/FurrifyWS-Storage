@@ -15,6 +15,8 @@ public interface AttachmentUploadStrategy {
 
     UploadedAttachmentFile uploadAttachment(final UUID attachmentId, final MultipartFile fileSource);
 
+    void removeAttachmentFiles(UUID attachmentId);
+
     @Value
     class UploadedAttachmentFile {
         URI fileUri;

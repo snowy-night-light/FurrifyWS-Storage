@@ -12,6 +12,7 @@ import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileUploadCannotCreatePathException;
 import ws.furrify.shared.exception.FileUploadFailedException;
+import ws.furrify.shared.util.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,7 +21,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.util.UUID;
 
 /**
@@ -128,27 +128,9 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
         File mediaDir = new java.io.File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId);
 
         if (mediaDir.exists()) {
-            deleteDirectory(mediaDir);
+            FileUtils.deleteDirectoryWithFiles(mediaDir);
         } else {
             log.error("Attempting to remove not existing directory [path=" + mediaDir.getAbsolutePath() + "].");
-        }
-    }
-
-    private void deleteDirectory(File directory) throws IllegalStateException {
-        File[] contents = directory.listFiles();
-        if (contents != null) {
-            for (File file : contents) {
-                if (!Files.isSymbolicLink(file.toPath())) {
-                    deleteDirectory(file);
-                }
-            }
-        }
-        boolean result = directory.delete();
-
-        if (!result) {
-            log.error("Cannot delete directory [path=" + directory.getAbsolutePath() + "].");
-
-            throw new IllegalStateException("Couldn't remove directory.");
         }
     }
 

@@ -6,12 +6,15 @@ import lombok.extern.java.Log;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.attachment.dto.AttachmentDTO;
 import ws.furrify.posts.attachment.dto.AttachmentDtoFactory;
+import ws.furrify.posts.attachment.strategy.AttachmentUploadStrategy;
 import ws.furrify.posts.attachment.vo.AttachmentSource;
+import ws.furrify.posts.post.PostEvent;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.shared.vo.SourceOriginType;
 import ws.furrify.sources.source.SourceEvent;
 
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -26,6 +29,22 @@ public class AttachmentFacade {
     private final AttachmentRepository attachmentRepository;
     private final AttachmentFactory attachmentFactory;
     private final AttachmentDtoFactory attachmentDTOFactory;
+    private final AttachmentUploadStrategy attachmentUploadStrategy;
+
+    /**
+     * Handle incoming post events.
+     *
+     * @param postEvent Post event instance received from kafka.
+     */
+    public void handleEvent(final UUID key, final PostEvent postEvent) {
+        switch (DomainEventPublisher.PostEventType.valueOf(postEvent.getState())) {
+            case REMOVED ->
+                    deleteAttachmentByPostIdAndRemoveAttachmentFiles(key, UUID.fromString(postEvent.getPostId()));
+
+            default -> log.warning("State received from kafka is not defined. " +
+                    "State=" + postEvent.getState() + " Topic=post_events");
+        }
+    }
 
     /**
      * Handle incoming attachment events.
@@ -116,6 +135,17 @@ public class AttachmentFacade {
      */
     public void deleteAttachment(final UUID userId, final UUID postId, final UUID attachmentId) {
         deleteAttachmentImpl.deleteAttachment(userId, postId, attachmentId);
+    }
+
+    private void deleteAttachmentByPostIdAndRemoveAttachmentFiles(final UUID ownerId, final UUID postId) {
+        Set<Attachment> attachments = attachmentRepository.findAllByOwnerIdAndPostId(ownerId, postId);
+        attachments.forEach(attachment -> {
+            AttachmentSnapshot snapshot = attachment.getSnapshot();
+
+            attachmentUploadStrategy.removeAttachmentFiles(snapshot.getAttachmentId());
+
+            attachmentRepository.deleteByAttachmentId(snapshot.getAttachmentId());
+        });
     }
 
     private void saveAttachmentInDatabase(final AttachmentDTO attachmentDTO) {
