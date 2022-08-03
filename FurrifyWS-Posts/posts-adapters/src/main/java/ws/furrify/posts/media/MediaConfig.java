@@ -30,7 +30,8 @@ class MediaConfig {
                 new ReplaceMediaImpl(eventPublisher, mediaRepository, mediaUploadStrategy()),
                 mediaRepository,
                 mediaFactory,
-                mediaDtoFactory
+                mediaDtoFactory,
+                mediaUploadStrategy()
         );
     }
 

@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ws.furrify.posts.media.dto.query.MediaDetailsQueryDTO;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Transactional(rollbackFor = RuntimeException.class)
 interface SqlMediaRepository extends Repository<MediaSnapshot, Long> {
@@ -27,6 +29,7 @@ interface SqlMediaRepository extends Repository<MediaSnapshot, Long> {
 
     Optional<MediaSnapshot> findByOwnerIdAndPostIdAndMd5(UUID ownerId, UUID postId, String md5);
 
+    Set<MediaSnapshot> findAllByOwnerIdAndPostId(UUID ownerId, UUID postId);
 }
 
 @Transactional(rollbackFor = {})
@@ -36,7 +39,7 @@ interface SqlMediaQueryRepositoryImpl extends MediaQueryRepository, Repository<M
     Optional<MediaDetailsQueryDTO> findByOwnerIdAndPostIdAndMediaId(UUID ownerId, UUID artistId, UUID mediaId);
 
     @Override
-    @Query("select media from MediaSnapshot media where ownerId = ?1 and postId = ?2 order by priority desc")
+    @Query("select media from MediaSnapshot media where media.ownerId = ?1 and media.postId = ?2 order by media.priority desc")
     Page<MediaDetailsQueryDTO> findAllByOwnerIdAndPostId(UUID ownerId, UUID postId, Pageable pageable);
 
     @Override
@@ -60,6 +63,13 @@ class MediaRepositoryImpl implements MediaRepository {
     @Override
     public long countMediaByUserId(final UUID userId) {
         return sqlMediaRepository.countMediaByUserId(userId);
+    }
+
+    @Override
+    public Set<Media> findAllByOwnerIdAndPostId(final UUID ownerId, final UUID postId) {
+        return sqlMediaRepository.findAllByOwnerIdAndPostId(ownerId, postId).stream()
+                .map(Media::restore)
+                .collect(Collectors.toSet());
     }
 
     @Override

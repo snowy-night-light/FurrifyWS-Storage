@@ -43,6 +43,7 @@ class EventListenerRegistry {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 
         postFacade.handleEvent(UUID.fromString(key), postEvent);
+        mediaFacade.handleEvent(UUID.fromString(key), postEvent);
     }
 
     @KafkaListener(topics = "tag_events")

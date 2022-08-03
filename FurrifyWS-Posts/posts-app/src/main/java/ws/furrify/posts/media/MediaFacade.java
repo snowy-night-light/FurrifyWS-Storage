@@ -6,12 +6,15 @@ import lombok.extern.java.Log;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.posts.media.dto.MediaDTO;
 import ws.furrify.posts.media.dto.MediaDtoFactory;
+import ws.furrify.posts.media.strategy.MediaUploadStrategy;
 import ws.furrify.posts.media.vo.MediaSource;
+import ws.furrify.posts.post.PostEvent;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 import ws.furrify.shared.vo.SourceOriginType;
 import ws.furrify.sources.source.SourceEvent;
 
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -28,6 +31,22 @@ final public class MediaFacade {
     private final MediaRepository mediaRepository;
     private final MediaFactory mediaFactory;
     private final MediaDtoFactory mediaDTOFactory;
+
+    private final MediaUploadStrategy mediaUploadStrategy;
+
+    /**
+     * Handle incoming post events.
+     *
+     * @param postEvent Post event instance received from kafka.
+     */
+    public void handleEvent(final UUID key, final PostEvent postEvent) {
+        switch (DomainEventPublisher.PostEventType.valueOf(postEvent.getState())) {
+            case REMOVED -> deleteMediaByPostIdAndRemoveMediaFiles(key, UUID.fromString(postEvent.getPostId()));
+
+            default -> log.warning("State received from kafka is not defined. " +
+                    "State=" + postEvent.getState() + " Topic=post_events");
+        }
+    }
 
     /**
      * Handle incoming media events.
@@ -157,6 +176,17 @@ final public class MediaFacade {
 
     private void saveMediaInDatabase(final MediaDTO mediaDTO) {
         mediaRepository.save(mediaFactory.from(mediaDTO));
+    }
+
+    private void deleteMediaByPostIdAndRemoveMediaFiles(final UUID ownerId, final UUID postId) {
+        Set<Media> mediaSet = mediaRepository.findAllByOwnerIdAndPostId(ownerId, postId);
+        mediaSet.forEach(media -> {
+            MediaSnapshot snapshot = media.getSnapshot();
+
+            mediaUploadStrategy.removeMediaFiles(snapshot.getMediaId());
+
+            mediaRepository.deleteByMediaId(snapshot.getMediaId());
+        });
     }
 
     private void deleteMediaByMediaIdFromDatabase(final UUID mediaId) {

@@ -127,7 +127,11 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
     public void removeMediaFiles(@NonNull final UUID mediaId) {
         File mediaDir = new java.io.File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId);
 
-        deleteDirectory(mediaDir);
+        if (mediaDir.exists()) {
+            deleteDirectory(mediaDir);
+        } else {
+            log.error("Attempting to remove not existing directory [path=" + mediaDir.getAbsolutePath() + "].");
+        }
     }
 
     private void deleteDirectory(File directory) throws IllegalStateException {
