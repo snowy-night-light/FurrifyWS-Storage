@@ -45,7 +45,7 @@ final class ReplaceMediaImpl implements ReplaceMedia {
         MediaUploadStrategy.UploadedMediaFile uploadedMediaFile;
 
         // If thumbnail file is present
-        if (thumbnailFile != null && !thumbnailFile.isEmpty() && !thumbnailFile.isEmpty()) {
+        if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
             FileUtils.validateThumbnail(
                     thumbnailFile
             );
