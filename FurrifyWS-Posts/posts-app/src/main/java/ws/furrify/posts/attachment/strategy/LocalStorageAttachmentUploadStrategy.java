@@ -1,6 +1,8 @@
 package ws.furrify.posts.attachment.strategy;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,6 +10,7 @@ import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileUploadCannotCreatePathException;
 import ws.furrify.shared.exception.FileUploadFailedException;
+import ws.furrify.shared.util.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,6 +28,7 @@ import java.util.UUID;
  * @author sky
  */
 @RequiredArgsConstructor
+@Log4j2
 public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStrategy {
 
     @Value("${LOCAL_STORAGE_ATTACHMENT_PATH:/data/attachment}")
@@ -32,6 +36,8 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
 
     @Value("${REMOTE_STORAGE_ATTACHMENT_PATH:/attachment}")
     private String REMOTE_STORAGE_ATTACHMENT_PATH;
+
+    private final static String ATTACHMENT_DIRECTORY = "file";
 
     @Override
     public UploadedAttachmentFile uploadAttachment(final UUID attachmentId, final MultipartFile fileSource) {
@@ -45,10 +51,13 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
             }
 
             // Sanitize filename
-            String filename = fileSource.getOriginalFilename().replaceAll("\\s+","_");
+            String filename = fileSource.getOriginalFilename().replaceAll("\\s+", "_");
+
+            // Remove old file if exists
+            removeAttachmentFile(attachmentId);
 
             // Create file
-            File attachmentFile = new File(LOCAL_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + filename);
+            File attachmentFile = new File(LOCAL_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + ATTACHMENT_DIRECTORY + "/" + filename);
 
             // Create directories where files need to be located
             boolean wasAttachmentFileCreated = attachmentFile.getParentFile().mkdirs() || attachmentFile.getParentFile().exists();
@@ -62,7 +71,7 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
 
             // Return created urls
             return new UploadedAttachmentFile(
-                    new URI(REMOTE_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + filename)
+                    new URI(REMOTE_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + ATTACHMENT_DIRECTORY + "/" + filename)
             );
 
         } catch (IOException | URISyntaxException e) {
@@ -70,12 +79,32 @@ public class LocalStorageAttachmentUploadStrategy implements AttachmentUploadStr
         }
     }
 
+    @Override
+    public void removeAllAttachmentFiles(@NonNull final UUID attachmentId) {
+        File attachmentDir = new java.io.File(LOCAL_STORAGE_ATTACHMENT_PATH + "/" + attachmentId);
+
+        if (attachmentDir.exists()) {
+            FileUtils.deleteDirectoryWithFiles(attachmentDir);
+        } else {
+            log.error("Attempting to remove not existing directory [path=" + attachmentDir.getAbsolutePath() + "].");
+        }
+    }
 
     private void writeToFile(File file, InputStream inputStream) {
         try (OutputStream outputStream = new FileOutputStream(file)) {
             IOUtils.copy(inputStream, outputStream);
         } catch (IOException e) {
             throw new FileUploadFailedException(Errors.FILE_UPLOAD_FAILED.getErrorMessage());
+        }
+    }
+
+    private void removeAttachmentFile(UUID attachmentId) {
+        File fileDir = new java.io.File(LOCAL_STORAGE_ATTACHMENT_PATH + "/" + attachmentId + "/" + ATTACHMENT_DIRECTORY);
+
+        if (fileDir.exists()) {
+            FileUtils.deleteDirectoryWithFiles(fileDir);
+        } else {
+            log.error("Attempting to remove not existing directory [path=" + fileDir.getAbsolutePath() + "].");
         }
     }
 

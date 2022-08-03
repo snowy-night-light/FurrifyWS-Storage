@@ -1,6 +1,9 @@
 package ws.furrify.posts.media.strategy;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,6 +12,7 @@ import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
 import ws.furrify.shared.exception.FileUploadCannotCreatePathException;
 import ws.furrify.shared.exception.FileUploadFailedException;
+import ws.furrify.shared.util.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,6 +30,7 @@ import java.util.UUID;
  * @author sky
  */
 @RequiredArgsConstructor
+@Log4j2
 public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
     @Value("${LOCAL_STORAGE_MEDIA_PATH:/data/media}")
@@ -33,7 +38,6 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
 
     @Value("${REMOTE_STORAGE_MEDIA_PATH:/media}")
     private String REMOTE_STORAGE_MEDIA_PATH;
-
     @Value("${THUMBNAIL_WIDTH:800}")
     private int THUMBNAIL_WIDTH;
 
@@ -43,12 +47,16 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
     @Value("${THUMBNAIL_PREFIX:thumbnail_}")
     private String THUMBNAIL_PREFIX;
 
+    private final static String THUMBNAIL_DIRECTORY = "thumbnail";
+
+    private final static String MEDIA_DIRECTORY = "file";
+
     private final static String THUMBNAIL_EXTENSION = ".jpg";
 
     @Override
-    public UploadedMediaFile uploadMediaWithGeneratedThumbnail(final UUID mediaId,
-                                                               final MediaExtension extension,
-                                                               final MultipartFile fileSource) {
+    public UploadedMediaFile uploadMediaWithGeneratedThumbnail(@NonNull final UUID mediaId,
+                                                               @NonNull final MediaExtension extension,
+                                                               @NonNull final MultipartFile fileSource) {
 
         try (
                 // Generate thumbnail
@@ -75,10 +83,10 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
     }
 
     @Override
-    public UploadedMediaFile uploadMedia(final UUID mediaId,
-                                         final MediaExtension extension,
-                                         final MultipartFile fileSource,
-                                         final MultipartFile thumbnailSource) {
+    public UploadedMediaFile uploadMedia(@NonNull final UUID mediaId,
+                                         @NonNull final MediaExtension extension,
+                                         @NonNull final MultipartFile fileSource,
+                                         @NonNull final MultipartFile thumbnailSource) {
         try (
                 InputStream thumbnailInputStream = thumbnailSource.getInputStream();
 
@@ -96,6 +104,57 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
         }
     }
 
+    @SneakyThrows
+    @Override
+    public UploadedMediaFile uploadThumbnail(@NonNull final UUID mediaId,
+                                             @NonNull final String originalMediaFilename,
+                                             @NonNull final MultipartFile thumbnailSource) {
+        try (
+                InputStream thumbnailInputStream = thumbnailSource.getInputStream();
+        ) {
+            return uploadFiles(
+                    mediaId,
+                    originalMediaFilename,
+                    null,
+                    thumbnailInputStream
+            );
+
+        } catch (IOException | URISyntaxException e) {
+            throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
+        }
+    }
+
+    @Override
+    public void removeAllMediaFiles(@NonNull final UUID mediaId) {
+        File mediaDir = new java.io.File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId);
+
+        if (mediaDir.exists()) {
+            FileUtils.deleteDirectoryWithFiles(mediaDir);
+        } else {
+            log.error("Attempting to remove not existing directory [path=" + mediaDir.getAbsolutePath() + "].");
+        }
+    }
+
+    private void removeMediaFile(UUID mediaId) {
+        File fileDir = new java.io.File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + MEDIA_DIRECTORY);
+
+        if (fileDir.exists()) {
+            FileUtils.deleteDirectoryWithFiles(fileDir);
+        } else {
+            log.error("Attempting to remove not existing directory [path=" + fileDir.getAbsolutePath() + "].");
+        }
+    }
+
+    private void removeThumbnailFile(UUID mediaId) {
+        File thumbnailDir = new java.io.File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + THUMBNAIL_DIRECTORY);
+
+        if (thumbnailDir.exists()) {
+            FileUtils.deleteDirectoryWithFiles(thumbnailDir);
+        } else {
+            log.error("Attempting to remove not existing directory [path=" + thumbnailDir.getAbsolutePath() + "].");
+        }
+    }
+
     private void writeToFile(File file, InputStream inputStream) {
         try (OutputStream outputStream = new FileOutputStream(file)) {
             IOUtils.copy(inputStream, outputStream);
@@ -110,33 +169,42 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
             final InputStream mediaInputStream,
             final InputStream thumbnailInputStream
     ) throws URISyntaxException {
-
         // Check if filename is not null
         if (originalFilename == null) {
             throw new IllegalStateException("Filename cannot be empty.");
         }
-
         // Sanitize filename
-        String filename = originalFilename.replaceAll("\\s+","_");
+        String filename = originalFilename.replaceAll("\\s+", "_");
 
-        // Create files
-        File mediaFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + filename);
-        // Create directories where file need to be located
-        boolean wasMediaFileCreated = mediaFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
+        URI fileUri = null;
 
-        if (!wasMediaFileCreated) {
-            throw new FileUploadCannotCreatePathException(Errors.FILE_UPLOAD_CANNOT_CREATE_PATH.getErrorMessage());
+        // If there is media file to upload
+        if (mediaInputStream != null) {
+            // Remove old file if exists
+            removeMediaFile(mediaId);
+
+            // Create file
+            File mediaFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + MEDIA_DIRECTORY + "/" + filename);
+            // Create directories where file need to be located
+            boolean wasMediaFileCreated = mediaFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
+
+            if (!wasMediaFileCreated) {
+                throw new FileUploadCannotCreatePathException(Errors.FILE_UPLOAD_CANNOT_CREATE_PATH.getErrorMessage());
+            }
+
+            // Upload file
+            writeToFile(mediaFile, mediaInputStream);
+
+            fileUri = new URI(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + MEDIA_DIRECTORY + "/" + filename);
         }
-
-        // Upload file
-        writeToFile(mediaFile, mediaInputStream);
-
-        URI fileUri = new URI(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + filename);
 
         URI thumbnailUri = null;
 
         // If there is a thumbnail
         if (thumbnailInputStream != null) {
+            // Remove old thumbnail if exists
+            removeThumbnailFile(mediaId);
+
             // Create thumbnail filename by removing extension from original filename
             String thumbnailFileName = THUMBNAIL_PREFIX +
                     filename.substring(
@@ -144,9 +212,9 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
                             filename.lastIndexOf(".")
                     ) + THUMBNAIL_EXTENSION;
 
-            File thumbnailFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName);
+            File thumbnailFile = new File(LOCAL_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + THUMBNAIL_DIRECTORY + "/" + thumbnailFileName);
             // Create directories where file need to be located
-            boolean wasMediaThumbnailFileCreated = thumbnailFile.getParentFile().mkdirs() || mediaFile.getParentFile().exists();
+            boolean wasMediaThumbnailFileCreated = thumbnailFile.getParentFile().mkdirs() || thumbnailFile.getParentFile().exists();
 
             if (!wasMediaThumbnailFileCreated) {
                 throw new FileUploadCannotCreatePathException(Errors.FILE_UPLOAD_CANNOT_CREATE_PATH.getErrorMessage());
@@ -155,7 +223,7 @@ public class LocalStorageMediaUploadStrategy implements MediaUploadStrategy {
             // Upload file
             writeToFile(thumbnailFile, thumbnailInputStream);
 
-            thumbnailUri = new URI(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + thumbnailFileName);
+            thumbnailUri = new URI(REMOTE_STORAGE_MEDIA_PATH + "/" + mediaId + "/" + THUMBNAIL_DIRECTORY + "/" + thumbnailFileName);
         }
 
         // Return created urls

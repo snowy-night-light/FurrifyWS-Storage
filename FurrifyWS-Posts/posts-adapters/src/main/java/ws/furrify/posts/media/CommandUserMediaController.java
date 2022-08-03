@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -89,9 +88,12 @@ class CommandUserMediaController {
     public ResponseEntity<?> updateMedia(@PathVariable UUID userId,
                                          @PathVariable UUID postId,
                                          @PathVariable UUID mediaId,
-                                         @RequestBody @Validated MediaUpdateCommandDTO mediaUpdateCommandDTO,
+                                         @RequestPart("media") @Validated MediaUpdateCommandDTO mediaUpdateCommandDTO,
+                                         @RequestPart(value = "file", required = false) MultipartFile mediaFile,
+                                         @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnailFile,
                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
-        mediaFacade.updateMedia(userId, postId, mediaId, mediaUpdateCommandDTO.toDTO());
+
+        mediaFacade.updateMedia(userId, postId, mediaId, mediaUpdateCommandDTO.toDTO(), mediaFile, thumbnailFile);
 
         return ResponseEntity.accepted().build();
     }
@@ -104,9 +106,11 @@ class CommandUserMediaController {
     public ResponseEntity<?> replaceMedia(@PathVariable UUID userId,
                                           @PathVariable UUID postId,
                                           @PathVariable UUID mediaId,
-                                          @RequestBody @Validated MediaReplaceCommandDTO mediaReplaceCommandDTO,
+                                          @RequestPart("media") @Validated MediaReplaceCommandDTO mediaReplaceCommandDTO,
+                                          @RequestPart("file") MultipartFile mediaFile,
+                                          @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnailFile,
                                           KeycloakAuthenticationToken keycloakAuthenticationToken) {
-        mediaFacade.replaceMedia(userId, postId, mediaId, mediaReplaceCommandDTO.toDTO());
+        mediaFacade.replaceMedia(userId, postId, mediaId, mediaReplaceCommandDTO.toDTO(), mediaFile, thumbnailFile);
 
         return ResponseEntity.accepted().build();
     }

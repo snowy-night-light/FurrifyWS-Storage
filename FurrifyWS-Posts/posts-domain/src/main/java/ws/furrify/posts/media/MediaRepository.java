@@ -1,6 +1,7 @@
 package ws.furrify.posts.media;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 interface MediaRepository {
@@ -15,4 +16,6 @@ interface MediaRepository {
     Media save(Media media);
 
     long countMediaByUserId(UUID userId);
+
+    Set<Media> findAllByOwnerIdAndPostId(UUID ownerId, UUID postId);
 }
