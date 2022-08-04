@@ -34,7 +34,7 @@ interface SqlAvatarQueryRepositoryImpl extends AvatarQueryRepository, Repository
     Optional<AvatarDetailsQueryDTO> findByOwnerIdAndArtistIdAndAvatarId(UUID ownerId, UUID artistId, UUID avatarId);
 
     @Override
-    @Query("select id from AvatarSnapshot where artistId = ?1")
+    @Query("select id from AvatarSnapshot where avatarId = ?1")
     Long getIdByAvatarId(UUID avatarId);
 }
 

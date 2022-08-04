@@ -38,8 +38,8 @@ final public class AvatarFacade {
         AvatarDTO avatarDTO = avatarDTOFactory.from(key, avatarEvent);
 
         switch (DomainEventPublisher.AvatarEventType.valueOf(avatarEvent.getState())) {
-            case CREATED -> saveAvatarInDatabase(avatarDTO);
-            case REMOVED -> deleteAvatarByOwnerIdAndAvatarIdFromDatabase(
+            case CREATED, UPDATED, REPLACED -> saveAvatarInDatabase(avatarDTO);
+            case REMOVED -> deleteAvatarByAvatarIdFromDatabaseAndFiles(
                     key,
                     avatarDTO.getAvatarId()
             );
@@ -126,7 +126,9 @@ final public class AvatarFacade {
         avatarRepository.save(avatarFactory.from(avatarDTO));
     }
 
-    private void deleteAvatarByOwnerIdAndAvatarIdFromDatabase(final UUID ownerId, final UUID avatarId) {
+    private void deleteAvatarByAvatarIdFromDatabaseAndFiles(final UUID ownerId, final UUID avatarId) {
+        avatarUploadStrategy.removeAllAvatarFiles(avatarId);
+
         avatarRepository.deleteByOwnerIdAndAvatarId(ownerId, avatarId);
     }
 
