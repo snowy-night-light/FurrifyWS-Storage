@@ -2,6 +2,7 @@ package ws.furrify.artists.avatar;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import ws.furrify.artists.avatar.strategy.AvatarUploadStrategy;
 import ws.furrify.posts.avatar.AvatarEvent;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.RecordNotFoundException;
@@ -14,6 +15,7 @@ final class DeleteAvatarImpl implements DeleteAvatar {
 
     private final AvatarRepository avatarRepository;
     private final DomainEventPublisher<AvatarEvent> domainEventPublisher;
+    private final AvatarUploadStrategy uploadStrategy;
 
     @Override
     public void deleteAvatar(@NonNull final UUID userId,
@@ -22,6 +24,8 @@ final class DeleteAvatarImpl implements DeleteAvatar {
         if (!avatarRepository.existsByOwnerIdAndArtistIdAndAvatarId(userId, artistId, avatarId)) {
             throw new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(avatarId.toString()));
         }
+
+        uploadStrategy.removeAllAvatarFiles(avatarId);
 
         // Publish delete avatar event
         domainEventPublisher.publish(

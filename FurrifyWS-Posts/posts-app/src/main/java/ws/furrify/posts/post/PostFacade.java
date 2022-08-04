@@ -169,6 +169,11 @@ public class PostFacade {
                     artistId,
                     new URI(avatarEvent.getData().getThumbnailUri())
             );
+            case REPLACED, UPDATED -> replaceArtistAvatarInPost(
+                    key,
+                    artistId,
+                    new URI(avatarEvent.getData().getThumbnailUri())
+            );
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + avatarEvent.getState() + " Topic=avatar_events");
         }
@@ -380,6 +385,15 @@ public class PostFacade {
         postRepository.findAllByOwnerIdAndArtistIdInArtists(ownerId, artistId)
                 .forEach(post -> {
                     post.setArtistThumbnailUri(artistId, null);
+
+                    postRepository.save(post);
+                });
+    }
+
+    private void replaceArtistAvatarInPost(final UUID userId, final UUID artistId, final URI thumbnailUri) {
+        postRepository.findAllByOwnerIdAndArtistIdInArtists(userId, artistId)
+                .forEach(post -> {
+                    post.setArtistThumbnailUri(artistId, thumbnailUri);
 
                     postRepository.save(post);
                 });

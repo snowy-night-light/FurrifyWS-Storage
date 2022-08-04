@@ -66,6 +66,8 @@ public interface DomainEventPublisher<T> {
          * Events that can occur on Avatar entity.
          */
         CREATED,
+        REPLACED,
+        UPDATED,
         REMOVED
     }
 

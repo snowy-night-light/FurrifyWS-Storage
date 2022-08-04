@@ -58,7 +58,7 @@ public class AttachmentFacade {
 
         switch (DomainEventPublisher.AttachmentEventType.valueOf(attachmentEvent.getState())) {
             case CREATED, REPLACED, UPDATED -> saveAttachmentInDatabase(attachmentDTO);
-            case REMOVED -> deleteAttachmentByAttachmentIdFromDatabase(attachmentDTO.getAttachmentId());
+            case REMOVED -> deleteAttachmentByAttachmentIdFromDatabaseAndFiles(attachmentDTO.getAttachmentId());
 
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + attachmentEvent.getState() + " Topic=attachment_events");
@@ -187,7 +187,9 @@ public class AttachmentFacade {
         attachmentRepository.save(attachmentFactory.from(attachmentDTO));
     }
 
-    private void deleteAttachmentByAttachmentIdFromDatabase(final UUID attachmentId) {
+    private void deleteAttachmentByAttachmentIdFromDatabaseAndFiles(final UUID attachmentId) {
+        attachmentUploadStrategy.removeAllAttachmentFiles(attachmentId);
+
         attachmentRepository.deleteByAttachmentId(attachmentId);
     }
 

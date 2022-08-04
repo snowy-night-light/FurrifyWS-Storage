@@ -160,4 +160,8 @@ class Artist {
     void deleteAvatar() {
         this.avatar = null;
     }
+
+    void replaceAvatar(@NonNull final ArtistAvatar avatar) {
+        this.avatar = avatar;
+    }
 }

@@ -6,7 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.artists.artist.ArtistEvent;
 import ws.furrify.artists.avatar.dto.AvatarDTO;
 import ws.furrify.artists.avatar.dto.AvatarDtoFactory;
+import ws.furrify.artists.avatar.strategy.AvatarUploadStrategy;
 import ws.furrify.posts.avatar.AvatarEvent;
+import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.util.UUID;
@@ -19,10 +21,13 @@ import java.util.UUID;
 final public class AvatarFacade {
 
     private final CreateAvatar createAvatarImpl;
+    private final ReplaceAvatar replaceAvatarImpl;
+    private final UpdateAvatar updateAvatarImpl;
     private final DeleteAvatar deleteAvatarImpl;
     private final AvatarRepository avatarRepository;
     private final AvatarFactory avatarFactory;
     private final AvatarDtoFactory avatarDTOFactory;
+    private final AvatarUploadStrategy avatarUploadStrategy;
 
     /**
      * Handle incoming avatar events.
@@ -33,8 +38,8 @@ final public class AvatarFacade {
         AvatarDTO avatarDTO = avatarDTOFactory.from(key, avatarEvent);
 
         switch (DomainEventPublisher.AvatarEventType.valueOf(avatarEvent.getState())) {
-            case CREATED -> saveAvatarInDatabase(avatarDTO);
-            case REMOVED -> deleteAvatarByOwnerIdAndAvatarIdFromDatabase(
+            case CREATED, UPDATED, REPLACED -> saveAvatarInDatabase(avatarDTO);
+            case REMOVED -> deleteAvatarByAvatarIdFromDatabaseAndFiles(
                     key,
                     avatarDTO.getAvatarId()
             );
@@ -51,7 +56,7 @@ final public class AvatarFacade {
      */
     public void handleEvent(final UUID key, final ArtistEvent artistEvent) {
         switch (DomainEventPublisher.ArtistEventType.valueOf(artistEvent.getState())) {
-            case REMOVED -> deleteAvatarByOwnerIdAndArtistIdFromDatabase(
+            case REMOVED -> deleteAvatarByOwnerIdAndArtistIdFromDatabaseAndRemoveFiles(
                     key,
                     UUID.fromString(artistEvent.getArtistId())
             );
@@ -77,6 +82,36 @@ final public class AvatarFacade {
     }
 
     /**
+     * Replaces avatar.
+     *
+     * @param userId    User uuid to assign avatar to.
+     * @param artistId  Artist uuid to assign avatar to.
+     * @param avatarDTO Avatar to replace.
+     */
+    public void replaceAvatar(final UUID userId,
+                              final UUID artistId,
+                              final UUID avatarId,
+                              final AvatarDTO avatarDTO,
+                              final MultipartFile avatarFile) {
+        replaceAvatarImpl.replaceAvatar(userId, artistId, avatarId, avatarDTO, avatarFile);
+    }
+
+    /**
+     * Updates avatar.
+     *
+     * @param userId    User uuid to assign avatar to.
+     * @param artistId  Artist uuid to assign avatar to.
+     * @param avatarDTO Avatar to update.
+     */
+    public void updateAvatar(final UUID userId,
+                             final UUID artistId,
+                             final UUID avatarId,
+                             final AvatarDTO avatarDTO,
+                             final MultipartFile avatarFile) {
+        updateAvatarImpl.updateAvatar(userId, artistId, avatarId, avatarDTO, avatarFile);
+    }
+
+    /**
      * Deletes avatar.
      *
      * @param userId   Avatar owner UUID.
@@ -91,11 +126,19 @@ final public class AvatarFacade {
         avatarRepository.save(avatarFactory.from(avatarDTO));
     }
 
-    private void deleteAvatarByOwnerIdAndAvatarIdFromDatabase(final UUID ownerId, final UUID avatarId) {
+    private void deleteAvatarByAvatarIdFromDatabaseAndFiles(final UUID ownerId, final UUID avatarId) {
+        avatarUploadStrategy.removeAllAvatarFiles(avatarId);
+
         avatarRepository.deleteByOwnerIdAndAvatarId(ownerId, avatarId);
     }
 
-    private void deleteAvatarByOwnerIdAndArtistIdFromDatabase(final UUID ownerId, final UUID artistId) {
+    private void deleteAvatarByOwnerIdAndArtistIdFromDatabaseAndRemoveFiles(final UUID ownerId, final UUID artistId) {
+        Avatar avatar = avatarRepository.findByOwnerIdAndArtistId(ownerId, artistId)
+                .orElseThrow(() -> new IllegalStateException(Errors.NO_RECORD_FOUND.getErrorMessage(artistId)));
+
+        // Remove files from storage
+        avatarUploadStrategy.removeAllAvatarFiles(avatar.getSnapshot().getAvatarId());
+
         avatarRepository.deleteByOwnerIdAndArtistId(ownerId, artistId);
     }
 }

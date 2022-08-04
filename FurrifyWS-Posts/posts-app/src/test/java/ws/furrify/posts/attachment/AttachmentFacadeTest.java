@@ -238,7 +238,6 @@ class AttachmentFacadeTest {
         );
     }
 
-
     @Test
     @DisplayName("Update attachment")
     void updateAttachment() throws URISyntaxException {

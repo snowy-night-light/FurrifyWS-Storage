@@ -4,15 +4,18 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ws.furrify.posts.attachment.vo.AttachmentFile;
 import ws.furrify.posts.attachment.vo.AttachmentSource;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -107,7 +110,7 @@ class AttachmentTest {
     @Test
     @DisplayName("Update source data in sources with non existing sourceId")
     void updateSourceDataInSources2() throws MalformedURLException {
-        // Given new AttachmentSource with non-existing
+        // Given new AttachmentSource with non-existing source id
         AttachmentSource attachmentSource = new AttachmentSource(
                 UUID.randomUUID(),
                 "PatreonV1SourceStrategy",
@@ -121,6 +124,44 @@ class AttachmentTest {
                 IllegalStateException.class,
                 () -> attachment.updateSourceDataInSources(attachmentSource),
                 "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Replace attachment file")
+    void replaceAttachmentFile() throws URISyntaxException {
+        // Given new AttachmentFile
+        AttachmentFile attachmentFile = AttachmentFile.builder()
+                .fileUri(new URI("/"))
+                .md5("08c6a51dde006e64aed953b94fd68f0c")
+                .filename("dsa.psd")
+                .extension(AttachmentExtension.EXTENSION_PSD)
+                .build();
+        // When replaceAttachmentFile() method called
+        // Then attachment file changed in aggregate
+        attachment.replaceAttachmentFile(attachmentFile);
+
+        assertAll(
+                () -> assertEquals(
+                        attachmentFile.getFileUri(),
+                        attachment.getSnapshot().getFileUri(),
+                        "Values are different."
+                ),
+                () -> assertEquals(
+                        attachmentFile.getMd5(),
+                        attachment.getSnapshot().getMd5(),
+                        "Values are different."
+                ),
+                () -> assertEquals(
+                        attachmentFile.getFilename(),
+                        attachment.getSnapshot().getFilename(),
+                        "Values are different."
+                ),
+                () -> assertEquals(
+                        attachmentFile.getExtension(),
+                        attachment.getSnapshot().getExtension(),
+                        "Values are different."
+                )
         );
     }
 }

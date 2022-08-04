@@ -23,6 +23,8 @@ interface SqlAvatarRepository extends Repository<AvatarSnapshot, Long> {
     boolean existsByOwnerIdAndArtistIdAndAvatarId(UUID ownerId, UUID artistId, UUID avatarId);
 
     Optional<AvatarSnapshot> findByOwnerIdAndArtistIdAndAvatarId(UUID ownerId, UUID artistId, UUID avatarId);
+
+    Optional<AvatarSnapshot> findByOwnerIdAndArtistId(UUID ownerId, UUID artistId);
 }
 
 @Transactional(rollbackFor = {})
@@ -32,7 +34,7 @@ interface SqlAvatarQueryRepositoryImpl extends AvatarQueryRepository, Repository
     Optional<AvatarDetailsQueryDTO> findByOwnerIdAndArtistIdAndAvatarId(UUID ownerId, UUID artistId, UUID avatarId);
 
     @Override
-    @Query("select id from AvatarSnapshot where artistId = ?1")
+    @Query("select id from AvatarSnapshot where avatarId = ?1")
     Long getIdByAvatarId(UUID avatarId);
 }
 
@@ -45,6 +47,16 @@ class AvatarRepositoryImpl implements AvatarRepository {
     @Override
     public Avatar save(final Avatar avatar) {
         return Avatar.restore(sqlAvatarRepository.save(avatar.getSnapshot()));
+    }
+
+    @Override
+    public Optional<Avatar> findByOwnerIdAndArtistIdAndAvatarId(final UUID ownerId, final UUID artistId, final UUID avatarId) {
+        return sqlAvatarRepository.findByOwnerIdAndArtistIdAndAvatarId(ownerId, artistId, avatarId).map(Avatar::restore);
+    }
+
+    @Override
+    public Optional<Avatar> findByOwnerIdAndArtistId(final UUID ownerId, final UUID artistId) {
+        return sqlAvatarRepository.findByOwnerIdAndArtistId(ownerId, artistId).map(Avatar::restore);
     }
 
     @Override

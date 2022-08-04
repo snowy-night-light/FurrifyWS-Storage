@@ -58,7 +58,7 @@ final public class MediaFacade {
 
         switch (DomainEventPublisher.MediaEventType.valueOf(mediaEvent.getState())) {
             case CREATED, REPLACED, UPDATED -> saveMediaInDatabase(mediaDTO);
-            case REMOVED -> deleteMediaByMediaIdFromDatabase(mediaDTO.getMediaId());
+            case REMOVED -> deleteMediaByMediaIdFromDatabaseAndFiles(mediaDTO.getMediaId());
 
             default -> log.warning("State received from kafka is not defined. " +
                     "State=" + mediaEvent.getState() + " Topic=media_events");
@@ -189,7 +189,9 @@ final public class MediaFacade {
         });
     }
 
-    private void deleteMediaByMediaIdFromDatabase(final UUID mediaId) {
+    private void deleteMediaByMediaIdFromDatabaseAndFiles(final UUID mediaId) {
+        mediaUploadStrategy.removeAllMediaFiles(mediaId);
+
         mediaRepository.deleteByMediaId(mediaId);
     }
 

@@ -71,6 +71,20 @@ final public class ArtistFacade {
                             )
                             .build()
             );
+            case REPLACED, UPDATED -> replaceAvatarInArtist(
+                    key,
+                    UUID.fromString(avatarEvent.getData().getArtistId()),
+                    ArtistAvatar.builder()
+                            .avatarId(UUID.fromString(avatarEvent.getAvatarId()))
+                            .fileUri(
+                                    new URI(avatarEvent.getData().getFileUri())
+                            )
+                            .extension(avatarEvent.getData().getExtension())
+                            .thumbnailUri(
+                                    new URI(avatarEvent.getData().getThumbnailUri())
+                            )
+                            .build()
+            );
             case REMOVED -> deleteAvatarFromArtist(
                     key,
                     UUID.fromString(avatarEvent.getData().getArtistId())
@@ -222,6 +236,14 @@ final public class ArtistFacade {
         Artist artist = artistRepository.findByOwnerIdAndArtistId(ownerId, artistId)
                 .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
         artist.deleteAvatar();
+
+        artistRepository.save(artist);
+    }
+
+    private void replaceAvatarInArtist(final UUID ownerId, final UUID artistId, final ArtistAvatar avatar) {
+        Artist artist = artistRepository.findByOwnerIdAndArtistId(ownerId, artistId)
+                .orElseThrow(() -> new IllegalStateException("Received request from kafka contains invalid uuid's."));
+        artist.replaceAvatar(avatar);
 
         artistRepository.save(artist);
     }
