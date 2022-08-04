@@ -4,16 +4,19 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ws.furrify.posts.media.vo.MediaFile;
 import ws.furrify.posts.media.vo.MediaPriority;
 import ws.furrify.posts.media.vo.MediaSource;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -138,6 +141,50 @@ class MediaTest {
                 IllegalStateException.class,
                 () -> media.updateSourceDataInSources(mediaSource),
                 "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Replace media file")
+    void replaceMediaFile() throws URISyntaxException {
+        // Given new MediaFile
+        MediaFile mediaFile = MediaFile.builder()
+                .fileUri(new URI("/"))
+                .thumbnailUri(new URI("/"))
+                .md5("08c6a51dde006e64aed953b94fd68f0c")
+                .filename("dsa.png")
+                .extension(MediaExtension.EXTENSION_PNG)
+                .build();
+        // When replaceMediaFile() method called
+        // Then media file changed in aggregate
+        media.replaceMediaFile(mediaFile);
+
+        assertAll(
+                () -> assertEquals(
+                        mediaFile.getFileUri(),
+                        media.getSnapshot().getFileUri(),
+                        "Values are different."
+                ),
+                () -> assertEquals(
+                        mediaFile.getThumbnailUri(),
+                        media.getSnapshot().getThumbnailUri(),
+                        "Values are different."
+                ),
+                () -> assertEquals(
+                        mediaFile.getMd5(),
+                        media.getSnapshot().getMd5(),
+                        "Values are different."
+                ),
+                () -> assertEquals(
+                        mediaFile.getFilename(),
+                        media.getSnapshot().getFilename(),
+                        "Values are different."
+                ),
+                () -> assertEquals(
+                        mediaFile.getExtension(),
+                        media.getSnapshot().getExtension(),
+                        "Values are different."
+                )
         );
     }
 }
