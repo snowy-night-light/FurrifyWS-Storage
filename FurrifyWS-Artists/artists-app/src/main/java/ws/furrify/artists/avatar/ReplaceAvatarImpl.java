@@ -52,6 +52,7 @@ final class ReplaceAvatarImpl implements ReplaceAvatar {
                 AvatarFile.builder()
                         .filename(Objects.requireNonNull(avatarFile.getOriginalFilename()))
                         .fileUri(uploadedAvatarFile.getFileUri())
+                        .thumbnailUri(uploadedAvatarFile.getThumbnailUri())
                         .extension(avatarDTO.getExtension())
                         .md5(md5)
                         .build()

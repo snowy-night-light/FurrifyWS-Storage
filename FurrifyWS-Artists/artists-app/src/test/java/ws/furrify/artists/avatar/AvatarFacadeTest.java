@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -41,6 +42,32 @@ class AvatarFacadeTest {
     private AvatarDTO avatarDTO;
     private Avatar avatar;
     private AvatarSnapshot avatarSnapshot;
+    private MultipartFile avatarFile;
+
+    @BeforeAll
+    static void beforeAll() {
+        avatarRepository = mock(AvatarRepository.class);
+        artistServiceClient = mock(ArtistServiceClient.class);
+        avatarUploadStrategy = mock(AvatarUploadStrategy.class);
+
+        var avatarQueryRepository = mock(AvatarQueryRepository.class);
+
+        var avatarFactory = new AvatarFactory();
+        var avatarDTOFactory = new AvatarDtoFactory(avatarQueryRepository);
+        @SuppressWarnings("unchecked")
+        var eventPublisher = (DomainEventPublisher<AvatarEvent>) mock(DomainEventPublisher.class);
+
+        avatarFacade = new AvatarFacade(
+                new CreateAvatarImpl(artistServiceClient, avatarRepository, avatarFactory, avatarUploadStrategy, eventPublisher),
+                new ReplaceAvatarImpl(eventPublisher, avatarRepository, avatarUploadStrategy),
+                new UpdateAvatarImpl(eventPublisher, avatarRepository, avatarUploadStrategy),
+                new DeleteAvatarImpl(avatarRepository, eventPublisher, avatarUploadStrategy),
+                avatarRepository,
+                avatarFactory,
+                avatarDTOFactory,
+                avatarUploadStrategy
+        );
+    }
 
     @BeforeEach
     @SneakyThrows
@@ -59,40 +86,8 @@ class AvatarFacadeTest {
 
         avatar = new AvatarFactory().from(avatarDTO);
         avatarSnapshot = avatar.getSnapshot();
-    }
 
-    @BeforeAll
-    static void beforeAll() {
-        avatarRepository = mock(AvatarRepository.class);
-        artistServiceClient = mock(ArtistServiceClient.class);
-        avatarUploadStrategy = mock(AvatarUploadStrategy.class);
-
-        var avatarQueryRepository = mock(AvatarQueryRepository.class);
-
-        var avatarFactory = new AvatarFactory();
-        var avatarDTOFactory = new AvatarDtoFactory(avatarQueryRepository);
-        @SuppressWarnings("unchecked")
-        var eventPublisher = (DomainEventPublisher<AvatarEvent>) mock(DomainEventPublisher.class);
-
-        avatarFacade = new AvatarFacade(
-                new CreateAvatarImpl(artistServiceClient, avatarRepository, avatarFactory, avatarUploadStrategy, eventPublisher),
-                new DeleteAvatarImpl(avatarRepository, eventPublisher),
-                avatarRepository,
-                avatarFactory,
-                avatarDTOFactory
-        );
-    }
-
-    @Test
-    @DisplayName("Create avatar")
-    void createAvatar() throws MalformedURLException, URISyntaxException {
-        // Given ownerId, avatarDTO and multipart file
-        UUID userId = UUID.randomUUID();
-        UUID artistId = UUID.randomUUID();
-
-        ArtistDetailsQueryDTO artistQueryDTO = new ArtistDetailsQueryDTO(null);
-
-        MultipartFile avatarFile = new MultipartFile() {
+        avatarFile = new MultipartFile() {
             @Override
             public String getName() {
                 return "test";
@@ -100,7 +95,7 @@ class AvatarFacadeTest {
 
             @Override
             public String getOriginalFilename() {
-                return "test.png";
+                return "example.png";
             }
 
             @Override
@@ -133,9 +128,20 @@ class AvatarFacadeTest {
 
             }
         };
+    }
+
+    @Test
+    @DisplayName("Create avatar")
+    void createAvatar() throws MalformedURLException, URISyntaxException {
+        // Given ownerId, avatarDTO and multipart file
+        UUID userId = UUID.randomUUID();
+        UUID artistId = UUID.randomUUID();
+
+        ArtistDetailsQueryDTO artistQueryDTO = new ArtistDetailsQueryDTO(null);
+
         // When createAvatar() method called
         when(artistServiceClient.getUserArtist(any(), any())).thenReturn(artistQueryDTO);
-        when(avatarUploadStrategy.uploadAvatarWithGeneratedThumbnail(any(), any(), any())).thenReturn(new AvatarUploadStrategy.UploadedAvatarFile(
+        when(avatarUploadStrategy.uploadAvatarWithGeneratedThumbnail(any(), any())).thenReturn(new AvatarUploadStrategy.UploadedAvatarFile(
                 new URI("https://example.com"),
                 new URI("https://example.com")
         ));
@@ -151,53 +157,84 @@ class AvatarFacadeTest {
         UUID userId = UUID.randomUUID();
         UUID artistId = UUID.randomUUID();
 
-        MultipartFile avatarFile = new MultipartFile() {
-            @Override
-            public String getName() {
-                return "test";
-            }
-
-            @Override
-            public String getOriginalFilename() {
-                return "example.psd";
-            }
-
-            @Override
-            public String getContentType() {
-                return null;
-            }
-
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-
-            @Override
-            public long getSize() {
-                return 0;
-            }
-
-            @Override
-            public byte[] getBytes() throws IOException {
-                return new byte[0];
-            }
-
-            @Override
-            public InputStream getInputStream() throws IOException {
-                return getClass().getClassLoader().getResourceAsStream("example.psd");
-            }
-
-            @Override
-            public void transferTo(final File file) throws IOException, IllegalStateException {
-
-            }
-        };
         // When createAvatar() method called
         when(artistServiceClient.getUserArtist(any(), any())).thenReturn(null);
         // Then throw exception
         assertThrows(
                 RecordNotFoundException.class,
                 () -> avatarFacade.createAvatar(userId, artistId, avatarDTO, avatarFile),
+                "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Replace avatar")
+    void replaceAvatar() throws URISyntaxException {
+        // Given ownerId, postId, avatarId, avatarId and multipart file
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        UUID avatarId = UUID.randomUUID();
+
+        // When replaceAvatar() method called
+        when(avatarRepository.findByOwnerIdAndArtistIdAndAvatarId(any(), any(), any())).thenReturn(Optional.of(avatar));
+        when(avatarUploadStrategy.uploadAvatarWithGeneratedThumbnail(any(), any())).thenReturn(new AvatarUploadStrategy.UploadedAvatarFile(
+                new URI("/test"),
+                new URI("/test2")
+        ));
+        // Then return generated uuid
+        assertDoesNotThrow(() -> avatarFacade.replaceAvatar(userId, postId, avatarId, avatarDTO, avatarFile), "Exception was not thrown.");
+    }
+
+    @Test
+    @DisplayName("Replace avatar with non existing avatarId")
+    void replaceAvatar2() {
+        // Given ownerId, postId, non-existing avatarId, avatarDTO and multipart file
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        UUID avatarId = UUID.randomUUID();
+
+        // When replaceAvatar() method called
+        when(avatarRepository.findByOwnerIdAndArtistIdAndAvatarId(any(), any(), any())).thenReturn(Optional.empty());
+        // Then throw exception
+        assertThrows(
+                RecordNotFoundException.class,
+                () -> avatarFacade.replaceAvatar(userId, postId, avatarId, avatarDTO, avatarFile),
+                "Exception was not thrown."
+        );
+    }
+
+    @Test
+    @DisplayName("Update avatar")
+    void updateAvatar() throws URISyntaxException {
+        // Given ownerId, postId, avatarId, avatarDTO and multipart file
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        UUID avatarId = UUID.randomUUID();
+
+        // When replaceAvatar() method called
+        when(avatarRepository.findByOwnerIdAndArtistIdAndAvatarId(any(), any(), any())).thenReturn(Optional.of(avatar));
+        when(avatarUploadStrategy.uploadAvatarWithGeneratedThumbnail(any(), any())).thenReturn(new AvatarUploadStrategy.UploadedAvatarFile(
+                new URI("/test"),
+                new URI("/test2")
+        ));
+        // Then return generated uuid
+        assertDoesNotThrow(() -> avatarFacade.updateAvatar(userId, postId, avatarId, avatarDTO, avatarFile), "Exception was not thrown.");
+    }
+
+    @Test
+    @DisplayName("Update avatar with non existing avatarId")
+    void updateAvatar2() {
+        // Given ownerId, postId, non-existing avatarId, avatarDTO and multipart file
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        UUID avatarId = UUID.randomUUID();
+
+        // When replaceAvatar() method called
+        when(avatarRepository.findByOwnerIdAndArtistIdAndAvatarId(any(), any(), any())).thenReturn(Optional.empty());
+        // Then throw exception
+        assertThrows(
+                RecordNotFoundException.class,
+                () -> avatarFacade.updateAvatar(userId, postId, avatarId, avatarDTO, avatarFile),
                 "Exception was not thrown."
         );
     }
