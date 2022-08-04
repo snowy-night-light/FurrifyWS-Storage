@@ -13,7 +13,9 @@ import java.util.UUID;
  */
 public interface AvatarUploadStrategy {
 
-    UploadedAvatarFile uploadAvatarWithGeneratedThumbnail(final UUID artistId, final UUID avatarId, final MultipartFile fileSource);
+    UploadedAvatarFile uploadAvatarWithGeneratedThumbnail(final UUID avatarId, final MultipartFile fileSource);
+
+    void removeAllAvatarFiles(UUID avatarId);
 
     @Value
     class UploadedAvatarFile {

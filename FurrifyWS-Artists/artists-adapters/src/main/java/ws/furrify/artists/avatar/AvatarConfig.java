@@ -25,10 +25,13 @@ class AvatarConfig {
 
         return new AvatarFacade(
                 new CreateAvatarImpl(artistServiceClient, avatarRepository, avatarFactory, avatarUploadStrategy(), eventPublisher),
-                new DeleteAvatarImpl(avatarRepository, eventPublisher),
+                new ReplaceAvatarImpl(eventPublisher, avatarRepository, avatarUploadStrategy()),
+                new UpdateAvatarImpl(eventPublisher, avatarRepository, avatarUploadStrategy()),
+                new DeleteAvatarImpl(avatarRepository, eventPublisher, avatarUploadStrategy()),
                 avatarRepository,
                 avatarFactory,
-                avatarDtoFactory
+                avatarDtoFactory,
+                avatarUploadStrategy()
         );
     }
 

@@ -43,10 +43,8 @@ final class ReplaceAttachmentImpl implements ReplaceAttachment {
                 attachmentRepository
         );
 
-        AttachmentUploadStrategy.UploadedAttachmentFile uploadedAttachmentFile;
-
         // Upload attachment file
-        uploadedAttachmentFile = attachmentUploadStrategy.uploadAttachment(
+        AttachmentUploadStrategy.UploadedAttachmentFile uploadedAttachmentFile = attachmentUploadStrategy.uploadAttachment(
                 attachmentId,
                 attachmentFile
         );
@@ -66,7 +64,7 @@ final class ReplaceAttachmentImpl implements ReplaceAttachment {
                 // User userId as key
                 userId,
                 AttachmentUtils.createAttachmentEvent(
-                        DomainEventPublisher.AttachmentEventType.UPDATED,
+                        DomainEventPublisher.AttachmentEventType.REPLACED,
                         attachment
                 )
         );

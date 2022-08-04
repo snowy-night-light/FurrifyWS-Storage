@@ -2,21 +2,16 @@ package ws.furrify.artists.avatar;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.artists.artist.ArtistServiceClient;
 import ws.furrify.artists.avatar.dto.AvatarDTO;
 import ws.furrify.artists.avatar.strategy.AvatarUploadStrategy;
 import ws.furrify.posts.avatar.AvatarEvent;
 import ws.furrify.shared.exception.Errors;
-import ws.furrify.shared.exception.FileContentIsCorruptedException;
-import ws.furrify.shared.exception.FileExtensionIsNotMatchingContentException;
-import ws.furrify.shared.exception.FilenameIsInvalidException;
 import ws.furrify.shared.exception.RecordAlreadyExistsException;
 import ws.furrify.shared.exception.RecordNotFoundException;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -46,35 +41,18 @@ final class CreateAvatarImpl implements CreateAvatar {
         // Generate avatar uuid
         UUID avatarId = UUID.randomUUID();
 
-        // Check if file is matching declared extension
-        boolean isFileContentValid = AvatarExtension.isFileContentValid(
-                avatarFile.getOriginalFilename(),
-                avatarFile,
-                avatarDTO.getExtension()
-        );
-        if (!isFileContentValid) {
-            throw new FileExtensionIsNotMatchingContentException(Errors.FILE_EXTENSION_IS_NOT_MATCHING_CONTENT.getErrorMessage());
-        }
+        // Generate hash from file
+        final String md5 = AvatarFileUtils.generateMd5FromFile(avatarFile);
 
-        // Check if filename is valid
-        boolean isFilenameValid = AvatarExtension.isFilenameValid(
-                avatarFile.getOriginalFilename()
+        // Validate avatar file
+        AvatarFileUtils.validateAvatar(
+                avatarDTO.getExtension(),
+                avatarFile
         );
-        if (!isFilenameValid) {
-            throw new FilenameIsInvalidException(Errors.FILENAME_IS_INVALID.getErrorMessage(avatarFile.getOriginalFilename()));
-        }
-
-        String md5;
-        try {
-            // Get file hash
-            md5 = DigestUtils.md5Hex(avatarFile.getInputStream());
-        } catch (IOException e) {
-            throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
-        }
 
         // Upload file and generate thumbnail
         AvatarUploadStrategy.UploadedAvatarFile uploadedAvatarFile =
-                avatarUploadStrategy.uploadAvatarWithGeneratedThumbnail(artistId, avatarId, avatarFile);
+                avatarUploadStrategy.uploadAvatarWithGeneratedThumbnail(avatarId, avatarFile);
 
         // Edit avatarDTO with generated avatar uuid
         AvatarDTO updatedAvatarToCreateDTO = avatarDTO.toBuilder()

@@ -24,7 +24,7 @@ class Avatar {
     @NonNull
     private final UUID ownerId;
     @NonNull
-    private final AvatarFile file;
+    private AvatarFile file;
 
     private final ZonedDateTime createDate;
 
@@ -58,5 +58,9 @@ class Avatar {
                 .fileUri(file.getFileUri())
                 .createDate(createDate)
                 .build();
+    }
+
+    void replaceAvatarFile(@NonNull final AvatarFile file) {
+        this.file = file;
     }
 }
