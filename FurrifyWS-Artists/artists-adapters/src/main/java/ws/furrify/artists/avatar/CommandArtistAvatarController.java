@@ -55,12 +55,12 @@ class CommandArtistAvatarController {
             "hasRole('admin') ||" +
                     "(hasRole('update_artist_avatar') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
-    public ResponseEntity<?> updateAttachment(@PathVariable UUID userId,
-                                              @PathVariable UUID artistId,
-                                              @PathVariable UUID avatarId,
-                                              @RequestPart("avatar") @Validated AvatarUpdateCommandDTO avatarUpdateCommandDTO,
-                                              @RequestPart(value = "file", required = false) MultipartFile avatarFile,
-                                              KeycloakAuthenticationToken keycloakAuthenticationToken) {
+    public ResponseEntity<?> updateAvatar(@PathVariable UUID userId,
+                                          @PathVariable UUID artistId,
+                                          @PathVariable UUID avatarId,
+                                          @RequestPart("avatar") @Validated AvatarUpdateCommandDTO avatarUpdateCommandDTO,
+                                          @RequestPart(value = "file", required = false) MultipartFile avatarFile,
+                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
 
         avatarFacade.updateAvatar(userId, artistId, avatarId, avatarUpdateCommandDTO.toDTO(), avatarFile);
 
@@ -72,12 +72,12 @@ class CommandArtistAvatarController {
             "hasRole('admin') ||" +
                     "(hasRole('replace_artist_avatar') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
     )
-    public ResponseEntity<?> replaceAttachment(@PathVariable UUID userId,
-                                               @PathVariable UUID artistId,
-                                               @PathVariable UUID avatarId,
-                                               @RequestPart("avatar") @Validated AvatarReplaceCommandDTO avatarReplaceCommandDTO,
-                                               @RequestPart(value = "file") MultipartFile avatarFile,
-                                               KeycloakAuthenticationToken keycloakAuthenticationToken) {
+    public ResponseEntity<?> replaceAvatar(@PathVariable UUID userId,
+                                           @PathVariable UUID artistId,
+                                           @PathVariable UUID avatarId,
+                                           @RequestPart("avatar") @Validated AvatarReplaceCommandDTO avatarReplaceCommandDTO,
+                                           @RequestPart(value = "file") MultipartFile avatarFile,
+                                           KeycloakAuthenticationToken keycloakAuthenticationToken) {
         avatarFacade.replaceAvatar(userId, artistId, avatarId, avatarReplaceCommandDTO.toDTO(), avatarFile);
 
         return ResponseEntity.accepted().build();
