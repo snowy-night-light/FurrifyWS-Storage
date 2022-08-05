@@ -42,7 +42,7 @@ public class LocalStorageAvatarUploadStrategy implements AvatarUploadStrategy {
 
     @Value("${THUMBNAIL_PREFIX:thumbnail_}")
     private String THUMBNAIL_PREFIX;
-    @Value("${LOCAL_STORAGE_AVATAR_PATH:/usr/share/nginx/html/avatar}")
+    @Value("${LOCAL_STORAGE_AVATAR_PATH:/data/avatar}")
     private String LOCAL_STORAGE_AVATAR_PATH;
     @Value("${REMOTE_STORAGE_AVATAR_PATH:/avatar}")
     private String REMOTE_STORAGE_AVATAR_PATH;
