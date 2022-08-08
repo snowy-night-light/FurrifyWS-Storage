@@ -20,7 +20,7 @@ public class TagReplaceCommandDTO implements CommandDTO<TagDTO> {
 
     @NotBlank
     @Size(min = 1, max = 64)
-    @Pattern(regexp = "^[a-z_-]*$")
+    @Pattern(regexp = "^[a-z0-9_-]*$")
     String value;
 
     @NotNull
