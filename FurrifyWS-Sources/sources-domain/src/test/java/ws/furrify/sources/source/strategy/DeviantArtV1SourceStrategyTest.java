@@ -438,7 +438,8 @@ class DeviantArtV1SourceStrategyTest {
 
         deviantArtV1SourceStrategy = new DeviantArtV1SourceStrategy(
                 keycloakServiceClient,
-                deviantArtServiceClient
+                deviantArtServiceClient,
+                deviantArtScrapperClient
         );
     }
 
