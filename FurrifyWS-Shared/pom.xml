@@ -101,7 +101,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>6.0.0</version>
+            <version>6.0.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -113,14 +113,14 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>6.0.0</version>
+            <version>6.0.1</version>
             <scope>compile</scope>
         </dependency>
         <!-- JPA -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>6.0.2</version>
+            <version>6.0.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -132,7 +132,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.1</version>
+            <version>5.9.2</version>
         </dependency>
         <!-- Logs -->
         <dependency>
