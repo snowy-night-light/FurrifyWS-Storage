@@ -59,7 +59,7 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
     @Override
     public ValidationResult validateMedia(final HashMap<String, String> requestData) {
         if (requestData.get(DEVIATION_URL_FIELD) == null || requestData.get(DEVIATION_URL_FIELD).isBlank()) {
-            return ValidationResult.invalid("Deviation url is required.");
+            return ValidationResult.invalid("Deviation url is required. 1");
         }
 
         URI uri;
@@ -70,18 +70,18 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
                 throw new URISyntaxException(requestData.get(DEVIATION_URL_FIELD), "Domain is missing");
             }
         } catch (URISyntaxException e) {
-            return ValidationResult.invalid("Deviation url is invalid.");
+            return ValidationResult.invalid("Deviation url is invalid. 2");
         }
 
         // If url does not contain correct domain
         if (!uri.getHost().replace(WWW_SUBDOMAIN, "").equalsIgnoreCase(DOMAIN)) {
-            return ValidationResult.invalid("Deviation url is invalid.");
+            return ValidationResult.invalid("Deviation url is invalid. 3");
         }
 
         String[] path = uri.getPath().split("[/\\\\]");
         // If there are not enough path params in url or art path is present
         if (path.length < DEVIATION_PATH_SEGMENTS || !path[DEVIATION_ART_PATH_POSITION_IN_URI].equals(DEVIATION_ART_PATH)) {
-            return ValidationResult.invalid("Deviation url is invalid.");
+            return ValidationResult.invalid("Deviation url is invalid. 4");
         }
 
         String deviationId;
@@ -91,7 +91,7 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
                is weird and doesn't allow getting deviation by id in url */
             deviationId = deviantArtScrapperClient.scrapDeviationId(PROTOCOL + DOMAIN + uri.getPath());
         } catch (IOException e) {
-            return ValidationResult.invalid("Deviation not found.");
+            return ValidationResult.invalid("Deviation not found. 5");
         }
 
         String providerBearerToken = "Bearer " + keycloakService.getKeycloakIdentityProviderToken(null, PropertyHolder.REALM, BROKER_ID).getAccessToken();
@@ -99,7 +99,7 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
         DeviantArtDeviationQueryDTO deviationQueryDTO =
                 deviantArtService.getDeviation(providerBearerToken, deviationId);
         if (deviationQueryDTO == null) {
-            return ValidationResult.invalid("Deviation not found.");
+            return ValidationResult.invalid("Deviation not found. 6");
         }
 
         HashMap<String, String> data = new HashMap<>(2);

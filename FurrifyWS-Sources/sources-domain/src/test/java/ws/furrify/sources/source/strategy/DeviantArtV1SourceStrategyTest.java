@@ -461,6 +461,8 @@ class DeviantArtV1SourceStrategyTest {
             SourceStrategy.ValidationResult validationResult =
                     deviantArtV1SourceStrategy.validateMedia(data);
 
+            System.out.println(validationResult.getReason());
+
             // Then
             assertAll(() -> {
                 assertTrue(validationResult.isValid(), "Validation failed with correct parameters.");
