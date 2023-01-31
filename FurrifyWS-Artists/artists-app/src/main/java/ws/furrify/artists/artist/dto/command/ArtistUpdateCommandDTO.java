@@ -1,13 +1,13 @@
 package ws.furrify.artists.artist.dto.command;
 
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.ToString;
 import lombok.Value;
 import ws.furrify.artists.artist.dto.ArtistDTO;
 import ws.furrify.shared.dto.CommandDTO;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.Set;
 
 /**

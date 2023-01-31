@@ -36,6 +36,7 @@ eureka:
 server:
   port: 8080
 
+# TODO config for keycloak changed https://stackoverflow.com/questions/74571191/use-keycloak-spring-adapter-with-spring-boot-3
 keycloak:
   auth-server-url: ${KEYCLOAK_AUTH_URL}
   realm: ${KEYCLOAK_REALM}

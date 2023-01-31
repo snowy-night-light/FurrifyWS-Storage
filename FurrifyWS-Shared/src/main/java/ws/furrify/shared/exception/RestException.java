@@ -1,5 +1,7 @@
 package ws.furrify.shared.exception;
 
+import org.springframework.http.HttpStatus;
+
 /**
  * Custom REST exception template interface.
  *

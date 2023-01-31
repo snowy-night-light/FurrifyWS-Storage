@@ -1,8 +1,7 @@
 package ws.furrify.posts.post.dto.command;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
 
 /**
  * @author Skyte

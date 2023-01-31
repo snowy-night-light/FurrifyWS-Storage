@@ -9,10 +9,10 @@ import feign.slf4j.Slf4jLogger;
 import io.github.resilience4j.feign.FeignDecorators;
 import io.github.resilience4j.feign.Resilience4jFeign;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.ExternalProviderServerSideErrorException;
 import ws.furrify.shared.exception.ExternalProviderTokenExpiredException;
-import ws.furrify.shared.exception.HttpStatus;
 import ws.furrify.sources.providers.deviantart.dto.DeviantArtDeviationQueryDTO;
 import ws.furrify.sources.providers.deviantart.dto.DeviantArtUserQueryDTO;
 
@@ -63,7 +63,7 @@ public class DeviantArtServiceClientImpl implements DeviantArtServiceClient {
         public DeviantArtDeviationQueryDTO getDeviation(final String bearerToken, final String deviationId) {
             var feignException = (FeignException) this.exception;
 
-            HttpStatus status = HttpStatus.of(feignException.status());
+            HttpStatus status = HttpStatus.valueOf(feignException.status());
 
             switch (status) {
                 case NOT_FOUND -> {
@@ -75,7 +75,7 @@ public class DeviantArtServiceClientImpl implements DeviantArtServiceClient {
                 case UNAUTHORIZED -> throw new ExternalProviderTokenExpiredException(Errors.EXTERNAL_PROVIDER_TOKEN_HAS_EXPIRED.getErrorMessage(ID));
 
                 default -> {
-                    log.error("DeviantArt identity provider endpoint returned unhandled status " + status.getStatus() + ".");
+                    log.error("DeviantArt identity provider endpoint returned unhandled status " + status.value() + ".");
 
                     throw feignException;
                 }
@@ -86,7 +86,7 @@ public class DeviantArtServiceClientImpl implements DeviantArtServiceClient {
         public DeviantArtUserQueryDTO getUser(final String bearerToken, final String username) {
             var feignException = (FeignException) this.exception;
 
-            HttpStatus status = HttpStatus.of(feignException.status());
+            HttpStatus status = HttpStatus.valueOf(feignException.status());
 
             switch (status) {
                 case NOT_FOUND -> {
@@ -98,7 +98,7 @@ public class DeviantArtServiceClientImpl implements DeviantArtServiceClient {
                 case UNAUTHORIZED -> throw new ExternalProviderTokenExpiredException(Errors.EXTERNAL_PROVIDER_TOKEN_HAS_EXPIRED.getErrorMessage(ID));
 
                 default -> {
-                    log.error("DeviantArt identity provider endpoint returned unhandled status " + status.getStatus() + ".");
+                    log.error("DeviantArt identity provider endpoint returned unhandled status " + status.value() + ".");
 
                     throw feignException;
                 }

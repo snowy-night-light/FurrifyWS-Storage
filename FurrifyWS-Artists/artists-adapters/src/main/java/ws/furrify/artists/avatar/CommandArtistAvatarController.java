@@ -1,5 +1,6 @@
 package ws.furrify.artists.avatar;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,6 @@ import ws.furrify.artists.avatar.dto.command.AvatarCreateCommandDTO;
 import ws.furrify.artists.avatar.dto.command.AvatarReplaceCommandDTO;
 import ws.furrify.artists.avatar.dto.command.AvatarUpdateCommandDTO;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @RestController

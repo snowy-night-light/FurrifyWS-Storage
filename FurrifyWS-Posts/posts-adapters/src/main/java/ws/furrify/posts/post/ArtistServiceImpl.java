@@ -4,13 +4,13 @@ import feign.FeignException;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ws.furrify.posts.artist.ArtistServiceClient;
 import ws.furrify.posts.artist.dto.query.ArtistDetailsQueryDTO;
 import ws.furrify.shared.exception.ChainOfRequestsBrokenException;
 import ws.furrify.shared.exception.ChainOfRequestsUnauthorizedException;
 import ws.furrify.shared.exception.Errors;
-import ws.furrify.shared.exception.HttpStatus;
 
 import java.util.UUID;
 
@@ -31,7 +31,7 @@ class ArtistServiceImpl implements ArtistServiceClient {
     private ArtistDetailsQueryDTO getUserArtistFallback(Throwable throwable) {
         var exception = (FeignException) throwable;
 
-        HttpStatus status = HttpStatus.of(exception.status());
+        HttpStatus status = HttpStatus.valueOf(exception.status());
 
         switch (status) {
             case NOT_FOUND -> {

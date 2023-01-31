@@ -9,6 +9,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -26,6 +27,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 /**
  * Global REST Controller Advice.
@@ -35,13 +39,11 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 
     @Override
-    protected @NonNull
-    ResponseEntity<Object> handleMissingServletRequestParameter(
+    protected @NonNull ResponseEntity<Object> handleMissingServletRequestParameter(
             @NonNull MissingServletRequestParameterException exception,
             @NonNull HttpHeaders headers,
-            @NonNull HttpStatus status,
-            @NonNull WebRequest request
-    ) {
+            @NonNull HttpStatusCode statusCode,
+            @NonNull WebRequest request) {
         return responseEntity(new ApiError(BAD_REQUEST, Errors.BAD_REQUEST.getErrorMessage(), exception));
     }
 
@@ -50,7 +52,7 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
     ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException exception,
             @NonNull HttpHeaders headers,
-            @NonNull HttpStatus status,
+            @NonNull HttpStatusCode statusCode,
             @NonNull WebRequest request
     ) {
         ApiError apiError = new ApiError(BAD_REQUEST);
@@ -61,9 +63,9 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
         return responseEntity(apiError);
     }
 
-    @ExceptionHandler(javax.validation.ConstraintViolationException.class)
+    @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
     protected ResponseEntity<Object> handleConstraintViolation(
-            javax.validation.ConstraintViolationException exception
+            jakarta.validation.ConstraintViolationException exception
     ) {
         ApiError apiError = new ApiError(BAD_REQUEST);
         apiError.setMessage(Errors.BAD_REQUEST.getErrorMessage());
@@ -76,7 +78,7 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
     protected @NonNull
     ResponseEntity<Object> handleHttpMessageNotReadable(@NonNull HttpMessageNotReadableException exception,
                                                         @NonNull HttpHeaders headers,
-                                                        @NonNull HttpStatus status,
+                                                        @NonNull HttpStatusCode statusCode,
                                                         @NonNull WebRequest request) {
         return responseEntity(new ApiError(BAD_REQUEST, Errors.BAD_REQUEST.getErrorMessage(), exception));
     }
@@ -85,9 +87,9 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
     protected @NonNull
     ResponseEntity<Object> handleHttpMessageNotWritable(@NonNull HttpMessageNotWritableException exception,
                                                         @NonNull HttpHeaders headers,
-                                                        @NonNull HttpStatus status,
+                                                        @NonNull HttpStatusCode statusCode,
                                                         @NonNull WebRequest request) {
-        return responseEntity(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, Errors.BAD_REQUEST.getErrorMessage(), exception));
+        return responseEntity(new ApiError(INTERNAL_SERVER_ERROR, Errors.BAD_REQUEST.getErrorMessage(), exception));
     }
 
     @Override
@@ -95,7 +97,7 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
     ResponseEntity<Object> handleNoHandlerFoundException(
             NoHandlerFoundException exception,
             @NonNull HttpHeaders headers,
-            @NonNull HttpStatus status,
+            @NonNull HttpStatusCode statusCode,
             @NonNull WebRequest request) {
         ApiError apiError = new ApiError(BAD_REQUEST);
         apiError.setMessage(String.format("Method %s was not found for endpoint %s", exception.getHttpMethod(), exception.getRequestURL()));
@@ -103,9 +105,9 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
         return responseEntity(apiError);
     }
 
-    @ExceptionHandler(javax.persistence.EntityNotFoundException.class)
-    protected ResponseEntity<Object> handleEntityNotFound(javax.persistence.EntityNotFoundException exception) {
-        return responseEntity(new ApiError(HttpStatus.NOT_FOUND, exception));
+    @ExceptionHandler(jakarta.persistence.EntityNotFoundException.class)
+    protected ResponseEntity<Object> handleEntityNotFound(jakarta.persistence.EntityNotFoundException exception) {
+        return responseEntity(new ApiError(NOT_FOUND, exception));
     }
 
     @ExceptionHandler(java.lang.IllegalArgumentException.class)
@@ -122,9 +124,9 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
     protected ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException exception,
                                                                   WebRequest request) {
         if (exception.getCause() instanceof ConstraintViolationException) {
-            return responseEntity(new ApiError(HttpStatus.CONFLICT, "Database error", exception.getCause()));
+            return responseEntity(new ApiError(CONFLICT, "Database error", exception.getCause()));
         }
-        return responseEntity(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, exception));
+        return responseEntity(new ApiError(INTERNAL_SERVER_ERROR, exception));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -167,7 +169,7 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
     protected ResponseEntity<Object> handleException(
             RestException exception) {
         // Convert HttpStatus from shared module to spring HttpStatus
-        HttpStatus httpStatus = HttpStatus.valueOf(exception.getStatus().getStatus());
+        HttpStatus httpStatus = HttpStatus.valueOf(exception.getStatus().value());
 
         ApiError apiError = new ApiError(httpStatus, exception.getMessage(), (Throwable) exception);
 
@@ -175,6 +177,6 @@ public class RestExceptionControllerAdvice extends ResponseEntityExceptionHandle
     }
 
     private ResponseEntity<Object> responseEntity(ApiError apiError) {
-        return new ResponseEntity<>(apiError, apiError.getStatus());
+        return new ResponseEntity<>(apiError, apiError.getStatusCode());
     }
 }

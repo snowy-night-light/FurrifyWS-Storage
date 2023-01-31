@@ -1,14 +1,13 @@
 package ws.furrify.artists.avatar.dto.command;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 import lombok.Value;
 import ws.furrify.artists.avatar.AvatarExtension;
 import ws.furrify.artists.avatar.dto.AvatarDTO;
 import ws.furrify.shared.dto.CommandDTO;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * @author Skyte

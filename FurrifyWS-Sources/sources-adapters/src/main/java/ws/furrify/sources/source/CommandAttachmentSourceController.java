@@ -1,5 +1,6 @@
 package ws.furrify.sources.source;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import ws.furrify.shared.vo.SourceOriginType;
 import ws.furrify.sources.source.dto.SourceDTO;
 import ws.furrify.sources.source.dto.command.SourceCreateCommandDTO;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @RestController

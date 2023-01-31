@@ -1,5 +1,6 @@
 package ws.furrify.tags.tag;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +22,6 @@ import ws.furrify.tags.tag.dto.command.TagCreateCommandDTO;
 import ws.furrify.tags.tag.dto.command.TagReplaceCommandDTO;
 import ws.furrify.tags.tag.dto.command.TagUpdateCommandDTO;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @RestController

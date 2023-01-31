@@ -1,5 +1,6 @@
 package ws.furrify.posts.media;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +23,6 @@ import ws.furrify.posts.media.dto.command.MediaUpdateCommandDTO;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.HardLimitForEntityTypeException;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @RestController
