@@ -1,5 +1,6 @@
 package ws.furrify.sources.source.strategy;
 
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -56,6 +57,7 @@ import static ws.furrify.sources.source.strategy.DeviantArtV1SourceStrategy.USER
 import static ws.furrify.sources.source.strategy.DeviantArtV1SourceStrategy.USER_URL_FIELD;
 import static ws.furrify.sources.source.strategy.DeviantArtV1SourceStrategy.USER_USERNAME_FIELD;
 
+@Log4j2
 class DeviantArtV1SourceStrategyTest {
 
     private static KeycloakServiceClient keycloakServiceClient;
@@ -461,7 +463,8 @@ class DeviantArtV1SourceStrategyTest {
             SourceStrategy.ValidationResult validationResult =
                     deviantArtV1SourceStrategy.validateMedia(data);
 
-            System.out.println(validationResult.getReason());
+            log.error("abc123 " + validationResult.getReason());
+            System.out.println("abc123 " + validationResult.getReason());
 
             // Then
             assertAll(() -> {
