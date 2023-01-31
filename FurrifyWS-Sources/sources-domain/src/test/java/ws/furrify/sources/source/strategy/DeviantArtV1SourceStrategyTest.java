@@ -440,7 +440,8 @@ class DeviantArtV1SourceStrategyTest {
 
         deviantArtV1SourceStrategy = new DeviantArtV1SourceStrategy(
                 keycloakServiceClient,
-                deviantArtServiceClient
+                deviantArtServiceClient,
+                deviantArtScrapperClient
         );
     }
 
@@ -462,9 +463,6 @@ class DeviantArtV1SourceStrategyTest {
 
             SourceStrategy.ValidationResult validationResult =
                     deviantArtV1SourceStrategy.validateMedia(data);
-
-            log.error("abc123 " + validationResult.getReason());
-            System.out.println("abc123 " + validationResult.getReason());
 
             // Then
             assertAll(() -> {

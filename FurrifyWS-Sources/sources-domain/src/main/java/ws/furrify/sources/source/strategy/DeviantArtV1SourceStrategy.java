@@ -50,10 +50,11 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
     }
 
     public DeviantArtV1SourceStrategy(final KeycloakServiceClient keycloakService,
-                                      final DeviantArtServiceClient deviantArtService) {
+                                      final DeviantArtServiceClient deviantArtService,
+                                      final DeviantArtScrapperClient deviantArtScrapperClient) {
         this.keycloakService = keycloakService;
         this.deviantArtService = deviantArtService;
-        this.deviantArtScrapperClient = new DeviantArtScrapperClientImpl();
+        this.deviantArtScrapperClient = deviantArtScrapperClient;
     }
 
     @Override
