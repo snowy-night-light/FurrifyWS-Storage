@@ -11,31 +11,31 @@ updates:
           - 7.0.1.Final
 
   - package-ecosystem: docker
-    directory: "/FurrifyWS-Artists"
+    directory: "./FurrifyWS-Artists"
     schedule:
       interval: daily
 
   - package-ecosystem: docker
-    directory: "/FurrifyWS-EurekaServer"
+    directory: "./FurrifyWS-EurekaServer"
     schedule:
       interval: daily
 
   - package-ecosystem: docker
-    directory: "/FurrifyWS-Gateway"
+    directory: "./FurrifyWS-Gateway"
     schedule:
       interval: daily
 
   - package-ecosystem: docker
-    directory: "/FurrifyWS-Posts"
+    directory: "./FurrifyWS-Posts"
     schedule:
       interval: daily
 
   - package-ecosystem: docker
-    directory: "/FurrifyWS-Sources"
+    directory: "./FurrifyWS-Sources"
     schedule:
       interval: daily
 
   - package-ecosystem: docker
-    directory: "/FurrifyWS-Tags"
+    directory: "./FurrifyWS-Tags"
     schedule:
       interval: daily
