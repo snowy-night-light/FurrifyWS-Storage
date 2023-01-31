@@ -91,6 +91,7 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
                is weird and doesn't allow getting deviation by id in url */
             deviationId = deviantArtScrapperClient.scrapDeviationId(PROTOCOL + DOMAIN + uri.getPath());
         } catch (IOException e) {
+            e.printStackTrace();
             return ValidationResult.invalid("Deviation not found. 5");
         }
 
