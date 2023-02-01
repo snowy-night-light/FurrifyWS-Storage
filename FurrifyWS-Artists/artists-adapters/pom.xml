@@ -23,10 +23,6 @@
         </plugins>
     </build>
 
-    <properties>
-        <keycloak.version>20.0.3</keycloak.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>ws.furrify</groupId>
@@ -53,11 +49,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-spring-boot-starter</artifactId>
-            <version>${keycloak.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -131,18 +122,6 @@
             </exclusions>
         </dependency>
     </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.keycloak.bom</groupId>
-                <artifactId>keycloak-adapter-bom</artifactId>
-                <version>${keycloak.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <repositories>
         <repository>
