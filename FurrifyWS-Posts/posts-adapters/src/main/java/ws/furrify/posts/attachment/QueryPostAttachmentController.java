@@ -1,12 +1,12 @@
 package ws.furrify.posts.attachment;
 
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +34,7 @@ class QueryPostAttachmentController {
     @GetMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_post_attachments') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('query_post_attachments') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public PagedModel<EntityModel<AttachmentDetailsQueryDTO>> getPostAttachments(
             @PathVariable UUID userId,
@@ -43,7 +43,7 @@ class QueryPostAttachmentController {
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) Integer page,
-            KeycloakAuthenticationToken keycloakAuthenticationToken) {
+            JwtAuthenticationToken jwtAuthenticationToken) {
 
         // Build page from page information
         Pageable pageable = PageableRequest.builder()
@@ -79,12 +79,12 @@ class QueryPostAttachmentController {
     @GetMapping("/{attachmentId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_post_attachments') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('query_post_attachments') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public EntityModel<AttachmentDetailsQueryDTO> getPostAttachment(@PathVariable UUID userId,
                                                                     @PathVariable UUID postId,
                                                                     @PathVariable UUID attachmentId,
-                                                                    KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                                                    JwtAuthenticationToken jwtAuthenticationToken) {
 
         AttachmentDetailsQueryDTO attachmentQueryDTO = attachmentQueryRepository.findByOwnerIdAndPostIdAndAttachmentId(userId, postId, attachmentId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(attachmentId)));

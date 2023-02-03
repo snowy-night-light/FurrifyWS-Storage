@@ -11,6 +11,21 @@ spring:
         prefix: "posts-test-"
     producer:
       retries: 3
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            scope: openid
+            authorization-grant-type: authorization_code
+            client-id: furrifyws-storage
+        provider:
+          keycloak:
+            issuer-uri: http://192.168.0.200:6565/realms/dev
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: http://192.168.0.200:6565/realms/dev
   servlet:
     multipart:
       max-file-size: 10GB
@@ -36,13 +51,3 @@ eureka:
 
 server:
   port: 7071
-
-# TODO config for keycloak changed https://stackoverflow.com/questions/74571191/use-keycloak-spring-adapter-with-spring-boot-3
-keycloak:
-  auth-server-url: http://192.168.0.200:6565
-  realm: dev
-  resource: furrifyws-storage
-  public-client: true
-  principal-attribute: preferred_username
-  bearer-only: true
-  use-resource-role-mappings: true

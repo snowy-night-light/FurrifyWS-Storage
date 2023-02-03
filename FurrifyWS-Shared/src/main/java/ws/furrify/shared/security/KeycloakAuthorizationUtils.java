@@ -1,20 +1,20 @@
 package ws.furrify.shared.security;
 
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 import java.util.UUID;
 
 public abstract class KeycloakAuthorizationUtils {
 
     /**
-     * Extract userId from keycloak token.
+     * Extract userId from JWT token.
      *
-     * @param keycloakAuthenticationToken Keycloak token.
+     * @param jwtAuthenticationToken JWT token.
      * @return UserId from token.
      */
-    public UUID getCurrentUserId(KeycloakAuthenticationToken keycloakAuthenticationToken) {
+    public UUID getCurrentUserId(JwtAuthenticationToken jwtAuthenticationToken) {
         return UUID.fromString(
-                keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject()
+                (String) jwtAuthenticationToken.getToken().getClaims().get("sub")
         );
     }
 

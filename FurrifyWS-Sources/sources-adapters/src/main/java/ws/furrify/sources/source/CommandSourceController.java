@@ -1,9 +1,9 @@
 package ws.furrify.sources.source;
 
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,11 +28,11 @@ class CommandSourceController {
     @DeleteMapping("/{sourceId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('delete_source') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('delete_source') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public ResponseEntity<?> deleteSource(@PathVariable UUID userId,
                                           @PathVariable UUID sourceId,
-                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                          JwtAuthenticationToken jwtAuthenticationToken) {
         sourceFacade.deleteSource(userId, sourceId);
 
         return ResponseEntity.accepted().build();
@@ -41,12 +41,12 @@ class CommandSourceController {
     @PatchMapping("/{sourceId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_source') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('update_source') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public ResponseEntity<?> updateSource(@PathVariable UUID userId,
                                           @PathVariable UUID sourceId,
                                           @RequestBody @Validated SourceUpdateCommandDTO sourceUpdateCommandDTO,
-                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                          JwtAuthenticationToken jwtAuthenticationToken) {
         sourceFacade.updateSource(userId, sourceId, sourceUpdateCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();
@@ -55,12 +55,12 @@ class CommandSourceController {
     @PutMapping("/{sourceId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_source') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('update_source') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public ResponseEntity<?> replaceSource(@PathVariable UUID userId,
                                            @PathVariable UUID sourceId,
                                            @RequestBody @Validated SourceReplaceCommandDTO sourceReplaceCommandDTO,
-                                           KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                           JwtAuthenticationToken jwtAuthenticationToken) {
         sourceFacade.replaceSource(userId, sourceId, sourceReplaceCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();

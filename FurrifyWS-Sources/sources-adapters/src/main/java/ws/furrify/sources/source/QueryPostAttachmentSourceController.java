@@ -1,12 +1,12 @@
 package ws.furrify.sources.source;
 
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +33,7 @@ class QueryPostAttachmentSourceController {
     @GetMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_post_attachment_sources') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('query_post_attachment_sources') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public PagedModel<EntityModel<SourceDetailsQueryDTO>> getPostAttachmentSources(
             @PathVariable UUID userId,
@@ -43,7 +43,7 @@ class QueryPostAttachmentSourceController {
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) Integer page,
-            KeycloakAuthenticationToken keycloakAuthenticationToken) {
+            JwtAuthenticationToken jwtAuthenticationToken) {
 
         // Build page from page information
         Pageable pageable = PageableRequest.builder()

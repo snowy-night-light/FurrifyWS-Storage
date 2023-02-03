@@ -2,10 +2,10 @@ package ws.furrify.artists.artist;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -39,11 +39,11 @@ class CommandUserArtistController {
     @PostMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('create_artist') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('create_artist') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public ResponseEntity<?> createArtist(@PathVariable UUID userId,
                                           @RequestBody @Validated ArtistCreateCommandDTO artistCreateCommandDTO,
-                                          KeycloakAuthenticationToken keycloakAuthenticationToken,
+                                          JwtAuthenticationToken jwtAuthenticationToken,
                                           HttpServletResponse response) {
         // Hard limit for artist
         long userArtistsCount = artistRepository.countPostsByUserId(userId);
@@ -65,11 +65,11 @@ class CommandUserArtistController {
     @DeleteMapping("/{artistId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('delete_artist') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('delete_artist') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public ResponseEntity<?> deleteArtist(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,
-                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                          JwtAuthenticationToken jwtAuthenticationToken) {
         artistFacade.deleteArtist(userId, artistId);
 
         return ResponseEntity.accepted().build();
@@ -78,12 +78,12 @@ class CommandUserArtistController {
     @PatchMapping("/{artistId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_artist') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('update_artist') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public ResponseEntity<?> updateArtist(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,
                                           @RequestBody @Validated ArtistUpdateCommandDTO artistUpdateCommandDTO,
-                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                          JwtAuthenticationToken jwtAuthenticationToken) {
         artistFacade.updateArtist(userId, artistId, artistUpdateCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();
@@ -92,12 +92,12 @@ class CommandUserArtistController {
     @PutMapping("/{artistId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_artist') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('update_artist') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public ResponseEntity<?> replaceArtist(@PathVariable UUID userId,
                                            @PathVariable UUID artistId,
                                            @RequestBody @Validated ArtistReplaceCommandDTO artistReplaceCommandDTO,
-                                           KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                           JwtAuthenticationToken jwtAuthenticationToken) {
         artistFacade.replaceArtist(userId, artistId, artistReplaceCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();

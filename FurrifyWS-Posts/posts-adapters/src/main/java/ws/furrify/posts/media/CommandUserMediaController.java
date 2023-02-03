@@ -2,10 +2,10 @@ package ws.furrify.posts.media;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -40,14 +40,14 @@ class CommandUserMediaController {
     @PostMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('create_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('create_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public ResponseEntity<?> createMedia(@PathVariable UUID userId,
                                          @PathVariable UUID postId,
                                          @RequestPart("media") @Validated MediaCreateCommandDTO mediaCreateCommandDTO,
                                          @RequestPart("file") MultipartFile mediaFile,
                                          @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnailFile,
-                                         KeycloakAuthenticationToken keycloakAuthenticationToken,
+                                         JwtAuthenticationToken jwtAuthenticationToken,
                                          HttpServletResponse response) {
         // Hard limit for media
         long userMediaCount = mediaRepository.countMediaByUserId(userId);
@@ -69,12 +69,12 @@ class CommandUserMediaController {
     @DeleteMapping("/{mediaId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('delete_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('delete_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public ResponseEntity<?> deleteMedia(@PathVariable UUID userId,
                                          @PathVariable UUID postId,
                                          @PathVariable UUID mediaId,
-                                         KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                         JwtAuthenticationToken jwtAuthenticationToken) {
         mediaFacade.deleteMedia(userId, postId, mediaId);
 
         return ResponseEntity.accepted().build();
@@ -83,7 +83,7 @@ class CommandUserMediaController {
     @PatchMapping("/{mediaId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('update_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public ResponseEntity<?> updateMedia(@PathVariable UUID userId,
                                          @PathVariable UUID postId,
@@ -91,7 +91,7 @@ class CommandUserMediaController {
                                          @RequestPart("media") @Validated MediaUpdateCommandDTO mediaUpdateCommandDTO,
                                          @RequestPart(value = "file", required = false) MultipartFile mediaFile,
                                          @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnailFile,
-                                         KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                         JwtAuthenticationToken jwtAuthenticationToken) {
 
         mediaFacade.updateMedia(userId, postId, mediaId, mediaUpdateCommandDTO.toDTO(), mediaFile, thumbnailFile);
 
@@ -101,7 +101,7 @@ class CommandUserMediaController {
     @PutMapping("/{mediaId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('replace_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('replace_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public ResponseEntity<?> replaceMedia(@PathVariable UUID userId,
                                           @PathVariable UUID postId,
@@ -109,7 +109,7 @@ class CommandUserMediaController {
                                           @RequestPart("media") @Validated MediaReplaceCommandDTO mediaReplaceCommandDTO,
                                           @RequestPart("file") MultipartFile mediaFile,
                                           @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnailFile,
-                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                          JwtAuthenticationToken jwtAuthenticationToken) {
         mediaFacade.replaceMedia(userId, postId, mediaId, mediaReplaceCommandDTO.toDTO(), mediaFile, thumbnailFile);
 
         return ResponseEntity.accepted().build();

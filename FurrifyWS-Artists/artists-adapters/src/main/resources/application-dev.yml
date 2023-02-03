@@ -11,6 +11,21 @@ spring:
         prefix: "artists-test-"
     producer:
       retries: 3
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            scope: openid
+            authorization-grant-type: authorization_code
+            client-id: furrifyws-storage
+        provider:
+          keycloak:
+            issuer-uri: http://192.168.0.200:6565/realms/dev
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: http://192.168.0.200:6565/realms/dev
   servlet:
     multipart:
       max-file-size: 1GB

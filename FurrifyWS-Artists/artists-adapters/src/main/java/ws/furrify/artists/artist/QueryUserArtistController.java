@@ -1,13 +1,13 @@
 package ws.furrify.artists.artist;
 
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +35,7 @@ class QueryUserArtistController {
     @GetMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_user_artists') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('query_user_artists') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public PagedModel<EntityModel<ArtistDetailsQueryDTO>> getUserArtists(
             @PathVariable UUID userId,
@@ -45,7 +45,7 @@ class QueryUserArtistController {
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) String preferredNickname,
-            KeycloakAuthenticationToken keycloakAuthenticationToken) {
+            JwtAuthenticationToken jwtAuthenticationToken) {
 
         // Build page from page information
         Pageable pageable = PageableRequest.builder()
@@ -89,11 +89,11 @@ class QueryUserArtistController {
     @GetMapping("/{artistId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_user_artists') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('query_user_artists') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public EntityModel<ArtistDetailsQueryDTO> getUserArtist(@PathVariable UUID userId,
                                                             @PathVariable UUID artistId,
-                                                            KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                                            JwtAuthenticationToken jwtAuthenticationToken) {
 
         ArtistDetailsQueryDTO artistQueryDTO = artistQueryRepository.findByOwnerIdAndArtistId(userId, artistId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(artistId)));

@@ -1,12 +1,12 @@
 package ws.furrify.sources.source;
 
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +34,7 @@ class QuerySourceController {
     @GetMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_user_sources') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('query_user_sources') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public PagedModel<EntityModel<SourceDetailsQueryDTO>> getUserSources(
             @PathVariable UUID userId,
@@ -42,7 +42,7 @@ class QuerySourceController {
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) Integer page,
-            KeycloakAuthenticationToken keycloakAuthenticationToken) {
+            JwtAuthenticationToken jwtAuthenticationToken) {
 
         // Build page from page information
         Pageable pageable = PageableRequest.builder()
@@ -76,11 +76,11 @@ class QuerySourceController {
     @GetMapping("/{sourceId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_user_sources') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "(hasRole('query_user_sources') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
     )
     public EntityModel<SourceDetailsQueryDTO> getUserSource(@PathVariable UUID userId,
                                                             @PathVariable UUID sourceId,
-                                                            KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                                            JwtAuthenticationToken jwtAuthenticationToken) {
 
         SourceDetailsQueryDTO sourceQueryDTO = sourceQueryRepository.findByOwnerIdAndSourceId(userId, sourceId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(sourceId)));
