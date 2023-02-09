@@ -109,11 +109,11 @@ class Artist {
         }
 
         // Verify is preferred nickname is already taken
-        boolean isPreferredNicknameTaken =
+        boolean isPreferredNicknameFree =
                 // Is nickname selected as preferred in other artists
-                artistRepository.existsByOwnerIdAndPreferredNickname(ownerId, preferredNickname.getNickname());
+                this.preferredNickname == preferredNickname || !artistRepository.existsByOwnerIdAndPreferredNickname(ownerId, preferredNickname.getNickname());
 
-        if (isPreferredNicknameTaken) {
+        if (!isPreferredNicknameFree) {
             throw new
                     RecordAlreadyExistsException(Errors.PREFERRED_NICKNAME_IS_TAKEN.getErrorMessage(preferredNickname.getNickname()));
         }

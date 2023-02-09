@@ -19,7 +19,7 @@ import java.util.Set;
 public class ArtistCreateCommandDTO implements CommandDTO<ArtistDTO> {
 
     @Size(min = 1, max = 64)
-    Set<@NotBlank @Size(max = 256) String> nicknames;
+    Set<@NotBlank @Size(max = 256) @Pattern(regexp = "^[A-Za-z0-9._\\-]+$") String> nicknames;
 
     @NotBlank
     @Size(min = 1, max = 256)

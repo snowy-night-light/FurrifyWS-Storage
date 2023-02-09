@@ -2,6 +2,7 @@ package ws.furrify.artists.artist.dto.command;
 
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.ToString;
 import lombok.Value;
@@ -18,9 +19,10 @@ import java.util.Set;
 public class ArtistUpdateCommandDTO implements CommandDTO<ArtistDTO> {
 
     @Size(min = 1, max = 64)
-    Set<@NotBlank @Size(max = 256) String> nicknames;
+    Set<@NotBlank @Size(max = 256) @Pattern(regexp = "^[A-Za-z0-9._\\-]+$") String> nicknames;
 
     @Size(min = 1, max = 256)
+    @Pattern(regexp = "^[A-Za-z0-9._\\-]+$")
     String preferredNickname;
 
     @Override
