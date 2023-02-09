@@ -4,13 +4,28 @@ logging:
 
 spring:
   kafka:
-    bootstrap-servers: http://192.168.0.200:9092
-    schema-registry-servers: http://192.168.0.200:8081
+    bootstrap-servers: http://192.168.1.200:9092
+    schema-registry-servers: http://192.168.1.200:8081
     consumer:
       group-id:
         prefix: "sources-test-"
     producer:
       retries: 3
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            scope: openid
+            authorization-grant-type: authorization_code
+            client-id: furrifyws-storage
+        provider:
+          keycloak:
+            issuer-uri: http://192.168.1.200:6565/realms/dev
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: http://192.168.1.200:6565/realms/dev
 
   datasource:
     driverClassName: org.h2.Driver
@@ -32,12 +47,3 @@ eureka:
 
 server:
   port: 7074
-
-keycloak:
-  auth-server-url: http://192.168.0.200:6565
-  realm: dev
-  resource: furrifyws-storage
-  public-client: true
-  principal-attribute: preferred_username
-  bearer-only: true
-  use-resource-role-mappings: true

@@ -10,11 +10,11 @@ import io.github.resilience4j.feign.FeignDecorators;
 import io.github.resilience4j.feign.Resilience4jFeign;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.ExternalProviderTokenExpiredException;
-import ws.furrify.shared.exception.HttpStatus;
 import ws.furrify.sources.keycloak.dto.KeycloakIdpTokenQueryDTO;
 
 import java.util.Objects;
@@ -41,7 +41,7 @@ public class KeycloakServiceClientImpl implements KeycloakServiceClient {
                 .decoder(new JacksonDecoder())
                 .logger(new Slf4jLogger(KeycloakServiceClient.class))
                 .logLevel(Logger.Level.FULL)
-                .target(KeycloakServiceClient.class, PropertyHolder.AUTH_SERVER);
+                .target(KeycloakServiceClient.class, PropertyHolder.ISSUER_URI);
     }
 
     public KeycloakServiceClientImpl(KeycloakServiceClient keycloakServiceClient) {
@@ -49,12 +49,12 @@ public class KeycloakServiceClientImpl implements KeycloakServiceClient {
     }
 
     @Override
-    public KeycloakIdpTokenQueryDTO getKeycloakIdentityProviderToken(String bearerToken, final String realm, final String broker) {
+    public KeycloakIdpTokenQueryDTO getKeycloakIdentityProviderToken(String bearerToken, final String broker) {
         if (bearerToken == null) {
             bearerToken = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest().getHeader("Authorization");
         }
 
-        return keycloakServiceClient.getKeycloakIdentityProviderToken(bearerToken, realm, broker);
+        return keycloakServiceClient.getKeycloakIdentityProviderToken(bearerToken, broker);
     }
 
 
@@ -66,16 +66,16 @@ public class KeycloakServiceClientImpl implements KeycloakServiceClient {
         }
 
         @Override
-        public KeycloakIdpTokenQueryDTO getKeycloakIdentityProviderToken(String bearerToken, final String realm, final String broker) {
+        public KeycloakIdpTokenQueryDTO getKeycloakIdentityProviderToken(String bearerToken, final String broker) {
             var feignException = (FeignException) this.exception;
 
-            HttpStatus status = HttpStatus.of(feignException.status());
+            HttpStatus status = HttpStatus.valueOf(feignException.status());
 
             if (status == HttpStatus.BAD_REQUEST) {
                 throw new ExternalProviderTokenExpiredException(Errors.EXTERNAL_PROVIDER_TOKEN_HAS_EXPIRED.getErrorMessage(broker));
             }
 
-            log.error("Keycloak identity provider endpoint returned status " + status.getStatus() + ".");
+            log.error("Keycloak identity provider endpoint returned status " + status.value() + ".");
 
             throw feignException;
         }

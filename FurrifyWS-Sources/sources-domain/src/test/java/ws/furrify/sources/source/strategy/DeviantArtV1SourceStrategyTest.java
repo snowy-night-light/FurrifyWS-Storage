@@ -1,5 +1,20 @@
 package ws.furrify.sources.source.strategy;
 
+import jakarta.servlet.AsyncContext;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletConnection;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpUpgradeHandler;
+import jakarta.servlet.http.Part;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,20 +31,6 @@ import ws.furrify.sources.providers.deviantart.DeviantArtServiceClient;
 import ws.furrify.sources.providers.deviantart.dto.DeviantArtDeviationQueryDTO;
 import ws.furrify.sources.providers.deviantart.dto.DeviantArtUserQueryDTO;
 
-import javax.servlet.AsyncContext;
-import javax.servlet.DispatcherType;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpUpgradeHandler;
-import javax.servlet.http.Part;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -76,8 +77,7 @@ class DeviantArtV1SourceStrategyTest {
         deviantArtServiceClient = mock(DeviantArtServiceClient.class);
         deviantArtScrapperClient = mock(DeviantArtScrapperClient.class);
 
-        PropertyHolder.AUTH_SERVER = "test";
-        PropertyHolder.REALM = "test";
+        PropertyHolder.ISSUER_URI = "test";
 
         servletRequestAttributes = new ServletRequestAttributes(new HttpServletRequest() {
             @Override
@@ -206,11 +206,6 @@ class DeviantArtV1SourceStrategyTest {
             }
 
             @Override
-            public String getRealPath(final String s) {
-                return null;
-            }
-
-            @Override
             public int getRemotePort() {
                 return 0;
             }
@@ -266,6 +261,21 @@ class DeviantArtV1SourceStrategyTest {
             }
 
             @Override
+            public String getRequestId() {
+                return null;
+            }
+
+            @Override
+            public String getProtocolRequestId() {
+                return null;
+            }
+
+            @Override
+            public ServletConnection getServletConnection() {
+                return null;
+            }
+
+            @Override
             public String getAuthType() {
                 return null;
             }
@@ -282,7 +292,7 @@ class DeviantArtV1SourceStrategyTest {
 
             @Override
             public String getHeader(final String s) {
-                return "dsa";
+                return null;
             }
 
             @Override
@@ -391,11 +401,6 @@ class DeviantArtV1SourceStrategyTest {
             }
 
             @Override
-            public boolean isRequestedSessionIdFromUrl() {
-                return false;
-            }
-
-            @Override
             public boolean authenticate(final HttpServletResponse httpServletResponse) throws IOException, ServletException {
                 return false;
             }
@@ -453,7 +458,7 @@ class DeviantArtV1SourceStrategyTest {
         deviantArtResponse.setDeviationId(deviationId.toString());
 
         when(deviantArtScrapperClient.scrapDeviationId(any())).thenReturn(deviationId.toString());
-        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
+        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(deviantArtResponse);
 
         try (MockedStatic<RequestContextHolder> mock = Mockito.mockStatic(RequestContextHolder.class)) {
@@ -487,7 +492,7 @@ class DeviantArtV1SourceStrategyTest {
     void validateMedia3() {
         // Given
         // When
-        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
+        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(null);
         // Then
         assertFalse(deviantArtV1SourceStrategy.validateMedia(data).isValid(), "Validation accepted empty url.");
@@ -564,7 +569,7 @@ class DeviantArtV1SourceStrategyTest {
         deviantArtResponse.setDeviationId(deviationId.toString());
 
         when(deviantArtScrapperClient.scrapDeviationId(any())).thenReturn(deviationId.toString());
-        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
+        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(deviantArtResponse);
 
         try (MockedStatic<RequestContextHolder> mock = Mockito.mockStatic(RequestContextHolder.class)) {
@@ -592,7 +597,7 @@ class DeviantArtV1SourceStrategyTest {
         deviantArtResponse.setDeviationId(deviationId.toString());
 
         when(deviantArtScrapperClient.scrapDeviationId(any())).thenReturn(deviationId.toString());
-        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
+        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(deviantArtResponse);
 
         try (MockedStatic<RequestContextHolder> mock = Mockito.mockStatic(RequestContextHolder.class)) {
@@ -626,7 +631,7 @@ class DeviantArtV1SourceStrategyTest {
     void validateAttachment3() {
         // Given
         // When
-        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
+        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(null);
         // Then
         assertFalse(deviantArtV1SourceStrategy.validateAttachment(data).isValid(), "Validation accepted empty url.");
@@ -703,7 +708,7 @@ class DeviantArtV1SourceStrategyTest {
         deviantArtResponse.setDeviationId(deviationId.toString());
 
         when(deviantArtScrapperClient.scrapDeviationId(any())).thenReturn(deviationId.toString());
-        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
+        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getDeviation(any(), any())).thenReturn(deviantArtResponse);
 
         try (MockedStatic<RequestContextHolder> mock = Mockito.mockStatic(RequestContextHolder.class)) {
@@ -732,7 +737,7 @@ class DeviantArtV1SourceStrategyTest {
                 new DeviantArtUserQueryDTO.User(userId.toString(), username)
         );
 
-        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
+        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getUser(any(), any())).thenReturn(deviantArtResponse);
 
         SourceStrategy.ValidationResult validationResult = deviantArtV1SourceStrategy.validateUser(data);
@@ -760,7 +765,7 @@ class DeviantArtV1SourceStrategyTest {
     void validateUser3() {
         // Given
         // When
-        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
+        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getUser(any(), any())).thenReturn(null);
         // Then
         assertFalse(deviantArtV1SourceStrategy.validateUser(data).isValid(), "Validation accepted empty url.");
@@ -828,7 +833,7 @@ class DeviantArtV1SourceStrategyTest {
                 new DeviantArtUserQueryDTO.User(userId.toString(), username)
         );
 
-        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
+        when(keycloakServiceClient.getKeycloakIdentityProviderToken(any(), any())).thenReturn(new KeycloakIdpTokenQueryDTO());
         when(deviantArtServiceClient.getUser(any(), any())).thenReturn(deviantArtResponse);
 
         SourceStrategy.ValidationResult validationResult = deviantArtV1SourceStrategy.validateUser(data);

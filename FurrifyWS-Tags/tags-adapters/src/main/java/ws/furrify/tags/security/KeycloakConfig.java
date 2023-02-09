@@ -1,43 +1,46 @@
 package ws.furrify.tags.security;
 
-import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
-import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import ws.furrify.shared.security.KeycloakRoleConverter;
+
 
 @Configuration
-class KeycloakConfig extends KeycloakWebSecurityConfigurerAdapter {
-    @Autowired
-    public void configureGlobal(
-            AuthenticationManagerBuilder auth) {
+class KeycloakConfig {
 
-        KeycloakAuthenticationProvider keycloakAuthenticationProvider
-                = keycloakAuthenticationProvider();
-        keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(
-                new SimpleAuthorityMapper());
-        auth.authenticationProvider(keycloakAuthenticationProvider);
+    @Value("${spring.security.oauth2.client.registration.keycloak.client-id}")
+    @Getter
+    private String clientId;
+
+    @Bean
+    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
     }
 
     @Bean
-    @Override
-    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-        return new RegisterSessionAuthenticationStrategy(
-                new SessionRegistryImpl());
+    public JwtAuthenticationConverter jwtAuthorityExtractor() {
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new KeycloakRoleConverter());
+        return jwtAuthenticationConverter;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
-        http.authorizeRequests()
-                .anyRequest().hasRole("user");
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests()
+                .anyRequest()
+                .hasRole("user");
+
+        http.oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer
+                .jwt().jwtAuthenticationConverter(jwtAuthorityExtractor()));
 
         http.csrf().disable();
 
@@ -45,5 +48,7 @@ class KeycloakConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        return http.build();
     }
 }

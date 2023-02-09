@@ -22,13 +22,13 @@ class EventListenerRegistry {
 
     @KafkaListener(topics = "source_events")
     @Retryable(
-            value = {Exception.class},
+            retryFor = {Exception.class},
             maxAttempts = 3,
             backoff = @Backoff(delay = 10_000)
     )
-    public void on(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+    public void on(@Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
                    @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
-                   @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+                   @Header(KafkaHeaders.RECEIVED_KEY) String key,
                    @Payload SourceEvent sourceEvent) {
         log.info("Event received from kafka [topic=" + topic + "] [partition=" + partition + "].");
 

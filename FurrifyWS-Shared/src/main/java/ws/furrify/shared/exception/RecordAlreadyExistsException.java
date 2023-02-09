@@ -1,6 +1,7 @@
 package ws.furrify.shared.exception;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author Skyte

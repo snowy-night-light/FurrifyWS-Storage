@@ -31,7 +31,7 @@ class AvatarTest implements CommandLineRunner {
     private void createTestingArtists() {
         var avatarFactory = new AvatarFactory();
 
-        var userId = UUID.fromString("5ce90f76-52cd-41e7-890c-b3cfbb4fd0e5");
+        var userId = UUID.fromString("bd08e777-6da3-4d46-8b9e-501e837a4462");
         var artistId = UUID.fromString("9551e7e0-4550-41b9-8c4a-57943642fa00");
         var avatarId = UUID.fromString("4d482df8-7380-4164-96ef-58f3796d8f27");
 

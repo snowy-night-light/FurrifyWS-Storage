@@ -1,9 +1,10 @@
 package ws.furrify.artists.avatar;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,7 +20,6 @@ import ws.furrify.artists.avatar.dto.command.AvatarCreateCommandDTO;
 import ws.furrify.artists.avatar.dto.command.AvatarReplaceCommandDTO;
 import ws.furrify.artists.avatar.dto.command.AvatarUpdateCommandDTO;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @RestController
@@ -33,13 +33,14 @@ class CommandArtistAvatarController {
     @PostMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('create_artist_avatar') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_create_artist_avatar') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> createAvatar(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,
                                           @RequestPart("avatar") @Validated AvatarCreateCommandDTO avatarCreateCommandDTO,
                                           @RequestPart("file") MultipartFile mediaFile,
-                                          KeycloakAuthenticationToken keycloakAuthenticationToken,
+                                          JwtAuthenticationToken jwtAuthenticationToken,
                                           HttpServletResponse response) {
         AvatarDTO avatarDTO = avatarCreateCommandDTO.toDTO();
 
@@ -53,14 +54,15 @@ class CommandArtistAvatarController {
     @PatchMapping("/{avatarId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_artist_avatar') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_update_artist_avatar') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> updateAvatar(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,
                                           @PathVariable UUID avatarId,
                                           @RequestPart("avatar") @Validated AvatarUpdateCommandDTO avatarUpdateCommandDTO,
                                           @RequestPart(value = "file", required = false) MultipartFile avatarFile,
-                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                          JwtAuthenticationToken jwtAuthenticationToken) {
 
         avatarFacade.updateAvatar(userId, artistId, avatarId, avatarUpdateCommandDTO.toDTO(), avatarFile);
 
@@ -70,14 +72,15 @@ class CommandArtistAvatarController {
     @PutMapping("/{avatarId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('replace_artist_avatar') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_replace_artist_avatar') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> replaceAvatar(@PathVariable UUID userId,
                                            @PathVariable UUID artistId,
                                            @PathVariable UUID avatarId,
                                            @RequestPart("avatar") @Validated AvatarReplaceCommandDTO avatarReplaceCommandDTO,
                                            @RequestPart(value = "file") MultipartFile avatarFile,
-                                           KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                           JwtAuthenticationToken jwtAuthenticationToken) {
         avatarFacade.replaceAvatar(userId, artistId, avatarId, avatarReplaceCommandDTO.toDTO(), avatarFile);
 
         return ResponseEntity.accepted().build();
@@ -86,12 +89,13 @@ class CommandArtistAvatarController {
     @DeleteMapping("/{avatarId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('delete_artist_avatar') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_delete_artist_avatar') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> deleteAvatar(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,
                                           @PathVariable UUID avatarId,
-                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                          JwtAuthenticationToken jwtAuthenticationToken) {
         avatarFacade.deleteAvatar(userId, artistId, avatarId);
 
         return ResponseEntity.accepted().build();

@@ -1,7 +1,7 @@
 package ws.furrify.artists.avatar;
 
 import lombok.NonNull;
-import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.FileContentIsCorruptedException;
@@ -21,7 +21,7 @@ class AvatarFileUtils {
     public static String generateMd5FromFile(@NonNull final MultipartFile mediaFile) {
         try {
             // Get file hash
-            return DigestUtils.md5Hex(mediaFile.getInputStream());
+            return DigestUtils.md5DigestAsHex(mediaFile.getInputStream());
         } catch (IOException e) {
             throw new FileContentIsCorruptedException(Errors.FILE_CONTENT_IS_CORRUPTED.getErrorMessage());
         }

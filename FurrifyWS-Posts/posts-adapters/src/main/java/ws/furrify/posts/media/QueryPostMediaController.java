@@ -1,12 +1,12 @@
 package ws.furrify.posts.media;
 
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +34,8 @@ class QueryPostMediaController {
     @GetMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_query_post_media_list') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public PagedModel<EntityModel<MediaDetailsQueryDTO>> getPostMediaList(
             @PathVariable UUID userId,
@@ -43,7 +44,7 @@ class QueryPostMediaController {
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) Integer page,
-            KeycloakAuthenticationToken keycloakAuthenticationToken) {
+            JwtAuthenticationToken jwtAuthenticationToken) {
 
         // Build page from page information
         Pageable pageable = PageableRequest.builder()
@@ -79,12 +80,13 @@ class QueryPostMediaController {
     @GetMapping("/{mediaId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_query_post_media') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public EntityModel<MediaDetailsQueryDTO> getPostMedia(@PathVariable UUID userId,
                                                           @PathVariable UUID postId,
                                                           @PathVariable UUID mediaId,
-                                                          KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                                          JwtAuthenticationToken jwtAuthenticationToken) {
 
         MediaDetailsQueryDTO mediaQueryDTO = mediaQueryRepository.findByOwnerIdAndPostIdAndMediaId(userId, postId, mediaId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(mediaId)));

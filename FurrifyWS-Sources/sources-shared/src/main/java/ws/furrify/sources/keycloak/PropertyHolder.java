@@ -11,16 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PropertyHolder {
 
-    public static String AUTH_SERVER;
-    public static String REALM;
+    public static String ISSUER_URI;
 
-    @Value("${keycloak.auth-server-url}")
+    @Value("${spring.security.oauth2.client.provider.keycloak.issuer-uri}")
     public void setAuthServer(String authServer) {
-        PropertyHolder.AUTH_SERVER = authServer;
-    }
-
-    @Value("${keycloak.realm}")
-    public void setRealm(String realm) {
-        PropertyHolder.REALM = realm;
+        PropertyHolder.ISSUER_URI = authServer;
     }
 }

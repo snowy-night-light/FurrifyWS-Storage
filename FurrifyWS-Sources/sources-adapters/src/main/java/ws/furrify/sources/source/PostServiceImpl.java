@@ -4,11 +4,11 @@ import feign.FeignException;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ws.furrify.shared.exception.ChainOfRequestsBrokenException;
 import ws.furrify.shared.exception.ChainOfRequestsUnauthorizedException;
 import ws.furrify.shared.exception.Errors;
-import ws.furrify.shared.exception.HttpStatus;
 import ws.furrify.sources.posts.PostServiceClient;
 import ws.furrify.sources.posts.dto.query.AttachmentDetailsQueryDTO;
 import ws.furrify.sources.posts.dto.query.MediaDetailsQueryDTO;
@@ -46,7 +46,7 @@ class PostServiceImpl implements PostServiceClient {
     private <T> T fallback(Throwable throwable) {
         var exception = (FeignException) throwable;
 
-        HttpStatus status = HttpStatus.of(exception.status());
+        HttpStatus status = HttpStatus.valueOf(exception.status());
 
         switch (status) {
             case NOT_FOUND -> {
@@ -62,7 +62,7 @@ class PostServiceImpl implements PostServiceClient {
     /**
      * Implements Attachment Service Client as a Feign Client.
      */
-    @FeignClient(name = "POSTS-SERVICE")
+    @FeignClient(value = "POSTS-SERVICE")
     private interface PostServiceClientImpl extends PostServiceClient {
     }
 }

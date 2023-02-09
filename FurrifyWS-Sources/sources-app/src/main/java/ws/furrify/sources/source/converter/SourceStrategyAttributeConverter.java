@@ -1,11 +1,11 @@
 package ws.furrify.sources.source.converter;
 
+import jakarta.persistence.AttributeConverter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.sources.source.strategy.SourceStrategy;
 
-import javax.persistence.AttributeConverter;
 import java.lang.reflect.InvocationTargetException;
 
 /**

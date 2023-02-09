@@ -1,7 +1,7 @@
 package ws.furrify.artists.security;
 
 import org.springframework.stereotype.Component;
-import ws.furrify.shared.security.KeycloakAuthorizationUtils;
+import ws.furrify.shared.security.JwtAuthorizationUtils;
 
 /**
  * Utils class adding easy access to user uuid.
@@ -9,5 +9,5 @@ import ws.furrify.shared.security.KeycloakAuthorizationUtils;
  * @author sky
  */
 @Component
-public class KeycloakAuthorizationUtilsImpl extends KeycloakAuthorizationUtils {
+public class JwtAuthorizationUtilsImpl extends JwtAuthorizationUtils {
 }

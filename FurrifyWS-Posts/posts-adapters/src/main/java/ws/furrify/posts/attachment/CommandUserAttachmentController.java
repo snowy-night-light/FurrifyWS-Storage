@@ -1,10 +1,11 @@
 package ws.furrify.posts.attachment;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,7 +23,6 @@ import ws.furrify.posts.attachment.dto.command.AttachmentUpdateCommandDTO;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.HardLimitForEntityTypeException;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @RestController
@@ -40,13 +40,14 @@ class CommandUserAttachmentController {
     @PostMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('create_post_attachment') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_create_post_attachment') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> createAttachment(@PathVariable UUID userId,
                                               @PathVariable UUID postId,
                                               @RequestPart("attachment") @Validated AttachmentCreateCommandDTO attachmentCreateCommandDTO,
                                               @RequestPart("file") MultipartFile mediaFile,
-                                              KeycloakAuthenticationToken keycloakAuthenticationToken,
+                                              JwtAuthenticationToken jwtAuthenticationToken,
                                               HttpServletResponse response) {
         // Hard limit for attachments
         long userAttachmentsCount = sqlAttachmentRepository.countAttachmentsByUserId(userId);
@@ -68,14 +69,15 @@ class CommandUserAttachmentController {
     @PatchMapping("/{attachmentId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_post_attachment') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_update_post_attachment') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> updateAttachment(@PathVariable UUID userId,
                                               @PathVariable UUID postId,
                                               @PathVariable UUID attachmentId,
                                               @RequestPart("attachment") @Validated AttachmentUpdateCommandDTO attachmentUpdateCommandDTO,
                                               @RequestPart(value = "file", required = false) MultipartFile attachmentFile,
-                                              KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                              JwtAuthenticationToken jwtAuthenticationToken) {
 
         attachmentFacade.updateAttachment(userId, postId, attachmentId, attachmentUpdateCommandDTO.toDTO(), attachmentFile);
 
@@ -85,14 +87,15 @@ class CommandUserAttachmentController {
     @PutMapping("/{attachmentId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('replace_post_attachment') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_replace_post_attachment') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> replaceAttachment(@PathVariable UUID userId,
                                                @PathVariable UUID postId,
                                                @PathVariable UUID attachmentId,
                                                @RequestPart("attachment") @Validated AttachmentReplaceCommandDTO attachmentReplaceCommandDTO,
                                                @RequestPart("file") MultipartFile attachmentFile,
-                                               KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                               JwtAuthenticationToken jwtAuthenticationToken) {
         attachmentFacade.replaceAttachment(userId, postId, attachmentId, attachmentReplaceCommandDTO.toDTO(), attachmentFile);
 
         return ResponseEntity.accepted().build();
@@ -101,12 +104,13 @@ class CommandUserAttachmentController {
     @DeleteMapping("/{attachmentId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('delete_post_attachment') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#keycloakAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_delete_post_attachment') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> deleteAttachment(@PathVariable UUID userId,
                                               @PathVariable UUID postId,
                                               @PathVariable UUID attachmentId,
-                                              KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                              JwtAuthenticationToken jwtAuthenticationToken) {
         attachmentFacade.deleteAttachment(userId, postId, attachmentId);
 
         return ResponseEntity.accepted().build();

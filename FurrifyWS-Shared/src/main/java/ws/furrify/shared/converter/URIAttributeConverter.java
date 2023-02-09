@@ -1,6 +1,7 @@
 package ws.furrify.shared.converter;
 
-import javax.persistence.AttributeConverter;
+import jakarta.persistence.AttributeConverter;
+
 import java.net.URI;
 
 /**

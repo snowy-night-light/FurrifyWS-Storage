@@ -6,10 +6,10 @@ import org.apache.avro.specific.SpecificRecord;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
 import ws.furrify.shared.kafka.DomainEventPublisher;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Topic publisher for kafka.
@@ -24,11 +24,10 @@ public class KafkaTopicEventPublisher<T extends SpecificRecord> implements Domai
 
     @Override
     public void publish(final Topic topic, final UUID key, final T event) {
-        ListenableFuture<SendResult<String, T>> future =
+        CompletableFuture<SendResult<String, T>> future =
                 kafkaTemplate.send(topic.getTopicName(), key.toString(), event);
 
-        future.addCallback(result -> {
-        }, error -> {
+        future.exceptionally(error -> {
             throw new RuntimeException("Unable to send event to kafka.");
         });
     }

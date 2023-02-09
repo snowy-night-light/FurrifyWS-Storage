@@ -1,10 +1,11 @@
 package ws.furrify.posts.post;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,7 +22,6 @@ import ws.furrify.posts.post.dto.command.PostUpdateCommandDTO;
 import ws.furrify.shared.exception.Errors;
 import ws.furrify.shared.exception.HardLimitForEntityTypeException;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @RestController
@@ -38,13 +38,13 @@ class CommandUserPostController {
 
     @PostMapping
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_create_user_post') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> createPost(@PathVariable UUID userId,
                                         @RequestBody @Validated PostCreateCommandDTO postCreateCommandDTO,
-                                        KeycloakAuthenticationToken keycloakAuthenticationToken,
+                                        JwtAuthenticationToken jwtAuthenticationToken,
                                         HttpServletResponse response) {
         // Hard limit for posts
         long userPostsCount = postRepository.countPostsByUserId(userId);
@@ -65,13 +65,13 @@ class CommandUserPostController {
 
     @DeleteMapping("/{postId}")
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_delete_user_post') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> deletePost(@PathVariable UUID userId,
                                         @PathVariable UUID postId,
-                                        KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                        JwtAuthenticationToken jwtAuthenticationToken) {
         postFacade.deletePost(userId, postId);
 
         return ResponseEntity.accepted().build();
@@ -79,14 +79,14 @@ class CommandUserPostController {
 
     @PatchMapping("/{postId}")
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_update_user_post') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> updatePost(@PathVariable UUID userId,
                                         @PathVariable UUID postId,
                                         @RequestBody @Validated PostUpdateCommandDTO postUpdateCommandDTO,
-                                        KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                        JwtAuthenticationToken jwtAuthenticationToken) {
         postFacade.updatePost(userId, postId, postUpdateCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();
@@ -94,14 +94,14 @@ class CommandUserPostController {
 
     @PutMapping("/{postId}")
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_replace_user_post') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> replacePost(@PathVariable UUID userId,
                                          @PathVariable UUID postId,
                                          @RequestBody @Validated PostReplaceCommandDTO postReplaceCommandDTO,
-                                         KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                         JwtAuthenticationToken jwtAuthenticationToken) {
         postFacade.replacePost(userId, postId, postReplaceCommandDTO.toDTO());
 
         return ResponseEntity.accepted().build();

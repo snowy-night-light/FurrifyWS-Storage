@@ -1,12 +1,12 @@
 package ws.furrify.posts.post;
 
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,9 +34,9 @@ class QueryUserPostController {
 
     @GetMapping
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_query_user_posts') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public PagedModel<EntityModel<PostDetailsQueryDTO>> getUserPosts(
             @PathVariable UUID userId,
@@ -44,7 +44,7 @@ class QueryUserPostController {
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) Integer page,
-            KeycloakAuthenticationToken keycloakAuthenticationToken) {
+            JwtAuthenticationToken jwtAuthenticationToken) {
 
         // Build page from page information
         Pageable pageable = PageableRequest.builder()
@@ -77,13 +77,13 @@ class QueryUserPostController {
 
     @GetMapping("/{postId}")
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_query_user_post') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public EntityModel<PostDetailsQueryDTO> getUserPost(@PathVariable UUID userId,
                                                         @PathVariable UUID postId,
-                                                        KeycloakAuthenticationToken keycloakAuthenticationToken) {
+                                                        JwtAuthenticationToken jwtAuthenticationToken) {
 
         PostDetailsQueryDTO postQueryDTO = postQueryRepository.findByOwnerIdAndPostId(userId, postId)
                 .orElseThrow(() -> new RecordNotFoundException(Errors.NO_RECORD_FOUND.getErrorMessage(postId)));
@@ -95,9 +95,9 @@ class QueryUserPostController {
 
     @GetMapping("/search")
     @PreAuthorize(
-            "hasRole('admin') or " +
-                    "hasAuthority('admin') or " +
-                    "(#keycloakAuthenticationToken != null and #userId == #keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken().getSubject())"
+            "hasRole('admin') ||" +
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_query_user_posts_by_query') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public PagedModel<EntityModel<PostDetailsQueryDTO>> getUserPostsByQuery(
             @PathVariable UUID userId,
@@ -106,7 +106,7 @@ class QueryUserPostController {
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) Integer page,
             @RequestParam String query,
-            KeycloakAuthenticationToken keycloakAuthenticationToken) {
+            JwtAuthenticationToken jwtAuthenticationToken) {
 
         // Build page from page information
         Pageable pageable = PageableRequest.builder()

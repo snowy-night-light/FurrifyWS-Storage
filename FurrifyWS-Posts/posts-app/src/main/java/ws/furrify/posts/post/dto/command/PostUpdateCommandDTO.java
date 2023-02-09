@@ -1,5 +1,7 @@
 package ws.furrify.posts.post.dto.command;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.ToString;
 import lombok.Value;
 import ws.furrify.posts.post.dto.PostDTO;
@@ -7,8 +9,6 @@ import ws.furrify.posts.post.vo.PostArtist;
 import ws.furrify.posts.post.vo.PostTag;
 import ws.furrify.shared.dto.CommandDTO;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
 import java.util.Set;
 import java.util.stream.Collectors;
 

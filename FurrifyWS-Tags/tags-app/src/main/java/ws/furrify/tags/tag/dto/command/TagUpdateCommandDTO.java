@@ -1,13 +1,12 @@
 package ws.furrify.tags.tag.dto.command;
 
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.ToString;
 import lombok.Value;
 import ws.furrify.shared.dto.CommandDTO;
 import ws.furrify.tags.tag.dto.TagDTO;
 import ws.furrify.tags.tag.vo.TagType;
-
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 /**
  * @author Skyte

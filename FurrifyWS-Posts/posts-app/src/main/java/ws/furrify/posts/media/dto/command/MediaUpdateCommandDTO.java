@@ -1,15 +1,14 @@
 package ws.furrify.posts.media.dto.command;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 import lombok.Value;
 import ws.furrify.posts.media.MediaExtension;
 import ws.furrify.posts.media.dto.MediaDTO;
 import ws.furrify.shared.dto.CommandDTO;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 
 /**
  * @author Skyte
