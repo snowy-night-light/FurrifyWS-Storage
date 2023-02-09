@@ -42,7 +42,7 @@ class SourceFacadeTest {
 
     @BeforeEach
     void setUp() {
-        PropertyHolder.AUTH_SERVER = "test";
+        PropertyHolder.ISSUER_URI = "test";
 
         sourceDTO = SourceDTO.builder()
                 .ownerId(UUID.randomUUID())

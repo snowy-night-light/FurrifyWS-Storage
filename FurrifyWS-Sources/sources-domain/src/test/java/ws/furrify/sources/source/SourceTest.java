@@ -27,7 +27,7 @@ class SourceTest {
 
     @BeforeEach
     void setUp() {
-        PropertyHolder.AUTH_SERVER = "test";
+        PropertyHolder.ISSUER_URI = "test";
 
         sourceSnapshot = SourceSnapshot.builder()
                 .id(0L)
