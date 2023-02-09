@@ -62,7 +62,7 @@ class PostServiceImpl implements PostServiceClient {
     /**
      * Implements Attachment Service Client as a Feign Client.
      */
-    @FeignClient(name = "POSTS-SERVICE", url = "POSTS-SERVICE")
+    @FeignClient(value = "POSTS-SERVICE")
     private interface PostServiceClientImpl extends PostServiceClient {
     }
 }
