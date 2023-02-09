@@ -2,7 +2,6 @@ package ws.furrify.sources.source.strategy;
 
 import ws.furrify.sources.keycloak.KeycloakServiceClient;
 import ws.furrify.sources.keycloak.KeycloakServiceClientImpl;
-import ws.furrify.sources.keycloak.PropertyHolder;
 import ws.furrify.sources.providers.deviantart.DeviantArtScrapperClient;
 import ws.furrify.sources.providers.deviantart.DeviantArtScrapperClientImpl;
 import ws.furrify.sources.providers.deviantart.DeviantArtServiceClient;
@@ -95,7 +94,7 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
             return ValidationResult.invalid("Deviation not found.");
         }
 
-        String providerBearerToken = "Bearer " + keycloakService.getKeycloakIdentityProviderToken(null, PropertyHolder.REALM, BROKER_ID).getAccessToken();
+        String providerBearerToken = "Bearer " + keycloakService.getKeycloakIdentityProviderToken(null, BROKER_ID).getAccessToken();
 
         DeviantArtDeviationQueryDTO deviationQueryDTO =
                 deviantArtService.getDeviation(providerBearerToken, deviationId);
@@ -139,7 +138,7 @@ public class DeviantArtV1SourceStrategy implements SourceStrategy {
             return ValidationResult.invalid("User url is invalid.");
         }
 
-        String providerBearerToken = "Bearer " + keycloakService.getKeycloakIdentityProviderToken(null, PropertyHolder.REALM, BROKER_ID).getAccessToken();
+        String providerBearerToken = "Bearer " + keycloakService.getKeycloakIdentityProviderToken(null, BROKER_ID).getAccessToken();
 
         DeviantArtUserQueryDTO userQueryDTO =
                 deviantArtService.getUser(providerBearerToken, path[USERNAME_PATH_POSITION_IN_URI]);

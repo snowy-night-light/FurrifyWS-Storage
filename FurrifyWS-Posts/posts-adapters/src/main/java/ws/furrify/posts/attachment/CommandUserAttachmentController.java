@@ -40,7 +40,8 @@ class CommandUserAttachmentController {
     @PostMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('create_post_attachment') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_create_post_attachment') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> createAttachment(@PathVariable UUID userId,
                                               @PathVariable UUID postId,
@@ -68,7 +69,8 @@ class CommandUserAttachmentController {
     @PatchMapping("/{attachmentId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_post_attachment') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_update_post_attachment') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> updateAttachment(@PathVariable UUID userId,
                                               @PathVariable UUID postId,
@@ -85,7 +87,8 @@ class CommandUserAttachmentController {
     @PutMapping("/{attachmentId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('replace_post_attachment') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_replace_post_attachment') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> replaceAttachment(@PathVariable UUID userId,
                                                @PathVariable UUID postId,
@@ -101,7 +104,8 @@ class CommandUserAttachmentController {
     @DeleteMapping("/{attachmentId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('delete_post_attachment') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_delete_post_attachment') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> deleteAttachment(@PathVariable UUID userId,
                                               @PathVariable UUID postId,

@@ -34,7 +34,8 @@ class QueryPostAttachmentController {
     @GetMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_post_attachments') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_query_post_attachments') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public PagedModel<EntityModel<AttachmentDetailsQueryDTO>> getPostAttachments(
             @PathVariable UUID userId,
@@ -79,7 +80,8 @@ class QueryPostAttachmentController {
     @GetMapping("/{attachmentId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_post_attachments') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_query_post_attachment') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public EntityModel<AttachmentDetailsQueryDTO> getPostAttachment(@PathVariable UUID userId,
                                                                     @PathVariable UUID postId,

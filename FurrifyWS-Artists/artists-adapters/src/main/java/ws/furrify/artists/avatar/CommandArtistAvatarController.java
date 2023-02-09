@@ -33,7 +33,8 @@ class CommandArtistAvatarController {
     @PostMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('create_artist_avatar') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_create_artist_avatar') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> createAvatar(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,
@@ -53,7 +54,8 @@ class CommandArtistAvatarController {
     @PatchMapping("/{avatarId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_artist_avatar') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_update_artist_avatar') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> updateAvatar(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,
@@ -70,7 +72,8 @@ class CommandArtistAvatarController {
     @PutMapping("/{avatarId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('replace_artist_avatar') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_replace_artist_avatar') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> replaceAvatar(@PathVariable UUID userId,
                                            @PathVariable UUID artistId,
@@ -86,7 +89,8 @@ class CommandArtistAvatarController {
     @DeleteMapping("/{avatarId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('delete_artist_avatar') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_delete_artist_avatar') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> deleteAvatar(@PathVariable UUID userId,
                                           @PathVariable UUID artistId,

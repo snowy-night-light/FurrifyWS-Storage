@@ -34,7 +34,8 @@ class QuerySourceController {
     @GetMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_user_sources') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_query_user_sources') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public PagedModel<EntityModel<SourceDetailsQueryDTO>> getUserSources(
             @PathVariable UUID userId,
@@ -76,7 +77,8 @@ class QuerySourceController {
     @GetMapping("/{sourceId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_user_sources') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_query_user_sources') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public EntityModel<SourceDetailsQueryDTO> getUserSource(@PathVariable UUID userId,
                                                             @PathVariable UUID sourceId,

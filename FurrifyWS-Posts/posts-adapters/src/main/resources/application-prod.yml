@@ -15,6 +15,21 @@ spring:
     multipart:
       max-file-size: ${MAX_UPLOAD_FILE_SIZE}
       max-request-size: ${MAX_REQUEST_SIZE}
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            scope: openid
+            authorization-grant-type: authorization_code
+            client-id: ${KEYCLOAK_CLIENT_ID}
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_ISSUER_URI}
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI}
 
   datasource:
     driverClassName: ${DATABASE_DRIVER}
@@ -35,13 +50,3 @@ eureka:
 
 server:
   port: 8080
-
-# TODO config for keycloak changed https://stackoverflow.com/questions/74571191/use-keycloak-spring-adapter-with-spring-boot-3
-keycloak:
-  auth-server-url: ${KEYCLOAK_AUTH_URL}
-  realm: ${KEYCLOAK_REALM}
-  resource: ${KEYCLOAK_RESOURCE}
-  public-client: true
-  principal-attribute: preferred_username
-  bearer-only: true
-  use-resource-role-mappings: true

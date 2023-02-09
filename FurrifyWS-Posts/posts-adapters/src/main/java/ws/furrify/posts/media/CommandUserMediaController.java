@@ -40,7 +40,8 @@ class CommandUserMediaController {
     @PostMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('create_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_create_post_media') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> createMedia(@PathVariable UUID userId,
                                          @PathVariable UUID postId,
@@ -69,7 +70,8 @@ class CommandUserMediaController {
     @DeleteMapping("/{mediaId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('delete_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_delete_post_media') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> deleteMedia(@PathVariable UUID userId,
                                          @PathVariable UUID postId,
@@ -83,7 +85,8 @@ class CommandUserMediaController {
     @PatchMapping("/{mediaId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_update_post_media') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> updateMedia(@PathVariable UUID userId,
                                          @PathVariable UUID postId,
@@ -101,7 +104,8 @@ class CommandUserMediaController {
     @PutMapping("/{mediaId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('replace_post_media') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_replace_post_media') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> replaceMedia(@PathVariable UUID userId,
                                           @PathVariable UUID postId,

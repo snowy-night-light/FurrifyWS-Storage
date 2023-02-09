@@ -28,7 +28,7 @@ class SourceTest implements CommandLineRunner {
     }
 
     private void createTestingSources() {
-        var userId = UUID.fromString("5ce90f76-52cd-41e7-890c-b3cfbb4fd0e5");
+        var userId = UUID.fromString("bd08e777-6da3-4d46-8b9e-501e837a4462");
         var postId = UUID.fromString("7c2c35f3-20e9-4b7e-a455-253b7b78e2fa");
 
         var artistSourceId = UUID.fromString("02038a77-9717-4de8-a21b-3a722f158be2");

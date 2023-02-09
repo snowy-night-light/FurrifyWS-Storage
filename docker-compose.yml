@@ -19,6 +19,7 @@ services:
     environment:
       # Eureka
       EUREKA_ZONE: "http://furrifyws-storage-eureka-server:8761/eureka"
+      EUREKA_HOSTNAME: "localhost"
 
   # Artists
   furrifyws-storage-artists-mysql:
@@ -46,9 +47,8 @@ services:
       MAX_UPLOAD_FILE_SIZE: "1GB" # Max size of uploaded file
       MAX_REQUEST_SIZE: "1GB" # Max size of multipart/form-data request
       # Keycloak config
-      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565"
-      KEYCLOAK_REALM: "dev"
-      KEYCLOAK_RESOURCE: "furrifyws-storage"
+      KEYCLOAK_ISSUER_URI: "http://192.168.1.200:6565/realms/dev"
+      KEYCLOAK_CLIENT_ID: "furrifyws-storage"
       # Database config
       DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver" # For PostgreSQL driver use: org.postgresql.Driver
       DATABASE_DIALECT: "org.hibernate.dialect.MySQL8Dialect" # For PostgreSQL dialect use: org.hibernate.dialect.PostgreSQLDialect
@@ -56,8 +56,8 @@ services:
       DATABASE_PASSWORD: "change_me"
       DATABASE_URL: "jdbc:mysql://furrifyws-storage-artists-mysql:3306/furrifyws-storage-artists?serverTimezone=UTC&autoReconnect=true&characterEncoding=utf8&useUnicode=true" # JDBC Connection url
       # Kafka config
-      KAFKA_BOOTSTRAP_SERVERS: "http://192.168.0.200:9092"
-      KAFKA_SCHEMA_REGISTRY_SERVERS: "http://192.168.0.200:8081"
+      KAFKA_BOOTSTRAP_SERVERS: "http://192.168.1.200:9092"
+      KAFKA_SCHEMA_REGISTRY_SERVERS: "http://192.168.1.200:8081"
       # Eureka
       EUREKA_ZONE: "http://furrifyws-storage-eureka-server:8761/eureka"
 
@@ -89,9 +89,8 @@ services:
       MAX_UPLOAD_FILE_SIZE: "10GB" # Max size of uploaded file
       MAX_REQUEST_SIZE: "10GB" # Max size of multipart/form-data request
       # Keycloak config
-      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565"
-      KEYCLOAK_REALM: "dev"
-      KEYCLOAK_RESOURCE: "furrifyws-storage"
+      KEYCLOAK_ISSUER_URI: "http://192.168.1.200:6565/realms/dev"
+      KEYCLOAK_CLIENT_ID: "furrifyws-storage"
       # Database config
       DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver" # For PostgreSQL driver use: org.postgresql.Driver
       DATABASE_DIALECT: "org.hibernate.dialect.MySQL8Dialect" # For PostgreSQL dialect use: org.hibernate.dialect.PostgreSQLDialect
@@ -99,8 +98,8 @@ services:
       DATABASE_PASSWORD: "change_me"
       DATABASE_URL: "jdbc:mysql://furrifyws-storage-posts-mysql:3306/furrifyws-storage-posts?serverTimezone=UTC&autoReconnect=true&characterEncoding=utf8&useUnicode=true" # JDBC Connection url
       # Kafka config
-      KAFKA_BOOTSTRAP_SERVERS: "http://192.168.0.200:9092"
-      KAFKA_SCHEMA_REGISTRY_SERVERS: "http://192.168.0.200:8081"
+      KAFKA_BOOTSTRAP_SERVERS: "http://192.168.1.200:9092"
+      KAFKA_SCHEMA_REGISTRY_SERVERS: "http://192.168.1.200:8081"
       # Eureka
       EUREKA_ZONE: "http://furrifyws-storage-eureka-server:8761/eureka"
 
@@ -126,9 +125,8 @@ services:
       FURRIFY_LIMITS_SOURCES: 50000 # Limit amount of sources per user
       KAFKA_CONSUMER_GROUP_ID: "eu-poland-1" # A unique group id for this instance of microservice.
       # Keycloak config
-      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565"
-      KEYCLOAK_REALM: "dev"
-      KEYCLOAK_RESOURCE: "furrifyws-storage"
+      KEYCLOAK_ISSUER_URI: "http://192.168.1.200:6565/realms/dev"
+      KEYCLOAK_CLIENT_ID: "furrifyws-storage"
       # Database config
       DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver" # For PostgreSQL driver use: org.postgresql.Driver
       DATABASE_DIALECT: "org.hibernate.dialect.MySQL8Dialect" # For PostgreSQL dialect use: org.hibernate.dialect.PostgreSQLDialect
@@ -136,8 +134,8 @@ services:
       DATABASE_PASSWORD: "change_me"
       DATABASE_URL: "jdbc:mysql://furrifyws-storage-sources-mysql:3306/furrifyws-storage-sources?serverTimezone=UTC&autoReconnect=true&characterEncoding=utf8&useUnicode=true" # JDBC Connection url
       # Kafka config
-      KAFKA_BOOTSTRAP_SERVERS: "http://192.168.0.200:9092"
-      KAFKA_SCHEMA_REGISTRY_SERVERS: "http://192.168.0.200:8081"
+      KAFKA_BOOTSTRAP_SERVERS: "http://192.168.1.200:9092"
+      KAFKA_SCHEMA_REGISTRY_SERVERS: "http://192.168.1.200:8081"
       # Eureka
       EUREKA_ZONE: "http://furrifyws-storage-eureka-server:8761/eureka"
 
@@ -163,9 +161,8 @@ services:
       FURRIFY_LIMITS_TAGS: 1000 # Limit amount of tags per user
       KAFKA_CONSUMER_GROUP_ID: "eu-poland-1" # A unique group id for this instance of microservice.
       # Keycloak config
-      KEYCLOAK_AUTH_URL: "http://192.168.0.200:6565"
-      KEYCLOAK_REALM: "dev"
-      KEYCLOAK_RESOURCE: "furrifyws-storage"
+      KEYCLOAK_ISSUER_URI: "http://192.168.1.200:6565/realms/dev"
+      KEYCLOAK_CLIENT_ID: "furrifyws-storage"
       # Database config
       DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver" # For PostgreSQL driver use: org.postgresql.Driver
       DATABASE_DIALECT: "org.hibernate.dialect.MySQL8Dialect" # For PostgreSQL dialect use: org.hibernate.dialect.PostgreSQLDialect
@@ -173,8 +170,8 @@ services:
       DATABASE_PASSWORD: "change_me"
       DATABASE_URL: "jdbc:mysql://furrifyws-storage-tags-mysql:3306/furrifyws-storage-tags?serverTimezone=UTC&autoReconnect=true&characterEncoding=utf8&useUnicode=true" # JDBC Connection url
       # Kafka config
-      KAFKA_BOOTSTRAP_SERVERS: "http://192.168.0.200:9092"
-      KAFKA_SCHEMA_REGISTRY_SERVERS: "http://192.168.0.200:8081"
+      KAFKA_BOOTSTRAP_SERVERS: "http://192.168.1.200:9092"
+      KAFKA_SCHEMA_REGISTRY_SERVERS: "http://192.168.1.200:8081"
       # Eureka
       EUREKA_ZONE: "http://furrifyws-storage-eureka-server:8761/eureka"
 

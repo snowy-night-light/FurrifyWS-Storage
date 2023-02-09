@@ -39,7 +39,8 @@ class CommandUserTagController {
     @PostMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('create_tag') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_create_tag') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> createTag(@PathVariable UUID userId,
                                        @RequestBody @Validated TagCreateCommandDTO tagCreateCommandDTO,
@@ -65,7 +66,8 @@ class CommandUserTagController {
     @DeleteMapping("/{value}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('delete_tag') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_delete_tag') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> deleteTag(@PathVariable UUID userId,
                                        @PathVariable String value,
@@ -78,7 +80,8 @@ class CommandUserTagController {
     @PatchMapping("/{value}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_tag') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_update_tag') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> updateTagDetails(@PathVariable UUID userId,
                                               @PathVariable String value,
@@ -92,7 +95,8 @@ class CommandUserTagController {
     @PutMapping("/{value}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_tag') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_replace_tag') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> replaceTagDetails(@PathVariable UUID userId,
                                                @PathVariable String value,

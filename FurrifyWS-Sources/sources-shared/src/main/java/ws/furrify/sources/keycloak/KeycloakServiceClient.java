@@ -16,10 +16,9 @@ public interface KeycloakServiceClient {
      *
      * @param bearerToken Bearer token to use for authentication.
      * @param broker      Identity provider unique name.
-     * @param realm       Keycloak realm.
      * @return Keycloak identity provider token information.
      */
     @Headers("Authorization: {bearerToken}")
-    @RequestLine("GET /realms/{realm}/broker/{broker}/token")
-    KeycloakIdpTokenQueryDTO getKeycloakIdentityProviderToken(@Param("bearerToken") String bearerToken, @Param("realm") String realm, @Param("broker") String broker);
+    @RequestLine("GET /broker/{broker}/token")
+    KeycloakIdpTokenQueryDTO getKeycloakIdentityProviderToken(@Param("bearerToken") String bearerToken, @Param("broker") String broker);
 }

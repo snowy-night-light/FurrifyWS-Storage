@@ -39,7 +39,8 @@ class CommandUserPostController {
     @PostMapping
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('create_post') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_create_user_post') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> createPost(@PathVariable UUID userId,
                                         @RequestBody @Validated PostCreateCommandDTO postCreateCommandDTO,
@@ -65,7 +66,8 @@ class CommandUserPostController {
     @DeleteMapping("/{postId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('delete_post') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_delete_user_post') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> deletePost(@PathVariable UUID userId,
                                         @PathVariable UUID postId,
@@ -78,7 +80,8 @@ class CommandUserPostController {
     @PatchMapping("/{postId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_post') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_update_user_post') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> updatePost(@PathVariable UUID userId,
                                         @PathVariable UUID postId,
@@ -92,7 +95,8 @@ class CommandUserPostController {
     @PutMapping("/{postId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('replace_post') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_replace_user_post') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> replacePost(@PathVariable UUID userId,
                                          @PathVariable UUID postId,

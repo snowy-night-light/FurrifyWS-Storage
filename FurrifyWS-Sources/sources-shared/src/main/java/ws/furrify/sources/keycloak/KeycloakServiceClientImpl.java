@@ -41,7 +41,7 @@ public class KeycloakServiceClientImpl implements KeycloakServiceClient {
                 .decoder(new JacksonDecoder())
                 .logger(new Slf4jLogger(KeycloakServiceClient.class))
                 .logLevel(Logger.Level.FULL)
-                .target(KeycloakServiceClient.class, PropertyHolder.AUTH_SERVER);
+                .target(KeycloakServiceClient.class, PropertyHolder.ISSUER_URI);
     }
 
     public KeycloakServiceClientImpl(KeycloakServiceClient keycloakServiceClient) {
@@ -49,12 +49,12 @@ public class KeycloakServiceClientImpl implements KeycloakServiceClient {
     }
 
     @Override
-    public KeycloakIdpTokenQueryDTO getKeycloakIdentityProviderToken(String bearerToken, final String realm, final String broker) {
+    public KeycloakIdpTokenQueryDTO getKeycloakIdentityProviderToken(String bearerToken, final String broker) {
         if (bearerToken == null) {
             bearerToken = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest().getHeader("Authorization");
         }
 
-        return keycloakServiceClient.getKeycloakIdentityProviderToken(bearerToken, realm, broker);
+        return keycloakServiceClient.getKeycloakIdentityProviderToken(bearerToken, broker);
     }
 
 
@@ -66,7 +66,7 @@ public class KeycloakServiceClientImpl implements KeycloakServiceClient {
         }
 
         @Override
-        public KeycloakIdpTokenQueryDTO getKeycloakIdentityProviderToken(String bearerToken, final String realm, final String broker) {
+        public KeycloakIdpTokenQueryDTO getKeycloakIdentityProviderToken(String bearerToken, final String broker) {
             var feignException = (FeignException) this.exception;
 
             HttpStatus status = HttpStatus.valueOf(feignException.status());

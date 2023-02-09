@@ -47,7 +47,7 @@ class ArtistServiceImpl implements ArtistServiceClient {
     /**
      * Implements Artists Service Client as a Feign Client.
      */
-    @FeignClient(name = "ARTISTS-SERVICE")
+    @FeignClient(name = "ARTISTS-SERVICE", url = "ARTISTS-SERVICE")
     private interface ArtistsServiceClientImpl extends ArtistServiceClient {
     }
 }

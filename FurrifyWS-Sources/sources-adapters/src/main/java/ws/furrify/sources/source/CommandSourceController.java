@@ -28,7 +28,8 @@ class CommandSourceController {
     @DeleteMapping("/{sourceId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('delete_source') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_delete_source') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> deleteSource(@PathVariable UUID userId,
                                           @PathVariable UUID sourceId,
@@ -41,7 +42,8 @@ class CommandSourceController {
     @PatchMapping("/{sourceId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_source') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_update_source') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> updateSource(@PathVariable UUID userId,
                                           @PathVariable UUID sourceId,
@@ -55,7 +57,8 @@ class CommandSourceController {
     @PutMapping("/{sourceId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('update_source') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_replace_source') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public ResponseEntity<?> replaceSource(@PathVariable UUID userId,
                                            @PathVariable UUID sourceId,

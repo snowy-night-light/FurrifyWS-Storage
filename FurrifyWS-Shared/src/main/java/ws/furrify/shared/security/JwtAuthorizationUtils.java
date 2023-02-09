@@ -4,7 +4,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 
 import java.util.UUID;
 
-public abstract class KeycloakAuthorizationUtils {
+public abstract class JwtAuthorizationUtils {
 
     /**
      * Extract userId from JWT token.
@@ -14,7 +14,7 @@ public abstract class KeycloakAuthorizationUtils {
      */
     public UUID getCurrentUserId(JwtAuthenticationToken jwtAuthenticationToken) {
         return UUID.fromString(
-                (String) jwtAuthenticationToken.getToken().getClaims().get("sub")
+                jwtAuthenticationToken.getToken().getSubject()
         );
     }
 

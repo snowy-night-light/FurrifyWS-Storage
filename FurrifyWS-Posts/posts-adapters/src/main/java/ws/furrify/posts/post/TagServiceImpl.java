@@ -47,7 +47,7 @@ class TagServiceImpl implements TagServiceClient {
     /**
      * Implements Tag Service Client as a Feign Client.
      */
-    @FeignClient(name = "TAGS-SERVICE")
+    @FeignClient(name = "TAGS-SERVICE", url = "TAGS-SERVICE")
     private interface TagServiceClientImpl extends TagServiceClient {
     }
 }

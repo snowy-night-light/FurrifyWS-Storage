@@ -30,7 +30,8 @@ class QueryArtistAvatarController {
     @GetMapping("/{avatarId}")
     @PreAuthorize(
             "hasRole('admin') ||" +
-                    "(hasRole('query_artist_avatar') && #userId == @keycloakAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken))"
+                    "hasAuthority(@keycloakConfig.clientId + '_admin') or " +
+                    "(hasAuthority(@keycloakConfig.clientId + '_query_artist_avatar') && #userId.equals(@jwtAuthorizationUtilsImpl.getCurrentUserId(#jwtAuthenticationToken)))"
     )
     public EntityModel<AvatarDetailsQueryDTO> getArtistAvatar(@PathVariable UUID userId,
                                                               @PathVariable UUID artistId,
