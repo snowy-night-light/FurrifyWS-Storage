@@ -91,7 +91,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.5.4</version>
+            <version>42.6.0</version>
         </dependency>
         <!-- Tools -->
         <dependency>
@@ -109,7 +109,7 @@
         <dependency>
             <groupId>io.confluent</groupId>
             <artifactId>kafka-avro-serializer</artifactId>
-            <version>7.3.2</version>
+            <version>7.3.3</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
