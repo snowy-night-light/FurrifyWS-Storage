@@ -28,7 +28,7 @@
             <dependency>
                 <groupId>io.github.openfeign</groupId>
                 <artifactId>feign-bom</artifactId>
-                <version>12.2</version>
+                <version>13.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -73,7 +73,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.15.4</version>
+            <version>1.16.2</version>
         </dependency>
     </dependencies>
 
