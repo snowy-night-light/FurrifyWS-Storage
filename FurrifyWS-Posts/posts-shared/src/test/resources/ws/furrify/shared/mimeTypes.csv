@@ -1,4 +1,4 @@
-file,mime
+filePath,mimeType
 ws/furrify/shared/files/example.png,image/png
 ws/furrify/shared/files/example.jpg,image/jpeg
 ws/furrify/shared/files/example.bmp,image/bmp

@@ -68,12 +68,6 @@
             <artifactId>byte-buddy</artifactId>
             <version>1.15.10</version>
         </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>5.11.3</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>
