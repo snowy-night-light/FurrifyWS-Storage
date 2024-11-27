@@ -13,11 +13,12 @@
 
     <properties>
         <java.version>21</java.version>
-        <avro.version>1.11.3</avro.version>
+        <avro.version>1.12.0</avro.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <lombok.version>1.18.36</lombok.version>
     </properties>
 
     <dependencyManagement>
@@ -25,7 +26,7 @@
             <dependency>
                 <groupId>io.github.openfeign</groupId>
                 <artifactId>feign-bom</artifactId>
-                <version>13.1</version>
+                <version>13.5</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -37,7 +38,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
-            <version>3.1.5</version>
+            <version>3.4.0</version>
             <scope>compile</scope>
         </dependency>
         <!-- Schema -->
@@ -50,15 +51,14 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.30</version>
-            <scope>compile</scope>
-            <optional>true</optional>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- Mapping -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.15.3</version>
+            <version>2.18.1</version>
         </dependency>
         <!-- Validation -->
         <dependency>
@@ -69,26 +69,26 @@
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <version>6.0.0</version>
+            <version>6.1.0</version>
             <scope>provided</scope>
         </dependency>
         <!-- Web -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>6.0.13</version>
+            <version>6.2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>6.0.13</version>
+            <version>6.2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
-            <version>3.1.5</version>
+            <version>3.4.0</version>
             <scope>compile</scope>
         </dependency>
         <!-- Communication -->
@@ -101,44 +101,44 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>6.1.5</version>
+            <version>6.4.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>6.1.5</version>
+            <version>6.4.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-            <version>3.1.5</version>
+            <version>3.4.0</version>
             <scope>compile</scope>
         </dependency>
         <!-- JPA -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>6.0.13</version>
+            <version>6.2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>6.1.6.Final</version>
+            <version>6.6.3.Final</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.10.1</version>
+            <version>5.11.3</version>
         </dependency>
         <!-- Logs -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.21.1</version>
+            <version>2.24.2</version>
         </dependency>
     </dependencies>
 
@@ -187,8 +187,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.13.0</version>
                 <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                     <source>21</source>
                     <target>21</target>
                 </configuration>

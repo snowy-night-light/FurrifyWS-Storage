@@ -15,7 +15,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
+<configuration>
+	<annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+         </annotationProcessorPaths>
                     <source>21</source>
                     <target>21</target>
                 </configuration>
@@ -43,13 +50,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>4.0.4</version>
         </dependency>
         <!-- Tools -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.30</version>
+    <version>1.18.36</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
@@ -57,20 +63,18 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.1</version>
+            <version>5.11.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.14.9</version>
+            <version>1.15.10</version>
         </dependency>
         <!-- Web -->
         <dependency>
             <groupId>org.springframework.hateoas</groupId>
             <artifactId>spring-hateoas</artifactId>
-            <version>2.1.2</version>
-            <scope>compile</scope>
         </dependency>
         <!-- Validators -->
         <dependency>
@@ -80,14 +84,14 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>6.1.5</version>
+            <version>6.4.1</version>
             <scope>compile</scope>
         </dependency>
         <!-- Utils -->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.16.0</version>
+            <version>1.17.1</version>
         </dependency>
         <dependency>
             <groupId>net.coobird</groupId>
@@ -97,7 +101,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>javacv-platform</artifactId>
-            <version>1.5.9</version>
+            <version>1.5.11</version>
         </dependency>
         <!-- Formats -->
         <dependency>
