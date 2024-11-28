@@ -41,7 +41,7 @@ public enum TagType {
     /**
      * Characters gender.
      */
-    SEX,
+    GENDER,
     /**
      * Characters specie.
      */

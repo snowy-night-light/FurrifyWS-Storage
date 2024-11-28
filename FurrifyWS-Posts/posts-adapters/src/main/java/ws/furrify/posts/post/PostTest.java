@@ -36,7 +36,7 @@ class PostTest implements CommandLineRunner {
     private void createTestingPosts() {
         var postFactory = new PostFactory();
 
-        var userId = UUID.fromString("bd08e777-6da3-4d46-8b9e-501e837a4462");
+        var userId = UUID.fromString("84212867-7662-43d8-b119-dc9f199904bc");
         var postId = UUID.fromString("7c2c35f3-20e9-4b7e-a455-253b7b78e2fa");
         var attachmentId = UUID.fromString("566548cf-fb1d-4552-a880-c741a1eb9d0e");
 
@@ -143,7 +143,7 @@ class PostTest implements CommandLineRunner {
                                                 .build(),
                                         PostTag.builder()
                                                 .value("walking9")
-                                                .type("SEX")
+                                                .type("GENDER")
                                                 .build(),
                                         PostTag.builder()
                                                 .value("walking10")
@@ -241,7 +241,7 @@ class PostTest implements CommandLineRunner {
                                                     .build(),
                                             PostTag.builder()
                                                     .value("walking9")
-                                                    .type("SEX")
+                                                    .type("GENDER")
                                                     .build(),
                                             PostTag.builder()
                                                     .value("walking10")
