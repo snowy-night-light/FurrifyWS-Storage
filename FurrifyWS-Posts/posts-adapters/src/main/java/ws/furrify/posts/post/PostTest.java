@@ -143,7 +143,7 @@ class PostTest implements CommandLineRunner {
                                                 .build(),
                                         PostTag.builder()
                                                 .value("walking9")
-                                                .type("SEX")
+                                                .type("GENDER")
                                                 .build(),
                                         PostTag.builder()
                                                 .value("walking10")
@@ -241,7 +241,7 @@ class PostTest implements CommandLineRunner {
                                                     .build(),
                                             PostTag.builder()
                                                     .value("walking9")
-                                                    .type("SEX")
+                                                    .type("GENDER")
                                                     .build(),
                                             PostTag.builder()
                                                     .value("walking10")
