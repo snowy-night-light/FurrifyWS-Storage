@@ -47,7 +47,7 @@ services:
       MAX_UPLOAD_FILE_SIZE: "1GB" # Max size of uploaded file
       MAX_REQUEST_SIZE: "1GB" # Max size of multipart/form-data request
       # Keycloak config
-      KEYCLOAK_ISSUER_URI: "http://192.168.1.200:6565/realms/dev"
+      KEYCLOAK_ISSUER_URI: "http://192.168.1.200:6565/realms/furrify-dev"
       KEYCLOAK_CLIENT_ID: "furrifyws-storage"
       # Database config
       DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver" # For PostgreSQL driver use: org.postgresql.Driver
@@ -89,7 +89,7 @@ services:
       MAX_UPLOAD_FILE_SIZE: "10GB" # Max size of uploaded file
       MAX_REQUEST_SIZE: "10GB" # Max size of multipart/form-data request
       # Keycloak config
-      KEYCLOAK_ISSUER_URI: "http://192.168.1.200:6565/realms/dev"
+      KEYCLOAK_ISSUER_URI: "http://192.168.1.200:6565/realms/furrify-dev"
       KEYCLOAK_CLIENT_ID: "furrifyws-storage"
       # Database config
       DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver" # For PostgreSQL driver use: org.postgresql.Driver
@@ -125,7 +125,7 @@ services:
       FURRIFY_LIMITS_SOURCES: 50000 # Limit amount of sources per user
       KAFKA_CONSUMER_GROUP_ID: "eu-poland-1" # A unique group id for this instance of microservice.
       # Keycloak config
-      KEYCLOAK_ISSUER_URI: "http://192.168.1.200:6565/realms/dev"
+      KEYCLOAK_ISSUER_URI: "http://192.168.1.200:6565/realms/furrify-dev"
       KEYCLOAK_CLIENT_ID: "furrifyws-storage"
       # Database config
       DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver" # For PostgreSQL driver use: org.postgresql.Driver
@@ -161,7 +161,7 @@ services:
       FURRIFY_LIMITS_TAGS: 1000 # Limit amount of tags per user
       KAFKA_CONSUMER_GROUP_ID: "eu-poland-1" # A unique group id for this instance of microservice.
       # Keycloak config
-      KEYCLOAK_ISSUER_URI: "http://192.168.1.200:6565/realms/dev"
+      KEYCLOAK_ISSUER_URI: "http://192.168.1.200:6565/realms/furrify-dev"
       KEYCLOAK_CLIENT_ID: "furrifyws-storage"
       # Database config
       DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver" # For PostgreSQL driver use: org.postgresql.Driver
