@@ -1,4 +1,4 @@
-FROM alpine:3.20
+FROM alpine:3.21
 
 RUN apk update && apk add --no-cache openjdk17-jdk && apk add --no-cache gcompat
 
