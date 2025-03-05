@@ -21,11 +21,11 @@ spring:
             client-id: furrifyws-storage
         provider:
           keycloak:
-            issuer-uri: http://192.168.1.200:6565/realms/furrify-dev
+            issuer-uri: https://keycloak.furrify.tech/realms/furrify-dev
             user-name-attribute: preferred_username
       resourceserver:
         jwt:
-          issuer-uri: http://192.168.1.200:6565/realms/furrify-dev
+          issuer-uri: https://keycloak.furrify.tech/realms/furrify-dev
   servlet:
     multipart:
       max-file-size: 1GB
