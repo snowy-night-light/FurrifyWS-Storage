@@ -2,23 +2,24 @@ spring:
   application:
     name: "GATEWAY-SERVICE"
   profiles:
-    active: prod
+    active: prodd
   cloud:
     gateway:
-      routes:
-        - id: sourcesService
-          uri: lb://SOURCES-SERVICE
-          predicates:
-            - Path=/users/*/sources/**, /users/*/posts/*/media/*/sources, /users/*/posts/*/attachments/*/sources, , /users/*/artists/*/sources
-        - id: postsService
-          uri: lb://POSTS-SERVICE
-          predicates:
-            - Path=/users/*/posts/**
-        - id: tagsService
-          uri: lb://TAGS-SERVICE
-          predicates:
-            - Path=/users/*/tags/**
-        - id: artistsService
-          uri: lb://ARTISTS-SERVICE
-          predicates:
-            - Path=/users/*/artists/**, /users/*/artists/*/avatar/**
+      mvc:
+        routes:
+          - id: sourcesService
+            uri: lb://SOURCES-SERVICE
+            predicates:
+              - Path=/users/*/sources/**, /users/*/posts/*/media/*/sources, /users/*/posts/*/attachments/*/sources, , /users/*/artists/*/sources
+          - id: postsService
+            uri: lb://POSTS-SERVICE
+            predicates:
+              - Path=/users/*/posts/**
+          - id: tagsService
+            uri: lb://TAGS-SERVICE
+            predicates:
+              - Path=/users/*/tags/**
+          - id: artistsService
+            uri: lb://ARTISTS-SERVICE
+            predicates:
+              - Path=/users/*/artists/**, /users/*/artists/*/avatar/**
